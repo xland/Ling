@@ -22,7 +22,7 @@ TextDemo::~TextDemo()
 void TextDemo::label()
 {
     auto ele = new Label();
-    ele->setText(u8R"(醉里挑灯看剑，梦回吹角连营。)");
+    ele->setText(u8R"(醉里挑灯看剑，梦回吹角连营。Abc, Def,)");
     ele->setFont("Microsoft YaHei");//STSong
     ele->setFontSize(21);
     ele->setBackgroundColor(0xFFFFFFFF);
