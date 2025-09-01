@@ -186,7 +186,37 @@ LRESULT CALLBACK WindowBase::windowMsgProc(HWND hwnd, UINT msg, WPARAM wParam, L
     }
     case WM_PAINT: {
         winImpl->paintElement(this);
-        paintArea();
+        
+        auto size = getWindowClientSize();
+        auto w = size.w * scaleFactor;
+        auto h = size.h * scaleFactor;
+        auto pix = winImpl->getPix();
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hwnd, &ps);
+        BITMAPINFO bmi{};
+        bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+        bmi.bmiHeader.biWidth = w;
+        bmi.bmiHeader.biHeight = -h;  // top-down
+        bmi.bmiHeader.biPlanes = 1;
+        bmi.bmiHeader.biBitCount = 32;
+        bmi.bmiHeader.biCompression = BI_RGB;
+
+        StretchDIBits(
+            hdc,
+            0, 0,
+            size.w, size.h,   // 目标大小（逻辑像素）
+            0, 0,
+            w, h,             // 源大小（物理像素）
+            pix.addr(),
+            &bmi,
+            DIB_RGB_COLORS,
+            SRCCOPY
+        );
+
+        EndPaint(hwnd, &ps);
+
+
+        //paintArea();
         return 0;
     }
     case WM_LBUTTONDBLCLK:
