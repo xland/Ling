@@ -62,7 +62,6 @@ void LayoutDemo::verticalHorizontalCenter()
     ele->setSize(100, 100);
     ele->setBackgroundColor(0xFF876543);
     ele->setCaption(true);
-
     win->setAlignItems(Align::Center);
     win->setJustifyContent(Justify::Center);
     win->addChild(ele);
@@ -70,7 +69,8 @@ void LayoutDemo::verticalHorizontalCenter()
 
 void LayoutDemo::start()
 {
-    topCenterBottom();
+    leftRight();
+    //topCenterBottom();
     //verticalHorizontalCenter();
     win->layout();
     win->show();
