@@ -170,7 +170,8 @@ void Element::update()
 		.bottom{(int)YGNodeLayoutGetHeight(node) + (int)globalY}
 	};
 	auto hwnd = getWindow()->getHandle();
-	InvalidateRect(hwnd, &r, false);
+	//InvalidateRect(hwnd, &r, false);
+	InvalidateRect(hwnd, nullptr, false);
 }
 
 void Element::paint(SkCanvas* canvas)

@@ -55,3 +55,34 @@ win->addChild(right);
 win->setFlexDirection(FlexDirection::Row);
 ```
 ![](Doc/LeftRight.png "左右布局")
+
+# Event
+
+```c++
+auto ele = new Element();
+ele->setSize(120, 40);
+ele->setBackgroundColor(0xFFFFFFFF);
+ele->onMouseEnter([ele](const MouseEvent& event) {
+    ele->setBackgroundColor(0xFF000000);
+    ele->update();
+    });
+ele->onMouseLeave([ele](const MouseEvent& event) {
+    ele->setBackgroundColor(0xFFFFFFFF);
+    ele->update();
+    });
+ele->onMouseDown([ele](const MouseEvent& event) {
+    ele->setBackgroundColor(0xFF00FFFF);
+    ele->update();
+    });
+ele->onMouseUp([ele](const MouseEvent& event) {
+    ele->setBackgroundColor(0xFFFFFF00);
+    ele->update();
+    });
+win->setAlignItems(Align::Center);
+win->setJustifyContent(Justify::Center);
+win->addChild(ele);
+```
+
+## 文本
+
+![](Doc/TextClear.png "文本清晰度对比")

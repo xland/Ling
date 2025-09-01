@@ -20,8 +20,10 @@ void WindowBaseImpl::paintElement(Element* ele)
     if (!surface) reset();
     auto canvas = surface->getCanvas(); //todo 不要每次重绘都全量绘制
     canvas->clear(0x000000);
+    canvas->save();
     canvas->scale(win->scaleFactor, win->scaleFactor);
     ele->paint(canvas);
+    canvas->restore();
 
     //SkPixmap pixmap;
     //surface->peekPixels(&pixmap);

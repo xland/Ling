@@ -10,10 +10,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 {
     App::init(hInstance);
     
-    LayoutDemo demo;
+    //LayoutDemo demo;
     //EventDemo demo;
     //InputDemo demo;
-    //TextDemo demo;
+    TextDemo demo;
     demo.start();
 
     return App::exec();

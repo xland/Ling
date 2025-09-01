@@ -22,9 +22,9 @@ TextDemo::~TextDemo()
 void TextDemo::label()
 {
     auto ele = new Label();
-    ele->setText(u8R"(醉里挑灯看剑，梦回吹角连营。 八百里分麾下炙，五十弦翻塞外声。 沙场秋点兵。)");
-    ele->setFont("STSong");
-    ele->setFontSize(13);
+    ele->setText(u8R"(醉里挑灯看剑，梦回吹角连营。)");
+    ele->setFont("Microsoft YaHei");//STSong
+    ele->setFontSize(21);
     ele->setBackgroundColor(0xFFFFFFFF);
 
     win->setAlignItems(Align::Center);

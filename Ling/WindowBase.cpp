@@ -327,7 +327,8 @@ void WindowBase::paintArea()
     bmi.bmiHeader.biPlanes = 1;
     bmi.bmiHeader.biBitCount = 32;
     bmi.bmiHeader.biCompression = BI_RGB;
-
+    SetStretchBltMode(hdc, HALFTONE);
+    SetBrushOrgEx(hdc, 0, 0, nullptr);
     StretchDIBits(hdc, 
         0, 0, size.w, size.h,
         0, 0, w, h,
