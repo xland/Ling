@@ -1,9 +1,7 @@
-#include "App.h"
+#include "../Include/App.h"
 
 namespace Ling {
     std::unique_ptr<App> app;
-    YGConfig* layoutConfig;
-
     App::App(HINSTANCE hInstance) :hInstance{ hInstance }
     {
         auto hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);

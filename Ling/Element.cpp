@@ -1,8 +1,10 @@
 ﻿#include <yoga/Yoga.h>
+#include <thorvg.h>
 
-#include "Element.h"
-#include "WindowBase.h"
-#include "App.h"
+#include "../Include/Element.h"
+#include "../Include/WindowBase.h"
+#include "../Include/App.h"
+
 
 namespace Ling{
 	Element::Element(): node{ YGNodeNew()  }
@@ -166,18 +168,23 @@ namespace Ling{
 		InvalidateRect(hwnd, &r, false);
 	}
 
-	void Element::paint(SkCanvas* canvas)
+	void Element::paint(tvg::Canvas* canvas)
 	{
 		float x = YGNodeLayoutGetLeft(node);
 		float y = YGNodeLayoutGetTop(node);
 		float w = YGNodeLayoutGetWidth(node);
 		float h = YGNodeLayoutGetHeight(node);
-		SkRect rect = SkRect::MakeXYWH(x, y, w, h);
 		if (bgColor != 0) { //绘制背景
 			SkPaint paint;
 			paint.setColor(bgColor);
 			paint.setStyle(SkPaint::kFill_Style);
 			paintRect(canvas, paint, rect);
+
+
+			auto rect = tvg::Shape::gen();
+			rect->appendRect(50, 50, 200, 200, 20, 20);
+			rect->fill(getColorR(bgColor), getColorG(bgColor), getColorB(bgColor), getColorA(bgColor));
+			canvas->push(rect);
 		}
 		if (borderColor != 0 && borderWidth > 0) { //绘制边框
 			rect.setXYWH(x + borderWidth / 2, y + borderWidth / 2, w - borderWidth, h - borderWidth);
