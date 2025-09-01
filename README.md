@@ -85,4 +85,6 @@ win->addChild(ele);
 
 ## 文本
 
+文本清晰度对比：
+
 ![](Doc/TextClear.png "文本清晰度对比")
