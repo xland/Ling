@@ -83,7 +83,7 @@ win->setJustifyContent(Justify::Center);
 win->addChild(ele);
 ```
 
-## 文本
+## Text
 
 ```c++
 auto ele = new Label();
