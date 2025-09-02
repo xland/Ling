@@ -15,159 +15,159 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Util.cpp">
+    <ClCompile Include="Src\Util.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="WindowNormal.cpp">
+    <ClCompile Include="Src\WindowNormal.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="WindowBase.cpp">
+    <ClCompile Include="Src\WindowBase.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="App.cpp">
+    <ClCompile Include="Src\App.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Element.cpp">
+    <ClCompile Include="Src\Element.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="WindowFrameless.cpp">
+    <ClCompile Include="Src\WindowFrameless.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Color.cpp">
+    <ClCompile Include="Src\Color.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Position.cpp">
+    <ClCompile Include="Src\Position.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Size.cpp">
+    <ClCompile Include="Src\Size.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Private\WindowBaseImpl.cpp">
+    <ClCompile Include="Src\Private\WindowBaseImpl.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="MouseEvent.cpp">
+    <ClCompile Include="Src\MouseEvent.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Event.cpp">
+    <ClCompile Include="Src\Event.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Input.cpp">
+    <ClCompile Include="Src\Input.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="TextArea.cpp">
+    <ClCompile Include="Src\TextArea.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="TextBlock.cpp">
+    <ClCompile Include="Src\TextBlock.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="ElementBox.cpp">
+    <ClCompile Include="Src\ElementBox.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="TextArea\editor.cpp">
+    <ClCompile Include="Src\TextArea\editor.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="TextArea\shape.cpp">
+    <ClCompile Include="Src\TextArea\shape.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="TextArea\stringslice.cpp">
+    <ClCompile Include="Src\TextArea\stringslice.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="TextArea\word_boundaries.cpp">
+    <ClCompile Include="Src\TextArea\word_boundaries.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Label.cpp">
+    <ClCompile Include="Src\Label.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Util.h">
+    <ClInclude Include="Include\Util.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="WindowNormal.h">
+    <ClInclude Include="Include\WindowNormal.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="WindowBase.h">
+    <ClInclude Include="Include\WindowBase.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="App.h">
+    <ClInclude Include="Include\App.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Element.h">
+    <ClInclude Include="Include\Element.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="WindowFrameless.h">
+    <ClInclude Include="Include\WindowFrameless.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Align.h">
+    <ClInclude Include="Include\Align.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Justify.h">
+    <ClInclude Include="Include\Justify.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Edge.h">
+    <ClInclude Include="Include\Edge.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Color.h">
+    <ClInclude Include="Include\Color.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Position.h">
+    <ClInclude Include="Include\Position.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Size.h">
+    <ClInclude Include="Include\Size.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Private\WindowBaseImpl.h">
+    <ClInclude Include="Src\Private\WindowBaseImpl.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="FlexDirection.h">
+    <ClInclude Include="Include\FlexDirection.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MouseEvent.h">
+    <ClInclude Include="Include\MouseEvent.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Event.h">
+    <ClInclude Include="Include\Event.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MouseButton.h">
+    <ClInclude Include="Include\MouseButton.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Input.h">
+    <ClInclude Include="Include\Input.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="TextArea.h">
+    <ClInclude Include="Include\TextArea.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="TextBlock.h">
+    <ClInclude Include="Include\TextBlock.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ElementBox.h">
+    <ClInclude Include="Include\ElementBox.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="TextArea\word_boundaries.h">
+    <ClInclude Include="Src\TextArea\word_boundaries.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="TextArea\editor.h">
+    <ClInclude Include="Src\TextArea\editor.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="TextArea\shape.h">
+    <ClInclude Include="Src\TextArea\shape.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="TextArea\stringslice.h">
+    <ClInclude Include="Src\TextArea\stringslice.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="TextArea\stringview.h">
+    <ClInclude Include="Src\TextArea\stringview.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Label.h">
+    <ClInclude Include="Include\Label.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="FontWeight.h">
+    <ClInclude Include="Include\FontWeight.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="FontWidth.h">
+    <ClInclude Include="Include\FontWidth.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="FontSlant.h">
+    <ClInclude Include="Include\FontSlant.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

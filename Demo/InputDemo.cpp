@@ -1,5 +1,5 @@
-﻿#include <WindowNormal.h>
-#include <TextArea.h>
+﻿#include "../Ling/Include/WindowNormal.h"
+#include "../Ling/Include/TextArea.h"
 #include "InputDemo.h"
 
 

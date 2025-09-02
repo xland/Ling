@@ -1,6 +1,6 @@
-﻿#include <WindowNormal.h>
-#include <TextBlock.h>
-#include <Label.h>
+﻿#include "../Ling/Include/WindowNormal.h"
+#include "../Ling/Include/TextBlock.h"
+#include "../Ling/Include/Label.h"
 #include "TextDemo.h"
 
 

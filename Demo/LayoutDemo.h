@@ -1,6 +1,7 @@
 ﻿#pragma once
 
-#include <WindowBase.h>
+#include "../Ling/Include/WindowBase.h"
+using namespace Ling;
 class LayoutDemo
 {
 public:

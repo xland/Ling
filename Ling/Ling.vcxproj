@@ -73,10 +73,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\Temp\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\Temp\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -161,59 +163,59 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="App.cpp" />
-    <ClCompile Include="Color.cpp" />
-    <ClCompile Include="Element.cpp" />
-    <ClCompile Include="ElementBox.cpp" />
-    <ClCompile Include="Event.cpp" />
-    <ClCompile Include="Input.cpp" />
-    <ClCompile Include="Label.cpp" />
-    <ClCompile Include="MouseEvent.cpp" />
-    <ClCompile Include="Position.cpp" />
-    <ClCompile Include="Size.cpp" />
-    <ClCompile Include="TextArea.cpp" />
-    <ClCompile Include="TextArea\editor.cpp" />
-    <ClCompile Include="TextArea\shape.cpp" />
-    <ClCompile Include="TextArea\stringslice.cpp" />
-    <ClCompile Include="TextArea\word_boundaries.cpp" />
-    <ClCompile Include="TextBlock.cpp" />
-    <ClCompile Include="Util.cpp" />
-    <ClCompile Include="Private\WindowBaseImpl.cpp" />
-    <ClCompile Include="WindowFrameless.cpp" />
-    <ClCompile Include="WindowNormal.cpp" />
-    <ClCompile Include="WindowBase.cpp" />
+    <ClCompile Include="Src\App.cpp" />
+    <ClCompile Include="Src\Color.cpp" />
+    <ClCompile Include="Src\Element.cpp" />
+    <ClCompile Include="Src\ElementBox.cpp" />
+    <ClCompile Include="Src\Event.cpp" />
+    <ClCompile Include="Src\Input.cpp" />
+    <ClCompile Include="Src\Label.cpp" />
+    <ClCompile Include="Src\MouseEvent.cpp" />
+    <ClCompile Include="Src\Position.cpp" />
+    <ClCompile Include="Src\Size.cpp" />
+    <ClCompile Include="Src\TextArea.cpp" />
+    <ClCompile Include="Src\TextArea\editor.cpp" />
+    <ClCompile Include="Src\TextArea\shape.cpp" />
+    <ClCompile Include="Src\TextArea\stringslice.cpp" />
+    <ClCompile Include="Src\TextArea\word_boundaries.cpp" />
+    <ClCompile Include="Src\TextBlock.cpp" />
+    <ClCompile Include="Src\Util.cpp" />
+    <ClCompile Include="Src\Private\WindowBaseImpl.cpp" />
+    <ClCompile Include="Src\WindowFrameless.cpp" />
+    <ClCompile Include="Src\WindowNormal.cpp" />
+    <ClCompile Include="Src\WindowBase.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Align.h" />
-    <ClInclude Include="App.h" />
-    <ClInclude Include="Color.h" />
-    <ClInclude Include="Edge.h" />
-    <ClInclude Include="Element.h" />
-    <ClInclude Include="ElementBox.h" />
-    <ClInclude Include="Event.h" />
-    <ClInclude Include="FlexDirection.h" />
-    <ClInclude Include="FontSlant.h" />
-    <ClInclude Include="Input.h" />
-    <ClInclude Include="Justify.h" />
-    <ClInclude Include="Label.h" />
-    <ClInclude Include="MouseButton.h" />
-    <ClInclude Include="MouseEvent.h" />
-    <ClInclude Include="Position.h" />
-    <ClInclude Include="FontWeight.h" />
-    <ClInclude Include="FontWidth.h" />
-    <ClInclude Include="Size.h" />
-    <ClInclude Include="TextArea.h" />
-    <ClInclude Include="TextArea\editor.h" />
-    <ClInclude Include="TextArea\shape.h" />
-    <ClInclude Include="TextArea\stringslice.h" />
-    <ClInclude Include="TextArea\stringview.h" />
-    <ClInclude Include="TextArea\word_boundaries.h" />
-    <ClInclude Include="TextBlock.h" />
-    <ClInclude Include="Util.h" />
-    <ClInclude Include="Private\WindowBaseImpl.h" />
-    <ClInclude Include="WindowFrameless.h" />
-    <ClInclude Include="WindowNormal.h" />
-    <ClInclude Include="WindowBase.h" />
+    <ClInclude Include="Include\Align.h" />
+    <ClInclude Include="Include\App.h" />
+    <ClInclude Include="Include\Color.h" />
+    <ClInclude Include="Include\Edge.h" />
+    <ClInclude Include="Include\Element.h" />
+    <ClInclude Include="Include\ElementBox.h" />
+    <ClInclude Include="Include\Event.h" />
+    <ClInclude Include="Include\FlexDirection.h" />
+    <ClInclude Include="Include\FontSlant.h" />
+    <ClInclude Include="Include\Input.h" />
+    <ClInclude Include="Include\Justify.h" />
+    <ClInclude Include="Include\Label.h" />
+    <ClInclude Include="Include\MouseButton.h" />
+    <ClInclude Include="Include\MouseEvent.h" />
+    <ClInclude Include="Include\Position.h" />
+    <ClInclude Include="Include\FontWeight.h" />
+    <ClInclude Include="Include\FontWidth.h" />
+    <ClInclude Include="Include\Size.h" />
+    <ClInclude Include="Include\TextArea.h" />
+    <ClInclude Include="Src\TextArea\editor.h" />
+    <ClInclude Include="Src\TextArea\shape.h" />
+    <ClInclude Include="Src\TextArea\stringslice.h" />
+    <ClInclude Include="Src\TextArea\stringview.h" />
+    <ClInclude Include="Src\TextArea\word_boundaries.h" />
+    <ClInclude Include="Include\TextBlock.h" />
+    <ClInclude Include="Include\Util.h" />
+    <ClInclude Include="Src\Private\WindowBaseImpl.h" />
+    <ClInclude Include="Include\WindowFrameless.h" />
+    <ClInclude Include="Include\WindowNormal.h" />
+    <ClInclude Include="Include\WindowBase.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Doc\Todo.md" />
