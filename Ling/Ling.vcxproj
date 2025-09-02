@@ -73,12 +73,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)build\$(Configuration)\Temp\</IntDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\$(ProjectName)Temp\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)build\$(Configuration)\Temp\</IntDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\$(ProjectName)Temp\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -173,6 +173,7 @@
     <ClCompile Include="Src\MouseEvent.cpp" />
     <ClCompile Include="Src\Position.cpp" />
     <ClCompile Include="Src\Size.cpp" />
+    <ClCompile Include="Src\Style.cpp" />
     <ClCompile Include="Src\TextArea.cpp" />
     <ClCompile Include="Src\TextArea\editor.cpp" />
     <ClCompile Include="Src\TextArea\shape.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="Include\FontWeight.h" />
     <ClInclude Include="Include\FontWidth.h" />
     <ClInclude Include="Include\Size.h" />
+    <ClInclude Include="Include\Style.h" />
     <ClInclude Include="Include\TextArea.h" />
     <ClInclude Include="Src\TextArea\editor.h" />
     <ClInclude Include="Src\TextArea\shape.h" />
