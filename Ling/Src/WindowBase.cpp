@@ -63,7 +63,7 @@ namespace Ling {
 
     void WindowBase::casecadeSetWindow(Element* ele)
     {
-        ele->win = this;
+        ele->setWindow(this);
         auto box = dynamic_cast<ElementBox*>(ele);
         if (box) {
             for (auto e : *(box->getChildren()))

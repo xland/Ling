@@ -1,5 +1,4 @@
-﻿#include <yoga/Yoga.h>
-#include <include/core/SkFontMgr.h>
+﻿#include <include/core/SkFontMgr.h>
 #include <include/core/SkFontStyle.h>
 #include <include/ports/SkTypeface_win.h>
 #include <include/core/SkFont.h>
@@ -12,13 +11,37 @@
 #include "../Include/WindowBase.h"
 #include "../Include/App.h"
 namespace Ling {
-	Element::Element() : node{ YGNodeNew() }//YGNodeNew()
+	Element::Element() 
 	{
 	}
 
 	Element::~Element()
 	{
-		YGNodeFreeRecursive(node);
+		
+	}
+	WindowBase* Element::getWindow()
+	{
+		return win;
+	}
+	void Element::update()
+	{
+		int left = (int)getGlobalX();
+		int top = (int)getGlobalY();
+		int right = (int)getWidth() + left;
+		int bottom = (int)getHeight() + top;
+		RECT r{ .left{left},.top{top}, .right{right}, .bottom{bottom} };
+		auto hwnd = getWindow()->getHandle();
+		InvalidateRect(hwnd, &r, false);
+	}
+
+	void Element::setWindow(WindowBase* win)
+	{
+		this->win = win;
+	}
+
+	void Element::setParent(Element* ele)
+	{
+		this->parent = ele;
 	}
 
 	Element* Element::getParent()
@@ -26,169 +49,92 @@ namespace Ling {
 		return parent;
 	}
 
-	void Element::setFlexGrow(const float& val)
-	{
-		YGNodeStyleSetFlexGrow(node, val);
-	}
-
-	void Element::setFlexShrink(const float& val)
-	{
-		YGNodeStyleSetFlexShrink(node, val);
-	}
-
-	void Element::setRadius(float r)
-	{
-		radiusLT = r; radiusRT = r; radiusRB = r; radiusLB = r;
-	}
-
-	void Element::setRadius(float lt, float rt, float rb, float lb)
-	{
-		radiusLT = lt; radiusRT = rt; radiusRB = rb; radiusLB = lb;
-	}
-
-	void Element::setCaption(bool flag)
-	{
-		isCaption = flag;
-	}
-
-	bool Element::getCaption()
-	{
-		return isCaption;
-	}
-
-	void Element::setSize(const float& w, const float& h)
-	{
-		YGNodeStyleSetWidth(node, w);
-		YGNodeStyleSetHeight(node, h);
-	}
-	void Element::setWidth(const float& w)
-	{
-		YGNodeStyleSetWidth(node, w);
-	}
-	void Element::setHeight(const float& h)
-	{
-		YGNodeStyleSetHeight(node, h);
-	}
-	void Element::setWidthPercent(const float& percent)
-	{
-		YGNodeStyleSetWidthPercent(node, percent);
-	}
-	void Element::setHeightPercent(const float& percent)
-	{
-		YGNodeStyleSetHeightPercent(node, percent);
-	}
-	void Element::setSizePercent(const float& w, const float& h)
-	{
-		YGNodeStyleSetWidthPercent(node, w);
-		YGNodeStyleSetHeightPercent(node, h);
-	}
-	void Element::setBorderWidth(const float& width)
-	{
-		borderWidth = width;
-	}
-
-	void Element::setBorderColor(const Color& color)
-	{
-		borderColor = color;
-	}
-
-	void Element::setBackgroundColor(const Color& color)
-	{
-		bgColor = color;
-	}
-
-	void Element::setMargin(const float& val)
-	{
-		YGNodeStyleSetMargin(node, YGEdgeAll, val);
-	}
-
-	void Element::setMargin(const float& left, const float& top, const float& right, const float& bottom)
-	{
-		YGNodeStyleSetMargin(node, YGEdgeLeft, left);
-		YGNodeStyleSetMargin(node, YGEdgeTop, top);
-		YGNodeStyleSetMargin(node, YGEdgeRight, right);
-		YGNodeStyleSetMargin(node, YGEdgeBottom, bottom);
-	}
-
-	void Element::setMargin(const Edge& type, const float& val)
-	{
-		YGNodeStyleSetMargin(node, (YGEdge)type, val);
-	}
-
-	void Element::setPadding(const float& val)
-	{
-		YGNodeStyleSetPadding(node, YGEdgeAll, val);
-	}
-
-	void Element::setPadding(const float& left, const float& top, const float& right, const float& bottom)
-	{
-		YGNodeStyleSetPadding(node, YGEdgeLeft, left);
-		YGNodeStyleSetPadding(node, YGEdgeTop, top);
-		YGNodeStyleSetPadding(node, YGEdgeRight, right);
-		YGNodeStyleSetPadding(node, YGEdgeBottom, bottom);
-	}
-
-	void Element::setPadding(const Edge& type, const float& val)
-	{
-		YGNodeStyleSetPadding(node, (YGEdge)type, val);
-	}
-
-	Position Element::getPosition()
-	{
-		int x = (int)YGNodeLayoutGetLeft(node);
-		int y = (int)YGNodeLayoutGetTop(node);
-		return Position(x, y);
-	}
-
-	Size Element::getSize()
-	{
-		int w = (int)YGNodeLayoutGetWidth(node);
-		int h = (int)YGNodeLayoutGetHeight(node);
-		return Size(w, h);
-	}
-
-	WindowBase* Element::getWindow()
-	{
-		return win;
-	}
-
-	bool Element::hittest(const int& x, const int& y)
-	{
-		float right = YGNodeLayoutGetWidth(node) + globalX;
-		float bottom = YGNodeLayoutGetHeight(node) + globalY;
-		if (x > globalX && y > globalY && x < right && y < bottom)
-		{
-			return true;
-		}
-		return false;
-	}
-
-	void Element::update()
-	{
-		RECT r{ .left{(int)globalX},.top{(int)globalY},
-			.right{(int)YGNodeLayoutGetWidth(node) + (int)globalX},
-			.bottom{(int)YGNodeLayoutGetHeight(node) + (int)globalY}
-		};
-		auto hwnd = getWindow()->getHandle();
-		//InvalidateRect(hwnd, &r, false);
-		InvalidateRect(hwnd, nullptr, false);
-	}
-
 	void Element::paint(SkCanvas* canvas)
 	{
-		float x = YGNodeLayoutGetLeft(node);
-		float y = YGNodeLayoutGetTop(node);
-		float w = YGNodeLayoutGetWidth(node);
-		float h = YGNodeLayoutGetHeight(node);
+		float x = getLeft();
+		float y = getTop();
+		float w = getWidth();
+		float h = getHeight();
 		SkRect rect = SkRect::MakeXYWH(x, y, w, h);
-		if (bgColor != 0) { //绘制背景
+		paintStyle(canvas, rect);
+	}
+
+	void Element::setBorderWidth(const float& borderWidth)
+	{
+		this->borderWidth = borderWidth;
+	}
+	float Element::getBorderWidth()
+	{
+		return borderWidth;
+	}
+	void Element::setRadius(const float& radius)
+	{
+		radiusLT = radius;
+		radiusRT = radius;
+		radiusRB = radius;
+		radiusLB = radius;
+	}
+	void Element::setRadius(const float& radiusLT, const float& radiusRT, const float& radiusRB, const float& radiusLB)
+	{
+		this->radiusLT = radiusLT;
+		this->radiusRT = radiusRT;
+		this->radiusRB = radiusRB;
+		this->radiusLB = radiusLB;
+	}
+	std::array<float, 4> Element::getRadius()
+	{
+		return std::array<float, 4>{radiusLT, radiusRT, radiusRB, radiusLB};
+	}
+	float Element::getRadiusLT()
+	{
+		return radiusLT;
+	}
+	float Element::getRadiusRT()
+	{
+		return radiusRT;
+	}
+	float Element::getRadiusRB()
+	{
+		return radiusRB;
+	}
+	float Element::getRadiusLB()
+	{
+		return radiusLB;
+	}
+	void Element::setBackgroundColor(const Color& backgroundColor)
+	{
+		this->backgroundColor = backgroundColor;
+	}
+	void Element::setBorderColor(const Color& borderColor)
+	{
+		this->borderColor = borderColor;
+	}
+	Color& Element::getBackgroundColor()
+	{
+		return backgroundColor;
+	}
+	Color& Element::getBorderColor()
+	{
+		return borderColor;
+	}
+	void Element::setCaptionFlag(bool captionFlag)
+	{
+		this->captionFlag = captionFlag;
+	}
+	bool Element::getCaptionFlag()
+	{
+		return captionFlag;
+	}
+
+	void Element::paintStyle(SkCanvas* canvas, SkRect& rect)
+	{
+		if (backgroundColor != 0) { //绘制背景
 			SkPaint paint;
-			paint.setColor(bgColor);
+			paint.setColor(backgroundColor);
 			paint.setStyle(SkPaint::kFill_Style);
 			paintRect(canvas, paint, rect);
 		}
 		if (borderColor != 0 && borderWidth > 0) { //绘制边框
-			rect.setXYWH(x + borderWidth / 2, y + borderWidth / 2, w - borderWidth, h - borderWidth);
 			SkPaint paint;
 			paint.setAntiAlias(true);
 			paint.setColor(borderColor);
@@ -196,7 +142,6 @@ namespace Ling {
 			paint.setStyle(SkPaint::kStroke_Style);
 			paintRect(canvas, paint, rect);
 		}
-
 	}
 	void Element::paintRect(SkCanvas* canvas, const SkPaint& paint, const SkRect& rect)
 	{

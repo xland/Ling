@@ -22,7 +22,7 @@ void LayoutDemo::leftRight()
     auto left = new Element();
     left->setSize(300, SizeNaN);
     left->setBackgroundColor(0xFF876543);
-    left->setCaption(true);
+    left->setCaptionFlag(true);
     win->addChild(left);
 
     auto right = new Element();
@@ -39,7 +39,7 @@ void LayoutDemo::topCenterBottom()
     auto top = new Element();
     top->setSize(SizeNaN, 80);
     top->setBackgroundColor(0xFF876543);
-    top->setCaption(true);
+    top->setCaptionFlag(true);
     win->addChild(top);
 
     auto center = new Element();
@@ -61,7 +61,7 @@ void LayoutDemo::verticalHorizontalCenter()
     auto ele = new Element();
     ele->setSize(100, 100);
     ele->setBackgroundColor(0xFF876543);
-    ele->setCaption(true);
+    ele->setCaptionFlag(true);
     win->setAlignItems(Align::Center);
     win->setJustifyContent(Justify::Center);
     win->addChild(ele);

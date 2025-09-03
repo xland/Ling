@@ -12,18 +12,17 @@ namespace Ling {
 
 	void ElementBox::addChild(Element* ele)
 	{
-		ele->parent = this;
-		YGNodeInsertChild(node, ele->node, YGNodeGetChildCount(node));
+		ele->setParent(this);
+		Node::addChild(ele);
 		children.push_back(ele);
 	}
 
 	void ElementBox::insertChild(const int& index, Element* ele)
 	{
-		ele->parent = this;
-		YGNodeInsertChild(node, ele->node, index);
+		ele->setParent(this);
+		Node::insertChild(ele, index);
 		children.insert(children.begin() + index, ele);
 	}
-
 
 	void ElementBox::paint(SkCanvas* canvas)
 	{

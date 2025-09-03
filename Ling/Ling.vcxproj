@@ -171,9 +171,9 @@
     <ClCompile Include="Src\Input.cpp" />
     <ClCompile Include="Src\Label.cpp" />
     <ClCompile Include="Src\MouseEvent.cpp" />
+    <ClCompile Include="Src\Node.cpp" />
     <ClCompile Include="Src\Position.cpp" />
     <ClCompile Include="Src\Size.cpp" />
-    <ClCompile Include="Src\Style.cpp" />
     <ClCompile Include="Src\TextArea.cpp" />
     <ClCompile Include="Src\TextArea\editor.cpp" />
     <ClCompile Include="Src\TextArea\shape.cpp" />
@@ -201,11 +201,11 @@
     <ClInclude Include="Include\Label.h" />
     <ClInclude Include="Include\MouseButton.h" />
     <ClInclude Include="Include\MouseEvent.h" />
+    <ClInclude Include="Include\Node.h" />
     <ClInclude Include="Include\Position.h" />
     <ClInclude Include="Include\FontWeight.h" />
     <ClInclude Include="Include\FontWidth.h" />
     <ClInclude Include="Include\Size.h" />
-    <ClInclude Include="Include\Style.h" />
     <ClInclude Include="Include\TextArea.h" />
     <ClInclude Include="Src\TextArea\editor.h" />
     <ClInclude Include="Src\TextArea\shape.h" />

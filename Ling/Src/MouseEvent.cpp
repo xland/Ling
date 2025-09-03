@@ -12,7 +12,7 @@ namespace Ling {
 
 	void MouseEvent::setRelativePosition(Element* ele)
 	{
-		x = this->globalX - ele->globalX;
-		y = this->globalY - ele->globalY;
+		x = this->globalX - ele->getGlobalX();
+		y = this->globalY - ele->getGlobalY();
 	}
 }

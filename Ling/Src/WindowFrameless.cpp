@@ -62,7 +62,7 @@ namespace Ling {
                 else if (y > winRect.bottom - borderWidth) return HTBOTTOM;
             }
             auto ele = getElementByPosition(x - winRect.left, y - winRect.top);
-            if (ele->getCaption()) {
+            if (ele->getCaptionFlag()) {
                 return HTCAPTION;
             }
             return HTCLIENT;

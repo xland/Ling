@@ -1,66 +1,46 @@
 ﻿#pragma once
 #include <Windows.h>
-#include "Align.h"
-#include "Justify.h"
-#include "Edge.h"
+#include "Node.h"
 #include "Color.h"
-#include "Position.h"
-#include "Size.h"
-#include "FlexDirection.h"
-#include "Event.h"
 
-struct YGNode;
-struct SkRect;
+class SkRect;
 class SkCanvas;
 class SkPaint;
 namespace Ling {
+	class Style;
 	class MouseEvent;
 	class WindowBase;
 	class ElementBox;
 	class Label;
 	class TextBlock;
-	class Element:public Event
+	class Element:public Node
 	{
 		public:
 			Element();
-			~Element();
+			~Element();		
 			virtual std::vector<Element*>* getChildren() { return nullptr; };
-			virtual void paint(SkCanvas* canvas);
 			Element* getParent();
-			/// <summary>
-			/// 此元素如何在父元素主轴方向上“长大”占据剩余空间
-			/// </summary>
-			/// <param name="val"></param>
-			void setFlexGrow(const float& val);
-			/// <summary>
-			/// 此元素如何在父元素主轴方向上“收缩”
-			/// </summary>
-			/// <param name="val"></param>
-			void setFlexShrink(const float& val);
-			void setWidth(const float& w);
-			void setHeight(const float& h);
-			void setSize(const float& w, const float& h);
-			void setWidthPercent(const float& percent);
-			void setHeightPercent(const float& percent);
-			void setSizePercent(const float& w, const float& h);
-			void setMargin(const float& val);
-			void setMargin(const float& left, const float& top, const float& right, const float& bottom);
-			void setMargin(const Edge& type, const float& val);
-			void setPadding(const float& val);
-			void setPadding(const float& left, const float& top, const float& right, const float& bottom);
-			void setPadding(const Edge& type, const float& val);
-			void setBorderWidth(const float& width);
-			void setBorderColor(const Color& color); 
-			void setBackgroundColor(const Color& color);
-			void setRadius(float r);
-			void setRadius(float lt, float rt, float rb, float lb);
-			void setCaption(bool flag);
-			bool getCaption();
-			Position getPosition();
-			Size getSize();
-			WindowBase* getWindow();
-			bool hittest(const int& x, const int& y);
+			virtual void paint(SkCanvas* canvas);			
+			WindowBase* getWindow();			
 			void update();
+
+			void setBorderWidth(const float& borderWidth);
+			float getBorderWidth();
+			void setRadius(const float& radius);
+			void setRadius(const float& radiusLT, const float& radiusRT, const float& radiusRB, const float& radiusLB);
+			std::array<float, 4> getRadius();
+			float getRadiusLT();
+			float getRadiusRT();
+			float getRadiusRB();
+			float getRadiusLB();
+			void setBackgroundColor(const Color& backgroundColor);
+			void setBorderColor(const Color& borderColor);
+			Color& getBackgroundColor();
+			Color& getBorderColor();
+			void setCaptionFlag(bool captionFlag);
+			bool getCaptionFlag();
+			void paintStyle(SkCanvas* canvas, SkRect& rect);
+
 		public:
 			friend class MouseEvent;
 			friend class ElementBox;
@@ -68,20 +48,17 @@ namespace Ling {
 			friend class TextBlock;
 			friend class WindowBase;
 		protected:
-
-		protected:
-
 		private:
+			void setWindow(WindowBase* win);
+			void setParent(Element* ele);
 			void paintRect(SkCanvas* canvas, const SkPaint& paint, const SkRect& rect);
 		private:
 			Element* parent{ nullptr };
-			YGNode* node;
 			WindowBase* win;
-			float borderWidth;
+			float borderWidth{ 0.f };
 			float radiusLT{ 0.f }, radiusRT{ 0.f }, radiusRB{ 0.f }, radiusLB{ 0.f };
-			Color bgColor{ 0x00000000 }, borderColor{ 0x00000000 };
-			bool isCaption{ false };
-			float globalX{ 0 }, globalY{ 0 };
+			Color backgroundColor{ 0x00000000 }, borderColor{ 0x00000000 };
+			bool captionFlag{ false };
 	};
 }
 
