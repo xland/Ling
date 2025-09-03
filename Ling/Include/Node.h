@@ -66,6 +66,7 @@ namespace Ling {
 		public:
 			friend class ElementBox;
 			friend class Label;
+			friend class TextBlock;
 		private:
 			void insertChild(Node* node,const int& index);
 			void addChild(Node* node);

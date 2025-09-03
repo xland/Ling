@@ -4,6 +4,7 @@
 #include <include/ports/SkTypeface_win.h>
 #include <include/core/SkFont.h>
 #include <include/core/SkPaint.h>
+#include <include/core/SkRect.h>
 #include <include/core/SkCanvas.h>
 
 #include "../Include/App.h"
@@ -11,21 +12,12 @@
 #include "../Include/WindowBase.h"
 
 namespace Ling {
-    static YGSize measure(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode) 
+    YGSize Label::nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode)
     {
         auto label = static_cast<Label*>(YGNodeGetContext(node));
-        auto& text = label->getText();
-        auto font = label->getFont();
-        auto win = label->getWindow();
-        auto fs = label->getFontSize();
-        auto sf = win->getScaleFactor();
-        auto fontSize = fs * sf;
-        font->setSize(fontSize);
-        SkRect r;
-        font->measureText(text.data(), text.length(), SkTextEncoding::kUTF8, &r);
-        float measuredWidth = r.width();
-        float measuredHeight = r.height();
-        //// 根据 Yoga 的约束模式进行裁剪
+        label->measure();
+        float measuredWidth = label->measuredRect->width();
+        float measuredHeight = label->measuredRect->height();
         if (widthMode == YGMeasureModeExactly) {
             measuredWidth = width;
         }
@@ -41,10 +33,22 @@ namespace Ling {
         return { measuredWidth, measuredHeight };
     }
 
+    void Label::measure()
+    {
+        if (measuredRect->isEmpty()) {
+            auto win = getWindow();
+            auto sf = win->getScaleFactor();
+            auto fs = fontSize * sf;
+            font->setSize(fs);
+            font->measureText(text.data(), text.length(), SkTextEncoding::kUTF8, measuredRect.get());
+        }
+    }
+
     Label::Label()
     {
+        measuredRect = std::make_unique<SkRect>();
         YGNodeSetContext(node, this);
-        YGNodeSetMeasureFunc(node, &measure);
+        YGNodeSetMeasureFunc(node, &Label::nodeMeasureCB);
     }
     Label::~Label() {
 
@@ -62,18 +66,14 @@ namespace Ling {
         //canvas->drawString("Hello World!", 20, 120, font, paint);
 
         Element::paint(canvas);
-
-        float x = YGNodeLayoutGetLeft(node);
-        float y = YGNodeLayoutGetTop(node);
-
-        SkRect r;
-        font->measureText(text.data(), text.length(), SkTextEncoding::kUTF8, &r);
+        float x = getLeft();
+        float y = getTop();
 
         SkPaint paint;
         paint.setAntiAlias(true);
         paint.setColor(SK_ColorRED);
         font->setSize(fontSize * win->scaleFactor);
-        canvas->drawSimpleText(text.data(), text.length(), SkTextEncoding::kUTF8, x - r.fLeft, y - r.fTop, *font.get(), paint);
+        canvas->drawSimpleText(text.data(), text.length(), SkTextEncoding::kUTF8, x - measuredRect->fLeft, y - measuredRect->fTop, *font.get(), paint);
     }
 
     const std::string& Label::getText()

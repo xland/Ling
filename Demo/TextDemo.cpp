@@ -34,18 +34,20 @@ void TextDemo::label()
 
 void TextDemo::textblock()
 {
-    win->setAlignItems(Align::Center);
-    win->setJustifyContent(Justify::Center);
-    auto ele = new TextBlock();
-    //    ele->setText(uR"(醉里挑灯看剑，梦回吹角连营。
+    //win->setAlignItems(Align::Center);
+    //win->setJustifyContent(Justify::Center);
+    //auto ele = new TextBlock();
+    //    ele->setText(u8R"(醉里挑灯看剑，梦回吹角连营。
     //八百里分麾下炙，五十弦翻塞外声。
     //沙场秋点兵。
     //马作的卢飞快，弓如霹雳弦惊。
     //了却君王天下事，赢得生前身后名。
     //可怜白发生！)");
-    ele->setSizePercent(100, 100);
-    ele->setBackgroundColor(0xFFFFFFFF);
-    win->addChild(ele);
+    //    ele->setFont("Microsoft YaHei");//STSong
+    //    ele->setFontSize(21);
+    //ele->setSizePercent(100, 100);
+    //ele->setBackgroundColor(0xFFFFFFFF);
+    //win->addChild(ele);
 }
 
 void TextDemo::start() {

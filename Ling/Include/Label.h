@@ -1,12 +1,17 @@
 #pragma once
 #include <string>
-
+#include <memory>
 #include "FontWeight.h"
 #include "FontWidth.h"
 #include "FontSlant.h"
 #include "Element.h"
 
+struct YGSize;
+struct YGNode;
 class SkFont;
+class SkRect;
+enum YGMeasureMode;
+typedef const struct YGNode* YGNodeConstRef;
 namespace Ling {
 	class Label :public Element
 	{
@@ -24,11 +29,14 @@ namespace Ling {
 			void setFontSize(const float& fontSize);
 			float getFontSize();
 		protected:
-
+		private:
+			static YGSize nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode);
+			void measure();
 		private:
 			std::string text;
 			std::shared_ptr<SkFont> font;
 			float fontSize{ 16.f };
+			std::unique_ptr<SkRect> measuredRect;
 	};
 }
 
