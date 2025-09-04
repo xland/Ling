@@ -175,10 +175,6 @@
     <ClCompile Include="Src\Position.cpp" />
     <ClCompile Include="Src\Size.cpp" />
     <ClCompile Include="Src\TextArea.cpp" />
-    <ClCompile Include="Src\TextArea\editor.cpp" />
-    <ClCompile Include="Src\TextArea\shape.cpp" />
-    <ClCompile Include="Src\TextArea\stringslice.cpp" />
-    <ClCompile Include="Src\TextArea\word_boundaries.cpp" />
     <ClCompile Include="Src\TextBlock.cpp" />
     <ClCompile Include="Src\Util.cpp" />
     <ClCompile Include="Src\Private\WindowBaseImpl.cpp" />
@@ -207,13 +203,11 @@
     <ClInclude Include="Include\FontWidth.h" />
     <ClInclude Include="Include\Size.h" />
     <ClInclude Include="Include\TextArea.h" />
-    <ClInclude Include="Src\TextArea\editor.h" />
-    <ClInclude Include="Src\TextArea\shape.h" />
-    <ClInclude Include="Src\TextArea\stringslice.h" />
-    <ClInclude Include="Src\TextArea\stringview.h" />
-    <ClInclude Include="Src\TextArea\word_boundaries.h" />
+    <ClInclude Include="Src\LineGlyphInfo.h" />
+    <ClInclude Include="Src\LineInfo.h" />
     <ClInclude Include="Include\TextBlock.h" />
     <ClInclude Include="Include\Util.h" />
+    <ClInclude Include="Src\LineSizeInfo.h" />
     <ClInclude Include="Src\Private\WindowBaseImpl.h" />
     <ClInclude Include="Include\WindowFrameless.h" />
     <ClInclude Include="Include\WindowNormal.h" />

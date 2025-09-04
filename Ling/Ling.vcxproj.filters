@@ -63,18 +63,6 @@
     <ClCompile Include="Src\ElementBox.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Src\TextArea\editor.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\TextArea\shape.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\TextArea\stringslice.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\TextArea\word_boundaries.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Label.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -146,21 +134,6 @@
     <ClInclude Include="Include\ElementBox.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Src\TextArea\word_boundaries.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\TextArea\editor.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\TextArea\shape.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\TextArea\stringslice.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\TextArea\stringview.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Label.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -174,6 +147,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Include\Node.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\LineInfo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\LineGlyphInfo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\LineSizeInfo.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

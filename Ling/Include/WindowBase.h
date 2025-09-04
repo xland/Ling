@@ -13,6 +13,7 @@ namespace Ling {
 	class WindowBaseImpl;
 	class TextArea;
 	class Label;
+	class TextBlock;
 	class WindowBase :public ElementBox
 	{
 	public:
@@ -41,6 +42,8 @@ namespace Ling {
 		friend class TextArea;
 		friend class WindowBaseImpl;
 		friend class Label;
+		friend class TextBlock;
+		friend class TextArea;
 	protected:
 		const std::wstring& getWinClsName();
 		void setScaleFactor();

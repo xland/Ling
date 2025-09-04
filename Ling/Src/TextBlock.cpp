@@ -1,5 +1,7 @@
+#include <sstream>
 #include <yoga/Yoga.h>
 #include <include/core/SkFontMgr.h>
+#include <include/core/SkFontMetrics.h>
 #include <include/core/SkFontStyle.h>
 #include <include/ports/SkTypeface_win.h>
 #include <include/core/SkFont.h>
@@ -7,46 +9,16 @@
 #include <include/core/SkCanvas.h>
 
 #include "../Include/App.h"
-#include "../Include/Label.h"
 #include "../Include/WindowBase.h"
 #include "../Include/TextBlock.h"
+#include "../Include/Position.h"
+#include "LineSizeInfo.h"
 
 namespace Ling {
-
-    static YGSize measure(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode)
-    {
-        auto label = static_cast<Label*>(YGNodeGetContext(node));
-        auto& text = label->getText();
-        auto font = label->getFont();
-        auto win = label->getWindow();
-        auto fs = label->getFontSize();
-        auto sf = win->getScaleFactor();
-        auto fontSize = fs * sf;
-        font->setSize(fontSize);
-        SkRect r;
-        font->measureText(text.data(), text.length(), SkTextEncoding::kUTF8, &r);
-        float measuredWidth = r.width();
-        float measuredHeight = r.height();
-        //// 根据 Yoga 的约束模式进行裁剪
-        if (widthMode == YGMeasureModeExactly) {
-            measuredWidth = width;
-        }
-        else if (widthMode == YGMeasureModeAtMost) {
-            measuredWidth = std::min(measuredWidth, width);
-        }
-        if (heightMode == YGMeasureModeExactly) {
-            measuredHeight = height;
-        }
-        else if (heightMode == YGMeasureModeAtMost) {
-            measuredHeight = std::min(measuredHeight, height);
-        }
-        return { measuredWidth, measuredHeight };
-    }
-
     TextBlock::TextBlock()
     {
         YGNodeSetContext(node, this);
-        YGNodeSetMeasureFunc(node, &measure);
+        YGNodeSetMeasureFunc(node, &TextBlock::nodeMeasureCB);
     }
     TextBlock::~TextBlock() {
 
@@ -54,34 +26,96 @@ namespace Ling {
 
     void TextBlock::paint(SkCanvas* canvas)
     {
-        //sk_sp<SkFontMgr> fontMgr = SkFontMgr_New_GDI();
-        //SkFontStyle fontStyle = SkFontStyle::Normal();
-        //sk_sp<SkTypeface> typeFace = fontMgr->matchFamilyStyle("Microsoft YaHei", fontStyle);
-        //SkFont font(typeFace, 56);
-
-        //SkPaint paint;
-        //paint.setColor(0xFF00FFFF);
-        //canvas->drawString("Hello World!", 20, 120, font, paint);
         Element::paint(canvas);
+        if (text.empty()) return;
+        measure();
+        float x = getLeft();
+        float y = getTop();
         SkPaint paint;
         paint.setAntiAlias(true);
-        sk_sp<SkFontMgr> fontMgr = SkFontMgr_New_GDI();
-        SkFontStyle fontStyle = SkFontStyle::Normal();
-        sk_sp<SkTypeface> typeFace = fontMgr->matchFamilyStyle("Microsoft YaHei", fontStyle);
-        SkFont font(typeFace, 56);
-
-        const char* text = "Hello, Bazel world! 测试";
-        size_t text_length = strlen(text);
-
-        SkRect r;
-        font.measureText(text, text_length, SkTextEncoding::kUTF8, &r);
-
         paint.setColor(SK_ColorRED);
-        canvas->drawSimpleText(text, text_length, SkTextEncoding::kUTF8, 20, 120, font, paint);
+        font->setSize(fontSize * getWindow()->scaleFactor);
+        for (auto& info: lineSizeInfos)
+        {
+            auto str = text.substr(info.startIndex, info.length);
+            canvas->drawSimpleText(str.data(), str.length(), SkTextEncoding::kUTF8, x+info.pos.x, y+info.pos.y, *font.get(), paint);
+        }
+        
+    }
+    YGSize TextBlock::nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode)
+    {
+        auto tb = static_cast<TextBlock*>(YGNodeGetContext(node));
+        tb->measure();
+        float mWidth = tb->measuredWidth;
+        float mHeight = tb->measuredHeight;
+        if (widthMode == YGMeasureModeExactly) {
+            mWidth = width;
+        }
+        else if (widthMode == YGMeasureModeAtMost) {
+            mWidth = std::min(mWidth, width);
+        }
+        if (heightMode == YGMeasureModeExactly) {
+            mHeight = height;
+        }
+        else if (heightMode == YGMeasureModeAtMost) {
+            mHeight = std::min(mHeight, height);
+        }
+        return { mWidth, mHeight };
     }
 
-    void TextBlock::setText(const std::wstring& text)
+    const std::string& TextBlock::getText()
+    {
+        return text;
+    }
+    void TextBlock::measure()
+    {
+        if (!lineSizeInfos.empty()) return;
+        std::stringstream ss(text);
+        std::string line;
+        int lineIndex{ 0 };
+        auto win = getWindow();
+        auto sf = win->getScaleFactor();
+        auto fs = fontSize * sf;
+        font->setSize(fs);
+        SkRect rect;
+        size_t startIndex{ 0 };
+        while (std::getline(ss, line)) {
+            font->measureText(line.data(), line.length(), SkTextEncoding::kUTF8, &rect);
+            LineSizeInfo lineInfo;
+            auto w = rect.width();
+            auto h = rect.height();
+            lineInfo.pos.x = 0 - rect.fLeft;
+            lineInfo.pos.y = lineIndex * h + h * lineSpace / 2 + getTop() - rect.fTop;
+            lineInfo.startIndex = startIndex;
+            lineInfo.length = line.length();
+            lineIndex += 1;
+            lineSizeInfos.push_back(std::move(lineInfo));
+            startIndex += lineInfo.length+1;
+            if (measuredWidth < w) measuredWidth = w;
+            measuredHeight += h + h * lineSpace;
+        }
+    }
+    void TextBlock::setText(const std::string& text)
     {
         this->text = text;
+    }
+
+    void TextBlock::setFont(const std::string& fontName, const FontWeight& fontWeight, const FontWidth& fontWidth, const FontSlant& fontSlant)
+    {
+        SkFontStyle fontStyle((SkFontStyle::Weight)fontWeight, (SkFontStyle::Width)fontWidth, (SkFontStyle::Slant)fontSlant);
+        sk_sp<SkTypeface> typeFace = App::getFontMgr()->matchFamilyStyle(fontName.data(), fontStyle);
+        font = std::make_shared<SkFont>(typeFace);
+        font->setEdging(SkFont::Edging::kSubpixelAntiAlias);
+        font->setSubpixel(true);
+    }
+
+    void TextBlock::setFontSize(const float& fontSize)
+    {
+        this->fontSize = fontSize;
+    }
+
+    float TextBlock::getFontSize()
+    {
+        return fontSize;
     }
 }

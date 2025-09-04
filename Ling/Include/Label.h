@@ -9,7 +9,7 @@
 struct YGSize;
 struct YGNode;
 class SkFont;
-class SkRect;
+struct SkRect;
 enum YGMeasureMode;
 typedef const struct YGNode* YGNodeConstRef;
 namespace Ling {
@@ -35,7 +35,7 @@ namespace Ling {
 		private:
 			std::string text;
 			std::shared_ptr<SkFont> font;
-			float fontSize{ 16.f };
+			float fontSize{ 14.f };
 			std::unique_ptr<SkRect> measuredRect;
 	};
 }

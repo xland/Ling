@@ -4,7 +4,7 @@ namespace Ling {
 	{
 	public:
 		Position();
-		Position(const int& x = 0, const int& y = 0);
+		Position(const int& x, const int& y);
 		~Position();
 	public:
 		int x{ 0 }, y{ 0 };

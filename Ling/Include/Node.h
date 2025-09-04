@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Align.h"
 #include "Justify.h"
 #include "Edge.h"
@@ -67,6 +67,7 @@ namespace Ling {
 			friend class ElementBox;
 			friend class Label;
 			friend class TextBlock;
+			friend class TextArea;
 		private:
 			void insertChild(Node* node,const int& index);
 			void addChild(Node* node);

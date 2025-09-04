@@ -12,10 +12,31 @@
 #include "../Include/WindowBase.h"
 
 namespace Ling {
+    Label::Label()
+    {
+        measuredRect = std::make_unique<SkRect>();
+        YGNodeSetContext(node, this);
+        YGNodeSetMeasureFunc(node, &Label::nodeMeasureCB);
+    }
+    Label::~Label() {
+
+    }
+
+    void Label::paint(SkCanvas* canvas)
+    {
+        Element::paint(canvas);
+        if (text.empty()) return;
+        float x = getLeft();
+        float y = getTop();
+        SkPaint paint;
+        paint.setAntiAlias(true);
+        paint.setColor(SK_ColorRED);
+        font->setSize(fontSize * getWindow()->scaleFactor);
+        canvas->drawSimpleText(text.data(), text.length(), SkTextEncoding::kUTF8, x - measuredRect->fLeft, y - measuredRect->fTop, *font.get(), paint);
+    }
     YGSize Label::nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode)
     {
         auto label = static_cast<Label*>(YGNodeGetContext(node));
-        label->measure();
         float measuredWidth = label->measuredRect->width();
         float measuredHeight = label->measuredRect->height();
         if (widthMode == YGMeasureModeExactly) {
@@ -43,39 +64,6 @@ namespace Ling {
             font->measureText(text.data(), text.length(), SkTextEncoding::kUTF8, measuredRect.get());
         }
     }
-
-    Label::Label()
-    {
-        measuredRect = std::make_unique<SkRect>();
-        YGNodeSetContext(node, this);
-        YGNodeSetMeasureFunc(node, &Label::nodeMeasureCB);
-    }
-    Label::~Label() {
-
-    }
-
-    void Label::paint(SkCanvas* canvas)
-    {
-        //sk_sp<SkFontMgr> fontMgr = SkFontMgr_New_GDI();
-        //SkFontStyle fontStyle = SkFontStyle::Normal();
-        //sk_sp<SkTypeface> typeFace = fontMgr->matchFamilyStyle("Microsoft YaHei", fontStyle);
-        //SkFont font(typeFace, 56);
-
-        //SkPaint paint;
-        //paint.setColor(0xFF00FFFF);
-        //canvas->drawString("Hello World!", 20, 120, font, paint);
-
-        Element::paint(canvas);
-        float x = getLeft();
-        float y = getTop();
-
-        SkPaint paint;
-        paint.setAntiAlias(true);
-        paint.setColor(SK_ColorRED);
-        font->setSize(fontSize * win->scaleFactor);
-        canvas->drawSimpleText(text.data(), text.length(), SkTextEncoding::kUTF8, x - measuredRect->fLeft, y - measuredRect->fTop, *font.get(), paint);
-    }
-
     const std::string& Label::getText()
     {
         return text;
@@ -90,9 +78,7 @@ namespace Ling {
     {
         //如果父容器已经约束住了大小，比如 flex:1 填充满了，Yoga 也不会再问 measureFunc。
         //如果你在 YGNodeStyleSetWidth(node, 100) / YGNodeStyleSetHeight(node, 50) 里已经指定了固定大小，Yoga 就直接用这个值，不会去调用 measureFunc。
-
-        //SkRect r;
-        //font.measureText(text, text_length, SkTextEncoding::kUTF8, &r);
+        measure();
         this->text = text;
     }
 

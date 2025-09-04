@@ -3,7 +3,7 @@
 #include "Node.h"
 #include "Color.h"
 
-class SkRect;
+struct SkRect;
 class SkCanvas;
 class SkPaint;
 namespace Ling {
@@ -40,12 +40,9 @@ namespace Ling {
 			void setCaptionFlag(bool captionFlag);
 			bool getCaptionFlag();
 			void paintStyle(SkCanvas* canvas, SkRect& rect);
-
 		public:
 			friend class MouseEvent;
 			friend class ElementBox;
-			friend class Label;
-			friend class TextBlock;
 			friend class WindowBase;
 		protected:
 		private:

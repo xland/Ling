@@ -4,7 +4,7 @@ namespace Ling {
 	{
 	public:
 		Size();
-		Size(const int& w = 0, const int& h = 0);
+		Size(const int& w, const int& h);
 		~Size();
 	public:
 		int w, h;
