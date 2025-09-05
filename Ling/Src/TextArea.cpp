@@ -22,6 +22,7 @@ namespace Ling {
     {
         YGNodeSetContext(node, this);
         YGNodeSetMeasureFunc(node, &TextArea::nodeMeasureCB);
+        setCursor(Cursor::Ibeam);
     }
     TextArea::~TextArea() {
 
@@ -142,8 +143,13 @@ namespace Ling {
 	void TextArea::shown()
 	{
 		Element::shown();
-		//startFlash();
+		startFlash();
 	}
+
+    void TextArea::mouseEnter(const MouseEvent& event)
+    {
+        Event::mouseEnter(event);
+    }
 
 	void TextArea::startFlash()
 	{

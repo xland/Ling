@@ -186,6 +186,7 @@
     <ClInclude Include="Include\Align.h" />
     <ClInclude Include="Include\App.h" />
     <ClInclude Include="Include\Color.h" />
+    <ClInclude Include="Include\Cursor.h" />
     <ClInclude Include="Include\Edge.h" />
     <ClInclude Include="Include\Element.h" />
     <ClInclude Include="Include\ElementBox.h" />

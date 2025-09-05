@@ -1,5 +1,4 @@
 ﻿#include <yoga/Yoga.h>
-
 #include "../Include/Element.h"
 #include "../Include/App.h"
 #include "../Include/WindowBase.h"
@@ -8,6 +7,9 @@
 namespace Ling {
     WindowBase::WindowBase() :winPosition(0, 0), winSize(980, 680)
     {
+        //HCURSOR hArrow = LoadCursor(NULL, IDC_ARROW);
+        //SetSystemCursor(hArrow, 32650);
+        //SystemParametersInfo(SPI_SETCURSORS, 0, NULL, 0);
     }
     WindowBase::~WindowBase() {
 
@@ -172,9 +174,13 @@ namespace Ling {
             //layout();
             return 0;
         }
-        //case WM_SETCURSOR: {
-        //    return 1;
-        //}
+        case WM_SETCURSOR: {
+            if (LOWORD(lParam) == HTCLIENT) 
+            {
+                return 1;
+            }
+            break;
+        }
         case WM_ERASEBKGND:
         {
             return 1;
@@ -223,24 +229,24 @@ namespace Ling {
         {
             switch (wParam)
             {
-            case VK_DELETE: {
-                return 0;
-            }
-            case VK_LEFT: {
-                return 0;
-            }
-            case VK_RIGHT: {
-                return 0;
-            }
-            case VK_ESCAPE: {
-                return 0;
-            }
-            case VK_SHIFT: {
-                return 0;
-            }
-            case VK_CONTROL: {
-                return 0;
-            }
+                case VK_DELETE: {
+                    return 0;
+                }
+                case VK_LEFT: {
+                    return 0;
+                }
+                case VK_RIGHT: {
+                    return 0;
+                }
+                case VK_ESCAPE: {
+                    return 0;
+                }
+                case VK_SHIFT: {
+                    return 0;
+                }
+                case VK_CONTROL: {
+                    return 0;
+                }
             }
             return 0;
         }
@@ -248,12 +254,12 @@ namespace Ling {
         {
             switch (wParam)
             {
-            case VK_SHIFT: {
-                return 0;
-            }
-            case VK_CONTROL: {
-                return 0;
-            }
+                case VK_SHIFT: {
+                    return 0;
+                }
+                case VK_CONTROL: {
+                    return 0;
+                }
             }
             return 0;
         }
@@ -294,9 +300,12 @@ namespace Ling {
                 hoverEle->mouseLeave(e);
             }
             ele->mouseEnter(e);
+            if (!hoverEle || hoverEle->getCursor() != ele->getCursor()) {
+                SetCursor(LoadCursor(NULL, MAKEINTRESOURCE(ele->getCursor())));
+            }
+            hoverEle = ele;
         }
         ele->mouseMove(e);
-        hoverEle = ele;
     }
 
     void WindowBase::windowMouseDown(const int& x, const int& y, const MouseButton& mouseBtn)
@@ -330,9 +339,7 @@ namespace Ling {
         bmi.bmiHeader.biCompression = BI_RGB;
         SetStretchBltMode(hdc, HALFTONE);
         SetBrushOrgEx(hdc, 0, 0, nullptr);
-        StretchDIBits(hdc,
-            0, 0, size.w, size.h,
-            0, 0, w, h,
+        StretchDIBits(hdc, 0, 0, size.w, size.h, 0, 0, w, h,
             pix.addr(), &bmi, DIB_RGB_COLORS, SRCCOPY);
         EndPaint(hwnd, &ps);
     }

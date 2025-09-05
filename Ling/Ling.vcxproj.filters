@@ -158,6 +158,9 @@
     <ClInclude Include="Src\LineSizeInfo.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Cursor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ToDo.md" />

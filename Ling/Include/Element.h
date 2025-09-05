@@ -2,12 +2,12 @@
 #include <Windows.h>
 #include "Node.h"
 #include "Color.h"
+#include "Cursor.h"
 
 struct SkRect;
 class SkCanvas;
 class SkPaint;
 namespace Ling {
-	class Style;
 	class MouseEvent;
 	class WindowBase;
 	class ElementBox;
@@ -39,6 +39,8 @@ namespace Ling {
 			Color& getBorderColor();
 			void setCaptionFlag(bool captionFlag);
 			bool getCaptionFlag();
+			void setCursor(const Cursor& cursor);
+			Cursor getCursor();
 			void paintStyle(SkCanvas* canvas, SkRect& rect);
 		public:
 			friend class MouseEvent;
@@ -56,6 +58,7 @@ namespace Ling {
 			float radiusLT{ 0.f }, radiusRT{ 0.f }, radiusRB{ 0.f }, radiusLB{ 0.f };
 			Color backgroundColor{ 0x00000000 }, borderColor{ 0x00000000 };
 			bool captionFlag{ false };
+			Cursor cursor{Cursor::Arrow};
 	};
 }
 

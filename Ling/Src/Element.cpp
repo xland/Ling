@@ -125,7 +125,14 @@ namespace Ling {
 	{
 		return captionFlag;
 	}
-
+	void Element::setCursor(const Cursor& cursor)
+	{
+		this->cursor = cursor;
+	}
+	Cursor Element::getCursor() 
+	{
+		return cursor;
+	}
 	void Element::paintStyle(SkCanvas* canvas, SkRect& rect)
 	{
 		if (backgroundColor != 0) { //绘制背景
