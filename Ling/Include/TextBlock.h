@@ -36,7 +36,7 @@ namespace Ling {
 			std::string text;
 			std::shared_ptr<SkFont> font;
 			float fontSize{ 14.f };
-			float lineSpace{ 1.f };
+			float lineSpace{ 8.f };
 			std::vector<LineSizeInfo> lineSizeInfos;
 			float measuredWidth, measuredHeight;
 	};

@@ -8,6 +8,7 @@ public:
 	~TextDemo();
 	void label();
 	void textblock();
+	void textarea();
 	void start();
 private:
 	std::unique_ptr<WindowBase> win;

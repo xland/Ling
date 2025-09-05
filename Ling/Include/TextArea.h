@@ -1,5 +1,5 @@
 #pragma once
-
+#include <string>
 #include "Element.h"
 #include "FontWeight.h"
 #include "FontWidth.h"
@@ -39,9 +39,9 @@ namespace Ling {
 			std::string text;
 			std::shared_ptr<SkFont> font;
 			float fontSize{ 16.f };
-			float lineSpace{ 1.2f };
-			std::unique_ptr<SkRect> measuredRect;
+			float lineSpace{ 18.f };
 			std::vector<LineGlyphInfo> lineGlyphInfos;
+			float measuredWidth, measuredHeight;
 	};
 }
 

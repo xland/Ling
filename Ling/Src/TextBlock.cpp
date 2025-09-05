@@ -72,7 +72,6 @@ namespace Ling {
         if (!lineSizeInfos.empty()) return;
         std::stringstream ss(text);
         std::string line;
-        int lineIndex{ 0 };
         auto win = getWindow();
         auto sf = win->getScaleFactor();
         auto fs = fontSize * sf;
@@ -81,19 +80,20 @@ namespace Ling {
         size_t startIndex{ 0 };
         while (std::getline(ss, line)) {
             font->measureText(line.data(), line.length(), SkTextEncoding::kUTF8, &rect);
-            LineSizeInfo lineInfo;
             auto w = rect.width();
             auto h = rect.height();
+            LineSizeInfo lineInfo;
+            if (measuredWidth < w) measuredWidth = w;
+            measuredHeight += lineSpace/2;
             lineInfo.pos.x = 0 - rect.fLeft;
-            lineInfo.pos.y = lineIndex * h + h * lineSpace / 2 + getTop() - rect.fTop;
+            lineInfo.pos.y = measuredHeight - rect.fTop;
             lineInfo.startIndex = startIndex;
             lineInfo.length = line.length();
-            lineIndex += 1;
             lineSizeInfos.push_back(std::move(lineInfo));
             startIndex += lineInfo.length+1;
-            if (measuredWidth < w) measuredWidth = w;
-            measuredHeight += h + h * lineSpace;
+            measuredHeight += h;
         }
+        measuredHeight += lineSpace / 2;
     }
     void TextBlock::setText(const std::string& text)
     {

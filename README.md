@@ -1,5 +1,14 @@
 # Ling
 A GUI Framework for modern C++20
+
+# Features
+
+- 支持UTF-8文本
+- 支持多种布局方式
+- 文字抗锯齿
+- 兼容性好
+- 内存消耗极低
+
 # Layout
 
 - 垂直水平居中
@@ -100,3 +109,5 @@ win->addChild(ele);
 文本清晰度对比（与Word）：
 
 ![](Doc/TextClear.png "文本清晰度对比")
+
+![](Doc/CenterText.png "一段文本，在窗口中水平垂直居中")

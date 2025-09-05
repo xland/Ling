@@ -2,14 +2,14 @@
 #include <vector>
 #include "../Include/Position.h"
 
+struct SkPoint;
+typedef uint16_t SkGlyphID;
 namespace Ling {
 	struct LineGlyphInfo
 	{
-		std::vector<uint16_t> glyphs;
-		std::vector<Position> wordPos;
+		std::vector<SkGlyphID> glyphs;
+		std::vector<SkPoint> wordPos;
 		Position pos;
-		size_t startIndex;
-		size_t length;
 	};
 }
 

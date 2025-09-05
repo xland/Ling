@@ -8,6 +8,9 @@
 #include <include/core/SkPaint.h>
 #include <include/core/SkCanvas.h>
 
+
+#include <include/core/SkTextBlob.h>
+
 #include "../Include/App.h"
 #include "../Include/WindowBase.h"
 #include "../Include/Position.h"
@@ -15,11 +18,8 @@
 #include "LineGlyphInfo.h"
 
 namespace Ling {
-
-
     TextArea::TextArea()
     {
-        measuredRect = std::make_unique<SkRect>();
         YGNodeSetContext(node, this);
         YGNodeSetMeasureFunc(node, &TextArea::nodeMeasureCB);
     }
@@ -30,45 +30,85 @@ namespace Ling {
     void TextArea::paint(SkCanvas* canvas)
     {
         Element::paint(canvas);
+        if (text.empty()) return;
+        measure();
         float x = getLeft();
         float y = getTop();
-        measure();
         SkPaint paint;
         paint.setAntiAlias(true);
         paint.setColor(SK_ColorRED);
         font->setSize(fontSize * getWindow()->scaleFactor);
-        canvas->drawSimpleText(text.data(), text.length(), SkTextEncoding::kUTF8, x - measuredRect->fLeft, y - measuredRect->fTop, *font.get(), paint);
+        for (auto& info : lineGlyphInfos)
+        {
+            canvas->drawGlyphs({ info.glyphs.data(),info.glyphs.size() }, 
+                { info.wordPos.data() ,info.wordPos.size()}, SkPoint(x, y), *font.get(), paint);
+        }
     }
     YGSize TextArea::nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode)
     {
         auto ta = static_cast<TextArea*>(YGNodeGetContext(node));
         ta->measure();
-        float measuredWidth = ta->measuredRect->width();
-        float measuredHeight = ta->measuredRect->height();
+        float mWidth = ta->measuredWidth;
+        float mHeight = ta->measuredHeight;
         if (widthMode == YGMeasureModeExactly) {
-            measuredWidth = width;
+            mWidth = width;
         }
         else if (widthMode == YGMeasureModeAtMost) {
-            measuredWidth = std::min(measuredWidth, width);
+            mWidth = std::min(mWidth, width);
         }
         if (heightMode == YGMeasureModeExactly) {
-            measuredHeight = height;
+            mHeight = height;
         }
         else if (heightMode == YGMeasureModeAtMost) {
-            measuredHeight = std::min(measuredHeight, height);
+            mHeight = std::min(mHeight, height);
         }
-        return { measuredWidth, measuredHeight };
+        return { mWidth, mHeight };
     }
 
     void TextArea::measure()
     {
-        if (measuredRect->isEmpty()) {
+        if (!lineGlyphInfos.empty()) return;
+        std::stringstream ss(text);
+        
+        std::string line;
+        {
             auto win = getWindow();
             auto sf = win->getScaleFactor();
             auto fs = fontSize * sf;
             font->setSize(fs);
-            font->measureText(text.data(), text.length(), SkTextEncoding::kUTF8, measuredRect.get());
         }
+        float ascent, descent,lineHeight;
+        {
+            SkFontMetrics metrics;
+            font->getMetrics(&metrics);
+            ascent = metrics.fAscent;
+            descent = metrics.fDescent;
+            lineHeight = metrics.fBottom - metrics.fTop;
+        }
+
+        while (std::getline(ss, line)) {
+            LineGlyphInfo info;
+            int textCount = font->countText(line.data(), line.length(), SkTextEncoding::kUTF8);
+            info.glyphs.resize(textCount);
+            auto glyphCount = font->textToGlyphs(line.data(),  line.length(), 
+                SkTextEncoding::kUTF8, {info.glyphs.data(), textCount});
+            std::vector<SkScalar> widths;
+            widths.resize(glyphCount);
+            font->getWidths({ info.glyphs.data(), glyphCount }, { widths.data() ,glyphCount });
+            info.wordPos.resize(glyphCount + 1);
+            measuredHeight += lineSpace / 2;
+            float x = 0;
+            float y = measuredHeight - ascent;
+            for (int i = 0; i < glyphCount; ++i) {
+                info.wordPos[i] = SkPoint::Make(x, y);
+                x += widths[i];
+            }
+            info.wordPos[glyphCount] = SkPoint::Make(x, y);
+            if (measuredWidth < x) measuredWidth = x;
+            measuredHeight += lineHeight;
+            lineGlyphInfos.push_back(info);
+        }
+        measuredHeight += lineSpace / 2 - descent;
     }
     const std::string& TextArea::getText()
     {
@@ -77,24 +117,6 @@ namespace Ling {
 
     void TextArea::setText(const std::string& text)
     {
-        lineGlyphInfos.clear();
-        std::stringstream ss(text);
-        std::string line;
-        int lineIndex{ 0 };
-        SkFontMetrics metrics;
-        font->getMetrics(&metrics);
-        auto lineHeight = metrics.fBottom - metrics.fTop;
-        size_t startIndex{0};
-        while (std::getline(ss, line)) {
-            LineGlyphInfo lineGlyphInfo;
-            lineGlyphInfo.pos.x = getLeft();
-            lineGlyphInfo.pos.y = lineIndex * lineHeight * lineSpace + getTop();
-            lineGlyphInfo.glyphs.resize(line.size());
-
-            auto glyphCount = font->textToGlyphs(line.data(), line.length(), SkTextEncoding::kUTF8, { lineGlyphInfo.glyphs.data(), line.size() });
-            //lineGlyphInfos
-        }
-
         this->text = text;
     }
 
@@ -120,7 +142,7 @@ namespace Ling {
 	void TextArea::shown()
 	{
 		Element::shown();
-		startFlash();
+		//startFlash();
 	}
 
 	void TextArea::startFlash()

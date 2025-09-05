@@ -26,6 +26,7 @@ namespace Ling {
     {
         Element::paint(canvas);
         if (text.empty()) return;
+        measure();
         float x = getLeft();
         float y = getTop();
         SkPaint paint;
@@ -37,6 +38,7 @@ namespace Ling {
     YGSize Label::nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode)
     {
         auto label = static_cast<Label*>(YGNodeGetContext(node));
+        label->measure();
         float measuredWidth = label->measuredRect->width();
         float measuredHeight = label->measuredRect->height();
         if (widthMode == YGMeasureModeExactly) {
@@ -77,8 +79,7 @@ namespace Ling {
     void Label::setText(const std::string& text)
     {
         //如果父容器已经约束住了大小，比如 flex:1 填充满了，Yoga 也不会再问 measureFunc。
-        //如果你在 YGNodeStyleSetWidth(node, 100) / YGNodeStyleSetHeight(node, 50) 里已经指定了固定大小，Yoga 就直接用这个值，不会去调用 measureFunc。
-        measure();
+        //如果你在 YGNodeStyleSetWidth(node, 100) / YGNodeStyleSetHeight(node, 50) 里已经指定了固定大小，Yoga 就直接用这个值，不会去调用 measureFunc。        
         this->text = text;
     }
 
