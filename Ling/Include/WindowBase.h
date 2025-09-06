@@ -75,6 +75,7 @@ namespace Ling {
 		Element* hoverEle{ nullptr };
 		Element* focusEle{ nullptr };
 		float scaleFactor{ 1.f };
+
 	};
 }
 

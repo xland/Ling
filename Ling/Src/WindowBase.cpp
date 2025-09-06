@@ -174,12 +174,21 @@ namespace Ling {
             //layout();
             return 0;
         }
+        case WM_MOUSEMOVE:
+        {
+            windowMouseMove(LOWORD(lParam), HIWORD(lParam));
+            return 0;
+        }
         case WM_SETCURSOR: {
-            if (LOWORD(lParam) == HTCLIENT) 
+            if (LOWORD(lParam) == HTCLIENT)
             {
                 return 1;
             }
-            break;
+            else
+            {
+                hoverEle = nullptr;
+                break;
+            }
         }
         case WM_ERASEBKGND:
         {
@@ -198,11 +207,6 @@ namespace Ling {
         }
         case WM_LBUTTONDBLCLK:
         {
-            return 0;
-        }
-        case WM_MOUSEMOVE:
-        {
-            windowMouseMove(LOWORD(lParam), HIWORD(lParam));
             return 0;
         }
         case WM_LBUTTONDOWN:
