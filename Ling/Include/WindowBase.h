@@ -31,13 +31,13 @@ namespace Ling {
 		void setWindowSize(const int& w, const int& h);
 		void setWindowPosition(const int& x, const int& y);
 		void setWindowToScreenCenter();
-
 		void resetWindowSize(const int& w, const int& h);
 		void resetWindowPosition(const int& x, const int& y);
 		void resetWindowToScreenCenter();
 		Element* getElementByPosition(int x, int y);
 		HWND getHandle();
 		float getScaleFactor();
+		size_t onDpiChanged(std::function<void()> callback);
 	public:
 		friend class TextArea;
 		friend class WindowBaseImpl;
@@ -61,6 +61,9 @@ namespace Ling {
 		void windowMouseUp(const int& x, const int& y, const MouseButton& mouseBtn);
 		void paintArea();
 		void casecadeSetWindow(Element* ele);
+		void setFocusEle(Element* ele);
+		size_t dpiChangedCBId{ 0 };
+		std::unordered_map<size_t, std::function<void()>> dpiChangedCBs;
 	private:
 		/// <summary>
 		/// 窗口在屏幕上的位置

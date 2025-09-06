@@ -1,4 +1,5 @@
 ﻿#include <sstream>
+#include <format>
 #include <yoga/Yoga.h>
 #include <include/core/SkFontMgr.h>
 #include <include/core/SkFontMetrics.h>
@@ -7,8 +8,6 @@
 #include <include/core/SkFont.h>
 #include <include/core/SkPaint.h>
 #include <include/core/SkCanvas.h>
-
-
 #include <include/core/SkTextBlob.h>
 
 #include "../Include/App.h"
@@ -43,6 +42,7 @@ namespace Ling {
         {
             canvas->drawGlyphs({ info.glyphs.data(),info.glyphs.size() }, 
                 { info.wordPos.data() ,info.wordPos.size()}, SkPoint(x, y), *font.get(), paint);
+            canvas->drawLine(SkPoint::Make(x, info.wordPos[0].fY+y), SkPoint::Make(measuredWidth+x, info.wordPos[0].fY+y), paint);
         }
     }
     YGSize TextArea::nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode)
@@ -86,7 +86,8 @@ namespace Ling {
             descent = metrics.fDescent;
             lineHeight = metrics.fBottom - metrics.fTop;
         }
-
+        measuredHeight = 0.f;
+        measuredWidth = 0.f;
         while (std::getline(ss, line)) {
             LineGlyphInfo info;
             int textCount = font->countText(line.data(), line.length(), SkTextEncoding::kUTF8);
@@ -111,6 +112,7 @@ namespace Ling {
         }
         measuredHeight += lineSpace / 2 - descent;
     }
+
     const std::string& TextArea::getText()
     {
         return text;
@@ -140,23 +142,46 @@ namespace Ling {
         return fontSize;
     }
 
-	void TextArea::shown()
-	{
-		Element::shown();
-		startFlash();
-	}
-
-    void TextArea::mouseEnter(const MouseEvent& event)
+    void TextArea::mouseDown(const MouseEvent& event)
     {
-        Event::mouseEnter(event);
-    }
+        Event::mouseDown(event);
+        caretVisible = true;
+        float ascent, descent, lineHeight;
+        {
+            SkFontMetrics metrics;
+            font->getMetrics(&metrics);
+            ascent = metrics.fAscent;
+            descent = metrics.fDescent;
+            lineHeight = metrics.fBottom - metrics.fTop;
+        }
 
-	void TextArea::startFlash()
-	{
-		auto win = getWindow();
-		win->focusEle = this;
-		auto hwnd = win->getHandle();
-		SetTimer(hwnd, FlashCaretTimer, 600, NULL); //每600毫秒触发一次
-		SendMessage(hwnd, WM_TIMER, FlashCaretTimer, 0); //马上触发一次
-	}
+        for (auto& info : lineGlyphInfos)
+        {
+            auto startY = info.wordPos[0].fY + ascent - lineSpace / 2;
+            auto endY = startY + lineHeight + lineSpace;
+            if (event.y >= startY && event.y < endY) {
+                for (size_t i = 0; i < info.wordPos.size(); i++)
+                {
+                    auto& word = info.wordPos[i];
+                    if (event.x > word.fX) {
+
+                    }
+                }
+                break;
+            }
+
+            OutputDebugString(std::format(L"{},{}----{},{}\n", info.wordPos[0].fX, info.wordPos[0].fY,event.x,event.y).data());
+        }
+        auto win = getWindow();
+        win->setFocusEle(this);
+    }
+    void TextArea::shown()
+    {
+        Event::shown();
+        auto win = getWindow();
+        win->onDpiChanged([this]() {
+            lineGlyphInfos.clear();
+            YGNodeMarkDirty(node);
+        });
+    }
 }

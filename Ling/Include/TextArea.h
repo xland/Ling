@@ -31,11 +31,10 @@ namespace Ling {
 			float getFontSize();
 		protected:
 			void shown() override;
-			void mouseEnter(const MouseEvent& event) override;
+			void mouseDown(const MouseEvent& event) override;
 		private:
 			static YGSize nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode);
 			void measure();
-			void startFlash();
 		private:
 			std::string text;
 			std::shared_ptr<SkFont> font;
@@ -43,6 +42,7 @@ namespace Ling {
 			float lineSpace{ 18.f };
 			std::vector<LineGlyphInfo> lineGlyphInfos;
 			float measuredWidth, measuredHeight;
+			bool caretVisible{false};
 	};
 }
 

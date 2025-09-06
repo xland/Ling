@@ -178,6 +178,7 @@
     <ClCompile Include="Src\TextBlock.cpp" />
     <ClCompile Include="Src\Util.cpp" />
     <ClCompile Include="Src\Private\WindowBaseImpl.cpp" />
+    <ClCompile Include="Src\WindowBaseMsgProc.cpp" />
     <ClCompile Include="Src\WindowFrameless.cpp" />
     <ClCompile Include="Src\WindowNormal.cpp" />
     <ClCompile Include="Src\WindowBase.cpp" />
