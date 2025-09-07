@@ -114,7 +114,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;WIN32;_WINDOWS;_UNICODE;UNICODE;DEBUG;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\sdk\yoga;D:\sdk\skia;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\sdk\yoga;D:\sdk\thorvg\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -129,9 +129,12 @@
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
     <Lib>
-      <AdditionalLibraryDirectories>D:\sdk\yoga\build\yoga\$(Configuration);D:\sdk\skia\out\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>yogacore.lib;skia.lib;skparagraph.lib;skunicode_core.lib;skunicode_icu.lib;kernel32.lib;usp10.lib;dwmapi.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\sdk\yoga\build\yoga\$(Configuration);D:\sdk\thorvg\$(Configuration)\src;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>yogacore.lib;libthorvg.a;kernel32.lib;usp10.lib;dwmapi.lib</AdditionalDependencies>
     </Lib>
+    <PostBuildEvent>
+      <Command>lib /OUT:Combined.lib D:\project\Ling\build\Debug\Ling.lib D:\sdk\yoga\build\yoga\Debug\yogacore.lib D:\sdk\thorvg\Debug\src\libthorvg.a</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -141,7 +144,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NOMINMAX;_CRT_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;WIN32;_WINDOWS;_UNICODE;UNICODE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\sdk\yoga;D:\sdk\skia;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\sdk\yoga;D:\sdk\thorvg\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -158,8 +161,8 @@
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
     <Lib>
-      <AdditionalLibraryDirectories>D:\sdk\yoga\build\yoga\$(Configuration);D:\sdk\skia\out\$(Configuration);</AdditionalLibraryDirectories>
-      <AdditionalDependencies>yogacore.lib;skia.lib;skparagraph.lib;skunicode_core.lib;skunicode_icu.lib;kernel32.lib;usp10.lib;dwmapi.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\sdk\yoga\build\yoga\$(Configuration);D:\sdk\thorvg\$(Configuration)\src;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>yogacore.lib;libthorvg.a;kernel32.lib;usp10.lib;dwmapi.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -177,8 +180,8 @@
     <ClCompile Include="Src\TextArea.cpp" />
     <ClCompile Include="Src\TextBlock.cpp" />
     <ClCompile Include="Src\Util.cpp" />
-    <ClCompile Include="Src\Private\WindowBaseImpl.cpp" />
     <ClCompile Include="Src\WindowBaseMsgProc.cpp" />
+    <ClCompile Include="Src\WindowBaseProperty.cpp" />
     <ClCompile Include="Src\WindowFrameless.cpp" />
     <ClCompile Include="Src\WindowNormal.cpp" />
     <ClCompile Include="Src\WindowBase.cpp" />
@@ -205,12 +208,10 @@
     <ClInclude Include="Include\FontWidth.h" />
     <ClInclude Include="Include\Size.h" />
     <ClInclude Include="Include\TextArea.h" />
-    <ClInclude Include="Src\LineGlyphInfo.h" />
     <ClInclude Include="Src\LineInfo.h" />
     <ClInclude Include="Include\TextBlock.h" />
     <ClInclude Include="Include\Util.h" />
     <ClInclude Include="Src\LineSizeInfo.h" />
-    <ClInclude Include="Src\Private\WindowBaseImpl.h" />
     <ClInclude Include="Include\WindowFrameless.h" />
     <ClInclude Include="Include\WindowNormal.h" />
     <ClInclude Include="Include\WindowBase.h" />

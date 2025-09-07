@@ -4,7 +4,6 @@
 
 namespace Ling{
     std::unique_ptr<App> app;
-    sk_sp<SkFontMgr> fontMgr;
     App::App(HINSTANCE hInstance):hInstance{hInstance}
     {
         auto hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
@@ -20,18 +19,12 @@ namespace Ling{
 
     void App::init(HINSTANCE hInstance)
     {
-        fontMgr = SkFontMgr_New_GDI();
         app = std::unique_ptr<App>(new App(hInstance));//std::make_unique<App>(hInstance);
 
     }
 
     App* App::get() {
         return app.get();
-    }
-
-    SkFontMgr* App::getFontMgr()
-    {
-        return fontMgr.get();
     }
 
     int App::exec() {

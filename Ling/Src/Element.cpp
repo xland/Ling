@@ -1,21 +1,38 @@
 ﻿#include <thorvg.h>
-
+#include <cstdint>
+#include <yoga/Yoga.h>
 #include "../Include/Element.h"
 #include "../Include/WindowBase.h"
 #include "../Include/App.h"
 namespace Ling {
-	Element::Element() 
+	Element::Element()
 	{
+		shape = tvg::Shape::gen();
 	}
 
 	Element::~Element()
 	{
-		
+		delete shape;
 	}
 	WindowBase* Element::getWindow()
 	{
 		return win;
 	}
+
+	void Element::layout()
+	{
+		float x = getLeft();
+		float y = getTop();
+		if (parent) {
+			globalX = x + parent->globalX;
+			globalY = y + parent->globalY;
+		}
+		float w = getWidth();
+		float h = getHeight();
+		shape->reset();
+		shape->appendRect(globalX, globalY, w, h, radius, radius);
+	}
+
 	void Element::update()
 	{
 		int left = (int)getGlobalX();
@@ -42,73 +59,29 @@ namespace Ling {
 		return parent;
 	}
 
-	void Element::paint(SkCanvas* canvas)
-	{
-		float x = getLeft();
-		float y = getTop();
-		float w = getWidth();
-		float h = getHeight();
-		SkRect rect = SkRect::MakeXYWH(x, y, w, h);
-		paintStyle(canvas, rect);
-	}
-
 	void Element::setBorderWidth(const float& borderWidth)
 	{
-		this->borderWidth = borderWidth;
+		shape->strokeWidth(borderWidth);
 	}
 	float Element::getBorderWidth()
 	{
-		return borderWidth;
+		return shape->strokeWidth();
 	}
 	void Element::setRadius(const float& radius)
 	{
-		radiusLT = radius;
-		radiusRT = radius;
-		radiusRB = radius;
-		radiusLB = radius;
+		this->radius = radius;
 	}
-	void Element::setRadius(const float& radiusLT, const float& radiusRT, const float& radiusRB, const float& radiusLB)
+	float Element::getRadius()
 	{
-		this->radiusLT = radiusLT;
-		this->radiusRT = radiusRT;
-		this->radiusRB = radiusRB;
-		this->radiusLB = radiusLB;
-	}
-	std::array<float, 4> Element::getRadius()
-	{
-		return std::array<float, 4>{radiusLT, radiusRT, radiusRB, radiusLB};
-	}
-	float Element::getRadiusLT()
-	{
-		return radiusLT;
-	}
-	float Element::getRadiusRT()
-	{
-		return radiusRT;
-	}
-	float Element::getRadiusRB()
-	{
-		return radiusRB;
-	}
-	float Element::getRadiusLB()
-	{
-		return radiusLB;
+		return radius;
 	}
 	void Element::setBackgroundColor(const Color& backgroundColor)
 	{
-		this->backgroundColor = backgroundColor;
+		shape->fill(backgroundColor.getR(), backgroundColor.getG(), backgroundColor.getB(), backgroundColor.getA());
 	}
 	void Element::setBorderColor(const Color& borderColor)
 	{
-		this->borderColor = borderColor;
-	}
-	Color& Element::getBackgroundColor()
-	{
-		return backgroundColor;
-	}
-	Color& Element::getBorderColor()
-	{
-		return borderColor;
+		shape->strokeFill(borderColor.getR(), borderColor.getG(), borderColor.getB(), borderColor.getA());
 	}
 	void Element::setCaptionFlag(bool captionFlag)
 	{
@@ -125,35 +98,6 @@ namespace Ling {
 	Cursor Element::getCursor() 
 	{
 		return cursor;
-	}
-	void Element::paintStyle(SkCanvas* canvas, SkRect& rect)
-	{
-		if (backgroundColor != 0) { //绘制背景
-			SkPaint paint;
-			paint.setColor(backgroundColor);
-			paint.setStyle(SkPaint::kFill_Style);
-			paintRect(canvas, paint, rect);
-		}
-		if (borderColor != 0 && borderWidth > 0) { //绘制边框
-			SkPaint paint;
-			paint.setAntiAlias(true);
-			paint.setColor(borderColor);
-			paint.setStrokeWidth(borderWidth);
-			paint.setStyle(SkPaint::kStroke_Style);
-			paintRect(canvas, paint, rect);
-		}
-	}
-	void Element::paintRect(SkCanvas* canvas, const SkPaint& paint, const SkRect& rect)
-	{
-		if (radiusLT > 0 || radiusRT > 0 || radiusRB > 0 || radiusLB > 0) {
-			SkVector radii[4]{ {radiusLT, radiusLT}, {radiusRT, radiusRT}, {radiusRB, radiusRB}, {radiusLB, radiusLB} };
-			SkRRect rr;
-			rr.setRectRadii(rect, radii);
-			canvas->drawRRect(rr, paint);
-		}
-		else {
-			canvas->drawRect(rect, paint);
-		}
 	}
 }
 

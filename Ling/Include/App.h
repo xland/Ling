@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include <Windows.h>
-
+#include <memory>
 struct YGConfig;
 class Element;
 
@@ -16,7 +16,6 @@ namespace Ling{
             ~App();
             static void init(HINSTANCE hInstance);
             static App* get();
-            static SkFontMgr* getFontMgr();
             static int exec();
         public:
             friend class Element;

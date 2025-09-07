@@ -3,7 +3,6 @@
 #include "../Include/App.h"
 #include "../Include/WindowNormal.h"
 #include "../Include/Util.h"
-#include "private\WindowBaseImpl.h"
 
 
 namespace Ling {

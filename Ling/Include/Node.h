@@ -65,6 +65,8 @@ namespace Ling {
 			float getPaddingBottom();
 		public:
 			friend class ElementBox;
+			friend class Element;
+			friend class WindowBase;
 			friend class Label;
 			friend class TextBlock;
 			friend class TextArea;

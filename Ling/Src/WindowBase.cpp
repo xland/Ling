@@ -1,12 +1,15 @@
 ﻿#include <yoga/Yoga.h>
+#include <thorvg.h>
 #include "../Include/Element.h"
 #include "../Include/App.h"
 #include "../Include/WindowBase.h"
-#include "private/WindowBaseImpl.h"
 
 namespace Ling {
     WindowBase::WindowBase() :winPosition(0, 0), winSize(980, 680)
     {
+        canvas = tvg::SwCanvas::gen();
+		scene = tvg::Scene::gen();
+        canvas->push(scene);
     }
     WindowBase::~WindowBase() {
 
@@ -32,6 +35,7 @@ namespace Ling {
     void WindowBase::casecadeSetWindow(Element* ele)
     {
         ele->setWindow(this);
+        scene->push(ele->shape);
         auto box = dynamic_cast<ElementBox*>(ele);
         if (box) {
             for (auto e : *(box->getChildren()))
@@ -72,28 +76,6 @@ namespace Ling {
         hoverEle->mouseUp(e);
     }
 
-    void WindowBase::paintArea()
-    {
-        auto size = getWindowClientSize();
-        auto w = size.w * scaleFactor;
-        auto h = size.h * scaleFactor;
-        auto pix = winImpl->getPix();
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(hwnd, &ps);
-        BITMAPINFO bmi{};
-        bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-        bmi.bmiHeader.biWidth = w;
-        bmi.bmiHeader.biHeight = -h;  // top-down
-        bmi.bmiHeader.biPlanes = 1;
-        bmi.bmiHeader.biBitCount = 32;
-        bmi.bmiHeader.biCompression = BI_RGB;
-        SetStretchBltMode(hdc, HALFTONE);
-        SetBrushOrgEx(hdc, 0, 0, nullptr);
-        StretchDIBits(hdc, 0, 0, size.w, size.h, 0, 0, w, h,
-            pix.addr(), &bmi, DIB_RGB_COLORS, SRCCOPY);
-        EndPaint(hwnd, &ps);
-    }
-
     const std::wstring& WindowBase::getWinClsName()
     {
         static std::wstring clsName = [] {
@@ -115,8 +97,6 @@ namespace Ling {
             }();
         return clsName;
     }
-
-
 
     Element* WindowBase::getElementByPosition(int x, int y)
     {
@@ -155,8 +135,25 @@ namespace Ling {
     void WindowBase::onWindowCreated()
     {
         setScaleFactor();
+		resetCanvas();
+    }
+    void WindowBase::resetCanvas() {
         auto size = getWindowClientSize();
+		auto curSize = getSize();
+        if (size.w == curSize.w && size.h == curSize.h) {
+            return;
+		}
         setSize(size.w, size.h);//工作区大小
-        winImpl = std::make_unique<WindowBaseImpl>(this);
+        int w = size.w * scaleFactor;
+        int h = size.h * scaleFactor;
+        buffer.resize(w * h);
+        buffer.shrink_to_fit();
+        scene->scale(scaleFactor);
+        canvas->target(buffer.data(), w, w, h, tvg::ColorSpace::ARGB8888);
+    }
+    void WindowBase::layout()
+    {
+        YGNodeCalculateLayout(node, YGUndefined, YGUndefined, YGDirectionLTR);
+		ElementBox::layout();
     }
 }

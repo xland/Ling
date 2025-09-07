@@ -18,24 +18,23 @@ namespace Ling {
 
     }
 
-    void TextBlock::paint(SkCanvas* canvas)
-    {
-        Element::paint(canvas);
-        if (text.empty()) return;
-        measure();
-        float x = getLeft();
-        float y = getTop();
-        SkPaint paint;
-        paint.setAntiAlias(true);
-        paint.setColor(SK_ColorRED);
-        font->setSize(fontSize * getWindow()->scaleFactor);
-        for (auto& info: lineSizeInfos)
-        {
-            auto str = text.substr(info.startIndex, info.length);
-            canvas->drawSimpleText(str.data(), str.length(), SkTextEncoding::kUTF8, x+info.pos.x, y+info.pos.y, *font.get(), paint);
-        }
-        
-    }
+    //void TextBlock::paint(SkCanvas* canvas)
+    //{
+    //    Element::paint(canvas);
+    //    if (text.empty()) return;
+    //    measure();
+    //    float x = getLeft();
+    //    float y = getTop();
+    //    SkPaint paint;
+    //    paint.setAntiAlias(true);
+    //    paint.setColor(SK_ColorRED);
+    //    font->setSize(fontSize * getWindow()->scaleFactor);
+    //    for (auto& info: lineSizeInfos)
+    //    {
+    //        auto str = text.substr(info.startIndex, info.length);
+    //        canvas->drawSimpleText(str.data(), str.length(), SkTextEncoding::kUTF8, x+info.pos.x, y+info.pos.y, *font.get(), paint);
+    //    }   
+    //}
     YGSize TextBlock::nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode)
     {
         auto tb = static_cast<TextBlock*>(YGNodeGetContext(node));
@@ -64,7 +63,7 @@ namespace Ling {
     void TextBlock::measure()
     {
         if (!lineSizeInfos.empty()) return;
-        std::stringstream ss(text);
+        /*std::stringstream ss(text);
         std::string line;
         auto win = getWindow();
         auto sf = win->getScaleFactor();
@@ -87,7 +86,7 @@ namespace Ling {
             startIndex += lineInfo.length+1;
             measuredHeight += h;
         }
-        measuredHeight += lineSpace / 2;
+        measuredHeight += lineSpace / 2;*/
     }
     void TextBlock::setText(const std::string& text)
     {
@@ -96,11 +95,11 @@ namespace Ling {
 
     void TextBlock::setFont(const std::string& fontName, const FontWeight& fontWeight, const FontWidth& fontWidth, const FontSlant& fontSlant)
     {
-        SkFontStyle fontStyle((SkFontStyle::Weight)fontWeight, (SkFontStyle::Width)fontWidth, (SkFontStyle::Slant)fontSlant);
-        sk_sp<SkTypeface> typeFace = App::getFontMgr()->matchFamilyStyle(fontName.data(), fontStyle);
-        font = std::make_shared<SkFont>(typeFace);
-        font->setEdging(SkFont::Edging::kSubpixelAntiAlias);
-        font->setSubpixel(true);
+        //SkFontStyle fontStyle((SkFontStyle::Weight)fontWeight, (SkFontStyle::Width)fontWidth, (SkFontStyle::Slant)fontSlant);
+        //sk_sp<SkTypeface> typeFace = App::getFontMgr()->matchFamilyStyle(fontName.data(), fontStyle);
+        //font = std::make_shared<SkFont>(typeFace);
+        //font->setEdging(SkFont::Edging::kSubpixelAntiAlias);
+        //font->setSubpixel(true);
     }
 
     void TextBlock::setFontSize(const float& fontSize)

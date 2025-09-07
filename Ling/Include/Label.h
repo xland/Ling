@@ -16,9 +16,8 @@ namespace Ling {
 		public:
 			Label();
 			~Label();
-			void paint(SkCanvas* canvas) override;
+			//void paint(SkCanvas* canvas) override;
 			const std::string& getText();
-			SkFont* getFont();
 			void setText(const std::string& text);
 			void setFont(const std::string& fontName = "Microsoft YaHei",
 				const FontWeight& fontWeight = FontWeight::Normal,
@@ -32,9 +31,9 @@ namespace Ling {
 			void measure();
 		private:
 			std::string text;
-			std::shared_ptr<SkFont> font;
+			//std::shared_ptr<SkFont> font;
+			//std::unique_ptr<SkRect> measuredRect;
 			float fontSize{ 14.f };
-			std::unique_ptr<SkRect> measuredRect;
 	};
 }
 

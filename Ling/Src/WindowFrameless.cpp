@@ -1,7 +1,6 @@
 #include <dwmapi.h>
 #include "../Include/App.h"
 #include "../Include/WindowFrameless.h"
-#include "private/WindowBaseImpl.h"
 
 namespace Ling {
     WindowFrameless::WindowFrameless()

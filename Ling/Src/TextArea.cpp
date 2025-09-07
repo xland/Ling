@@ -7,7 +7,6 @@
 #include "../Include/WindowBase.h"
 #include "../Include/Position.h"
 #include "../Include/TextArea.h"
-#include "LineGlyphInfo.h"
 
 namespace Ling {
     TextArea::TextArea()
@@ -20,28 +19,28 @@ namespace Ling {
 
     }
 
-    void TextArea::paint(SkCanvas* canvas)
-    {
-        Element::paint(canvas);
-        if (text.empty()) return;
-        measure();
-        float x = getLeft();
-        float y = getTop();
-        SkPaint paint;
-        paint.setAntiAlias(true);
-        paint.setColor(SK_ColorRED);
-        font->setSize(fontSize * getWindow()->scaleFactor);
-        for (auto& info : lineGlyphInfos)
-        {
-            canvas->drawGlyphs({ info.glyphs.data(),info.glyphs.size() }, 
-                { info.wordPos.data() ,info.wordPos.size()}, SkPoint(x, y), *font.get(), paint);
-            canvas->drawLine(SkPoint::Make(x, info.wordPos[0].fY+y), SkPoint::Make(measuredWidth+x, info.wordPos[0].fY+y), paint);
-        }
-    }
+    //void TextArea::paint(SkCanvas* canvas)
+    //{
+    //    Element::paint(canvas);
+    //    if (text.empty()) return;
+    //    measure();
+    //    float x = getLeft();
+    //    float y = getTop();
+    //    SkPaint paint;
+    //    paint.setAntiAlias(true);
+    //    paint.setColor(SK_ColorRED);
+    //    font->setSize(fontSize * getWindow()->scaleFactor);
+    //    for (auto& info : lineGlyphInfos)
+    //    {
+    //        canvas->drawGlyphs({ info.glyphs.data(),info.glyphs.size() }, 
+    //            { info.wordPos.data() ,info.wordPos.size()}, SkPoint(x, y), *font.get(), paint);
+    //        canvas->drawLine(SkPoint::Make(x, info.wordPos[0].fY+y), SkPoint::Make(measuredWidth+x, info.wordPos[0].fY+y), paint);
+    //    }
+    //}
     YGSize TextArea::nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode)
     {
         auto ta = static_cast<TextArea*>(YGNodeGetContext(node));
-        ta->measure();
+        //ta->measure();
         float mWidth = ta->measuredWidth;
         float mHeight = ta->measuredHeight;
         if (widthMode == YGMeasureModeExactly) {
@@ -59,7 +58,7 @@ namespace Ling {
         return { mWidth, mHeight };
     }
 
-    void TextArea::measure()
+    /*void TextArea::measure()
     {
         if (!lineGlyphInfos.empty()) return;
         std::stringstream ss(text);
@@ -104,7 +103,7 @@ namespace Ling {
             lineGlyphInfos.push_back(info);
         }
         measuredHeight += lineSpace / 2 - descent;
-    }
+    }*/
 
     const std::string& TextArea::getText()
     {
@@ -116,14 +115,14 @@ namespace Ling {
         this->text = text;
     }
 
-    void TextArea::setFont(const std::string& fontName, const FontWeight& fontWeight, const FontWidth& fontWidth, const FontSlant& fontSlant)
-    {
-        SkFontStyle fontStyle((SkFontStyle::Weight)fontWeight, (SkFontStyle::Width)fontWidth, (SkFontStyle::Slant)fontSlant);
-        sk_sp<SkTypeface> typeFace = App::getFontMgr()->matchFamilyStyle(fontName.data(), fontStyle);
-        font = std::make_shared<SkFont>(typeFace);
-        font->setEdging(SkFont::Edging::kSubpixelAntiAlias);
-        font->setSubpixel(true);
-    }
+    //void TextArea::setFont(const std::string& fontName, const FontWeight& fontWeight, const FontWidth& fontWidth, const FontSlant& fontSlant)
+    //{
+    //    SkFontStyle fontStyle((SkFontStyle::Weight)fontWeight, (SkFontStyle::Width)fontWidth, (SkFontStyle::Slant)fontSlant);
+    //    sk_sp<SkTypeface> typeFace = App::getFontMgr()->matchFamilyStyle(fontName.data(), fontStyle);
+    //    font = std::make_shared<SkFont>(typeFace);
+    //    font->setEdging(SkFont::Edging::kSubpixelAntiAlias);
+    //    font->setSubpixel(true);
+    //}
 
     void TextArea::setFontSize(const float& fontSize)
     {
@@ -135,7 +134,7 @@ namespace Ling {
         return fontSize;
     }
 
-    void TextArea::mouseDown(const MouseEvent& event)
+    /*void TextArea::mouseDown(const MouseEvent& event)
     {
         Event::mouseDown(event);
         caretVisible = true;
@@ -147,7 +146,6 @@ namespace Ling {
             descent = metrics.fDescent;
             lineHeight = metrics.fBottom - metrics.fTop;
         }
-
         for (auto& info : lineGlyphInfos)
         {
             auto startY = info.wordPos[0].fY + ascent - lineSpace / 2;
@@ -162,19 +160,18 @@ namespace Ling {
                 }
                 break;
             }
-
             OutputDebugString(std::format(L"{},{}----{},{}\n", info.wordPos[0].fX, info.wordPos[0].fY,event.x,event.y).data());
         }
         auto win = getWindow();
         win->setFocusEle(this);
-    }
+    }*/
     void TextArea::shown()
     {
-        Event::shown();
-        auto win = getWindow();
-        win->onDpiChanged([this]() {
-            lineGlyphInfos.clear();
-            YGNodeMarkDirty(node);
-        });
+        //Event::shown();
+        //auto win = getWindow();
+        //win->onDpiChanged([this]() {
+        //    lineGlyphInfos.clear();
+        //    YGNodeMarkDirty(node);
+        //});
     }
 }

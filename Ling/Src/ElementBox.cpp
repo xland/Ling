@@ -24,20 +24,6 @@ namespace Ling {
 		children.insert(children.begin() + index, ele);
 	}
 
-	void ElementBox::paint(SkCanvas* canvas)
-	{
-		Element::paint(canvas);
-		float x = YGNodeLayoutGetLeft(node);
-		float y = YGNodeLayoutGetTop(node);
-		for (size_t i = 0; i < children.size(); i++)
-		{
-			canvas->save();
-			canvas->translate(x, y);
-			children[i]->paint(canvas);
-			canvas->restore();
-		}
-	}
-
 	std::vector<Element*>* ElementBox::getChildren()
 	{
 		return &children;
@@ -56,18 +42,6 @@ namespace Ling {
 	{
 		YGNodeStyleSetFlexDirection(node, (YGFlexDirection)flexDirection);
 	}
-	void ElementBox::calculateGlobalPos(std::vector<Element*>* children)
-	{
-		for (auto& child : *children)
-		{
-			child->globalX = YGNodeLayoutGetLeft(child->node) + child->parent->globalX;
-			child->globalY = YGNodeLayoutGetTop(child->node) + child->parent->globalY;
-			auto children = child->getChildren();
-			if (children && children->size() > 0) {
-				calculateGlobalPos(children);
-			}
-		}
-	}
 	void ElementBox::casecadeShown()
 	{
 		shown();
@@ -84,7 +58,10 @@ namespace Ling {
 	}
 	void ElementBox::layout()
 	{
-		YGNodeCalculateLayout(node, YGUndefined, YGUndefined, YGDirectionLTR);
-		calculateGlobalPos(&children);
+		Element::layout();
+		for (auto& child : children)
+		{
+			child->layout();
+		}
 	}
 }

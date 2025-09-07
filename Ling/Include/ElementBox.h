@@ -6,7 +6,6 @@ namespace Ling {
 	public:
 		ElementBox();
 		~ElementBox();
-		virtual void paint(SkCanvas* canvas) override;
 		std::vector<Element*>* getChildren() override;
 		/// <summary>
 		/// 添加了新元素之后，应重新执行布局
@@ -39,11 +38,10 @@ namespace Ling {
 		/// <summary>
 		/// 把所有子元素都添加到父元素中之后，才能执行布局
 		/// </summary>
-		void layout();
+		virtual void layout() override;
 	protected:
 		void casecadeShown();
 	private:
-		void calculateGlobalPos(std::vector<Element*>* children);
 	private:
 		std::vector<Element*> children;
 	};

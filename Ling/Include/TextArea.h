@@ -16,9 +16,8 @@ namespace Ling {
 		public:
 			TextArea();
 			~TextArea();
-			void paint(SkCanvas* canvas) override;
+			//void paint(SkCanvas* canvas) override;
 			const std::string& getText();
-			SkFont* getFont();
 			void setText(const std::string& text);
 			void setFont(const std::string& fontName = "Microsoft YaHei",
 				const FontWeight& fontWeight = FontWeight::Normal,
@@ -28,16 +27,16 @@ namespace Ling {
 			float getFontSize();
 		protected:
 			void shown() override;
-			void mouseDown(const MouseEvent& event) override;
+			//void mouseDown(const MouseEvent& event) override;
 		private:
 			static YGSize nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode);
-			void measure();
+			//void measure();
 		private:
 			std::string text;
-			std::shared_ptr<SkFont> font;
+			//std::shared_ptr<SkFont> font;
 			float fontSize{ 16.f };
 			float lineSpace{ 18.f };
-			std::vector<LineGlyphInfo> lineGlyphInfos;
+			//std::vector<LineGlyphInfo> lineGlyphInfos;
 			float measuredWidth, measuredHeight;
 			bool caretVisible{false};
 	};

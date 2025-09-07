@@ -1,4 +1,5 @@
 #include <Windows.h>
+#include <thorvg.h>
 #include "../Include/WindowBase.h"
 
 namespace Ling {
@@ -37,17 +38,18 @@ namespace Ling {
             case WM_SIZE:
             {
                 int w{ LOWORD(lParam) }, h{ HIWORD(lParam) };
+                setWindowSize(w, h);
                 if (w == 0 || h == 0) {
                     return 0;
                 }
-                setWindowSize(w, h);
-                winImpl->reset();
+                resetCanvas();
                 layout();
                 return 0;
             }
             case WM_DPICHANGED:
             {
                 scaleFactor = LOWORD(wParam) / 96.0f;
+				scene->scale(scaleFactor);
                 for (const auto& pair : dpiChangedCBs) {
                     pair.second();
                 }
@@ -85,7 +87,6 @@ namespace Ling {
                 return 0;
             }
             case WM_PAINT: {
-                winImpl->paintElement(this);
                 paintArea();
                 return 0;
             }
@@ -181,5 +182,26 @@ namespace Ling {
     LRESULT CALLBACK WindowBase::customMsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     {
         return DefWindowProc(hwnd, msg, wParam, lParam);
+    }
+
+    void WindowBase::paintArea()
+    {
+        auto size = getWindowClientSize();
+        auto w = size.w * scaleFactor;
+        auto h = size.h * scaleFactor;
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hwnd, &ps);
+        BITMAPINFO bmi{};
+        bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+        bmi.bmiHeader.biWidth = w;
+        bmi.bmiHeader.biHeight = -h;  // top-down
+        bmi.bmiHeader.biPlanes = 1;
+        bmi.bmiHeader.biBitCount = 32;
+        bmi.bmiHeader.biCompression = BI_RGB;
+        SetStretchBltMode(hdc, HALFTONE);
+        SetBrushOrgEx(hdc, 0, 0, nullptr);
+        StretchDIBits(hdc, 0, 0, size.w, size.h, 0, 0, w, h,
+            buffer.data(), &bmi, DIB_RGB_COLORS, SRCCOPY);
+        EndPaint(hwnd, &ps);
     }
 }

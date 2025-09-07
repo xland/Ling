@@ -111,3 +111,7 @@ win->addChild(ele);
 ![](Doc/TextClear.png "文本清晰度对比")
 
 ![](Doc/CenterText.png "一段文本，在窗口中水平垂直居中")
+
+# Warning
+
+This library is a work in progress! Anything can change at any moment without any notice! Use this library at your own risk!

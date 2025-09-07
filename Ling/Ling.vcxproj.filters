@@ -42,9 +42,6 @@
     <ClCompile Include="Src\Size.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Private\WindowBaseImpl.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Src\MouseEvent.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -70,6 +67,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Src\WindowBaseMsgProc.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\WindowBaseProperty.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -108,9 +108,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Include\Size.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Private\WindowBaseImpl.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Include\FlexDirection.h">
@@ -153,9 +150,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Src\LineInfo.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\LineGlyphInfo.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Src\LineSizeInfo.h">
