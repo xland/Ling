@@ -1,8 +1,18 @@
 #include <Windows.h>
 #include "../Include/WindowBase.h"
-#include "private/WindowBaseImpl.h"
 
 namespace Ling {
+
+    LRESULT CALLBACK WindowBase::routeWindowMsg(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+        auto winObj = reinterpret_cast<WindowBase*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
+        if (winObj)
+        {
+            return winObj->windowMsgProc(hwnd, msg, wParam, lParam);
+        }
+        else {
+            return DefWindowProc(hwnd, msg, wParam, lParam);
+        }
+    }
     LRESULT CALLBACK WindowBase::windowMsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     {
         switch (msg)

@@ -10,7 +10,6 @@
 
 
 namespace Ling {
-	class WindowBaseImpl;
 	class TextArea;
 	class Label;
 	class TextBlock;
@@ -20,16 +19,18 @@ namespace Ling {
 		WindowBase();
 		~WindowBase();
 		void show();
-		void setTitle(const std::wstring& title);
-		const std::wstring& getTitle();
 		virtual void createNativeWindow() = 0;
 		void insertChild(const int& index, Element* ele) override;
 		void addChild(Element* ele) override;
+		size_t onDpiChanged(std::function<void()> callback);
+	public:
+		void setTitle(const std::wstring& title);
+		const std::wstring& getTitle();
 		const Position& getWindowPosition();
 		const Size& getWindowSize();
-		const Size getWindowClientSize();
 		void setWindowSize(const int& w, const int& h);
 		void setWindowPosition(const int& x, const int& y);
+		const Size getWindowClientSize();
 		void setWindowToScreenCenter();
 		void resetWindowSize(const int& w, const int& h);
 		void resetWindowPosition(const int& x, const int& y);
@@ -37,7 +38,6 @@ namespace Ling {
 		Element* getElementByPosition(int x, int y);
 		HWND getHandle();
 		float getScaleFactor();
-		size_t onDpiChanged(std::function<void()> callback);
 	public:
 		friend class TextArea;
 		friend class WindowBaseImpl;
@@ -47,10 +47,10 @@ namespace Ling {
 	protected:
 		const std::wstring& getWinClsName();
 		void setScaleFactor();
+		void onWindowCreated();
 		virtual LRESULT CALLBACK customMsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	protected:
 		HWND hwnd;
-		std::unique_ptr<WindowBaseImpl> winImpl;
 		std::wstring title;
 		bool resizable{ true };
 	private:

@@ -3,7 +3,6 @@
 
 struct YGConfig;
 class Element;
-class SkFontMgr;
 
 namespace Ling{
     class App

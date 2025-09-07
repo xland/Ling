@@ -20,27 +20,25 @@ namespace Ling {
         hwnd = CreateWindowEx(WS_EX_APPWINDOW, getWinClsName().data(), title.data(), WS_POPUP | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
             pos.x, pos.y, size.w, size.h, nullptr, nullptr, App::get()->hInstance, nullptr);
         SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
-        setScaleFactor();
-        setSize(size.w, size.h);
-        winImpl = std::make_unique<WindowBaseImpl>(this);
         MARGINS margins = { -1, -1, -1, -1 };
         DwmExtendFrameIntoClientArea(hwnd, &margins);
         int value = 2;
         DwmSetWindowAttribute(hwnd, DWMWA_NCRENDERING_POLICY, &value, sizeof(value));
         DwmSetWindowAttribute(hwnd, DWMWA_ALLOW_NCPAINT, &value, sizeof(value));
+		onWindowCreated();
     }
 
     LRESULT WindowFrameless::customMsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     {
         switch (msg)
         {
-        case WM_NCHITTEST:
-        {
-            int x = GET_X_LPARAM(lParam);
-            int y = GET_Y_LPARAM(lParam);
-            return this->hitTest(x, y);
-            break;
-        }
+            case WM_NCHITTEST:
+            {
+                int x = GET_X_LPARAM(lParam);
+                int y = GET_Y_LPARAM(lParam);
+                return this->hitTest(x, y);
+                break;
+            }
         }
         return WindowBase::customMsgProc(hwnd, msg, wParam, lParam);
     }

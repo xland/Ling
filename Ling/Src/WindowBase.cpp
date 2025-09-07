@@ -7,9 +7,6 @@
 namespace Ling {
     WindowBase::WindowBase() :winPosition(0, 0), winSize(980, 680)
     {
-        //HCURSOR hArrow = LoadCursor(NULL, IDC_ARROW);
-        //SetSystemCursor(hArrow, 32650);
-        //SystemParametersInfo(SPI_SETCURSORS, 0, NULL, 0);
     }
     WindowBase::~WindowBase() {
 
@@ -18,37 +15,6 @@ namespace Ling {
         ShowWindow(hwnd, SW_SHOW);     // 或者 SW_SHOWNORMAL / SW_SHOWDEFAULT
         UpdateWindow(hwnd);
         casecadeShown();
-    }
-
-    void WindowBase::resetWindowToScreenCenter()
-    {
-        int screenWidth = GetSystemMetrics(SM_CXSCREEN);
-        int screenHeight = GetSystemMetrics(SM_CYSCREEN);
-        auto size = getWindowSize();
-        int x{ (screenWidth - size.w) / 2 };
-        int y{ (screenHeight - size.h) / 2 };
-        setWindowPosition(x, y);
-        SetWindowPos(hwnd, NULL, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
-    }
-
-    void WindowBase::setWindowToScreenCenter()
-    {
-        int screenWidth = GetSystemMetrics(SM_CXSCREEN);
-        int screenHeight = GetSystemMetrics(SM_CYSCREEN);
-        auto size = getWindowSize();
-        int x{ (screenWidth - size.w) / 2 };
-        int y{ (screenHeight - size.h) / 2 };
-        setWindowPosition(x, y);
-    }
-
-    void WindowBase::setTitle(const std::wstring& title)
-    {
-        this->title = title;
-    }
-
-    const std::wstring& WindowBase::getTitle()
-    {
-        return title;
     }
 
     void WindowBase::insertChild(const int& index, Element* ele)
@@ -74,63 +40,6 @@ namespace Ling {
             }
         }
     }
-
-    const Position& WindowBase::getWindowPosition()
-    {
-        return winPosition;
-    }
-
-    const Size& WindowBase::getWindowSize()
-    {
-        return winSize;
-    }
-
-    const Size WindowBase::getWindowClientSize()
-    {
-        RECT clientRect;
-        GetClientRect(hwnd, &clientRect);
-        Size s(clientRect.right - clientRect.left, clientRect.bottom - clientRect.top);
-        return s;
-    }
-
-    void WindowBase::resetWindowSize(const int& w, const int& h)
-    {
-        winSize.w = w;
-        winSize.h = h;
-        SetWindowPos(hwnd, NULL, 0, 0, w, h, SWP_NOMOVE | SWP_NOZORDER);
-    }
-
-    void WindowBase::resetWindowPosition(const int& x, const int& y)
-    {
-        winPosition.x = x;
-        winPosition.y = y;
-        SetWindowPos(hwnd, NULL, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
-    }
-    void WindowBase::setWindowSize(const int& w, const int& h)
-    {
-        winSize.w = w;
-        winSize.h = h;
-    }
-
-    void WindowBase::setWindowPosition(const int& x, const int& y)
-    {
-        winPosition.x = x;
-        winPosition.y = y;
-    }
-
-    LRESULT CALLBACK WindowBase::routeWindowMsg(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
-        auto winObj = reinterpret_cast<WindowBase*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
-        if (winObj)
-        {
-            return winObj->windowMsgProc(hwnd, msg, wParam, lParam);
-        }
-        else {
-            return DefWindowProc(hwnd, msg, wParam, lParam);
-        }
-    }
-
-    
-
     void WindowBase::windowMouseMove(const int& x, const int& y)
     {
         MouseEvent e(x, y);
@@ -207,11 +116,7 @@ namespace Ling {
         return clsName;
     }
 
-    void WindowBase::setScaleFactor()
-    {
-        UINT dpi = GetDpiForWindow(hwnd);
-        scaleFactor = dpi / 96.0f;
-    }
+
 
     Element* WindowBase::getElementByPosition(int x, int y)
     {
@@ -235,16 +140,6 @@ namespace Ling {
         }
         return result;
     }
-
-    HWND WindowBase::getHandle()
-    {
-        return hwnd;
-    }
-
-    float WindowBase::getScaleFactor()
-    {
-        return scaleFactor;
-    }
     void WindowBase::setFocusEle(Element* ele)
     {
         SetTimer(hwnd, FlashCaretTimer, 600, NULL); //每600毫秒触发一次
@@ -256,5 +151,12 @@ namespace Ling {
         dpiChangedCBId += 1;
         dpiChangedCBs.insert({ dpiChangedCBId,callback });
         return dpiChangedCBId;
+    }
+    void WindowBase::onWindowCreated()
+    {
+        setScaleFactor();
+        auto size = getWindowClientSize();
+        setSize(size.w, size.h);//工作区大小
+        winImpl = std::make_unique<WindowBaseImpl>(this);
     }
 }
