@@ -8,8 +8,6 @@
 
 struct YGSize;
 struct YGNode;
-class SkFont;
-struct SkRect;
 enum YGMeasureMode;
 typedef const struct YGNode* YGNodeConstRef;
 namespace Ling {

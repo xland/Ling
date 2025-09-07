@@ -1,4 +1,4 @@
-#include <include/core/SkColor.h>
+#include <thorvg.h>
 #include "../Include/Color.h"
 
 namespace Ling{

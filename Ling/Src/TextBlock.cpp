@@ -1,12 +1,6 @@
 #include <sstream>
 #include <yoga/Yoga.h>
-#include <include/core/SkFontMgr.h>
-#include <include/core/SkFontMetrics.h>
-#include <include/core/SkFontStyle.h>
-#include <include/ports/SkTypeface_win.h>
-#include <include/core/SkFont.h>
-#include <include/core/SkPaint.h>
-#include <include/core/SkCanvas.h>
+#include <thorvg.h>
 
 #include "../Include/App.h"
 #include "../Include/WindowBase.h"

@@ -4,9 +4,7 @@
 #include "Color.h"
 #include "Cursor.h"
 
-struct SkRect;
-class SkCanvas;
-class SkPaint;
+
 namespace Ling {
 	class MouseEvent;
 	class WindowBase;

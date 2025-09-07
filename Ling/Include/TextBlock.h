@@ -6,9 +6,6 @@
 #include "FontSlant.h"
 #include "Element.h"
 
-class SkFont;
-class SkCanvas;
-struct SkRect;
 struct YGSize;
 struct YGNode;
 enum YGMeasureMode;

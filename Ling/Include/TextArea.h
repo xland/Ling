@@ -5,9 +5,6 @@
 #include "FontWidth.h"
 #include "FontSlant.h"
 
-class SkFont;
-class SkCanvas;
-struct SkRect;
 struct YGSize;
 struct YGNode;
 enum YGMeasureMode;
