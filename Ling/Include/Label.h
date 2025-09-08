@@ -32,6 +32,7 @@ namespace Ling {
 			void setFontSize(const float& fontSize);
 			float getFontSize();
 			void setFontName(const std::string& fontName);
+			std::string getFontName();
 		protected:
 		private:
 			/// <summary>
@@ -53,6 +54,7 @@ namespace Ling {
 			float fontSize{ 14.f };
 			tvg::Text* textShape;
 			Color foregroundColor;
+			std::string fontName;
 	};
 }
 

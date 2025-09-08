@@ -120,11 +120,12 @@ namespace Ling {
 
     void Label::setFontName(const std::string& fontName)
     {
-        if (fontName == "Arial") {
-            tvg::Text::load("C:\\Windows\\Fonts\\arial.ttf");
-        }
-        else if (fontName == "Microsoft YaHei") {
-            tvg::Text::load("C:\\Windows\\Fonts\\msyh.ttc");
-        }
+		App::loadFont(fontName);
+        this->fontName = fontName;
+		textShape->font(fontName.data());
+    }
+    std::string Label::getFontName()
+    {
+        return fontName;
     }
 }

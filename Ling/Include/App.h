@@ -1,9 +1,9 @@
 ﻿#pragma once
 #include <Windows.h>
+#include <string>
 #include <memory>
-struct YGConfig;
-class Element;
 
+class Element;
 namespace Ling{
     class App
     {
@@ -17,6 +17,7 @@ namespace Ling{
             static void init(HINSTANCE hInstance);
             static App* get();
             static int exec();
+            static void loadFont(const std::string & fontName);
         public:
             friend class Element;
             HINSTANCE hInstance;
