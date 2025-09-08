@@ -1,11 +1,13 @@
 ﻿#include <yoga/Yoga.h>
 #include <thorvg.h>
+#include <thread>
 #include "../Include/App.h"
 
 namespace Ling{
     std::unique_ptr<App> app;
     App::App(HINSTANCE hInstance):hInstance{hInstance}
     {
+        tvg::Initializer::init(std::thread::hardware_concurrency());
         auto hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
         if (FAILED(hr))
         {
@@ -35,6 +37,7 @@ namespace Ling{
             DispatchMessage(&msg);
         }
         CoUninitialize();
+        tvg::Initializer::term();
         return 0;
     }
 }

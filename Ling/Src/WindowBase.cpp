@@ -5,14 +5,18 @@
 #include "../Include/WindowBase.h"
 
 namespace Ling {
-    WindowBase::WindowBase() :winPosition(0, 0), winSize(980, 680)
+    WindowBase::WindowBase() : winPosition(0, 0),  winSize(980, 680), 
+        canvas{ tvg::SwCanvas::gen() },  scene{ tvg::Scene::gen() }
     {
-        canvas = tvg::SwCanvas::gen();
-		scene = tvg::Scene::gen();
-        canvas->push(scene);
+        Element::setWindow(this);
     }
     WindowBase::~WindowBase() {
-
+        scene->remove();
+        canvas->remove();
+        //auto s = scene.release();
+        //auto c = canvas.release();
+        //delete(s);
+        //delete(c);
     }
     void WindowBase::show() {
         ShowWindow(hwnd, SW_SHOW);     // 或者 SW_SHOWNORMAL / SW_SHOWDEFAULT
@@ -35,7 +39,8 @@ namespace Ling {
     void WindowBase::casecadeSetWindow(Element* ele)
     {
         ele->setWindow(this);
-        scene->push(ele->shape);
+        //scene->push(ele->shape.get());
+        //canvas->push(ele->shape.get());
         auto box = dynamic_cast<ElementBox*>(ele);
         if (box) {
             for (auto e : *(box->getChildren()))
@@ -132,24 +137,15 @@ namespace Ling {
         dpiChangedCBs.insert({ dpiChangedCBId,callback });
         return dpiChangedCBId;
     }
-    void WindowBase::onWindowCreated()
-    {
-        setScaleFactor();
-		resetCanvas();
-    }
     void WindowBase::resetCanvas() {
         auto size = getWindowClientSize();
-		auto curSize = getSize();
-        if (size.w == curSize.w && size.h == curSize.h) {
-            return;
-		}
         setSize(size.w, size.h);//工作区大小
         int w = size.w * scaleFactor;
         int h = size.h * scaleFactor;
         buffer.resize(w * h);
         buffer.shrink_to_fit();
-        scene->scale(scaleFactor);
-        canvas->target(buffer.data(), w, w, h, tvg::ColorSpace::ARGB8888);
+        canvas->target(buffer.data(), w, w, h, tvg::ColorSpace::ARGB8888);        
+        canvas->push(scene);
     }
     void WindowBase::layout()
     {

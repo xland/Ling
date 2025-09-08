@@ -9,8 +9,8 @@
 #define FlashCaretTimer WM_APP+1
 
 namespace tvg {
-	class __declspec(dllimport) SwCanvas;
-	class __declspec(dllimport) Scene;
+	class SwCanvas;
+	class Scene;
 }
 namespace Ling {
 	class TextArea;
@@ -47,12 +47,12 @@ namespace Ling {
 		friend class WindowBaseImpl;
 		friend class Label;
 		friend class TextBlock;
-		friend class TextArea;
+		friend class Element;
 	protected:
 		const std::wstring& getWinClsName();
 		void setScaleFactor();
-		void onWindowCreated();
 		virtual LRESULT CALLBACK customMsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+		void resetCanvas();
 	protected:
 		HWND hwnd;
 		std::wstring title;
@@ -63,10 +63,11 @@ namespace Ling {
 		void windowMouseMove(const int& x, const int& y);
 		void windowMouseDown(const int& x, const int& y, const MouseButton& mouseBtn);
 		void windowMouseUp(const int& x, const int& y, const MouseButton& mouseBtn);
+		int windowKeyDown(const int& key);
+		int windowKeyUp(const int& key);
 		void paintArea();
 		void casecadeSetWindow(Element* ele);
 		void setFocusEle(Element* ele);
-		void resetCanvas();
 		size_t dpiChangedCBId{ 0 };
 		std::unordered_map<size_t, std::function<void()>> dpiChangedCBs;
 	private:
@@ -86,6 +87,7 @@ namespace Ling {
 		tvg::SwCanvas* canvas;
 		tvg::Scene* scene;
 		std::vector<uint32_t> buffer;
+		bool isWinInit{ true };
 	};
 }
 

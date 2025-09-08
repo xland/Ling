@@ -5,18 +5,22 @@
 #include "../Include/WindowBase.h"
 #include "../Include/App.h"
 namespace Ling {
-	Element::Element()
+	Element::Element() :shape{ tvg::Shape::gen() }
 	{
-		shape = tvg::Shape::gen();
 	}
 
 	Element::~Element()
 	{
-		delete shape;
 	}
 	WindowBase* Element::getWindow()
 	{
 		return win;
+	}
+
+	void Element::setWindow(WindowBase* win)
+	{
+		win->scene->push(shape);
+		this->win = win;
 	}
 
 	void Element::layout()
@@ -42,11 +46,6 @@ namespace Ling {
 		RECT r{ .left{left},.top{top}, .right{right}, .bottom{bottom} };
 		auto hwnd = getWindow()->getHandle();
 		InvalidateRect(hwnd, &r, false);
-	}
-
-	void Element::setWindow(WindowBase* win)
-	{
-		this->win = win;
 	}
 
 	void Element::setParent(Element* ele)

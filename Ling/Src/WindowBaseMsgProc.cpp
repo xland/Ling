@@ -18,6 +18,11 @@ namespace Ling {
     {
         switch (msg)
         {
+            case WM_CREATE:
+            {
+                auto a = 1;
+                return 0;
+            }
             case WM_NCDESTROY:
             {
                 SetWindowLongPtr(hwnd, GWLP_USERDATA, 0);
@@ -38,8 +43,12 @@ namespace Ling {
             case WM_SIZE:
             {
                 int w{ LOWORD(lParam) }, h{ HIWORD(lParam) };
-                setWindowSize(w, h);
+                setSize(w, h);
                 if (w == 0 || h == 0) {
+                    return 0;
+                }
+                if (isWinInit) {
+                    isWinInit = false;
                     return 0;
                 }
                 resetCanvas();
@@ -116,41 +125,11 @@ namespace Ling {
             }
             case WM_KEYDOWN:
             {
-                switch (wParam)
-                {
-                case VK_DELETE: {
-                    return 0;
-                }
-                case VK_LEFT: {
-                    return 0;
-                }
-                case VK_RIGHT: {
-                    return 0;
-                }
-                case VK_ESCAPE: {
-                    return 0;
-                }
-                case VK_SHIFT: {
-                    return 0;
-                }
-                case VK_CONTROL: {
-                    return 0;
-                }
-                }
-                return 0;
+                return windowKeyDown(wParam);
             }
             case WM_KEYUP:
             {
-                switch (wParam)
-                {
-                case VK_SHIFT: {
-                    return 0;
-                }
-                case VK_CONTROL: {
-                    return 0;
-                }
-                }
-                return 0;
+                return windowKeyUp(wParam);
             }
             case WM_CHAR:
             {
@@ -189,6 +168,38 @@ namespace Ling {
         auto size = getWindowClientSize();
         auto w = size.w * scaleFactor;
         auto h = size.h * scaleFactor;
+        //std::vector<uint32_t> buffer;
+        //buffer.resize(w * h);
+        //for (size_t i = 0; i < 666666; i++)
+        //{
+        //    buffer[i] = 66;
+        //}
+        //PAINTSTRUCT ps;
+        //auto hdc = BeginPaint(hwnd, &ps);
+        //BITMAPINFO bmi = { sizeof(BITMAPINFOHEADER), w, 0 - h, 1, 32, BI_RGB, h * 4 * w, 0, 0, 0, 0 };
+        //SetDIBitsToDevice(hdc, 0, 0, w, h, 0, 0, 0, h, buffer.data(), &bmi, DIB_RGB_COLORS);
+        //EndPaint(hwnd, &ps);
+        
+
+        //auto canvas = tvg::SwCanvas::gen();
+        //auto scene = tvg::Scene::gen();
+        //auto rect = tvg::Shape::gen();
+        //rect->appendRect(0, 0, 200, 200, 20, 20);
+        //rect->fill(100, 100, 100);
+        //scene->push(rect);
+        //scene->scale(1.5);        
+        //canvas->target(buffer.data(), w, w, h, tvg::ColorSpace::ARGB8888);
+        //canvas->remove(scene);
+        //canvas->push(scene);
+
+
+        //auto canvas = tvg::SwCanvas::gen();
+        //canvas->target(buffer.data(), w, w, h, tvg::ColorSpace::ARGB8888);
+        canvas->update();
+        canvas->draw(true);
+        canvas->sync();
+
+
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hwnd, &ps);
         BITMAPINFO bmi{};
@@ -203,5 +214,42 @@ namespace Ling {
         StretchDIBits(hdc, 0, 0, size.w, size.h, 0, 0, w, h,
             buffer.data(), &bmi, DIB_RGB_COLORS, SRCCOPY);
         EndPaint(hwnd, &ps);
+    }
+    int WindowBase::windowKeyDown(const int& key)
+    {
+        switch (key)
+        {
+            case VK_DELETE: {
+                return 0;
+            }
+            case VK_LEFT: {
+                return 0;
+            }
+            case VK_RIGHT: {
+                return 0;
+            }
+            case VK_ESCAPE: {
+                return 0;
+            }
+            case VK_SHIFT: {
+                return 0;
+            }
+            case VK_CONTROL: {
+                return 0;
+            }
+        }
+        return 0;
+    }
+    int WindowBase::windowKeyUp(const int& key) {
+        switch (key)
+        {
+            case VK_SHIFT: {
+                return 0;
+            }
+            case VK_CONTROL: {
+                return 0;
+        }
+        }
+        return 0;
     }
 }

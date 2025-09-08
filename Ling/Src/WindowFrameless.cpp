@@ -16,15 +16,16 @@ namespace Ling {
     {
         auto pos = getWindowPosition();
         auto size = getWindowSize();
-        hwnd = CreateWindowEx(WS_EX_APPWINDOW, getWinClsName().data(), title.data(), WS_POPUP | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
+        hwnd = CreateWindowEx(WS_EX_APPWINDOW | WS_EX_WINDOWEDGE, getWinClsName().data(), title.data(), WS_POPUP,
             pos.x, pos.y, size.w, size.h, nullptr, nullptr, App::get()->hInstance, nullptr);
         SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
-        MARGINS margins = { -1, -1, -1, -1 };
+        MARGINS margins = { 0, 0, 0, 1 };
         DwmExtendFrameIntoClientArea(hwnd, &margins);
         int value = 2;
         DwmSetWindowAttribute(hwnd, DWMWA_NCRENDERING_POLICY, &value, sizeof(value));
         DwmSetWindowAttribute(hwnd, DWMWA_ALLOW_NCPAINT, &value, sizeof(value));
-		onWindowCreated();
+        setScaleFactor();
+        resetCanvas();
     }
 
     LRESULT WindowFrameless::customMsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)

@@ -6,10 +6,11 @@
 LayoutDemo::LayoutDemo() 
 {
     win = std::make_unique<WindowFrameless>();
+    //win = std::make_unique<WindowNormal>();
     win->setTitle(L"SkiaGUI 示例窗口");
     win->setWindowSize(1000, 800);
     win->setWindowToScreenCenter();
-    win->setBackgroundColor(0xFF234567);
+    win->setBackgroundColor(0x234567FF);
     win->createNativeWindow();
 }
 LayoutDemo::~LayoutDemo() 
@@ -60,7 +61,7 @@ void LayoutDemo::verticalHorizontalCenter()
 {
     auto ele = new Element();
     ele->setSize(100, 100);
-    ele->setBackgroundColor(0xFF876543);
+    ele->setBackgroundColor(0x876543FF);
     ele->setCaptionFlag(true);
     win->setAlignItems(Align::Center);
     win->setJustifyContent(Justify::Center);
@@ -69,9 +70,9 @@ void LayoutDemo::verticalHorizontalCenter()
 
 void LayoutDemo::start()
 {
-    leftRight();
+    //leftRight();
     //topCenterBottom();
-    //verticalHorizontalCenter();
+    verticalHorizontalCenter();
     win->layout();
     win->show();
 }

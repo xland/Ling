@@ -1,3 +1,4 @@
+#include <thorvg.h>
 #include "../Include/WindowBase.h"
 
 namespace Ling {
@@ -42,6 +43,7 @@ namespace Ling {
     {
         UINT dpi = GetDpiForWindow(hwnd);
         scaleFactor = dpi / 96.0f;
+        scene->scale(scaleFactor);
     }
     const Size WindowBase::getWindowClientSize()
     {
