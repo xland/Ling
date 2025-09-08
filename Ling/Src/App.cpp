@@ -43,31 +43,34 @@ namespace Ling{
     void App::loadFont(const std::string& fontName)
     {
         if (fontName == "Arial") {
-            tvg::Text::load("C:\\Windows\\Fonts\\arial.ttf");
+            auto r = tvg::Text::load("C:\\Windows\\Fonts\\Arial.ttf");
+            auto a = r;
         }
         else if (fontName == "Microsoft YaHei") {
-            tvg::Text::load("C:\\Windows\\Fonts\\msyh.ttc");
+            auto r = tvg::Text::load("C:\\Windows\\Fonts\\msyh.ttc");
+            auto a = r;
         }
         else if (fontName == "Segoe UI") {
-            tvg::Text::load("C:\Windows\Fonts\segoeui.ttf");
+            tvg::Text::load("C:\\Windows\\Fonts\\segoeui.ttf");
         }
         else if (fontName == "Microsoft JhengHei") {
-			tvg::Text::load("C:\Windows\Fonts\msjh.ttc"); // 微软正黑体 繁体
+			tvg::Text::load("C:\\Windows\\Fonts\\msjh.ttc"); // 微软正黑体 繁体
         }
         else if (fontName == "SimSun") {
-            tvg::Text::load("C:\Windows\Fonts\simsun.ttc"); // 宋体
+            tvg::Text::load("C:\\Windows\\Fonts\\simsun.ttc"); // 宋体
         }
         else if (fontName == "SimHei") {
-            tvg::Text::load("C:\Windows\Fonts\simhei.ttf"); // 黑体
+            auto r = tvg::Text::load("C:\\Windows\\Fonts\\SimHei.ttf"); // 黑体
+            auto a = r;
         }
         else if (fontName == "SimKai") {
-            tvg::Text::load("C:\Windows\Fonts\simkai.ttf"); // 楷体
+            tvg::Text::load("C:\\Windows\\Fonts\\simkai.ttf"); // 楷体
         }
         else if (fontName == "SimFang") {
-            tvg::Text::load("C:\Windows\Fonts\simfang.ttf"); //仿宋
+            tvg::Text::load("C:\\Windows\\Fonts\\simfang.ttf"); //仿宋
         }
         else if (fontName == "Segoe UI Emoji") {
-            tvg::Text::load("C:\Windows\Fonts\seguiemj.ttf"); //表情
+            tvg::Text::load("C:\\Windows\\Fonts\\seguiemj.ttf"); //表情
         }
     }
 }

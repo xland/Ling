@@ -12,7 +12,7 @@ TextDemo::TextDemo()
     win->setTitle(L"Ling 示例窗口");
     win->setWindowSize(1000, 800);
     win->setWindowToScreenCenter();
-    win->setBackgroundColor(0xFFDDDDDD);
+    win->setBackgroundColor(0xDDDDDDFF);
     win->createNativeWindow();
 }
 
@@ -23,9 +23,11 @@ TextDemo::~TextDemo()
 void TextDemo::label()
 {
     auto ele = new Label();
-    ele->setText(u8R"(醉里挑灯看剑，梦回吹角连营。Abc, Def,)");
-    ele->setFont("Microsoft YaHei");//STSong
+    std::u8string str = u8R"(醉里挑灯看剑，梦回吹角连营。Abc, Def,)";
+    ele->setText(str);
+    ele->setFontName("SimHei");//STSong  //Microsoft YaHei //SimHei
     ele->setFontSize(21);
+    ele->setForegroundColor(0x000000FF);
     ele->setBackgroundColor(0xFFFFFFFF);
     win->setAlignItems(Align::Center);
     win->setJustifyContent(Justify::Center);

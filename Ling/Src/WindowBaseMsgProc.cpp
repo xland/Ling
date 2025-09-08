@@ -165,6 +165,17 @@ namespace Ling {
 
     void WindowBase::paintArea()
     {
+        //auto text = tvg::Text::gen();
+        //tvg::Text::load("C:\\Windows\\Fonts\\SimHei.ttf");        
+        //text->font("SimHei");
+        //text->size(80);
+        //std::u8string str = u8R"(醉里挑灯看剑，梦回吹角连营。Abc, Def,)";
+        //text->text(reinterpret_cast<const char*>(str.c_str()));
+        //text->fill(255, 255, 255);
+        //scene->push(text);
+
+
+
         canvas->update();
         canvas->draw();
         canvas->sync();

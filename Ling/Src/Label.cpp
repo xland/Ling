@@ -8,9 +8,9 @@
 namespace Ling {
     Label::Label()
     {
-        //measuredRect = std::make_unique<SkRect>();
         YGNodeSetContext(node, this);
         YGNodeSetMeasureFunc(node, &Label::nodeMeasureCB);
+        textShape = tvg::Text::gen();
     }
     Label::~Label() {
 
@@ -19,9 +19,6 @@ namespace Ling {
     void Label::layout()
     {
         Element::layout();
-        textShape = tvg::Text::gen();
-        tvg::Text::load("/arial.ttf");
-        textShape->font("Arial");
     }
 
     void Label::setWindow(WindowBase* win)
@@ -30,25 +27,14 @@ namespace Ling {
         win->scene->push(textShape);
     }
 
-    //void Label::paint(SkCanvas* canvas)
-    //{
-    //    Element::paint(canvas);
-    //    if (text.empty()) return;
-    //    measure();
-    //    float x = getLeft();
-    //    float y = getTop();
-    //    SkPaint paint;
-    //    paint.setAntiAlias(true);
-    //    paint.setColor(SK_ColorRED);
-    //    font->setSize(fontSize * getWindow()->scaleFactor);
-    //    canvas->drawSimpleText(text.data(), text.length(), SkTextEncoding::kUTF8, x - measuredRect->fLeft, y - measuredRect->fTop, *font.get(), paint);
-    //}
-
 
     YGSize Label::nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode)
     {
         auto label = static_cast<Label*>(YGNodeGetContext(node));
-        label->measure();
+        
+        //float x, y, w, h;
+        //label->textShape->bounds(&x, &y, &w, &h);
+
         float measuredWidth;// = label->measuredRect->width();
         float measuredHeight;// = label->measuredRect->height();
         if (widthMode == YGMeasureModeExactly) {
@@ -63,28 +49,18 @@ namespace Ling {
         else if (heightMode == YGMeasureModeAtMost) {
             measuredHeight = std::min(measuredHeight, height);
         }
-        return { measuredWidth, measuredHeight };
+        return { 300, 60 };
     }
-
-/*    void Label::measure()
-    {
-        if (measuredRect->isEmpty()) {
-            auto win = getWindow();
-            auto sf = win->getScaleFactor();
-            auto fs = fontSize * sf;
-            font->setSize(fs);
-            font->measureText(text.data(), text.length(), SkTextEncoding::kUTF8, measuredRect.get());
-        }
-    }*/
-    const std::string& Label::getText()
+    const std::u8string& Label::getText()
     {
         return text;
     }
 
-    void Label::setText(const std::string& text)
+    void Label::setText(const std::u8string& text)
     {    
         this->text = text;
-        textShape->text(text.data());
+        textShape->text(reinterpret_cast<const char*>(text.c_str()));
+        textShape->translate(10, 10);
     }
 
     void Label::setForegroundColor(const Color& foregroundColor)
@@ -97,16 +73,6 @@ namespace Ling {
     {
         return foregroundColor;
     }
-
-    //void Label::setFont(const std::string& fontName, const FontWeight& fontWeight, const FontWidth& fontWidth, const FontSlant& fontSlant)
-    //{
-    //    SkFontStyle fontStyle((SkFontStyle::Weight)fontWeight, (SkFontStyle::Width)fontWidth, (SkFontStyle::Slant)fontSlant);
-    //    sk_sp<SkTypeface> typeFace = App::getFontMgr()->matchFamilyStyle(fontName.data(), fontStyle);
-    //    font = std::make_shared<SkFont>(typeFace);
-    //    font->setEdging(SkFont::Edging::kSubpixelAntiAlias);
-    //    font->setSubpixel(true);
-    //}
-
     void Label::setFontSize(const float& fontSize)
     {
         this->fontSize = fontSize;
@@ -128,4 +94,18 @@ namespace Ling {
     {
         return fontName;
     }
+    void Label::setItalic(const bool& italic)
+    {
+        if (italic) {
+            textShape->italic();
+        }
+        else
+        {
+            textShape->italic(0);
+        }
+    }
+	bool Label::getItalic()
+    {
+        return italic;
+	}
 }

@@ -21,18 +21,16 @@ namespace Ling {
 			~Label();
 			void layout() override;
 			void setWindow(WindowBase* win) override;
-			const std::string& getText();
-			void setText(const std::string& text);
+			const std::u8string& getText();
+			void setText(const std::u8string& text);
 			void setForegroundColor(const Color& foregroundColor);
 			Color getForegroundColor();
-			void setFont(const std::string& fontName = "Microsoft YaHei",
-				const FontWeight& fontWeight = FontWeight::Normal,
-				const FontWidth& fontWidth = FontWidth::Normal,
-				const FontSlant& fontSlant = FontSlant::Upright);
 			void setFontSize(const float& fontSize);
 			float getFontSize();
 			void setFontName(const std::string& fontName);
 			std::string getFontName();
+			void setItalic(const bool& italic);
+			bool getItalic();
 		protected:
 		private:
 			/// <summary>
@@ -48,13 +46,14 @@ namespace Ling {
 			static YGSize nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode);
 			void measure();
 		private:
-			std::string text;
+			std::u8string text;
 			//std::shared_ptr<SkFont> font;
 			//std::unique_ptr<SkRect> measuredRect;
 			float fontSize{ 14.f };
 			tvg::Text* textShape;
 			Color foregroundColor;
 			std::string fontName;
+			bool italic{ false };
 	};
 }
 
