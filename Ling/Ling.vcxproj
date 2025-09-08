@@ -184,6 +184,7 @@
     <ClCompile Include="Src\WindowBaseMsgProc.cpp" />
     <ClCompile Include="Src\WindowBaseProperty.cpp" />
     <ClCompile Include="Src\WindowFrameless.cpp" />
+    <ClCompile Include="Src\WindowLayered.cpp" />
     <ClCompile Include="Src\WindowNormal.cpp" />
     <ClCompile Include="Src\WindowBase.cpp" />
   </ItemGroup>
@@ -209,6 +210,7 @@
     <ClInclude Include="Include\FontWidth.h" />
     <ClInclude Include="Include\Size.h" />
     <ClInclude Include="Include\TextArea.h" />
+    <ClInclude Include="Include\WindowLayered.h" />
     <ClInclude Include="Src\LineInfo.h" />
     <ClInclude Include="Include\TextBlock.h" />
     <ClInclude Include="Include\Util.h" />

@@ -7,7 +7,7 @@ EventDemo::EventDemo()
     win->setTitle(L"Ling 示例窗口");
     win->setWindowSize(1000, 800);
     win->setWindowToScreenCenter();
-    win->setBackgroundColor(0xFF234567);
+    win->setBackgroundColor(0x234567FF);
     win->createNativeWindow();
 }
 
@@ -20,7 +20,7 @@ void EventDemo::start() {
     ele->setSize(120, 40);
     ele->setBackgroundColor(0xFFFFFFFF);
     ele->onMouseEnter([ele](const MouseEvent& event) {
-        ele->setBackgroundColor(0xFF000000);
+        ele->setBackgroundColor(0x000000FF);
         ele->update();
         });
     ele->onMouseLeave([ele](const MouseEvent& event) {
@@ -32,12 +32,12 @@ void EventDemo::start() {
         ele->update();
         });
     ele->onMouseUp([ele](const MouseEvent& event) {
-        ele->setBackgroundColor(0xFFFFFF00);
+        ele->setBackgroundColor(0xFFFF00FF);
         ele->update();
         });
     win->setAlignItems(Align::Center);
     win->setJustifyContent(Justify::Center);
     win->addChild(ele);
-    win->layout();    
+    win->layout();
     win->show();
 }

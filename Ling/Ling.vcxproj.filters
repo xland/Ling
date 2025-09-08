@@ -72,6 +72,9 @@
     <ClCompile Include="Src\WindowBaseProperty.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Src\WindowLayered.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Util.h">
@@ -156,6 +159,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Include\Cursor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\WindowLayered.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

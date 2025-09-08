@@ -4,6 +4,9 @@
 namespace Ling {
 	Node::Node() : node{ YGNodeNew() }//YGNodeNew()
 	{
+		//YGConfigRef config = YGConfigNew();
+		//YGConfigSetPointScaleFactor(config, 1.5f);
+		//node = YGNodeNewWithConfig(config);
 	}
 
 	Node::~Node()

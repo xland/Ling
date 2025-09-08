@@ -11,8 +11,8 @@ namespace Ling {
         Element::setWindow(this);
     }
     WindowBase::~WindowBase() {
-        scene->remove();
-        canvas->remove();
+        //scene->remove();
+        //canvas->remove();
         //auto s = scene.release();
         //auto c = canvas.release();
         //delete(s);
@@ -39,8 +39,6 @@ namespace Ling {
     void WindowBase::casecadeSetWindow(Element* ele)
     {
         ele->setWindow(this);
-        //scene->push(ele->shape.get());
-        //canvas->push(ele->shape.get());
         auto box = dynamic_cast<ElementBox*>(ele);
         if (box) {
             for (auto e : *(box->getChildren()))
@@ -145,7 +143,10 @@ namespace Ling {
         buffer.resize(w * h);
         buffer.shrink_to_fit();
         canvas->target(buffer.data(), w, w, h, tvg::ColorSpace::ARGB8888);        
-        canvas->push(scene);
+        if (canvas->paints().size() <= 0) {
+            canvas->push(scene);
+        }
+        
     }
     void WindowBase::layout()
     {

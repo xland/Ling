@@ -70,9 +70,9 @@ void LayoutDemo::verticalHorizontalCenter()
 
 void LayoutDemo::start()
 {
-    //leftRight();
+    leftRight();
     //topCenterBottom();
-    verticalHorizontalCenter();
+    //verticalHorizontalCenter();
     win->layout();
     win->show();
 }

@@ -19,7 +19,7 @@ namespace Ling {
         hwnd = CreateWindowEx(WS_EX_APPWINDOW | WS_EX_WINDOWEDGE, getWinClsName().data(), title.data(), WS_POPUP,
             pos.x, pos.y, size.w, size.h, nullptr, nullptr, App::get()->hInstance, nullptr);
         SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
-        MARGINS margins = { 0, 0, 0, 1 };
+        MARGINS margins = { 1, 1, 1, 1 };
         DwmExtendFrameIntoClientArea(hwnd, &margins);
         int value = 2;
         DwmSetWindowAttribute(hwnd, DWMWA_NCRENDERING_POLICY, &value, sizeof(value));

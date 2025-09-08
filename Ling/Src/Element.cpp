@@ -39,13 +39,13 @@ namespace Ling {
 
 	void Element::update()
 	{
-		int left = (int)getGlobalX();
-		int top = (int)getGlobalY();
-		int right = (int)getWidth() + left;
-		int bottom = (int)getHeight() + top;
-		RECT r{ .left{left},.top{top}, .right{right}, .bottom{bottom} };
+		//int left = (int)getGlobalX()-1;
+		//int top = (int)getGlobalY()-1;
+		//int right = (int)getWidth() + left+1;
+		//int bottom = (int)getHeight() + top+1;
+		//RECT r{ .left{left},.top{top}, .right{right}, .bottom{bottom} };
 		auto hwnd = getWindow()->getHandle();
-		InvalidateRect(hwnd, &r, false);
+		InvalidateRect(hwnd, nullptr, false);
 	}
 
 	void Element::setParent(Element* ele)
