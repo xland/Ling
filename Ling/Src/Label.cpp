@@ -16,6 +16,20 @@ namespace Ling {
 
     }
 
+    void Label::layout()
+    {
+        Element::layout();
+        textShape = tvg::Text::gen();
+        tvg::Text::load("/arial.ttf");
+        textShape->font("Arial");
+    }
+
+    void Label::setWindow(WindowBase* win)
+    {
+        Element::setWindow(win);
+        win->scene->push(textShape);
+    }
+
     //void Label::paint(SkCanvas* canvas)
     //{
     //    Element::paint(canvas);
@@ -29,6 +43,8 @@ namespace Ling {
     //    font->setSize(fontSize * getWindow()->scaleFactor);
     //    canvas->drawSimpleText(text.data(), text.length(), SkTextEncoding::kUTF8, x - measuredRect->fLeft, y - measuredRect->fTop, *font.get(), paint);
     //}
+
+
     YGSize Label::nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode)
     {
         auto label = static_cast<Label*>(YGNodeGetContext(node));
@@ -66,10 +82,20 @@ namespace Ling {
     }
 
     void Label::setText(const std::string& text)
-    {
-        //如果父容器已经约束住了大小，比如 flex:1 填充满了，Yoga 也不会再问 measureFunc。
-        //如果你在 YGNodeStyleSetWidth(node, 100) / YGNodeStyleSetHeight(node, 50) 里已经指定了固定大小，Yoga 就直接用这个值，不会去调用 measureFunc。        
+    {    
         this->text = text;
+        textShape->text(text.data());
+    }
+
+    void Label::setForegroundColor(const Color& foregroundColor)
+    {
+        this->foregroundColor = foregroundColor;
+        textShape->fill(foregroundColor.getR(), foregroundColor.getG(), foregroundColor.getB());
+    }
+
+    Color Label::getForegroundColor()
+    {
+        return foregroundColor;
     }
 
     //void Label::setFont(const std::string& fontName, const FontWeight& fontWeight, const FontWidth& fontWidth, const FontSlant& fontSlant)
@@ -84,10 +110,21 @@ namespace Ling {
     void Label::setFontSize(const float& fontSize)
     {
         this->fontSize = fontSize;
+        textShape->size(fontSize);
     }
 
     float Label::getFontSize()
     {
         return fontSize;
+    }
+
+    void Label::setFontName(const std::string& fontName)
+    {
+        if (fontName == "Arial") {
+            tvg::Text::load("C:\\Windows\\Fonts\\arial.ttf");
+        }
+        else if (fontName == "Microsoft YaHei") {
+            tvg::Text::load("C:\\Windows\\Fonts\\msyh.ttc");
+        }
     }
 }

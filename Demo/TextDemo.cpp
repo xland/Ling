@@ -22,14 +22,14 @@ TextDemo::~TextDemo()
 
 void TextDemo::label()
 {
-    //auto ele = new Label();
-    //ele->setText(u8R"(醉里挑灯看剑，梦回吹角连营。Abc, Def,)");
-    //ele->setFont("Microsoft YaHei");//STSong
-    //ele->setFontSize(21);
-    //ele->setBackgroundColor(0xFFFFFFFF);
-    //win->setAlignItems(Align::Center);
-    //win->setJustifyContent(Justify::Center);
-    //win->addChild(ele);
+    auto ele = new Label();
+    ele->setText(u8R"(醉里挑灯看剑，梦回吹角连营。Abc, Def,)");
+    ele->setFont("Microsoft YaHei");//STSong
+    ele->setFontSize(21);
+    ele->setBackgroundColor(0xFFFFFFFF);
+    win->setAlignItems(Align::Center);
+    win->setJustifyContent(Justify::Center);
+    win->addChild(ele);
 }
 
 void TextDemo::textblock()
@@ -68,9 +68,9 @@ void TextDemo::textarea()
 }
 
 void TextDemo::start() {
+    label();
     //textblock();
-    //label();
-    textarea();
+    //textarea();
     win->layout();
     win->show();
 }

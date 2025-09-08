@@ -25,7 +25,6 @@ namespace Ling {
 			WindowBase* getWindow();
 			virtual void layout();
 			void update();
-
 			void setBorderWidth(const float& borderWidth);
 			float getBorderWidth();
 			void setRadius(const float& radius);
@@ -40,9 +39,10 @@ namespace Ling {
 			friend class MouseEvent;
 			friend class ElementBox;
 			friend class WindowBase;
+			friend class Label;
 		protected:
+			virtual void setWindow(WindowBase* win);
 		private:
-			void setWindow(WindowBase* win);
 			void setParent(Element* ele);
 		private:
 			Element* parent{ nullptr };
