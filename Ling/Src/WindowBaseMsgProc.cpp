@@ -1,4 +1,4 @@
-#include <Windows.h>
+ï»¿#include <Windows.h>
 #include <thorvg.h>
 #include "../Include/WindowBase.h"
 
@@ -58,15 +58,7 @@ namespace Ling {
             case WM_DPICHANGED:
             {
                 scaleFactor = LOWORD(wParam) / 96.0f;
-				scene->scale(scaleFactor);
-                for (const auto& pair : dpiChangedCBs) {
-                    pair.second();
-                }
-                RECT* suggestedRect = reinterpret_cast<RECT*>(lParam);
-                auto w{ suggestedRect->right - suggestedRect->left };
-                auto h{ suggestedRect->bottom - suggestedRect->top };
-                SetWindowPos(hwnd, nullptr, suggestedRect->left, suggestedRect->top, w, h,
-                    SWP_NOZORDER | SWP_NOACTIVATE);
+                dpiChanged(reinterpret_cast<RECT*>(lParam));
                 return 0;
             }
             case WM_MOUSEMOVE:
@@ -162,18 +154,29 @@ namespace Ling {
     {
         return DefWindowProc(hwnd, msg, wParam, lParam);
     }
-
+    void WindowBase::dpiChanged(RECT* suggestedRect)
+    {
+        scene->scale(scaleFactor);
+        for (const auto& pair : dpiChangedCBs) {
+            pair.second();
+        }
+        auto w{ suggestedRect->right - suggestedRect->left };
+        auto h{ suggestedRect->bottom - suggestedRect->top };
+        SetWindowPos(hwnd, nullptr, suggestedRect->left, suggestedRect->top, w, h, SWP_NOZORDER | SWP_NOACTIVATE);
+    }
     void WindowBase::paintArea()
     {
-        //auto text = tvg::Text::gen();
-        //tvg::Text::load("C:\\Windows\\Fonts\\SimHei.ttf");        
-        //text->font("SimHei");
-        //text->size(80);
-        //std::u8string str = u8R"(×íÀïÌôµÆ¿´½££¬ÃÎ»Ø´µ½ÇÁ¬Óª¡£Abc, Def,)";
+        //auto text = tvg::Text::gen();    
+        //std::u8string str = u8R"(é†‰é‡ŒæŒ‘ç¯çœ‹å‰‘ï¼Œæ¢¦å›žå¹è§’è¿žè¥ã€‚Abc, Def)";
         //text->text(reinterpret_cast<const char*>(str.c_str()));
-        //text->fill(255, 255, 255);
+        //text->font("SimHei");
+        //text->size(21.f);
+        //text->fill(0, 0, 0);
+        //float x1, y1, w1, h1;
+        //text->bounds(&x1, &y1, &w1, &h1);
+        //auto ss = getWindowClientSize();
+        //text->translate(ss.w-w1-x1, ss.h-h1-y1);
         //scene->push(text);
-
 
 
         canvas->update();

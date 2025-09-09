@@ -49,7 +49,7 @@ namespace Ling {
 			std::u8string text;
 			//std::shared_ptr<SkFont> font;
 			//std::unique_ptr<SkRect> measuredRect;
-			float fontSize{ 14.f };
+			float fontSize{ 14.f },mWidth,mHeight;
 			tvg::Text* textShape;
 			Color foregroundColor;
 			std::string fontName;

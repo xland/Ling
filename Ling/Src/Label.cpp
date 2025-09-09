@@ -6,11 +6,14 @@
 #include "../Include/WindowBase.h"
 
 namespace Ling {
+
+    //static tvg::Text* textShape;
+
     Label::Label()
     {
+        textShape = tvg::Text::gen();
         YGNodeSetContext(node, this);
         YGNodeSetMeasureFunc(node, &Label::nodeMeasureCB);
-        textShape = tvg::Text::gen();
     }
     Label::~Label() {
 
@@ -19,6 +22,7 @@ namespace Ling {
     void Label::layout()
     {
         Element::layout();
+        textShape->translate(getGlobalX(), getGlobalY());
     }
 
     void Label::setWindow(WindowBase* win)
@@ -31,12 +35,12 @@ namespace Ling {
     YGSize Label::nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode)
     {
         auto label = static_cast<Label*>(YGNodeGetContext(node));
-        
-        //float x, y, w, h;
-        //label->textShape->bounds(&x, &y, &w, &h);
-
-        float measuredWidth;// = label->measuredRect->width();
-        float measuredHeight;// = label->measuredRect->height();
+        label->textShape->translate(0, 0);
+        float x, y, w, h;
+        label->textShape->bounds(&x, &y, &w, &h);
+        auto dpi = label->getWindow()->getScaleFactor();
+        float measuredWidth = (w+x) / dpi;
+        float measuredHeight = (h+y) / dpi;
         if (widthMode == YGMeasureModeExactly) {
             measuredWidth = width;
         }
@@ -49,7 +53,7 @@ namespace Ling {
         else if (heightMode == YGMeasureModeAtMost) {
             measuredHeight = std::min(measuredHeight, height);
         }
-        return { 300, 60 };
+        return { measuredWidth, measuredHeight };
     }
     const std::u8string& Label::getText()
     {
@@ -60,7 +64,6 @@ namespace Ling {
     {    
         this->text = text;
         textShape->text(reinterpret_cast<const char*>(text.c_str()));
-        textShape->translate(10, 10);
     }
 
     void Label::setForegroundColor(const Color& foregroundColor)
@@ -76,7 +79,8 @@ namespace Ling {
     void Label::setFontSize(const float& fontSize)
     {
         this->fontSize = fontSize;
-        textShape->size(fontSize);
+        auto dpi = GetDpiForSystem() / 96.f;
+        textShape->size(fontSize*dpi);
     }
 
     float Label::getFontSize()

@@ -11,6 +11,7 @@
 namespace tvg {
 	class SwCanvas;
 	class Scene;
+	class Text;
 }
 namespace Ling {
 	class TextArea;
@@ -27,6 +28,7 @@ namespace Ling {
 		void addChild(Element* ele) override;
 		void layout() override;
 		size_t onDpiChanged(std::function<void()> callback);
+		size_t onBeforeLayout(std::function<void()> callback);
 	public:
 		void setTitle(const std::wstring& title);
 		const std::wstring& getTitle();
@@ -68,8 +70,7 @@ namespace Ling {
 		void paintArea();
 		void casecadeSetWindow(Element* ele);
 		void setFocusEle(Element* ele);
-		size_t dpiChangedCBId{ 0 };
-		std::unordered_map<size_t, std::function<void()>> dpiChangedCBs;
+		void dpiChanged(RECT* rect);
 	private:
 		/// <summary>
 		/// 窗口在屏幕上的位置
@@ -88,6 +89,11 @@ namespace Ling {
 		tvg::Scene* scene;
 		std::vector<uint32_t> buffer;
 		bool isWinInit{ true };
+
+		size_t dpiChangedCBId{ 0 };
+		size_t beforeLayoutCBId{ 0 };
+		std::unordered_map<size_t, std::function<void()>> dpiChangedCBs;
+		std::unordered_map<size_t, std::function<void()>> beforeLayoutCBs;
 	};
 }
 

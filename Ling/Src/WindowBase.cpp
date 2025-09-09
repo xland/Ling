@@ -5,6 +5,9 @@
 #include "../Include/WindowBase.h"
 
 namespace Ling {
+
+    //static tvg::Text* text{ nullptr };
+
     WindowBase::WindowBase() : winPosition(0, 0),  winSize(980, 680), 
         canvas{ tvg::SwCanvas::gen() },  scene{ tvg::Scene::gen() }
     {
@@ -148,8 +151,19 @@ namespace Ling {
         }
         
     }
+    
+    size_t WindowBase::onBeforeLayout(std::function<void()> callback) 
+    {
+        beforeLayoutCBId += 1;
+        beforeLayoutCBs.insert({ beforeLayoutCBId,callback });
+        return beforeLayoutCBId;
+    }
+    
     void WindowBase::layout()
     {
+        for (const auto& pair : beforeLayoutCBs) {
+            pair.second();
+        }
         YGNodeCalculateLayout(node, YGUndefined, YGUndefined, YGDirectionLTR);
 		ElementBox::layout();
     }

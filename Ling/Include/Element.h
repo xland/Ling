@@ -24,6 +24,7 @@ namespace Ling {
 			Element* getParent();	
 			WindowBase* getWindow();
 			virtual void layout();
+			virtual void beforeLayout() {};
 			void update();
 			void setBorderWidth(const float& borderWidth);
 			float getBorderWidth();
