@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClCompile Include="EventDemo.cpp" />
     <ClCompile Include="InputDemo.cpp" />
+    <ClCompile Include="IrregularWindow.cpp" />
     <ClCompile Include="LayoutDemo.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TextDemo.cpp" />
@@ -161,6 +162,7 @@
   <ItemGroup>
     <ClInclude Include="EventDemo.h" />
     <ClInclude Include="InputDemo.h" />
+    <ClInclude Include="IrregularWindow.h" />
     <ClInclude Include="LayoutDemo.h" />
     <ClInclude Include="TextDemo.h" />
   </ItemGroup>

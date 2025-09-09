@@ -17,12 +17,13 @@ namespace Ling {
 	class TextArea;
 	class Label;
 	class TextBlock;
+	class WindowLayered;
 	class WindowBase :public ElementBox
 	{
 	public:
 		WindowBase();
 		~WindowBase();
-		void show();
+		virtual void show();
 		virtual void createNativeWindow() = 0;
 		void insertChild(const int& index, Element* ele) override;
 		void addChild(Element* ele) override;
@@ -50,6 +51,7 @@ namespace Ling {
 		friend class Label;
 		friend class TextBlock;
 		friend class Element;
+		friend class WindowLayered;
 	protected:
 		const std::wstring& getWinClsName();
 		void setScaleFactor();
