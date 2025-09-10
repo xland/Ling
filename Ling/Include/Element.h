@@ -4,9 +4,12 @@
 #include "Node.h"
 #include "Color.h"
 #include "Cursor.h"
+#include "Gradient.h"
+#include "GradientType.h"
 
 namespace tvg {
-	class __declspec(dllimport) Shape;
+	class Shape;
+	class Fill;
 }
 
 namespace Ling {
@@ -24,13 +27,12 @@ namespace Ling {
 			Element* getParent();	
 			WindowBase* getWindow();
 			virtual void layout();
-			virtual void beforeLayout() {};
-			void update();
 			void setBorderWidth(const float& borderWidth);
 			float getBorderWidth();
 			void setRadius(const float& radius);
 			float getRadius();
 			void setBackgroundColor(const Color& backgroundColor);
+			void setBackgroundColor(const Gradient& backgroundGradient);
 			void setBorderColor(const Color& borderColor);
 			void setCaptionFlag(bool captionFlag);
 			bool getCaptionFlag();
@@ -52,6 +54,7 @@ namespace Ling {
 			bool captionFlag{ false };
 			Cursor cursor{Cursor::Arrow};
 			tvg::Shape* shape;
+			tvg::Fill* fill{nullptr};
 	};
 }
 

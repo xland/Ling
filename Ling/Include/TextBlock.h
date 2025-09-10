@@ -1,9 +1,6 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "FontWeight.h"
-#include "FontWidth.h"
-#include "FontSlant.h"
 #include "Element.h"
 
 struct YGSize;
@@ -20,10 +17,6 @@ namespace Ling {
 			//void paint(SkCanvas* canvas) override;
 			const std::string& getText();
 			void setText(const std::string& text);
-			void setFont(const std::string& fontName = "Microsoft YaHei",
-				const FontWeight& fontWeight = FontWeight::Normal,
-				const FontWidth& fontWidth = FontWidth::Normal,
-				const FontSlant& fontSlant = FontSlant::Upright);
 			void setFontSize(const float& fontSize);
 			float getFontSize();
 		private:

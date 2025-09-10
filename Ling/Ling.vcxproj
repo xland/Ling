@@ -174,6 +174,7 @@
     <ClCompile Include="Src\Element.cpp" />
     <ClCompile Include="Src\ElementBox.cpp" />
     <ClCompile Include="Src\Event.cpp" />
+    <ClCompile Include="Src\Gradient.cpp" />
     <ClCompile Include="Src\Input.cpp" />
     <ClCompile Include="Src\Label.cpp" />
     <ClCompile Include="Src\MouseEvent.cpp" />
@@ -200,7 +201,7 @@
     <ClInclude Include="Include\ElementBox.h" />
     <ClInclude Include="Include\Event.h" />
     <ClInclude Include="Include\FlexDirection.h" />
-    <ClInclude Include="Include\FontSlant.h" />
+    <ClInclude Include="Include\Gradient.h" />
     <ClInclude Include="Include\Input.h" />
     <ClInclude Include="Include\Justify.h" />
     <ClInclude Include="Include\Label.h" />
@@ -208,8 +209,6 @@
     <ClInclude Include="Include\MouseEvent.h" />
     <ClInclude Include="Include\Node.h" />
     <ClInclude Include="Include\Position.h" />
-    <ClInclude Include="Include\FontWeight.h" />
-    <ClInclude Include="Include\FontWidth.h" />
     <ClInclude Include="Include\Size.h" />
     <ClInclude Include="Include\TextArea.h" />
     <ClInclude Include="Include\WindowLayered.h" />

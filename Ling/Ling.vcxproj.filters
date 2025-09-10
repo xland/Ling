@@ -75,6 +75,9 @@
     <ClCompile Include="Src\WindowLayered.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Gradient.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Util.h">
@@ -140,15 +143,6 @@
     <ClInclude Include="Include\Label.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Include\FontWeight.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\FontWidth.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\FontSlant.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Node.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -165,6 +159,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Include\Wrap.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Gradient.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

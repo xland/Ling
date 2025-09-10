@@ -150,6 +150,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="EventDemo.cpp" />
+    <ClCompile Include="GraphicsDemo.cpp" />
     <ClCompile Include="InputDemo.cpp" />
     <ClCompile Include="IrregularWindow.cpp" />
     <ClCompile Include="LayoutDemo.cpp" />
@@ -163,6 +164,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EventDemo.h" />
+    <ClInclude Include="GraphicsDemo.h" />
     <ClInclude Include="InputDemo.h" />
     <ClInclude Include="IrregularWindow.h" />
     <ClInclude Include="LayoutDemo.h" />

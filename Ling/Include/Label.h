@@ -1,9 +1,6 @@
 #pragma once
 #include <string>
 #include <memory>
-#include "FontWeight.h"
-#include "FontWidth.h"
-#include "FontSlant.h"
 #include "Element.h"
 
 struct YGSize;

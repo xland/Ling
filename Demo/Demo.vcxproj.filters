@@ -33,6 +33,9 @@
     <ClCompile Include="IrregularWindow.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="GraphicsDemo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LayoutDemo.h">
@@ -48,6 +51,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="IrregularWindow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsDemo.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

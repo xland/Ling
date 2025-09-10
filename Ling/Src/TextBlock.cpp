@@ -93,15 +93,6 @@ namespace Ling {
         this->text = text;
     }
 
-    void TextBlock::setFont(const std::string& fontName, const FontWeight& fontWeight, const FontWidth& fontWidth, const FontSlant& fontSlant)
-    {
-        //SkFontStyle fontStyle((SkFontStyle::Weight)fontWeight, (SkFontStyle::Width)fontWidth, (SkFontStyle::Slant)fontSlant);
-        //sk_sp<SkTypeface> typeFace = App::getFontMgr()->matchFamilyStyle(fontName.data(), fontStyle);
-        //font = std::make_shared<SkFont>(typeFace);
-        //font->setEdging(SkFont::Edging::kSubpixelAntiAlias);
-        //font->setSubpixel(true);
-    }
-
     void TextBlock::setFontSize(const float& fontSize)
     {
         this->fontSize = fontSize;

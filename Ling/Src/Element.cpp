@@ -35,17 +35,9 @@ namespace Ling {
 		float h = getHeight();
 		shape->reset();
 		shape->appendRect(globalX, globalY, w, h, radius, radius);
-	}
+		if (fill) {
 
-	void Element::update()
-	{
-		//int left = (int)getGlobalX()-1;
-		//int top = (int)getGlobalY()-1;
-		//int right = (int)getWidth() + left+1;
-		//int bottom = (int)getHeight() + top+1;
-		//RECT r{ .left{left},.top{top}, .right{right}, .bottom{bottom} };
-		auto hwnd = getWindow()->getHandle();
-		InvalidateRect(hwnd, nullptr, false);
+		}
 	}
 
 	void Element::setParent(Element* ele)
@@ -77,6 +69,18 @@ namespace Ling {
 	void Element::setBackgroundColor(const Color& backgroundColor)
 	{
 		shape->fill(backgroundColor.getR(), backgroundColor.getG(), backgroundColor.getB(), backgroundColor.getA());
+	}
+	void Element::setBackgroundColor(const Gradient& backgroundGradient)
+	{
+		auto gradientType = backgroundGradient.getGradientType();
+		if (gradientType == GradientType::Linear) {
+			fill = tvg::LinearGradient::gen();
+		}
+		else if (gradientType == GradientType::Radial) {
+			fill = tvg::RadialGradient::gen();
+		}
+		fill->colorStops(backgroundGradient.getData(), backgroundGradient.getDataCount());
+		shape->fill(fill);
 	}
 	void Element::setBorderColor(const Color& borderColor)
 	{
