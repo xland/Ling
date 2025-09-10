@@ -43,8 +43,10 @@ void TextDemo::icon()
 
     win->setFlexDirection(FlexDirection::Row);
     win->setFlexWrap(Wrap::Wrap);
-    const std::u8string arr[] = { u8"\ue687", u8"\ue688", u8"\ue686", u8"\ue689", u8"\ue68a", 
-        u8"\ue68b", u8"\ue68c", u8"\ue68d", u8"\ue68e", u8"\ue68f", u8"\ue690", u8"\ue691", u8"\ue692", u8"\ue693",
+    const std::u8string arr[] = { 
+        u8"\ue687", u8"\ue688", u8"\ue686", u8"\ue689", u8"\ue68a", 
+        u8"\ue68b", u8"\ue68c", u8"\ue68d", u8"\ue68e", u8"\ue68f", 
+        u8"\ue690", u8"\ue691", u8"\ue692", u8"\ue693",
     };
 
     for (auto& iconCode:arr)
@@ -57,7 +59,6 @@ void TextDemo::icon()
         ele->setPadding(20.f);
         win->addChild(ele);
     }
-
 }
 
 void TextDemo::textblock()

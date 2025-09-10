@@ -112,6 +112,32 @@ win->addChild(ele);
 
 ![](Doc/CenterText.png "一段文本，在窗口中水平垂直居中")
 
+
+
+```c++
+App::loadFontFile("iconfont.ttf");
+
+win->setFlexDirection(FlexDirection::Row);
+win->setFlexWrap(Wrap::Wrap);
+const std::u8string arr[] = { 
+    u8"\ue687", u8"\ue688", u8"\ue686", u8"\ue689", u8"\ue68a", 
+    u8"\ue68b", u8"\ue68c", u8"\ue68d", u8"\ue68e", u8"\ue68f", 
+    u8"\ue690", u8"\ue691", u8"\ue692", u8"\ue693",
+};
+
+for (auto& iconCode:arr)
+{
+    auto ele = new Label();
+    ele->setText(iconCode);
+    ele->setFontName("iconfont");
+    ele->setFontSize(63);
+    ele->setForegroundColor(0x000000FF);
+    ele->setPadding(20.f);
+    win->addChild(ele);
+}
+```
+![](Doc/icon.png "一段文本，在窗口中水平垂直居中")
+
 # Warning
 
 This library is a work in progress! Anything can change at any moment without any notice! Use this library at your own risk!
