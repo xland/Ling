@@ -90,7 +90,6 @@ namespace Ling {
 
     void Label::setFontName(const std::string& fontName)
     {
-		App::loadFont(fontName);
         this->fontName = fontName;
 		textShape->font(fontName.data());
     }

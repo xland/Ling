@@ -147,9 +147,10 @@
       <PreprocessorDefinitions>TVG_STATIC;NOMINMAX;WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\sdk\yoga;D:\sdk\thorvg\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpp23</LanguageStandard>
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -212,6 +213,7 @@
     <ClInclude Include="Include\Size.h" />
     <ClInclude Include="Include\TextArea.h" />
     <ClInclude Include="Include\WindowLayered.h" />
+    <ClInclude Include="Include\Wrap.h" />
     <ClInclude Include="Src\LineInfo.h" />
     <ClInclude Include="Include\TextBlock.h" />
     <ClInclude Include="Include\Util.h" />

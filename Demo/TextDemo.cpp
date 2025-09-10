@@ -2,6 +2,8 @@
 #include "../Ling/Include/TextArea.h"
 #include "../Ling/Include/TextBlock.h"
 #include "../Ling/Include/Label.h"
+#include "../Ling/Include/App.h"
+#include "../Ling/Include/Wrap.h"
 #include "TextDemo.h"
 
 
@@ -22,6 +24,7 @@ TextDemo::~TextDemo()
 
 void TextDemo::label()
 {
+    App::loadSystemFont("SimHei");
     auto ele = new Label();
     std::u8string str = u8R"(醉里挑灯看剑，梦回吹角连营。Abc, Def,)";
     ele->setText(str);
@@ -32,6 +35,29 @@ void TextDemo::label()
     win->setAlignItems(Align::Center);
     win->setJustifyContent(Justify::Center);
     win->addChild(ele);
+}
+
+void TextDemo::icon()
+{
+    App::loadFontFile("iconfont.ttf");
+
+    win->setFlexDirection(FlexDirection::Row);
+    win->setFlexWrap(Wrap::Wrap);
+    const std::u8string arr[] = { u8"\ue687", u8"\ue688", u8"\ue686", u8"\ue689", u8"\ue68a", 
+        u8"\ue68b", u8"\ue68c", u8"\ue68d", u8"\ue68e", u8"\ue68f", u8"\ue690", u8"\ue691", u8"\ue692", u8"\ue693",
+    };
+
+    for (auto& iconCode:arr)
+    {
+        auto ele = new Label();
+        ele->setText(iconCode);
+        ele->setFontName("iconfont");
+        ele->setFontSize(63);
+        ele->setForegroundColor(0x000000FF);
+        ele->setPadding(20.f);
+        win->addChild(ele);
+    }
+
 }
 
 void TextDemo::textblock()
@@ -70,7 +96,8 @@ void TextDemo::textarea()
 }
 
 void TextDemo::start() {
-    label();
+    //label();
+    icon();
     //textblock();
     //textarea();
     win->layout();

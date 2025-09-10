@@ -5,6 +5,7 @@
 #include "Position.h"
 #include "Size.h"
 #include "FlexDirection.h"
+
 #include "Event.h"
 
 struct YGNode;
@@ -14,6 +15,8 @@ namespace Ling {
 		public:
 			Node();
 			~Node();
+
+			
 			/// <summary>
 			/// 此元素如何在父元素主轴方向上“长大”占据剩余空间
 			/// </summary>

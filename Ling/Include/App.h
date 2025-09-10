@@ -17,7 +17,8 @@ namespace Ling{
             static void init(HINSTANCE hInstance);
             static App* get();
             static int exec();
-            static void loadFont(const std::string & fontName);
+            static void loadSystemFont(const std::string & fontName);
+            static void loadFontFile(const std::string& fileName);
         public:
             friend class Element;
             HINSTANCE hInstance;

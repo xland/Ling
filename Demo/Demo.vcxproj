@@ -135,6 +135,8 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../Ling;D:\sdk\yoga;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <LanguageStandard>stdcpp23</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -165,6 +167,11 @@
     <ClInclude Include="IrregularWindow.h" />
     <ClInclude Include="LayoutDemo.h" />
     <ClInclude Include="TextDemo.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="iconfont.ttf">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

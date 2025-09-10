@@ -7,6 +7,7 @@ public:
 	TextDemo();
 	~TextDemo();
 	void label();
+	void icon();
 	void textblock();
 	void textarea();
 	void start();

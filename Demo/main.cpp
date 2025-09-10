@@ -13,8 +13,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     //LayoutDemo demo;
     //EventDemo demo;
     //InputDemo demo;
-    //TextDemo demo;
-    IrregularWindow demo;
+    TextDemo demo;
+    //IrregularWindow demo;
     demo.start();
 
     return App::exec();

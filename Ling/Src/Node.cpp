@@ -14,6 +14,7 @@ namespace Ling {
 		YGNodeFreeRecursive(node);
 	}
 
+
 	void Node::setFlexGrow(const float& val)
 	{
 		YGNodeStyleSetFlexGrow(node, val);

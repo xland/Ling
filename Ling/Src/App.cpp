@@ -40,7 +40,7 @@ namespace Ling{
         tvg::Initializer::term();
         return 0;
     }
-    void App::loadFont(const std::string& fontName)
+    void App::loadSystemFont(const std::string& fontName)
     {
         if (fontName == "Arial") {
             auto r = tvg::Text::load("C:\\Windows\\Fonts\\Arial.ttf");
@@ -72,5 +72,10 @@ namespace Ling{
         else if (fontName == "Segoe UI Emoji") {
             tvg::Text::load("C:\\Windows\\Fonts\\seguiemj.ttf"); //表情
         }
+    }
+    void App::loadFontFile(const std::string& fileName)
+    {
+        auto r = tvg::Text::load(fileName.data());
+        auto a = 1;
     }
 }

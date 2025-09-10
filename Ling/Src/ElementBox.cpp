@@ -34,6 +34,10 @@ namespace Ling {
 		YGNodeStyleSetAlignItems(node, (YGAlign)val);
 	}
 
+	void ElementBox::setFlexWrap(const Wrap& val)
+	{
+		YGNodeStyleSetFlexWrap(node, (YGWrap)val);
+	}
 	void ElementBox::setJustifyContent(const Justify& val)
 	{
 		YGNodeStyleSetJustifyContent(node, (YGJustify)val);

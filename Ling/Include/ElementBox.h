@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Element.h"
+#include "Wrap.h"
 namespace Ling {
 	class ElementBox :public Element
 	{
@@ -18,6 +19,9 @@ namespace Ling {
 		/// </summary>
 		/// <param name="ele"></param>
 		virtual void addChild(Element* ele);
+
+
+		void setFlexWrap(const Wrap& val);
 		/// <summary>
 		/// 用来设置 子元素在交叉轴 上的对齐方式。
 		/// 主轴 ：由 flex-direction 决定（水平方向或垂直方向）。
