@@ -148,8 +148,7 @@ namespace Ling {
         canvas->target(buffer.data(), w, w, h, tvg::ColorSpace::ARGB8888);        
         if (canvas->paints().size() <= 0) {
             canvas->push(scene);
-        }
-        
+        }        
     }
     
     size_t WindowBase::onBeforeLayout(std::function<void()> callback) 

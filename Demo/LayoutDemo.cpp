@@ -22,14 +22,14 @@ void LayoutDemo::leftRight()
 {
     auto left = new Element();
     left->setSize(300, SizeNaN);
-    left->setBackgroundColor(0xFF876543);
+    left->setBackgroundColor(0x876543FF);
     left->setCaptionFlag(true);
     win->addChild(left);
 
     auto right = new Element();
     right->setFlexGrow(1.f);
     right->setFlexShrink(1.f);
-    right->setBackgroundColor(0xFF9988aa);
+    right->setBackgroundColor(0x9988aaFF);
     win->addChild(right);
 
     win->setFlexDirection(FlexDirection::Row);
@@ -39,19 +39,19 @@ void LayoutDemo::topCenterBottom()
 {
     auto top = new Element();
     top->setSize(SizeNaN, 80);
-    top->setBackgroundColor(0xFF876543);
+    top->setBackgroundColor(0x876543FF);
     top->setCaptionFlag(true);
     win->addChild(top);
 
     auto center = new Element();
     center->setFlexGrow(1.f);
     center->setFlexShrink(1.f);
-    center->setBackgroundColor(0xFF9988aa);
+    center->setBackgroundColor(0x9988aaFF);
     win->addChild(center);
 
     auto bottom = new Element();
     bottom->setSize(SizeNaN, 40);
-    bottom->setBackgroundColor(0xFF313951);
+    bottom->setBackgroundColor(0x313951FF);
     win->addChild(bottom);
 
     win->setFlexDirection(FlexDirection::Column);
