@@ -140,7 +140,7 @@ namespace Ling {
     }
     void WindowBase::resetCanvas() {
         auto size = getWindowClientSize();
-        setSize(size.w, size.h);//工作区大小
+        setSize(size.w, size.h);
         int w = size.w * scaleFactor;
         int h = size.h * scaleFactor;
         buffer.resize(w * h);

@@ -13,6 +13,7 @@ namespace Ling {
 			void show() override;
 		protected:
 			LRESULT CALLBACK customMsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) override;
+			int paintArea() override;
 		private:
 			LRESULT hitTest(int x, int y);
 			void scalePix();

@@ -88,8 +88,7 @@ namespace Ling {
                 return 0;
             }
             case WM_PAINT: {
-                paintArea();
-                return 0;
+                return paintArea();
             }
             case WM_LBUTTONDBLCLK:
             {
@@ -164,7 +163,7 @@ namespace Ling {
         auto h{ suggestedRect->bottom - suggestedRect->top };
         SetWindowPos(hwnd, nullptr, suggestedRect->left, suggestedRect->top, w, h, SWP_NOZORDER | SWP_NOACTIVATE);
     }
-    void WindowBase::paintArea()
+    int WindowBase::paintArea()
     {
         //auto text = tvg::Text::gen();    
         //std::u8string str = u8R"(醉里挑灯看剑，梦回吹角连营。Abc, Def)";
@@ -199,6 +198,7 @@ namespace Ling {
         StretchDIBits(hdc, 0, 0, size.w, size.h, 0, 0, w, h,
             buffer.data(), &bmi, DIB_RGB_COLORS, SRCCOPY);
         EndPaint(hwnd, &ps);
+        return 1;
     }
     int WindowBase::windowKeyDown(const int& key)
     {

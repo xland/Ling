@@ -56,6 +56,20 @@ namespace Ling {
         return WindowBase::customMsgProc(hwnd, msg, wParam, lParam);
     }
 
+    /// <summary>
+    /// 必须得BeginPaint和EndPaint，不然会不断触发WM_PAINT
+    /// 在用户按下Win+D显示桌面后，再点击任务栏窗口，显示此窗口，此时会不断反复触发WM_PAINT
+    /// </summary>
+    /// <returns></returns>
+    int WindowLayered::paintArea()
+    {
+        PAINTSTRUCT ps;
+        BeginPaint(hwnd, &ps);
+        OutputDebugString(L"paint area \n");
+        EndPaint(hwnd, &ps);
+        return 1;
+    }
+
     LRESULT WindowLayered::hitTest(int x, int y) {
         if (!hwnd) return HTNOWHERE;
         RECT winRect;

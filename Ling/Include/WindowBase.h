@@ -57,6 +57,7 @@ namespace Ling {
 		void setScaleFactor();
 		virtual LRESULT CALLBACK customMsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		void resetCanvas();
+		virtual int paintArea();
 	protected:
 		HWND hwnd;
 		std::wstring title;
@@ -69,7 +70,6 @@ namespace Ling {
 		void windowMouseUp(const int& x, const int& y, const MouseButton& mouseBtn);
 		int windowKeyDown(const int& key);
 		int windowKeyUp(const int& key);
-		void paintArea();
 		void casecadeSetWindow(Element* ele);
 		void setFocusEle(Element* ele);
 		void dpiChanged(RECT* rect);
