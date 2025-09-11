@@ -66,6 +66,11 @@ namespace Ling {
             hoverEle = ele;
         }
         ele->mouseMove(e);
+        ele = hoverEle->getParent();
+        while (ele) {
+            ele->mouseMove(e);
+            ele = ele->getParent();
+        }
     }
 
     void WindowBase::windowMouseDown(const int& x, const int& y, const MouseButton& mouseBtn)
@@ -73,6 +78,12 @@ namespace Ling {
         MouseEvent e(x, y, mouseBtn);
         e.setRelativePosition(hoverEle);
         hoverEle->mouseDown(e);
+
+        auto ele = hoverEle->getParent();
+        while (ele) {
+            ele->mouseDown(e);
+            ele = ele->getParent();
+        }
     }
 
     void WindowBase::windowMouseUp(const int& x, const int& y, const MouseButton& mouseBtn)
@@ -80,6 +91,11 @@ namespace Ling {
         MouseEvent e(x, y, mouseBtn);
         e.setRelativePosition(hoverEle);
         hoverEle->mouseUp(e);
+        auto ele = hoverEle->getParent();
+        while (ele) {
+            ele->mouseUp(e);
+            ele = ele->getParent();
+        }
     }
 
     const std::wstring& WindowBase::getWinClsName()

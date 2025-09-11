@@ -43,7 +43,16 @@ namespace Ling {
 			}
 		}
 	}
-
+	void Element::update()
+	{
+		//int left = (int)getGlobalX()-1;
+		//int top = (int)getGlobalY()-1;
+		//int right = (int)getWidth() + left+1;
+		//int bottom = (int)getHeight() + top+1;
+		//RECT r{ .left{left},.top{top}, .right{right}, .bottom{bottom} };
+		auto hwnd = getWindow()->getHandle();
+		InvalidateRect(hwnd, nullptr, false);
+	}
 	void Element::setParent(Element* ele)
 	{
 		this->parent = ele;

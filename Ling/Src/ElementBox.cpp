@@ -28,7 +28,58 @@ namespace Ling {
 	{
 		return &children;
 	}
+	void ElementBox::setPadding(const float& val)
+	{
+		YGNodeStyleSetPadding(node, YGEdgeAll, val);
+	}
 
+	void ElementBox::setPadding(const float& left, const float& top, const float& right, const float& bottom)
+	{
+		YGNodeStyleSetPadding(node, YGEdgeLeft, left);
+		YGNodeStyleSetPadding(node, YGEdgeTop, top);
+		YGNodeStyleSetPadding(node, YGEdgeRight, right);
+		YGNodeStyleSetPadding(node, YGEdgeBottom, bottom);
+	}
+
+	void ElementBox::setPaddingLeft(const float& val)
+	{
+		YGNodeStyleSetPadding(node, YGEdgeLeft, val);
+	}
+
+	void ElementBox::setPaddingTop(const float& val)
+	{
+		YGNodeStyleSetPadding(node, YGEdgeTop, val);
+	}
+
+	void ElementBox::setPaddingRight(const float& val)
+	{
+		YGNodeStyleSetPadding(node, YGEdgeRight, val);
+	}
+
+	void ElementBox::setPaddingBottom(const float& val)
+	{
+		YGNodeStyleSetPadding(node, YGEdgeBottom, val);
+	}
+
+	float ElementBox::getPaddingLeft()
+	{
+		return YGNodeStyleGetPadding(node, YGEdge::YGEdgeLeft).value;
+	}
+
+	float ElementBox::getPaddingTop()
+	{
+		return YGNodeStyleGetPadding(node, YGEdge::YGEdgeTop).value;
+	}
+
+	float ElementBox::getPaddingRight()
+	{
+		return YGNodeStyleGetPadding(node, YGEdge::YGEdgeRight).value;
+	}
+
+	float ElementBox::getPaddingBottom()
+	{
+		return YGNodeStyleGetPadding(node, YGEdge::YGEdgeBottom).value;
+	}
 	void ElementBox::setAlignItems(const Align& val)
 	{
 		YGNodeStyleSetAlignItems(node, (YGAlign)val);

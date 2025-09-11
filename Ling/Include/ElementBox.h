@@ -20,6 +20,16 @@ namespace Ling {
 		/// <param name="ele"></param>
 		virtual void addChild(Element* ele);
 
+		void setPadding(const float& val);
+		void setPadding(const float& left, const float& top, const float& right, const float& bottom);
+		void setPaddingLeft(const float& val);
+		void setPaddingTop(const float& val);
+		void setPaddingRight(const float& val);
+		void setPaddingBottom(const float& val);
+		float getPaddingLeft();
+		float getPaddingTop();
+		float getPaddingRight();
+		float getPaddingBottom();
 
 		void setFlexWrap(const Wrap& val);
 		/// <summary>

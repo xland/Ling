@@ -57,7 +57,7 @@ namespace Ling{
 			tvg::Text::load("C:\\Windows\\Fonts\\msjh.ttc"); // 微软正黑体 繁体
         }
         else if (fontName == "SimSun") {
-            tvg::Text::load("C:\\Windows\\Fonts\\simsun.ttc"); // 宋体
+            tvg::Text::load("C:\\Windows\\Fonts\\SimSun.ttc"); // 宋体
         }
         else if (fontName == "SimHei") {
             auto r = tvg::Text::load("C:\\Windows\\Fonts\\SimHei.ttf"); // 黑体

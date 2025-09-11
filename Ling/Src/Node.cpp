@@ -120,58 +120,7 @@ namespace Ling {
 	{
 		YGNodeStyleSetMargin(node, YGEdge::YGEdgeBottom, val);
 	}
-	void Node::setPadding(const float& val)
-	{
-		YGNodeStyleSetPadding(node, YGEdgeAll, val);
-	}
-
-	void Node::setPadding(const float& left, const float& top, const float& right, const float& bottom)
-	{
-		YGNodeStyleSetPadding(node, YGEdgeLeft, left);
-		YGNodeStyleSetPadding(node, YGEdgeTop, top);
-		YGNodeStyleSetPadding(node, YGEdgeRight, right);
-		YGNodeStyleSetPadding(node, YGEdgeBottom, bottom);
-	}
-
-	void Node::setPaddingLeft(const float& val)
-	{
-		YGNodeStyleSetPadding(node, YGEdgeLeft, val);
-	}
-
-	void Node::setPaddingTop(const float& val)
-	{
-		YGNodeStyleSetPadding(node, YGEdgeTop, val);
-	}
-
-	void Node::setPaddingRight(const float& val)
-	{
-		YGNodeStyleSetPadding(node, YGEdgeRight, val);
-	}
-
-	void Node::setPaddingBottom(const float& val)
-	{
-		YGNodeStyleSetPadding(node, YGEdgeBottom, val);
-	}
-
-	float Node::getPaddingLeft()
-	{
-		return YGNodeStyleGetPadding(node, YGEdge::YGEdgeLeft).value;
-	}
-
-	float Node::getPaddingTop()
-	{
-		return YGNodeStyleGetPadding(node, YGEdge::YGEdgeTop).value;
-	}
-
-	float Node::getPaddingRight()
-	{
-		return YGNodeStyleGetPadding(node, YGEdge::YGEdgeRight).value;
-	}
-
-	float Node::getPaddingBottom()
-	{
-		return YGNodeStyleGetPadding(node, YGEdge::YGEdgeBottom).value;
-	}
+	
 
 	void Node::insertChild(Node* tar, const int& index)
 	{

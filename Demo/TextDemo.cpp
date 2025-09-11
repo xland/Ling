@@ -26,8 +26,7 @@ void TextDemo::label()
 {
     App::loadSystemFont("SimHei");
     auto ele = new Label();
-    std::u8string str = u8R"(醉里挑灯看剑，梦回吹角连营。Abc, Def,)";
-    ele->setText(str);
+    ele->setText(u8R"(醉里挑灯看剑，梦回吹角连营。Abc, Def,)");
     ele->setFontName("SimHei");//STSong  //Microsoft YaHei //SimHei
     ele->setFontSize(13);
     ele->setForegroundColor(0x000000FF);
@@ -56,7 +55,6 @@ void TextDemo::icon()
         ele->setFontName("iconfont");
         ele->setFontSize(63);
         ele->setForegroundColor(0x000000FF);
-        ele->setPadding(20.f);
         win->addChild(ele);
     }
 }
@@ -97,8 +95,8 @@ void TextDemo::textarea()
 }
 
 void TextDemo::start() {
-    //label();
-    icon();
+    label();
+    //icon();
     //textblock();
     //textarea();
     win->layout();

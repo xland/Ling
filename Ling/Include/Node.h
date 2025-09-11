@@ -55,17 +55,6 @@ namespace Ling {
 			float getMarginTop();
 			float getMarginRight();
 			float getMarginBottom();
-
-			void setPadding(const float& val);
-			void setPadding(const float& left, const float& top, const float& right, const float& bottom);
-			void setPaddingLeft(const float& val);
-			void setPaddingTop(const float& val);
-			void setPaddingRight(const float& val);
-			void setPaddingBottom(const float& val);
-			float getPaddingLeft();
-			float getPaddingTop();
-			float getPaddingRight();
-			float getPaddingBottom();
 		public:
 			friend class ElementBox;
 			friend class Element;

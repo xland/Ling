@@ -1,4 +1,5 @@
 #include "../Include/Event.h"
+#include "../Include/Element.h"
 
 namespace Ling {
 	size_t Event::onMouseMove(std::function<void(const MouseEvent&)> callback)
