@@ -32,7 +32,7 @@ namespace Ling {
 			void setRadius(const float& radius);
 			float getRadius();
 			void setBackgroundColor(const Color& backgroundColor);
-			void setBackgroundColor(const Gradient& backgroundGradient);
+			void setBackgroundColor(const std::shared_ptr<Gradient>& backgroundGradient);
 			void setBorderColor(const Color& borderColor);
 			void setCaptionFlag(bool captionFlag);
 			bool getCaptionFlag();
@@ -48,13 +48,13 @@ namespace Ling {
 		private:
 			void setParent(Element* ele);
 		private:
+			std::shared_ptr<Gradient> backgroundGradient;
 			Element* parent{ nullptr };
 			WindowBase* win;
 			float radius{ 0.f };
 			bool captionFlag{ false };
 			Cursor cursor{Cursor::Arrow};
 			tvg::Shape* shape;
-			tvg::Fill* fill{nullptr};
 	};
 }
 

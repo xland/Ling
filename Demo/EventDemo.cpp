@@ -21,19 +21,19 @@ void EventDemo::start() {
     ele->setBackgroundColor(0xFFFFFFFF);
     ele->onMouseEnter([ele](const MouseEvent& event) {
         ele->setBackgroundColor(0x000000FF);
-        ele->update();
+        //ele->update();
         });
     ele->onMouseLeave([ele](const MouseEvent& event) {
         ele->setBackgroundColor(0xFFFFFFFF);
-        ele->update();
+        //ele->update();
         });
     ele->onMouseDown([ele](const MouseEvent& event) {
         ele->setBackgroundColor(0xFF00FFFF);
-        ele->update();
+        //ele->update();
         });
     ele->onMouseUp([ele](const MouseEvent& event) {
         ele->setBackgroundColor(0xFFFF00FF);
-        ele->update();
+        //ele->update();
         });
     win->setAlignItems(Align::Center);
     win->setJustifyContent(Justify::Center);

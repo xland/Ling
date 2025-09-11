@@ -9,6 +9,55 @@ A GUI Framework for modern C++20
 - 兼容性好
 - 内存消耗极低
 
+# Element
+
+- 元素
+```c++
+std::unique_ptr<WindowBase> win;
+win = std::make_unique<WindowNormal>();
+win->setTitle(L"Ling 示例窗口");
+win->setWindowSize(1000, 800);
+win->setWindowToScreenCenter();
+win->setBackgroundColor(0x234567FF);
+win->createNativeWindow();
+
+win->setFlexDirection(FlexDirection::Row);
+win->setFlexWrap(Wrap::Wrap);
+
+auto rect = new Element();
+rect->setSize(100, 100);
+rect->setBackgroundColor(0x876543FF);
+rect->setMargin(30);
+win->addChild(rect);
+
+auto roundRect = new Element();
+roundRect->setSize(100, 100);
+roundRect->setBackgroundColor(0x876543FF);
+roundRect->setMargin(30);
+roundRect->setRadius(12);
+win->addChild(roundRect);
+
+auto circle = new Element();
+circle->setSize(100, 100);
+circle->setBackgroundColor(0x876543FF);
+circle->setMargin(30);
+circle->setRadius(50);
+win->addChild(circle);
+
+auto rect1 = new Element();
+rect1->setSize(100, 100);
+auto gradient = std::make_shared<Gradient>(GradientType::Linear);
+gradient->addColor(0.f, 0xFF0066FF);
+gradient->addColor(1.f, 0x0066FFFF);
+rect1->setBackgroundColor(gradient);
+rect1->setMargin(30);
+win->addChild(rect1);
+
+win->layout();
+win->show();
+```
+![](Doc/Element.png "垂直水平居中")
+
 # Layout
 
 - 垂直水平居中

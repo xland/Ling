@@ -6,7 +6,7 @@ GraphicsDemo::GraphicsDemo()
 {
     //win = std::make_unique<WindowFrameless>();
     win = std::make_unique<WindowNormal>();
-    win->setTitle(L"SkiaGUI 示例窗口");
+    win->setTitle(L"Ling 示例窗口");
     win->setWindowSize(1000, 800);
     win->setWindowToScreenCenter();
     win->setBackgroundColor(0x234567FF);
@@ -41,6 +41,15 @@ void GraphicsDemo::start()
     circle->setMargin(30);
     circle->setRadius(50);
     win->addChild(circle);
+
+    auto rect1 = new Element();
+    rect1->setSize(100, 100);
+    auto gradient = std::make_shared<Gradient>(GradientType::Linear);
+    gradient->addColor(0.f, 0xFF0066FF);
+    gradient->addColor(1.f, 0x0066FFFF);
+    rect1->setBackgroundColor(gradient);
+    rect1->setMargin(30);
+    win->addChild(rect1);
 
     win->layout();
     win->show();

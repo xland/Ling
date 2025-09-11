@@ -5,6 +5,12 @@ namespace Ling{
 
 	Gradient::Gradient(const GradientType& gradientType) : gradientType{gradientType}
 	{
+		if (gradientType == GradientType::Linear) {
+			fill = tvg::LinearGradient::gen();
+		}
+		else if (gradientType == GradientType::Radial) {
+			fill = tvg::RadialGradient::gen();
+		}
 	}
 
 	Gradient::~Gradient()
@@ -14,18 +20,18 @@ namespace Ling{
 
 	void Gradient::addColor(const float& offset, const Color& color)
 	{
-		stops.push_back({ offset,color.getR(),color.getG(), color.getB(), color.getA() });
+		stops.push_back({ offset,color });
 	}
 	GradientType Gradient::getGradientType() const
 	{
 		return gradientType;
 	}
-	const tvg::Fill::ColorStop* Gradient::getData() const
+	std::vector<std::pair<float, Color>>* Gradient::getData()
 	{
-		return stops.data();
+		return &stops;
 	}
-	int Gradient::getDataCount() const
+	tvg::Fill* Gradient::getFill()
 	{
-		return stops.size();
+		return fill;
 	}
 }

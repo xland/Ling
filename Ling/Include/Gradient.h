@@ -5,20 +5,22 @@
 
 namespace tvg {
 	class Fill;
-	struct Fill::ColorStop;
 }
+
 namespace Ling {
 	class Gradient
 	{
 		public:
+			Gradient() = default;
 			Gradient(const GradientType& gradientType);
 			~Gradient();
 			void addColor(const float& offset, const Color& color);
 			GradientType getGradientType() const;
-			const tvg::Fill::ColorStop* getData() const;
-			int getDataCount() const;
+			std::vector<std::pair<float, Color>>* getData();
+			tvg::Fill* getFill();
 		private:
-			std::vector<tvg::Fill::ColorStop> stops;
+			std::vector<std::pair<float,Color>> stops;
 			GradientType gradientType;
+			tvg::Fill* fill;
 	};
 }

@@ -202,6 +202,7 @@
     <ClInclude Include="Include\Event.h" />
     <ClInclude Include="Include\FlexDirection.h" />
     <ClInclude Include="Include\Gradient.h" />
+    <ClInclude Include="Include\GradientType.h" />
     <ClInclude Include="Include\Input.h" />
     <ClInclude Include="Include\Justify.h" />
     <ClInclude Include="Include\Label.h" />

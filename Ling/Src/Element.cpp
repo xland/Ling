@@ -35,8 +35,12 @@ namespace Ling {
 		float h = getHeight();
 		shape->reset();
 		shape->appendRect(globalX, globalY, w, h, radius, radius);
-		if (fill) {
 
+		if (backgroundGradient) {
+			if (backgroundGradient->getGradientType() == GradientType::Linear) {
+				auto lFill = (tvg::LinearGradient*)backgroundGradient->getFill();
+				lFill->linear(globalX, globalY, globalX + w, globalY + h);
+			}
 		}
 	}
 
@@ -70,16 +74,22 @@ namespace Ling {
 	{
 		shape->fill(backgroundColor.getR(), backgroundColor.getG(), backgroundColor.getB(), backgroundColor.getA());
 	}
-	void Element::setBackgroundColor(const Gradient& backgroundGradient)
+	void Element::setBackgroundColor(const std::shared_ptr<Gradient>& backgroundGradient)
 	{
-		auto gradientType = backgroundGradient.getGradientType();
-		if (gradientType == GradientType::Linear) {
-			fill = tvg::LinearGradient::gen();
+		this->backgroundGradient = backgroundGradient;
+		auto fill = backgroundGradient->getFill();
+		std::vector<tvg::Fill::ColorStop> colors;
+		auto data = backgroundGradient->getData();
+		for (auto& pair:*data)
+		{
+			colors.push_back({ pair.first,
+				pair.second.getR(),
+				pair.second.getG(), 
+				pair.second.getB(), 
+				pair.second.getA() 
+			});
 		}
-		else if (gradientType == GradientType::Radial) {
-			fill = tvg::RadialGradient::gen();
-		}
-		fill->colorStops(backgroundGradient.getData(), backgroundGradient.getDataCount());
+		fill->colorStops(colors.data(), colors.size());
 		shape->fill(fill);
 	}
 	void Element::setBorderColor(const Color& borderColor)

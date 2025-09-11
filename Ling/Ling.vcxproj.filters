@@ -164,6 +164,9 @@
     <ClInclude Include="Include\Gradient.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Include\GradientType.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ToDo.md" />

@@ -10,7 +10,7 @@ IrregularWindow::IrregularWindow()
     win->setTitle(L"SkiaGUI 示例窗口");
     win->setWindowSize(800, 800);
     win->setWindowToScreenCenter();
-    win->setBackgroundColor(0x00000000);
+    //win->setBackgroundColor(0x00000000);
     win->createNativeWindow();
 }
 IrregularWindow::~IrregularWindow()
