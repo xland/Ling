@@ -1,4 +1,5 @@
-﻿#include "../Ling/Include/WindowNormal.h"
+﻿#include <format>
+#include "../Ling/Include/WindowNormal.h"
 #include "../Ling/Include/Element.h"
 #include "../Ling/Include/ElementBox.h"
 #include "../Ling/Include/Label.h"
@@ -50,7 +51,10 @@ void EventDemo::counter()
     App::loadSystemFont("SimHei");
     auto label = new Label();
     label->setFontSize(14);
-    label->setText(u8"点击我");
+    static int countNum{ 0 };
+    auto str =std::format("点击我：{}次", countNum);
+    std::u8string utf8_result{ str.begin(), str.end() };
+    label->setText(u8"点击我：{}次");
     label->setFontName("SimHei");
     label->setForegroundColor(0X000000FF);
     label->setBackgroundColor(0xFFFFFFFF);
@@ -64,7 +68,9 @@ void EventDemo::counter()
         });
     label->onMouseDown([label](const MouseEvent& event) {
         label->setBackgroundColor(0xFF00FFFF);
-        label->setText(u8"hahaha");
+        auto str = std::format("点击我：{}次", ++countNum);
+        std::u8string utf8_result{ str.begin(), str.end() };
+        label->setText(utf8_result);
         label->update();
     });
     win->addChild(label);

@@ -15,8 +15,6 @@ namespace Ling {
 		public:
 			Node();
 			~Node();
-
-			
 			/// <summary>
 			/// 此元素如何在父元素主轴方向上“长大”占据剩余空间
 			/// </summary>
@@ -55,6 +53,7 @@ namespace Ling {
 			float getMarginTop();
 			float getMarginRight();
 			float getMarginBottom();
+
 		public:
 			friend class ElementBox;
 			friend class Element;

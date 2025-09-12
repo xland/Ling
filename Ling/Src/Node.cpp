@@ -121,7 +121,6 @@ namespace Ling {
 		YGNodeStyleSetMargin(node, YGEdge::YGEdgeBottom, val);
 	}
 	
-
 	void Node::insertChild(Node* tar, const int& index)
 	{
 		YGNodeInsertChild(node, tar->node, index);
@@ -131,7 +130,6 @@ namespace Ling {
 	{
 		YGNodeInsertChild(node, tar->node, YGNodeGetChildCount(node));
 	}
-
 
 	Position Node::getPosition()
 	{

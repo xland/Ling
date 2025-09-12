@@ -7,8 +7,6 @@
 
 namespace Ling {
 
-    //static tvg::Text* textShape;
-
     Label::Label()
     {
         textShape = tvg::Text::gen();
