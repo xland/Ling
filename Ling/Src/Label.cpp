@@ -53,15 +53,15 @@ namespace Ling {
         }
         return { measuredWidth, measuredHeight };
     }
-    const std::u8string& Label::getText()
+    const std::string& Label::getText()
     {
         return text;
     }
 
-    void Label::setText(const std::u8string& text)
+    void Label::setText(const std::string& text)
     {    
         this->text = text;
-        textShape->text(reinterpret_cast<const char*>(text.c_str()));
+        textShape->text(text.c_str());
     }
 
     void Label::setForegroundColor(const Color& foregroundColor)

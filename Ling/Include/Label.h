@@ -18,8 +18,8 @@ namespace Ling {
 			~Label();
 			void layout() override;
 			void setWindow(WindowBase* win) override;
-			const std::u8string& getText();
-			void setText(const std::u8string& text);
+			const std::string& getText();
+			void setText(const std::string& text);
 			void setForegroundColor(const Color& foregroundColor);
 			Color getForegroundColor();
 			void setFontSize(const float& fontSize);
@@ -43,7 +43,7 @@ namespace Ling {
 			static YGSize nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode);
 			void measure();
 		private:
-			std::u8string text;
+			std::string text;
 			//std::shared_ptr<SkFont> font;
 			//std::unique_ptr<SkRect> measuredRect;
 			float fontSize{ 14.f },mWidth,mHeight;
