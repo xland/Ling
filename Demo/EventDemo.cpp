@@ -52,9 +52,8 @@ void EventDemo::counter()
     auto label = new Label();
     label->setFontSize(14);
     static int countNum{ 0 };
-    auto str =std::format("点击我：{}次", countNum);
-    std::u8string utf8_result{ str.begin(), str.end() };
-    label->setText(u8"点击我：{}次");
+    auto str =std::format(L"点击我：{}次", countNum);
+    label->setText(str);
     label->setFontName("SimHei");
     label->setForegroundColor(0X000000FF);
     label->setBackgroundColor(0xFFFFFFFF);
@@ -68,9 +67,8 @@ void EventDemo::counter()
         });
     label->onMouseDown([label](const MouseEvent& event) {
         label->setBackgroundColor(0xFF00FFFF);
-        auto str = std::format("点击我：{}次", ++countNum);
-        std::u8string utf8_result{ str.begin(), str.end() };
-        label->setText(utf8_result);
+        auto str = std::format(L"点击我：{}次", ++countNum);
+        label->setText(str);
         label->update();
     });
     win->addChild(label);

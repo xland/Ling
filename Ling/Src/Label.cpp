@@ -1,6 +1,7 @@
 ﻿#include <yoga/Yoga.h>
 #include <thorvg.h>
 
+#include "../Include/Util.h"
 #include "../Include/App.h"
 #include "../Include/Label.h"
 #include "../Include/WindowBase.h"
@@ -53,15 +54,16 @@ namespace Ling {
         }
         return { measuredWidth, measuredHeight };
     }
-    const std::string& Label::getText()
+    const std::wstring& Label::getText()
     {
         return text;
     }
 
-    void Label::setText(const std::string& text)
+    void Label::setText(const std::wstring& text)
     {    
         this->text = text;
-        textShape->text(text.c_str());
+        auto str = Ling::ConvertToUTF8(text);
+        textShape->text(str.c_str());
     }
 
     void Label::setForegroundColor(const Color& foregroundColor)
