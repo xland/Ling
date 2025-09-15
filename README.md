@@ -3,7 +3,6 @@ A GUI Framework for modern C++20
 
 # Features
 
-- 支持UTF-8文本
 - 支持多种布局方式
 - 文字抗锯齿
 - 兼容性好
