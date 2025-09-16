@@ -171,6 +171,7 @@
   <ItemGroup>
     <ClCompile Include="Src\App.cpp" />
     <ClCompile Include="Src\Color.cpp" />
+    <ClCompile Include="Src\EffectBox.cpp" />
     <ClCompile Include="Src\Element.cpp" />
     <ClCompile Include="Src\ElementBox.cpp" />
     <ClCompile Include="Src\Event.cpp" />
@@ -192,6 +193,7 @@
     <ClCompile Include="Src\WindowBase.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\EffectBox.h" />
     <ClInclude Include="Include\Align.h" />
     <ClInclude Include="Include\App.h" />
     <ClInclude Include="Include\Color.h" />

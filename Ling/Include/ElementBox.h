@@ -7,18 +7,18 @@ namespace Ling {
 	public:
 		ElementBox();
 		~ElementBox();
-		std::vector<Element*>* getChildren() override;
+		std::vector<std::shared_ptr<Element>>* getChildren();
 		/// <summary>
 		/// 添加了新元素之后，应重新执行布局
 		/// </summary>
 		/// <param name="index"></param>
 		/// <param name="ele"></param>
-		virtual void insertChild(const int& index, Element* ele);
+		virtual void insertChild(const int& index, const std::shared_ptr<Element>& ele);
 		/// <summary>
 		/// 添加了新元素之后，应重新执行布局
 		/// </summary>
 		/// <param name="ele"></param>
-		virtual void addChild(Element* ele);
+		virtual void addChild(const std::shared_ptr<Element>& ele);
 
 		void setPadding(const float& val);
 		void setPadding(const float& left, const float& top, const float& right, const float& bottom);
@@ -57,7 +57,7 @@ namespace Ling {
 		void casecadeShown();
 	private:
 	private:
-		std::vector<Element*> children;
+		std::vector<std::shared_ptr<Element>> children;
 	};
 }
 

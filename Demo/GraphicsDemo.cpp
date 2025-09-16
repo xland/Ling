@@ -1,5 +1,6 @@
 ﻿#include "../Ling/Include/WindowFrameless.h"
 #include "../Ling/Include/WindowNormal.h"
+#include "../Ling/Include/EffectBox.h"
 #include "GraphicsDemo.h"
 
 GraphicsDemo::GraphicsDemo()
@@ -50,6 +51,14 @@ void GraphicsDemo::start()
     rect1->setBackgroundColor(gradient);
     rect1->setMargin(30);
     win->addChild(rect1);
+
+    auto effect = new EffectBox();
+    effect->setSize(100, 100);
+    effect->setRadius(50);
+    effect->setBackgroundColor(0x876543FF);
+    effect->setShadow(0xFF0088FF, 0, 0, 30.f);
+    effect->setMargin(30);
+    win->addChild(effect);
 
     win->layout();
     win->show();

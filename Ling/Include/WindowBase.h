@@ -25,8 +25,8 @@ namespace Ling {
 		~WindowBase();
 		virtual void show();
 		virtual void createNativeWindow() = 0;
-		void insertChild(const int& index, Element* ele) override;
-		void addChild(Element* ele) override;
+		void insertChild(const int& index, const std::shared_ptr<Element>& ele) override;
+		void addChild(const std::shared_ptr<Element>& ele) override;
 		void layout() override;
 		size_t onDpiChanged(std::function<void()> callback);
 		size_t onBeforeLayout(std::function<void()> callback);
@@ -51,6 +51,7 @@ namespace Ling {
 		friend class Label;
 		friend class TextBlock;
 		friend class Element;
+		friend class EffectBox;
 		friend class WindowLayered;
 	protected:
 		const std::wstring& getWinClsName();

@@ -10,21 +10,21 @@ namespace Ling {
 	{
 	}
 
-	void ElementBox::addChild(Element* ele)
+	void ElementBox::addChild(const std::shared_ptr<Element>& ele)
 	{
 		ele->setParent(this);
-		Node::addChild(ele);
+		Node::addChild(ele.get());
 		children.push_back(ele);
 	}
 
-	void ElementBox::insertChild(const int& index, Element* ele)
+	void ElementBox::insertChild(const int& index, const std::shared_ptr<Element>& ele)
 	{
 		ele->setParent(this);
-		Node::insertChild(ele, index);
+		Node::insertChild(ele.get(), index);
 		children.insert(children.begin() + index, ele);
 	}
 
-	std::vector<Element*>* ElementBox::getChildren()
+	std::vector<std::shared_ptr<Element>>* ElementBox::getChildren()
 	{
 		return &children;
 	}
@@ -102,7 +102,7 @@ namespace Ling {
 		shown();
 		for (auto& child : children)
 		{
-			auto box = dynamic_cast<ElementBox*>(child);
+			auto box = dynamic_cast<ElementBox*>(child.get());
 			if (box) {
 				box->casecadeShown();
 			}

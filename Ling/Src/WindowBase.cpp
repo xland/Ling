@@ -1,6 +1,7 @@
 ﻿#include <yoga/Yoga.h>
 #include <thorvg.h>
 #include "../Include/Element.h"
+#include "../Include/ElementBox.h"
 #include "../Include/App.h"
 #include "../Include/WindowBase.h"
 
@@ -27,16 +28,16 @@ namespace Ling {
         casecadeShown();
     }
 
-    void WindowBase::insertChild(const int& index, Element* ele)
+    void WindowBase::insertChild(const int& index, const std::shared_ptr<Element>& ele)
     {
         ElementBox::insertChild(index, ele);
-        casecadeSetWindow(ele);
+        casecadeSetWindow(ele.get());
     }
 
-    void WindowBase::addChild(Element* ele)
+    void WindowBase::addChild(const std::shared_ptr<Element>& ele)
     {
         ElementBox::addChild(ele);
-        casecadeSetWindow(ele);
+        casecadeSetWindow(ele.get());
     }
 
     void WindowBase::casecadeSetWindow(Element* ele)
@@ -46,7 +47,7 @@ namespace Ling {
         if (box) {
             for (auto e : *(box->getChildren()))
             {
-                casecadeSetWindow(e);
+                casecadeSetWindow(e.get());
             }
         }
     }
@@ -123,7 +124,7 @@ namespace Ling {
     Element* WindowBase::getElementByPosition(int x, int y)
     {
         Element* result = this;
-        auto children = result->getChildren();
+        auto children = this->getChildren();
         while (children && children->size() > 0) {
             bool flag{ false };
             for (auto child : *children) //遍历子元素
@@ -131,9 +132,12 @@ namespace Ling {
                 if (child->hittest(x, y)) //命中测试
                 {
                     flag = true;
-                    result = child;
-                    children = result->getChildren();
-                    break; //结束本层级的遍历，开始遍历下一个层级，找到最底层的元素
+                    result = child.get();
+                    auto box = dynamic_cast<ElementBox*>(result);
+                    if (box) {
+                        children = box->getChildren();
+                        break;
+                    }
                 }
             }
             if (!flag) {

@@ -22,8 +22,7 @@ namespace Ling {
 	{
 		public:
 			Element();
-			~Element();		
-			virtual std::vector<Element*>* getChildren() { return nullptr; };
+			~Element();
 			Element* getParent();	
 			WindowBase* getWindow();
 			virtual void layout();
@@ -38,10 +37,12 @@ namespace Ling {
 			void setCaptionFlag(bool captionFlag);
 			bool getCaptionFlag();
 			void setCursor(const Cursor& cursor);
+			void setShadow(const Color& color, const float& angle, const float& distance, const float& sigma);
 			Cursor getCursor();
 		public:
 			friend class MouseEvent;
 			friend class ElementBox;
+			friend class EffectBox;
 			friend class WindowBase;
 			friend class Label;
 		protected:

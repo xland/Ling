@@ -19,7 +19,7 @@ namespace Ling {
 
 	void Element::setWindow(WindowBase* win)
 	{
-		win->scene->push(shape);
+		auto result = win->scene->push(shape);
 		this->win = win;
 	}
 
