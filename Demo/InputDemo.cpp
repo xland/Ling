@@ -22,7 +22,7 @@ void InputDemo::start() {
 
 
 
-    auto ele = new TextArea();
+    auto ele = std::make_shared<Ling::TextArea>();
 //    ele->setText(uR"(醉里挑灯看剑，梦回吹角连营。
 //八百里分麾下炙，五十弦翻塞外声。
 //沙场秋点兵。

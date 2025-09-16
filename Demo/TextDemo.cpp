@@ -25,7 +25,7 @@ TextDemo::~TextDemo()
 void TextDemo::label()
 {
     App::loadSystemFont("SimHei");
-    auto ele = new Label();
+    auto ele = std::make_shared<Ling::Label>();
     ele->setText(LR"(醉里挑灯看剑，梦回吹角连营。Abc, Def,)");
     ele->setFontName("SimHei");//STSong  //Microsoft YaHei //SimHei
     ele->setFontSize(13);
@@ -50,7 +50,7 @@ void TextDemo::icon()
 
     for (auto& iconCode:arr)
     {
-        auto ele = new Label();
+        auto ele = std::make_shared<Ling::Label>();
         ele->setText(iconCode);
         ele->setFontName("iconfont");
         ele->setFontSize(63);

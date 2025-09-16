@@ -19,7 +19,7 @@ IrregularWindow::~IrregularWindow()
 }
 void IrregularWindow::start()
 {
-    auto center = new Element();
+    auto center = std::make_shared<Ling::Element>();
     center->setSize(800, 800);
     center->setBackgroundColor(0x876543FF);
     center->setRadius(400);

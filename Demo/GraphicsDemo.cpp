@@ -23,27 +23,27 @@ void GraphicsDemo::start()
     win->setFlexDirection(FlexDirection::Row);
     win->setFlexWrap(Wrap::Wrap);
 
-    auto rect = new Element();
+    auto rect = std::make_shared<Ling::Element>();
     rect->setSize(100, 100);
     rect->setBackgroundColor(0x876543FF);
     rect->setMargin(30);
     win->addChild(rect);
 
-    auto roundRect = new Element();
+    auto roundRect = std::make_shared<Ling::Element>();
     roundRect->setSize(100, 100);
     roundRect->setBackgroundColor(0x876543FF);
     roundRect->setMargin(30);
     roundRect->setRadius(12);
     win->addChild(roundRect);
 
-    auto circle = new Element();
+    auto circle = std::make_shared<Ling::Element>();
     circle->setSize(100, 100);
     circle->setBackgroundColor(0x876543FF);
     circle->setMargin(30);
     circle->setRadius(50);
     win->addChild(circle);
 
-    auto rect1 = new Element();
+    auto rect1 = std::make_shared<Ling::Element>();
     rect1->setSize(100, 100);
     auto gradient = std::make_shared<Gradient>(GradientType::Linear);
     gradient->addColor(0.f, 0xFF0066FF);
@@ -52,7 +52,7 @@ void GraphicsDemo::start()
     rect1->setMargin(30);
     win->addChild(rect1);
 
-    auto effect = new EffectBox();
+    auto effect = std::make_shared<Ling::EffectBox>();
     effect->setSize(100, 100);
     effect->setRadius(50);
     effect->setBackgroundColor(0x876543FF);

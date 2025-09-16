@@ -20,13 +20,13 @@ LayoutDemo::~LayoutDemo()
 
 void LayoutDemo::leftRight()
 {
-    auto left = new Element();
+    auto left = std::make_shared<Ling::Element>();
     left->setSize(300, SizeNaN);
     left->setBackgroundColor(0x876543FF);
     left->setCaptionFlag(true);
     win->addChild(left);
 
-    auto right = new Element();
+    auto right = std::make_shared<Ling::Element>();
     right->setFlexGrow(1.f);
     right->setFlexShrink(1.f);
     right->setBackgroundColor(0x9988aaFF);
@@ -37,19 +37,19 @@ void LayoutDemo::leftRight()
 
 void LayoutDemo::topCenterBottom()
 {
-    auto top = new Element();
+    auto top = std::make_shared<Ling::Element>();
     top->setSize(SizeNaN, 80);
     top->setBackgroundColor(0x876543FF);
     top->setCaptionFlag(true);
     win->addChild(top);
 
-    auto center = new Element();
+    auto center = std::make_shared<Ling::Element>();
     center->setFlexGrow(1.f);
     center->setFlexShrink(1.f);
     center->setBackgroundColor(0x9988aaFF);
     win->addChild(center);
 
-    auto bottom = new Element();
+    auto bottom = std::make_shared<Ling::Element>();
     bottom->setSize(SizeNaN, 40);
     bottom->setBackgroundColor(0x313951FF);
     win->addChild(bottom);
@@ -59,7 +59,7 @@ void LayoutDemo::topCenterBottom()
 
 void LayoutDemo::verticalHorizontalCenter()
 {
-    auto ele = new Element();
+    auto ele = std::make_shared<Ling::Element>();
     ele->setSize(100, 100);
     ele->setBackgroundColor(0x876543FF);
     ele->setCaptionFlag(true);

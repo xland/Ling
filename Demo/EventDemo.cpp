@@ -22,7 +22,7 @@ EventDemo::~EventDemo()
 
 void EventDemo::enterLeaveDownUp()
 {
-    auto ele = new Ling::Element();
+    auto ele = std::make_shared<Ling::Element>();
     ele->setSize(120, 40);
     ele->setBackgroundColor(0xFFFFFFFF);
 
@@ -49,7 +49,7 @@ void EventDemo::enterLeaveDownUp()
 void EventDemo::counter()
 {
     App::loadSystemFont("SimHei");
-    auto label = new Label();
+    auto label = std::make_shared<Ling::Label>();
     label->setFontSize(14);
     static int countNum{ 0 };
     auto str =std::format(L"点击我：{}次", countNum);
