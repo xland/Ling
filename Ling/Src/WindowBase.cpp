@@ -152,23 +152,23 @@ namespace Ling {
     }
     int WindowBase::paintArea()
     {
-        App::loadSystemFont("SimHei");
-        auto text = tvg::Text::gen();
-        //https://github.com/thorvg/thorvg/wiki/25'-Development-Roadmap
-        auto str = Ling::ConvertToUTF8(LR"(醉里挑灯看剑，梦回吹角连营。
-    八百里分麾下炙，五十弦翻塞外声。
-    沙场秋点兵。
-    马作的卢飞快，弓如霹雳弦惊。
-    了却君王天下事，赢得生前身后名。
-    可怜白发生！)");
-        text->text(str.c_str());
-        text->font("SimHei");
-        text->size(21.f);
-        text->fill(0, 0, 0);
-        text->translate(22, 22);
-        text->layout(600, 400);
-        text->align(0.f, 0.f);
-        canvas->push(text);
+    //    App::loadSystemFont("SimHei");
+    //    auto text = tvg::Text::gen();
+    //    //https://github.com/thorvg/thorvg/wiki/25'-Development-Roadmap
+    //    auto str = Ling::ConvertToUTF8(LR"(醉里挑灯看剑，梦回吹角连营。
+    //八百里分麾下炙，五十弦翻塞外声。
+    //沙场秋点兵。
+    //马作的卢飞快，弓如霹雳弦惊。
+    //了却君王天下事，赢得生前身后名。
+    //可怜白发生！)");
+    //    text->text(str.c_str());
+    //    text->font("SimHei");
+    //    text->size(21.f);
+    //    text->fill(0, 0, 0);
+    //    text->translate(22, 22);
+    //    text->layout(600, 400);
+    //    text->align(0.f, 0.f);
+    //    canvas->push(text);
 
 
         canvas->update();
