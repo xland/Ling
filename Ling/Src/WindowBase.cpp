@@ -154,7 +154,7 @@ namespace Ling {
     {
         App::loadSystemFont("SimHei");
         auto text = tvg::Text::gen();
-        text->lineWrap(true);
+        //https://github.com/thorvg/thorvg/wiki/25'-Development-Roadmap
         auto str = Ling::ConvertToUTF8(LR"(醉里挑灯看剑，梦回吹角连营。
     八百里分麾下炙，五十弦翻塞外声。
     沙场秋点兵。
