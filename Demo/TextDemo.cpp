@@ -63,15 +63,17 @@ void TextDemo::icon()
 
 void TextDemo::textblock()
 {
-    auto ele = new TextBlock();
+    App::loadSystemFont("SimHei");
+    auto ele = std::make_shared<TextBlock>();
     ele->setText(LR"(醉里挑灯看剑，梦回吹角连营。
     八百里分麾下炙，五十弦翻塞外声。
     沙场秋点兵。
     马作的卢飞快，弓如霹雳弦惊。
     了却君王天下事，赢得生前身后名。
     可怜白发生！)");
-    ele->setFont("Microsoft YaHei");//STSong
+    ele->setFontName("SimHei");
     ele->setFontSize(21);
+    ele->setForegroundColor(0x000000FF);
     ele->setBackgroundColor(0xFFFFFFFF);
     win->setAlignItems(Align::Center);
     win->setJustifyContent(Justify::Center);

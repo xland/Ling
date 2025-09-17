@@ -1,16 +1,16 @@
-#include <sstream>
 #include <yoga/Yoga.h>
 #include <thorvg.h>
 
+#include "../Include/Util.h"
 #include "../Include/App.h"
-#include "../Include/WindowBase.h"
 #include "../Include/TextBlock.h"
-#include "../Include/Position.h"
-#include "LineSizeInfo.h"
+#include "../Include/WindowBase.h"
 
 namespace Ling {
+
     TextBlock::TextBlock()
     {
+        textShape = tvg::Text::gen();
         YGNodeSetContext(node, this);
         YGNodeSetMeasureFunc(node, &TextBlock::nodeMeasureCB);
     }
@@ -18,88 +18,97 @@ namespace Ling {
 
     }
 
-    //void TextBlock::paint(SkCanvas* canvas)
-    //{
-    //    Element::paint(canvas);
-    //    if (text.empty()) return;
-    //    measure();
-    //    float x = getLeft();
-    //    float y = getTop();
-    //    SkPaint paint;
-    //    paint.setAntiAlias(true);
-    //    paint.setColor(SK_ColorRED);
-    //    font->setSize(fontSize * getWindow()->scaleFactor);
-    //    for (auto& info: lineSizeInfos)
-    //    {
-    //        auto str = text.substr(info.startIndex, info.length);
-    //        canvas->drawSimpleText(str.data(), str.length(), SkTextEncoding::kUTF8, x+info.pos.x, y+info.pos.y, *font.get(), paint);
-    //    }   
-    //}
+    void TextBlock::layout()
+    {
+        Element::layout();
+        textShape->translate(getGlobalX(), getGlobalY());
+    }
+
+    void TextBlock::setWindow(WindowBase* win)
+    {
+        Element::setWindow(win);
+        win->scene->push(textShape);
+    }
+
+
     YGSize TextBlock::nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode)
     {
         auto tb = static_cast<TextBlock*>(YGNodeGetContext(node));
-        tb->measure();
-        float mWidth = tb->measuredWidth;
-        float mHeight = tb->measuredHeight;
+        tb->textShape->translate(0, 0);
+        float x, y, w, h;
+        tb->textShape->bounds(&x, &y, &w, &h);
+        auto dpi = tb->getWindow()->getScaleFactor();
+        float measuredWidth = (w + x) / dpi;
+        float measuredHeight = (h + y) / dpi;
         if (widthMode == YGMeasureModeExactly) {
-            mWidth = width;
+            measuredWidth = width;
         }
         else if (widthMode == YGMeasureModeAtMost) {
-            mWidth = std::min(mWidth, width);
+            measuredWidth = std::min(measuredWidth, width);
         }
         if (heightMode == YGMeasureModeExactly) {
-            mHeight = height;
+            measuredHeight = height;
         }
         else if (heightMode == YGMeasureModeAtMost) {
-            mHeight = std::min(mHeight, height);
+            measuredHeight = std::min(measuredHeight, height);
         }
-        return { mWidth, mHeight };
+        return { measuredWidth, measuredHeight };
     }
-
-    const std::string& TextBlock::getText()
+    const std::wstring& TextBlock::getText()
     {
         return text;
     }
-    void TextBlock::measure()
-    {
-        if (!lineSizeInfos.empty()) return;
-        /*std::stringstream ss(text);
-        std::string line;
-        auto win = getWindow();
-        auto sf = win->getScaleFactor();
-        auto fs = fontSize * sf;
-        font->setSize(fs);
-        SkRect rect;
-        size_t startIndex{ 0 };
-        while (std::getline(ss, line)) {
-            font->measureText(line.data(), line.length(), SkTextEncoding::kUTF8, &rect);
-            auto w = rect.width();
-            auto h = rect.height();
-            LineSizeInfo lineInfo;
-            if (measuredWidth < w) measuredWidth = w;
-            measuredHeight += lineSpace/2;
-            lineInfo.pos.x = 0 - rect.fLeft;
-            lineInfo.pos.y = measuredHeight - rect.fTop;
-            lineInfo.startIndex = startIndex;
-            lineInfo.length = line.length();
-            lineSizeInfos.push_back(std::move(lineInfo));
-            startIndex += lineInfo.length+1;
-            measuredHeight += h;
-        }
-        measuredHeight += lineSpace / 2;*/
-    }
-    void TextBlock::setText(const std::string& text)
+
+    void TextBlock::setText(const std::wstring& text)
     {
         this->text = text;
+        auto str = Ling::ConvertToUTF8(text);
+        textShape->text(str.c_str());
     }
 
+    void TextBlock::setForegroundColor(const Color& foregroundColor)
+    {
+        this->foregroundColor = foregroundColor;
+        textShape->fill(foregroundColor.getR(), foregroundColor.getG(), foregroundColor.getB());
+    }
+
+    Color TextBlock::getForegroundColor()
+    {
+        return foregroundColor;
+    }
     void TextBlock::setFontSize(const float& fontSize)
     {
         this->fontSize = fontSize;
+        auto dpi = GetDpiForSystem() / 96.f;
+        textShape->size(fontSize * dpi);
     }
 
     float TextBlock::getFontSize()
     {
         return fontSize;
+    }
+
+    void TextBlock::setFontName(const std::string& fontName)
+    {
+        this->fontName = fontName;
+        textShape->font(fontName.data());
+    }
+    std::string TextBlock::getFontName()
+    {
+        return fontName;
+    }
+    void TextBlock::setItalic(const bool& italic)
+    {
+        if (italic) {
+            textShape->italic();
+        }
+        else
+        {
+            textShape->italic(0);
+        }
+    }
+    bool TextBlock::getItalic()
+    {
+        return italic;
     }
 }

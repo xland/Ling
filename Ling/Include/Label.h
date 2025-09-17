@@ -53,4 +53,3 @@ namespace Ling {
 			bool italic{ false };
 	};
 }
-
