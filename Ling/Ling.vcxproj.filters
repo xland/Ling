@@ -81,6 +81,12 @@
     <ClCompile Include="Src\EffectBox.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Src\WindowBaseMouseEvent.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\WindowBaseKeyEvent.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Util.h">

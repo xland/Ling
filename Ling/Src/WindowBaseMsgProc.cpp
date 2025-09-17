@@ -61,11 +61,6 @@ namespace Ling {
                 dpiChanged(reinterpret_cast<RECT*>(lParam));
                 return 0;
             }
-            case WM_MOUSEMOVE:
-            {
-                windowMouseMove(LOWORD(lParam), HIWORD(lParam));
-                return 0;
-            }
             case WM_SETCURSOR: {
                 if (LOWORD(lParam) == HTCLIENT)
                 {
@@ -93,6 +88,11 @@ namespace Ling {
             case WM_LBUTTONDBLCLK:
             {
                 return 0;
+            }
+            case WM_MOUSEMOVE:
+            {
+                windowMouseMove(LOWORD(lParam), HIWORD(lParam));
+                return 1;
             }
             case WM_LBUTTONDOWN:
             {
@@ -152,89 +152,5 @@ namespace Ling {
     LRESULT CALLBACK WindowBase::customMsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     {
         return DefWindowProc(hwnd, msg, wParam, lParam);
-    }
-    void WindowBase::dpiChanged(RECT* suggestedRect)
-    {
-        scene->scale(scaleFactor);
-        for (const auto& pair : dpiChangedCBs) {
-            pair.second();
-        }
-        auto w{ suggestedRect->right - suggestedRect->left };
-        auto h{ suggestedRect->bottom - suggestedRect->top };
-        SetWindowPos(hwnd, nullptr, suggestedRect->left, suggestedRect->top, w, h, SWP_NOZORDER | SWP_NOACTIVATE);
-    }
-    int WindowBase::paintArea()
-    {
-        //auto text = tvg::Text::gen();    
-        //std::u8string str = u8R"(醉里挑灯看剑，梦回吹角连营。Abc, Def)";
-        //text->text(reinterpret_cast<const char*>(str.c_str()));
-        //text->font("SimHei");
-        //text->size(21.f);
-        //text->fill(0, 0, 0);
-        //float x1, y1, w1, h1;
-        //text->bounds(&x1, &y1, &w1, &h1);
-        //auto ss = getWindowClientSize();
-        //text->translate(ss.w-w1-x1, ss.h-h1-y1);
-        //scene->push(text);
-
-
-        canvas->update();
-        canvas->draw();
-        canvas->sync();
-        auto size = getWindowClientSize();
-        auto w = size.w * scaleFactor;
-        auto h = size.h * scaleFactor;
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(hwnd, &ps);
-        BITMAPINFO bmi{};
-        bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-        bmi.bmiHeader.biWidth = w;
-        bmi.bmiHeader.biHeight = -h;  // top-down
-        bmi.bmiHeader.biPlanes = 1;
-        bmi.bmiHeader.biBitCount = 32;
-        bmi.bmiHeader.biCompression = BI_RGB;
-        SetStretchBltMode(hdc, HALFTONE);
-        SetBrushOrgEx(hdc, 0, 0, nullptr);
-        StretchDIBits(hdc, 0, 0, size.w, size.h, 0, 0, w, h,
-            buffer.data(), &bmi, DIB_RGB_COLORS, SRCCOPY);
-        EndPaint(hwnd, &ps);
-        return 1;
-    }
-    int WindowBase::windowKeyDown(const int& key)
-    {
-        switch (key)
-        {
-            case VK_DELETE: {
-                return 0;
-            }
-            case VK_LEFT: {
-                return 0;
-            }
-            case VK_RIGHT: {
-                return 0;
-            }
-            case VK_ESCAPE: {
-                return 0;
-            }
-            case VK_SHIFT: {
-                return 0;
-            }
-            case VK_CONTROL: {
-                return 0;
-            }
-        }
-        return 0;
-    }
-    int WindowBase::windowKeyUp(const int& key) {
-        switch (key)
-        {
-            case VK_SHIFT: {
-                return 0;
-            }
-            case VK_CONTROL: {
-                return 0;
-        }
-        }
-        return 0;
     }
 }

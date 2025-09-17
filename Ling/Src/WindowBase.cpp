@@ -51,53 +51,7 @@ namespace Ling {
             }
         }
     }
-    void WindowBase::windowMouseMove(const int& x, const int& y)
-    {
-        MouseEvent e(x, y);
-        auto ele = getElementByPosition(x, y);
-        e.setRelativePosition(ele);
-        if (hoverEle != ele) {
-            if (hoverEle && !hoverEle->hittest(x, y)) {
-                hoverEle->mouseLeave(e);
-            }
-            ele->mouseEnter(e);
-            if (!hoverEle || hoverEle->getCursor() != ele->getCursor()) {
-                SetCursor(LoadCursor(NULL, MAKEINTRESOURCE(ele->getCursor())));
-            }
-            hoverEle = ele;
-        }
-        ele->mouseMove(e);
-        ele = hoverEle->getParent();
-        while (ele) {
-            ele->mouseMove(e);
-            ele = ele->getParent();
-        }
-    }
-
-    void WindowBase::windowMouseDown(const int& x, const int& y, const MouseButton& mouseBtn)
-    {
-        MouseEvent e(x, y, mouseBtn);
-        e.setRelativePosition(hoverEle);
-        hoverEle->mouseDown(e);
-
-        auto ele = hoverEle->getParent();
-        while (ele) {
-            ele->mouseDown(e);
-            ele = ele->getParent();
-        }
-    }
-
-    void WindowBase::windowMouseUp(const int& x, const int& y, const MouseButton& mouseBtn)
-    {
-        MouseEvent e(x, y, mouseBtn);
-        e.setRelativePosition(hoverEle);
-        hoverEle->mouseUp(e);
-        auto ele = hoverEle->getParent();
-        while (ele) {
-            ele->mouseUp(e);
-            ele = ele->getParent();
-        }
-    }
+    
 
     const std::wstring& WindowBase::getWinClsName()
     {
@@ -125,39 +79,32 @@ namespace Ling {
     {
         Element* result = this;
         auto children = this->getChildren();
-        while (children && children->size() > 0) {
-            bool flag{ false };
+        while (children && children->size() > 0) 
+        {
+            bool findFlag = false;
             for (auto child : *children) //遍历子元素
             {
                 if (child->hittest(x, y)) //命中测试
                 {
-                    flag = true;
                     result = child.get();
                     auto box = dynamic_cast<ElementBox*>(result);
-                    if (box) {
-                        children = box->getChildren();
-                        break;
-                    }
+                    if (!box) break; //已找到最底层元素了
+                    children = box->getChildren(); //还要继续找
+                    findFlag = true;
                 }
             }
-            if (!flag) {
-                break;//上级命中，但本级没有命中，直接退出循环。
-            }
+            if (!findFlag) break;
         }
         return result;
     }
+
     void WindowBase::setFocusEle(Element* ele)
     {
         SetTimer(hwnd, FlashCaretTimer, 600, NULL); //每600毫秒触发一次
         SendMessage(hwnd, WM_TIMER, FlashCaretTimer, 0); //马上触发一次
         focusEle = ele;
     }
-    size_t WindowBase::onDpiChanged(std::function<void()> callback)
-    {
-        dpiChangedCBId += 1;
-        dpiChangedCBs.insert({ dpiChangedCBId,callback });
-        return dpiChangedCBId;
-    }
+
     void WindowBase::resetCanvas() {
         auto size = getWindowClientSize();
         setSize(size.w, size.h);
@@ -185,5 +132,56 @@ namespace Ling {
         }
         YGNodeCalculateLayout(node, YGUndefined, YGUndefined, YGDirectionLTR);
 		ElementBox::layout();
+    }
+    size_t WindowBase::onDpiChanged(std::function<void()> callback)
+    {
+        dpiChangedCBId += 1;
+        dpiChangedCBs.insert({ dpiChangedCBId,callback });
+        return dpiChangedCBId;
+    }
+    void WindowBase::dpiChanged(RECT* suggestedRect)
+    {
+        scene->scale(scaleFactor);
+        for (const auto& pair : dpiChangedCBs) {
+            pair.second();
+        }
+        auto w{ suggestedRect->right - suggestedRect->left };
+        auto h{ suggestedRect->bottom - suggestedRect->top };
+        SetWindowPos(hwnd, nullptr, suggestedRect->left, suggestedRect->top, w, h, SWP_NOZORDER | SWP_NOACTIVATE);
+    }
+    int WindowBase::paintArea()
+    {
+        //auto text = tvg::Text::gen();    
+        //std::u8string str = u8R"(醉里挑灯看剑，梦回吹角连营。Abc, Def)";
+        //text->text(reinterpret_cast<const char*>(str.c_str()));
+        //text->font("SimHei");
+        //text->size(21.f);
+        //text->fill(0, 0, 0);
+        //float x1, y1, w1, h1;
+        //text->bounds(&x1, &y1, &w1, &h1);
+        //auto ss = getWindowClientSize();
+        //text->translate(ss.w-w1-x1, ss.h-h1-y1);
+        //scene->push(text);
+        canvas->update();
+        canvas->draw();
+        canvas->sync();
+        auto size = getWindowClientSize();
+        auto w = size.w * scaleFactor;
+        auto h = size.h * scaleFactor;
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hwnd, &ps);
+        BITMAPINFO bmi{};
+        bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+        bmi.bmiHeader.biWidth = w;
+        bmi.bmiHeader.biHeight = -h;  // top-down
+        bmi.bmiHeader.biPlanes = 1;
+        bmi.bmiHeader.biBitCount = 32;
+        bmi.bmiHeader.biCompression = BI_RGB;
+        SetStretchBltMode(hdc, HALFTONE);
+        SetBrushOrgEx(hdc, 0, 0, nullptr);
+        StretchDIBits(hdc, 0, 0, size.w, size.h, 0, 0, w, h,
+            buffer.data(), &bmi, DIB_RGB_COLORS, SRCCOPY);
+        EndPaint(hwnd, &ps);
+        return 1;
     }
 }

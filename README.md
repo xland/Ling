@@ -1,12 +1,24 @@
 # Ling
-A GUI Framework for modern C++20
 
-# Features
+A GUI Framework for modern C++
 
-- 支持多种布局方式
-- 文字抗锯齿
-- 兼容性好
-- 内存消耗极低
+# 目标
+
+- 编译产物体积尽可能小；
+- 功能尽可能多；
+- 内存占用尽可能少；
+- 性能尽可能好；
+- 使用尽可能简单；
+
+# 编译产物大小
+
+![](Doc/size.png "编译产物大小")
+
+上图中 Ling.lib 是我这个框架的静态链接库。
+
+Demo.exe 是我使用这个静态链接库开发的示例程序。
+
+这个可执行程序不依赖任何dll，大小只有591KB。
 
 # Element
 
@@ -116,29 +128,31 @@ win->setFlexDirection(FlexDirection::Row);
 # Event
 
 ```c++
-auto ele = new Element();
-ele->setSize(120, 40);
-ele->setBackgroundColor(0xFFFFFFFF);
-ele->onMouseEnter([ele](const MouseEvent& event) {
-    ele->setBackgroundColor(0xFF000000);
-    ele->update();
+App::loadSystemFont("SimHei");
+auto label = std::make_shared<Ling::Label>();
+label->setFontSize(14);
+static int countNum{ 0 };
+auto str =std::format(L"点击我：{}次", countNum);
+label->setText(str);
+label->setFontName("SimHei");
+label->setForegroundColor(0X000000FF);
+label->setBackgroundColor(0xFFFFFFFF);
+label->onMouseEnter([label](const MouseEvent& event) {
+    label->setBackgroundColor(0xDD0066FF);
+    label->update();
     });
-ele->onMouseLeave([ele](const MouseEvent& event) {
-    ele->setBackgroundColor(0xFFFFFFFF);
-    ele->update();
+label->onMouseLeave([label](const MouseEvent& event) {
+    label->setBackgroundColor(0xFFFFFFFF);
+    label->update();
     });
-ele->onMouseDown([ele](const MouseEvent& event) {
-    ele->setBackgroundColor(0xFF00FFFF);
-    ele->update();
-    });
-ele->onMouseUp([ele](const MouseEvent& event) {
-    ele->setBackgroundColor(0xFFFFFF00);
-    ele->update();
-    });
-win->setAlignItems(Align::Center);
-win->setJustifyContent(Justify::Center);
-win->addChild(ele);
+label->onMouseDown([label](const MouseEvent& event) {
+    label->setBackgroundColor(0xFF00FFFF);
+    auto str = std::format(L"点击我：{}次", ++countNum);
+    label->setText(str);
+    label->update();
+});
 ```
+![](Doc/event.gif "事件")
 
 ## Text
 
@@ -189,3 +203,8 @@ for (auto& iconCode:arr)
 # Warning
 
 This library is a work in progress! Anything can change at any moment without any notice! Use this library at your own risk!
+
+# Thanks
+
+- [Thorvg](https://github.com/thorvg/thorvg) (MIT License)
+- [Yoga](https://github.com/facebook/yoga) (MIT License)

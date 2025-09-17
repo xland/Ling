@@ -185,6 +185,8 @@
     <ClCompile Include="Src\TextArea.cpp" />
     <ClCompile Include="Src\TextBlock.cpp" />
     <ClCompile Include="Src\Util.cpp" />
+    <ClCompile Include="Src\WindowBaseKeyEvent.cpp" />
+    <ClCompile Include="Src\WindowBaseMouseEvent.cpp" />
     <ClCompile Include="Src\WindowBaseMsgProc.cpp" />
     <ClCompile Include="Src\WindowBaseProperty.cpp" />
     <ClCompile Include="Src\WindowFrameless.cpp" />
