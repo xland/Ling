@@ -72,6 +72,7 @@ void TextDemo::textblock()
     了却君王天下事，赢得生前身后名。
     可怜白发生！)");
     ele->setFontName("SimHei");
+    ele->setSize(600, 400);
     ele->setFontSize(21);
     ele->setForegroundColor(0x000000FF);
     ele->setBackgroundColor(0xFFFFFFFF);
@@ -101,7 +102,7 @@ void TextDemo::textarea()
 void TextDemo::start() {
     //label();
     //icon();
-    textblock();
+    //textblock();
     //textarea();
     win->layout();
     win->show();

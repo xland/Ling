@@ -28,7 +28,7 @@ namespace Ling {
 
 			void setWidth(const float& w);
 			void setHeight(const float& h);
-			void setSize(const float& w, const float& h);
+			virtual void setSize(const float& w, const float& h);
 			float getLeft();
 			float getTop();
 			float getWidth();

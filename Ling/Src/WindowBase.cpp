@@ -1,5 +1,6 @@
 ﻿#include <yoga/Yoga.h>
 #include <thorvg.h>
+#include "../Include/Util.h"
 #include "../Include/Element.h"
 #include "../Include/ElementBox.h"
 #include "../Include/App.h"
@@ -151,17 +152,25 @@ namespace Ling {
     }
     int WindowBase::paintArea()
     {
-        //auto text = tvg::Text::gen();    
-        //std::u8string str = u8R"(醉里挑灯看剑，梦回吹角连营。Abc, Def)";
-        //text->text(reinterpret_cast<const char*>(str.c_str()));
-        //text->font("SimHei");
-        //text->size(21.f);
-        //text->fill(0, 0, 0);
-        //float x1, y1, w1, h1;
-        //text->bounds(&x1, &y1, &w1, &h1);
-        //auto ss = getWindowClientSize();
-        //text->translate(ss.w-w1-x1, ss.h-h1-y1);
-        //scene->push(text);
+        App::loadSystemFont("SimHei");
+        auto text = tvg::Text::gen();
+        text->lineWrap(true);
+        auto str = Ling::ConvertToUTF8(LR"(醉里挑灯看剑，梦回吹角连营。
+    八百里分麾下炙，五十弦翻塞外声。
+    沙场秋点兵。
+    马作的卢飞快，弓如霹雳弦惊。
+    了却君王天下事，赢得生前身后名。
+    可怜白发生！)");
+        text->text(str.c_str());
+        text->font("SimHei");
+        text->size(21.f);
+        text->fill(0, 0, 0);
+        text->translate(22, 22);
+        text->layout(600, 400);
+        text->align(0.f, 0.f);
+        canvas->push(text);
+
+
         canvas->update();
         canvas->draw();
         canvas->sync();

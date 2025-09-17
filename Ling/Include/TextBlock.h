@@ -21,6 +21,7 @@ namespace Ling {
 		const std::wstring& getText();
 		void setText(const std::wstring& text);
 		void setForegroundColor(const Color& foregroundColor);
+		void setSize(const float& w, const float& h) override;
 		Color getForegroundColor();
 		void setFontSize(const float& fontSize);
 		float getFontSize();

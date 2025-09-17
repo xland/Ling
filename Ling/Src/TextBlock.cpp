@@ -11,8 +11,8 @@ namespace Ling {
     TextBlock::TextBlock()
     {
         textShape = tvg::Text::gen();
-        YGNodeSetContext(node, this);
-        YGNodeSetMeasureFunc(node, &TextBlock::nodeMeasureCB);
+        //YGNodeSetContext(node, this);
+        //YGNodeSetMeasureFunc(node, &TextBlock::nodeMeasureCB);
     }
     TextBlock::~TextBlock() {
 
@@ -70,6 +70,13 @@ namespace Ling {
     {
         this->foregroundColor = foregroundColor;
         textShape->fill(foregroundColor.getR(), foregroundColor.getG(), foregroundColor.getB());
+    }
+
+    void TextBlock::setSize(const float& w, const float& h)
+    {
+        Node::setSize(w, h);
+        textShape->layout(w, h);
+        textShape->align(0.f, 1.f);
     }
 
     Color TextBlock::getForegroundColor()
