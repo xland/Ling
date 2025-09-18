@@ -188,6 +188,11 @@
   <ItemGroup>
     <CopyFileToFolders Include="img.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="img.svg">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

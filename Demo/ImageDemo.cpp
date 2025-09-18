@@ -47,11 +47,22 @@ void ImageDemo::webp()
     win->addChild(ele);
 }
 
+void ImageDemo::svg()
+{
+    auto ele = std::make_shared<Image>();
+    ele->setSrc(L"img.svg");
+    ele->setSize(360, 360);
+    win->setAlignItems(Align::Center);
+    win->setJustifyContent(Justify::Center);
+    win->addChild(ele);
+}
+
 void ImageDemo::start()
 {
-    png();
+    //png();
     //jpg();
     //webp();
+    svg();
     win->layout();
     win->show();
 }

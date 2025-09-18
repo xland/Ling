@@ -72,5 +72,6 @@
     <CopyFileToFolders Include="img.jpg">
       <Filter>资源文件</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="img.svg" />
   </ItemGroup>
 </Project>

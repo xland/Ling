@@ -9,6 +9,7 @@ public:
 	void png();
 	void jpg();
 	void webp();
+	void svg();
 	void start();
 private:
 	std::unique_ptr<WindowBase> win;
