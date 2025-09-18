@@ -49,6 +49,7 @@ namespace Ling {
 		friend class TextArea;
 		friend class WindowBaseImpl;
 		friend class Label;
+		friend class Image;
 		friend class TextBlock;
 		friend class Element;
 		friend class EffectBox;

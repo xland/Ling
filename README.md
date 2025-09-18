@@ -200,6 +200,19 @@ for (auto& iconCode:arr)
 ```
 ![](Doc/icon.png "一段文本，在窗口中水平垂直居中")
 
+# 图像
+
+```c++
+auto ele = std::make_shared<Image>();
+ele->setSize(200, 200);
+ele->setSrc(L"img.png");
+win->setAlignItems(Align::Center);
+win->setJustifyContent(Justify::Center);
+win->addChild(ele);
+```
+
+![](Doc/image.png "一段文本，在窗口中水平垂直居中")
+
 # Warning
 
 This library is a work in progress! Anything can change at any moment without any notice! Use this library at your own risk!

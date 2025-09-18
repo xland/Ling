@@ -151,6 +151,7 @@
   <ItemGroup>
     <ClCompile Include="EventDemo.cpp" />
     <ClCompile Include="GraphicsDemo.cpp" />
+    <ClCompile Include="ImageDemo.cpp" />
     <ClCompile Include="InputDemo.cpp" />
     <ClCompile Include="IrregularWindow.cpp" />
     <ClCompile Include="LayoutDemo.cpp" />
@@ -165,6 +166,7 @@
   <ItemGroup>
     <ClInclude Include="EventDemo.h" />
     <ClInclude Include="GraphicsDemo.h" />
+    <ClInclude Include="ImageDemo.h" />
     <ClInclude Include="InputDemo.h" />
     <ClInclude Include="IrregularWindow.h" />
     <ClInclude Include="LayoutDemo.h" />
@@ -174,6 +176,17 @@
     <CopyFileToFolders Include="iconfont.ttf">
       <FileType>Document</FileType>
     </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="img.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="img.webp">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="img.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -29,6 +29,7 @@ namespace Ling {
 			void setWidth(const float& w);
 			void setHeight(const float& h);
 			virtual void setSize(const float& w, const float& h);
+			Size getSize();
 			float getLeft();
 			float getTop();
 			float getWidth();
@@ -36,7 +37,6 @@ namespace Ling {
 			float getGlobalX();
 			float getGlobalY();
 			Position getPosition();
-			Size getSize();
 			bool hittest(const int& x, const int& y);
 
 			void setWidthPercent(const float& percent);
@@ -59,6 +59,7 @@ namespace Ling {
 			friend class Element;
 			friend class WindowBase;
 			friend class Label;
+			friend class Image;
 			friend class TextBlock;
 			friend class TextArea;
 		private:

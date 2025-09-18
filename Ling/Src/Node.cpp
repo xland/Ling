@@ -25,10 +25,26 @@ namespace Ling {
 		YGNodeStyleSetFlexShrink(node, val);
 	}
 
+	void Node::setWidth(const float& w)
+	{
+		YGNodeStyleSetWidth(node, w);
+	}
+	void Node::setHeight(const float& h)
+	{
+		YGNodeStyleSetHeight(node, h);
+	}
 	void Node::setSize(const float& w, const float& h)
 	{
 		YGNodeStyleSetWidth(node, w);
 		YGNodeStyleSetHeight(node, h);
+	}
+	Size Node::getSize()
+	{
+		//int w = (int)YGNodeLayoutGetWidth(node);
+		//int h = (int)YGNodeLayoutGetHeight(node);
+		int w = (int)YGNodeStyleGetWidth(node).value;
+		int h = (int)YGNodeStyleGetHeight(node).value;
+		return Size(w, h);
 	}
 	float Node::getLeft()
 	{
@@ -53,14 +69,6 @@ namespace Ling {
 	float Node::getGlobalY()
 	{
 		return globalY;
-	}
-	void Node::setWidth(const float& w)
-	{
-		YGNodeStyleSetWidth(node, w);
-	}
-	void Node::setHeight(const float& h)
-	{
-		YGNodeStyleSetHeight(node, h);
 	}
 	void Node::setWidthPercent(const float& percent)
 	{
@@ -136,13 +144,6 @@ namespace Ling {
 		int x = (int)YGNodeLayoutGetLeft(node);
 		int y = (int)YGNodeLayoutGetTop(node);
 		return Position(x, y);
-	}
-
-	Size Node::getSize()
-	{
-		int w = (int)YGNodeLayoutGetWidth(node);
-		int h = (int)YGNodeLayoutGetHeight(node);
-		return Size(w, h);
 	}
 
 	bool Node::hittest(const int& x, const int& y)

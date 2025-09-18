@@ -176,6 +176,7 @@
     <ClCompile Include="Src\ElementBox.cpp" />
     <ClCompile Include="Src\Event.cpp" />
     <ClCompile Include="Src\Gradient.cpp" />
+    <ClCompile Include="Src\Image.cpp" />
     <ClCompile Include="Src\Input.cpp" />
     <ClCompile Include="Src\Label.cpp" />
     <ClCompile Include="Src\MouseEvent.cpp" />
@@ -207,6 +208,7 @@
     <ClInclude Include="Include\FlexDirection.h" />
     <ClInclude Include="Include\Gradient.h" />
     <ClInclude Include="Include\GradientType.h" />
+    <ClInclude Include="Include\Image.h" />
     <ClInclude Include="Include\Input.h" />
     <ClInclude Include="Include\Justify.h" />
     <ClInclude Include="Include\Label.h" />

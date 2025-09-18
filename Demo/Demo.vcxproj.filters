@@ -36,6 +36,9 @@
     <ClCompile Include="GraphicsDemo.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ImageDemo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LayoutDemo.h">
@@ -56,8 +59,18 @@
     <ClInclude Include="GraphicsDemo.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ImageDemo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="iconfont.ttf" />
+    <CopyFileToFolders Include="img.png">
+      <Filter>资源文件</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="img.webp" />
+    <CopyFileToFolders Include="img.jpg">
+      <Filter>资源文件</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>
