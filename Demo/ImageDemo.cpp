@@ -8,7 +8,7 @@ ImageDemo::ImageDemo()
 {
     //win = std::make_unique<WindowFrameless>();
     win = std::make_unique<WindowNormal>();
-    win->setTitle(L"SkiaGUI 示例窗口");
+    win->setTitle(L"Ling 示例窗口");
     win->setWindowSize(1000, 800);
     win->setWindowToScreenCenter();
     win->setBackgroundColor(0x234567FF);
@@ -51,7 +51,7 @@ void ImageDemo::svg()
 {
     auto ele = std::make_shared<Image>();
     ele->setSrc(L"img.svg");
-    ele->setSize(360, 360);
+    ele->setSize(260, 260);
     win->setAlignItems(Align::Center);
     win->setJustifyContent(Justify::Center);
     win->addChild(ele);

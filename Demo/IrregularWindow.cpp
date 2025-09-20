@@ -7,7 +7,7 @@ IrregularWindow::IrregularWindow()
 {
     win = std::make_unique<WindowLayered>();
     //win = std::make_unique<WindowNormal>();
-    win->setTitle(L"SkiaGUI 示例窗口");
+    win->setTitle(L"Ling 示例窗口");
     win->setWindowSize(800, 800);
     win->setWindowToScreenCenter();
     //win->setBackgroundColor(0x00000000);

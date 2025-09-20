@@ -7,7 +7,7 @@ LayoutDemo::LayoutDemo()
 {
     win = std::make_unique<WindowFrameless>();
     //win = std::make_unique<WindowNormal>();
-    win->setTitle(L"SkiaGUI 示例窗口");
+    win->setTitle(L"Ling 示例窗口");
     win->setWindowSize(1000, 800);
     win->setWindowToScreenCenter();
     win->setBackgroundColor(0x234567FF);

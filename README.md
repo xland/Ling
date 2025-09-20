@@ -5,10 +5,10 @@ A GUI Framework for modern C++
 # 目标
 
 - 编译产物体积尽可能小；
-- 功能尽可能多；
 - 内存占用尽可能少；
 - 性能尽可能好；
 - 使用尽可能简单；
+- 功能尽可能多；
 
 # 编译产物大小
 
@@ -172,8 +172,6 @@ win->addChild(ele);
 
 ![](Doc/TextClear.png "文本清晰度对比")
 
-![](Doc/CenterText.png "一段文本，在窗口中水平垂直居中")
-
 
 
 ```c++
@@ -198,20 +196,26 @@ for (auto& iconCode:arr)
     win->addChild(ele);
 }
 ```
-![](Doc/icon.png "一段文本，在窗口中水平垂直居中")
+![](Doc/icon.png "字体图标")
 
 # 图像
 
 ```c++
 auto ele = std::make_shared<Image>();
 ele->setSize(200, 200);
-ele->setSrc(L"img.png");
+ele->setSrc(L"img.png"); 
 win->setAlignItems(Align::Center);
 win->setJustifyContent(Justify::Center);
 win->addChild(ele);
 ```
+- png jpeg jpg webp
 
-![](Doc/image.png "一段文本，在窗口中水平垂直居中")
+![](Doc/image.png "图像")
+
+- svg
+
+![](Doc/svg.png "图像")
+
 
 # Warning
 
