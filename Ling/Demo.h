@@ -6,6 +6,5 @@ public:
 	Demo();
 	~Demo();
 private:
-	void onPaint() override;
 };
 

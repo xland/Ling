@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "WindowBase.h"
 
 
@@ -74,7 +74,7 @@ void WindowBase::setCursor(LPCWSTR cursorName)
 
 void WindowBase::createWindow(const DWORD& exStyle, const DWORD& style)
 {
-    hwnd = CreateWindowEx(WS_EX_NOREDIRECTIONBITMAP| exStyle, getWinClsName().c_str(), NULL, WS_POPUP|style, x, y, w, h, NULL, NULL, GetModuleHandle(nullptr), NULL);
+    hwnd = CreateWindowEx(WS_EX_NOREDIRECTIONBITMAP| exStyle, getWinClsName().c_str(), NULL, style, x, y, w, h, NULL, NULL, GetModuleHandle(nullptr), NULL); //WS_POPUP
     SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 	dpi = GetDpiForWindow(hwnd) / 96.0f;
     auto interop = compositor.as<ABI::Windows::UI::Composition::Desktop::ICompositorDesktopInterop>();
@@ -84,20 +84,21 @@ void WindowBase::createWindow(const DWORD& exStyle, const DWORD& style)
     );
     rootVisual = compositor.CreateContainerVisual();
     rootVisual.RelativeSizeAdjustment({ 1.0f, 1.0f });
-    rootVisual.Offset({ 0, 0, 0 });
+    rootVisual.Offset({ 0, 0, 0 });    
     winTarget.Root(rootVisual);
 
 
 
-    winrt::Windows::UI::Composition::SpriteVisual sprite = compositor.CreateSpriteVisual();
-    sprite.Size({ 200, 200 });
-    sprite.Offset({ 50, 50, 0 });
+    element = compositor.CreateSpriteVisual();
+    element.RelativeSizeAdjustment({ 1.0f, 1.0f });
+    //element.Size({ (float)50, (float)50 });
+    //element.Offset({ (float)w - (float)100, (float)y - (float)100, (float)0 });
 
     winrt::Windows::UI::Composition::CompositionColorBrush brush = compositor.CreateColorBrush(winrt::Windows::UI::Colors::Red());
-    sprite.Brush(brush);
+    element.Brush(brush);
 
     // 将 sprite 添加到 root 的子节点中
-    rootVisual.Children().InsertAtTop(sprite);
+    rootVisual.Children().InsertAtTop(element);
 
     onCreated();
 }
@@ -161,11 +162,6 @@ LRESULT WindowBase::winProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         else {
             self->onHidden();
         }
-    }
-    else if (msg == WM_PAINT)
-    {
-        self->paint();
-        return 1;
     }
     else if (msg == WM_SETCURSOR) {
         if (LOWORD(lParam) == HTCLIENT) return self->onCursor();
@@ -234,6 +230,12 @@ LRESULT WindowBase::winProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         self->onDpiChanged();
         return 0;
     }
+    else if (msg == WM_SIZE) {
+        self->w = LOWORD(lParam);
+        self->h = HIWORD(lParam);
+        self->element.Offset({ (float)(self->w - 100), (float)(self->h - 100), 0 });
+        return 0;
+    }
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
@@ -260,10 +262,3 @@ void WindowBase::mouseLeave()
 	onMouseLeave();
 }
 
-void WindowBase::paint()
-{
-    PAINTSTRUCT ps;
-    BeginPaint(hwnd, &ps);
-    onPaint();
-    EndPaint(hwnd, &ps);
-}

@@ -28,7 +28,6 @@ protected:
 	virtual void onCreated() {};
 	virtual void onShown() {};
 	virtual void onHidden() {};
-	virtual void onPaint() = 0;
 	virtual void onMouseMove(const int& x, const int& y) {};
 	virtual void onMouseDrag(const int& x, const int& y,const UINT_PTR& modifiers) {};
 	virtual void onMouseDown(const int& x, const int& y, bool isRight) {};

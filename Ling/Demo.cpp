@@ -7,7 +7,7 @@ Demo::Demo()
 	y = 100;
 	w = 800;
 	h = 600;
-	createWindow();
+	createWindow(0, WS_OVERLAPPEDWINDOW);
 	show();
 }
 
@@ -15,6 +15,3 @@ Demo::~Demo()
 {
 }
 
-void Demo::onPaint()
-{
-}
