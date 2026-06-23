@@ -1,7 +1,5 @@
-﻿#include "pch.h"
+﻿import Ling;
 #include "WindowBase.h"
-
-
 
 WindowBase::WindowBase():compositor{ winrt::Windows::UI::Composition::Compositor() }
 {

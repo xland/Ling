@@ -1,0 +1,279 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\yoga\algorithm\AbsoluteLayout.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\yoga\algorithm\Baseline.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\yoga\algorithm\Cache.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\yoga\algorithm\CalculateLayout.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\yoga\algorithm\FlexLine.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\yoga\algorithm\PixelGrid.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\yoga\config\Config.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\yoga\debug\AssertFatal.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\yoga\debug\Log.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\yoga\event\event.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\yoga\node\LayoutResults.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\yoga\node\Node.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\yoga\YGConfig.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\yoga\YGEnums.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\yoga\YGNode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\yoga\YGNodeLayout.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\yoga\YGNodeStyle.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\yoga\YGPixelGrid.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\yoga\YGValue.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\WindowBase.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Demo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\App.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\Ling.ixx">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Ling\yoga\algorithm\AbsoluteLayout.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\algorithm\Align.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\algorithm\Baseline.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\algorithm\BoundAxis.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\algorithm\Cache.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\algorithm\CalculateLayout.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\algorithm\FlexDirection.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\algorithm\FlexLine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\algorithm\PixelGrid.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\algorithm\SizingMode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\algorithm\TrailingPosition.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\config\Config.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\debug\AssertFatal.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\debug\Log.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\enums\Align.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\enums\BoxSizing.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\enums\Dimension.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\enums\Direction.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\enums\Display.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\enums\Edge.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\enums\Errata.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\enums\ExperimentalFeature.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\enums\FlexDirection.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\enums\GridTrackType.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\enums\Gutter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\enums\Justify.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\enums\LogLevel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\enums\MeasureMode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\enums\NodeType.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\enums\Overflow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\enums\PhysicalEdge.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\enums\PositionType.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\enums\Unit.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\enums\Wrap.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\enums\YogaEnums.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\event\event.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\node\CachedMeasurement.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\node\LayoutableChildren.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\node\LayoutResults.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\node\Node.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\numeric\Comparison.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\numeric\FloatOptional.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\style\GridLine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\style\GridTrack.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\style\SmallValueBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\style\Style.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\style\StyleLength.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\style\StyleSizeLength.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\style\StyleValueHandle.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\style\StyleValuePool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\YGConfig.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\YGEnums.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\YGMacros.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\YGNode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\YGNodeLayout.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\YGNodeStyle.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\YGPixelGrid.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\YGValue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\yoga\Yoga.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\WindowBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Demo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\App.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

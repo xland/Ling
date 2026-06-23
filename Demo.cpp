@@ -1,6 +1,6 @@
-﻿#include "pch.h"
+﻿import Ling;
 #include "Demo.h"
-
+#include "Ling/WindowBase.h"
 Demo::Demo()
 {
 	x = 100;
