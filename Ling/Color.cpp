@@ -53,6 +53,11 @@ namespace Ling{
 		return ColorHelper::FromArgb(a, r, g,b);
 	}
 
+	D2D1_COLOR_F Color::getD2DColor()
+	{
+		return D2D1::ColorF(r,b,b,a/255.f);
+	}
+
 	//constexpr Color colorTransparent = 0xFF000000;
 	//constexpr Color colorBlack = 0xFF000000;
 	//constexpr Color colorWhite = 0xFFFFFFFF;

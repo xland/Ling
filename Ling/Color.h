@@ -30,6 +30,7 @@ namespace Ling {
 		uint8_t getG() const;
 		uint8_t getB() const;
 		winrt::Windows::UI::Color getUIColor();
+		D2D1_COLOR_F getD2DColor();
 		
 	private:
 		uint8_t a{ 255 };

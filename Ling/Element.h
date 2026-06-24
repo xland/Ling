@@ -79,6 +79,8 @@ namespace Ling {
 		/// </summary>
 		/// <param name="flexDirection"></param>
 		void setFlexDirection(const FlexDirection& flexDirection);
+	public:
+		float xAbs{ 0.f }, yAbs{ 0.f };
 	protected:
 		virtual void initProperty(const Composition::Compositor& comp);
 	protected:
@@ -87,7 +89,7 @@ namespace Ling {
 		WindowBase* win{ nullptr };
 		Element* parent{ nullptr };
 		std::vector<std::shared_ptr<Element>> children;
-		float xAbs{ 0.f }, yAbs{ 0.f }, x{0.f}, y{ 0.f }, w{ 0.f }, h{ 0.f };
+		float x{0.f}, y{ 0.f }, w{ 0.f }, h{ 0.f };
 		Color backgroundColor;
 	private:
 	};

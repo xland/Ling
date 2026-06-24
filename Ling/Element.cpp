@@ -30,10 +30,10 @@ namespace Ling {
 	}
 	void Element::initProperty(const Composition::Compositor& comp)
 	{
+		parent = this;
 		visual = comp.CreateSpriteVisual();
 		visual.Brush(comp.CreateColorBrush(backgroundColor.getUIColor()));
 		win = win;
-		parent = this;
 	}
 	void Element::insertChild(const int& index, const std::shared_ptr<Element>& ele)
 	{
