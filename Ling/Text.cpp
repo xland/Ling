@@ -33,7 +33,17 @@ namespace Ling {
 	void Text::initProperty(const Composition::Compositor& comp)
 	{
 		
-		auto surface = comp.CreateDrawingSurface(
+		auto interop = comp.as<ABI::Windows::UI::Composition::Desktop::ICompositorInterop>();
+		ComPtr<IUnknown> graphicsDeviceIUnknown;
+
+		// 需要传入一个 DirectX 设备 (ID3D11Device*)
+		// 假设你有一个 d3dDevice:
+		interop->CreateGraphicsDevice(d3dDevice.Get(), &graphicsDeviceIUnknown);
+
+		auto graphicsDevice = graphicsDeviceIUnknown.as<Composition::CompositionGraphicsDevice>();
+
+		// 2. 在 CompositionGraphicsDevice 上调用 CreateDrawingSurface
+		auto surface = graphicsDevice.CreateDrawingSurface(
 			winrt::Windows::Foundation::Size{ 0, 0 },
 			winrt::Windows::Graphics::DirectX::DirectXPixelFormat::B8G8R8A8UIntNormalized,
 			winrt::Windows::Graphics::DirectX::DirectXAlphaMode::Premultiplied
