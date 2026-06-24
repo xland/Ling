@@ -1,9 +1,11 @@
-#pragma once
-import Ling;
+﻿#pragma once
+
+#include "Header.h"
+#include <yoga/Yoga.h>
+#include "Element.h"
 namespace Ling {
-	class WindowBase
+	class WindowBase : public Element
 	{
-		friend class App;
 	public:
 		WindowBase();
 		virtual ~WindowBase();
@@ -13,16 +15,24 @@ namespace Ling {
 		void close();
 		void move(const int& x, const int& y);
 		void resize(const int& w, const int& h);
-		void createWindow(const DWORD& exStyle=NULL, const DWORD& style=NULL);
+		void createNativeWindow(const DWORD& exStyle=NULL, const DWORD& style=NULL);
 		HRESULT createBitmap();
 		void enableShadow();
 		void setTimer(const UINT& elapse, const UINT& id);
 		void killTimer(const UINT& id);
 		void setCursor(LPCWSTR cursorName);
+		void layout() override;
+		void setTitle(const std::wstring& title);
+		std::wstring getTitle();
+		std::tuple<int,int> getPosition();
+		std::tuple<float, float> getSize();
+		void setSize(const float& w, const float& h);
+		void setPosition(const int& xWin, const int& yWin);
+		HWND getHandle();
+		float getScaleFactor();
+		void setPosScreenCenter();
 	public:
-		HWND hwnd{nullptr};
-		int x, y, w, h;
-		float dpi{1.0};
+		int xWin, yWin;
 		bool isMouseDown{ false },isMouseIn{ false };
 	protected:
 		virtual LRESULT onHitTest(WPARAM wParam, LPARAM lParam);
@@ -41,7 +51,7 @@ namespace Ling {
 		virtual void onMouseWheel(const int& x, const int& y, const short& delta) {};
 		virtual void onTimer(const UINT& timerId) {};
 		virtual BOOL onCursor();
-		virtual void onIME() {};
+		virtual void onIme() {};
 		virtual void onBlur() {};
 		virtual void onDestroy() {};
 		virtual void onDpiChanged() {};
@@ -52,10 +62,12 @@ namespace Ling {
 		void mouseLeave();
 		void paint();
 		void dpiChange(WPARAM wParam, LPARAM lParam);
+		void sizeChange(const int& w, const int& h);
 	private:
-		winrt::Windows::UI::Composition::Compositor compositor;
-		winrt::Windows::UI::Composition::Desktop::DesktopWindowTarget winTarget{ nullptr };
-		winrt::Windows::UI::Composition::ContainerVisual rootVisual{ nullptr };
-		winrt::Windows::UI::Composition::SpriteVisual element{ nullptr };
+		HWND hwnd{ nullptr };
+		std::wstring title;
+		Composition::Compositor compositor;
+		float dpi{ 1.0 };
+		Composition::Desktop::DesktopWindowTarget winTarget{ nullptr };
 	};
 }

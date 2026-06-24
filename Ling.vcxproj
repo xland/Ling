@@ -71,10 +71,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)Temp</IntDir>
+    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)Temp\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)Temp</IntDir>
+    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)Temp\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -155,9 +155,10 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Ling\Color.cpp" />
+    <ClCompile Include="Ling\Element.cpp" />
     <ClCompile Include="Ling\App.cpp" />
     <ClCompile Include="Demo.cpp" />
-    <ClCompile Include="Ling\Ling.ixx" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Ling\WindowBase.cpp" />
     <ClCompile Include="Ling\yoga\algorithm\AbsoluteLayout.cpp">
@@ -236,11 +237,21 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Ling\Screen.cpp" />
+    <ClCompile Include="Ling\Text.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ling\Align.h" />
+    <ClInclude Include="Ling\Color.h" />
+    <ClInclude Include="Ling\Edge.h" />
+    <ClInclude Include="Ling\Element.h" />
+    <ClInclude Include="Ling\FlexDirection.h" />
+    <ClInclude Include="Ling\Header.h" />
     <ClInclude Include="Ling\App.h" />
     <ClInclude Include="Demo.h" />
+    <ClInclude Include="Ling\Justify.h" />
     <ClInclude Include="Ling\WindowBase.h" />
+    <ClInclude Include="Ling\Wrap.h" />
     <ClInclude Include="Ling\yoga\algorithm\AbsoluteLayout.h" />
     <ClInclude Include="Ling\yoga\algorithm\Align.h" />
     <ClInclude Include="Ling\yoga\algorithm\Baseline.h" />
@@ -300,6 +311,8 @@
     <ClInclude Include="Ling\yoga\YGPixelGrid.h" />
     <ClInclude Include="Ling\yoga\YGValue.h" />
     <ClInclude Include="Ling\yoga\Yoga.h" />
+    <ClInclude Include="Ling\Screen.h" />
+    <ClInclude Include="Ling\Text.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

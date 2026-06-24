@@ -84,7 +84,16 @@
     <ClCompile Include="Ling\App.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Ling\Ling.ixx">
+    <ClCompile Include="Ling\Element.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\Screen.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\Color.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\Text.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -273,6 +282,36 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Ling\App.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\Header.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\Element.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\Align.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\Justify.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\Edge.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\FlexDirection.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\Wrap.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\Screen.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\Color.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\Text.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

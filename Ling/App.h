@@ -1,5 +1,5 @@
-#pragma once
-import Ling;
+﻿#pragma once
+#include "Header.h"
 namespace Ling {
 	class App
 	{

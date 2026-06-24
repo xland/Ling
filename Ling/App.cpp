@@ -1,4 +1,4 @@
-import Ling;
+﻿#include "Header.h"
 #include "App.h"
 
 namespace Ling {
