@@ -81,12 +81,12 @@ namespace Ling {
 		void setFlexDirection(const FlexDirection& flexDirection);
 	public:
 		float xAbs{ 0.f }, yAbs{ 0.f };
+		WindowBase* win{ nullptr };
 	protected:
 		virtual void initProperty(const Composition::Compositor& comp);
 	protected:
 		YGNodeRef node{ nullptr };
 		Composition::SpriteVisual visual{ nullptr };
-		WindowBase* win{ nullptr };
 		Element* parent{ nullptr };
 		std::vector<std::shared_ptr<Element>> children;
 		float x{0.f}, y{ 0.f }, w{ 0.f }, h{ 0.f };

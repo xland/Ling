@@ -7,7 +7,7 @@ Demo::Demo()
 	setTitle(L"Ling 示例窗口");
 	setSize(1000, 800);
 	setPosScreenCenter();
-	setBackgroundColor(0x234567FF);
+	setBackgroundColor(0x884567FF);
 	createNativeWindow(0, WS_OVERLAPPEDWINDOW);
 
 

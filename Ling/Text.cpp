@@ -44,6 +44,7 @@ namespace Ling {
 	void Text::initProperty(const Composition::Compositor& comp)
 	{
 		visual = comp.CreateSpriteVisual();
+		win = parent->win;
 		Composition::CompositionGraphicsDevice graphicsDevice{ nullptr };
 		auto interop = comp.as<ABI::Windows::UI::Composition::ICompositorInterop>();
 		interop->CreateGraphicsDevice(d2dDevice.Get(),reinterpret_cast<ABI::Windows::UI::Composition::ICompositionGraphicsDevice**>(winrt::put_abi(graphicsDevice)));
@@ -75,9 +76,9 @@ namespace Ling {
 		auto trans = D2D1::Matrix3x2F::Translation(static_cast<float>(offset.x), static_cast<float>(offset.y));
 		d2dContext->SetTransform(trans);
 		d2dContext->Clear(0);
-		winrt::com_ptr<ID2D1SolidColorBrush> brush;
-		d2dContext->CreateSolidColorBrush(D2D1::ColorF(0x000000), brush.put());
-		d2dContext->DrawTextLayout({ 0, 0 }, textLayout.Get(), brush.get());
+		ComPtr<ID2D1SolidColorBrush> brush;
+		d2dContext->CreateSolidColorBrush(D2D1::ColorF(0x000000), brush.GetAddressOf());
+		d2dContext->DrawTextLayout({ 0, 0 }, textLayout.Get(), brush.Get());
 		d2dContext->EndDraw();
 	}
 	YGSize Text::nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode)

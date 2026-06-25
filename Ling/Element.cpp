@@ -30,13 +30,13 @@ namespace Ling {
 	}
 	void Element::initProperty(const Composition::Compositor& comp)
 	{
-		parent = this;
 		visual = comp.CreateSpriteVisual();
 		visual.Brush(comp.CreateColorBrush(backgroundColor.getUIColor()));
-		win = win;
+		win = parent->win;
 	}
 	void Element::insertChild(const int& index, const std::shared_ptr<Element>& ele)
 	{
+		ele->parent = this;
 		ele->initProperty(visual.Compositor());
 		Composition::Visual v{nullptr};
 		int i = 0;
@@ -53,6 +53,7 @@ namespace Ling {
 	}
 	void Element::addChild(const std::shared_ptr<Element>& ele)
 	{
+		ele->parent = this;
 		ele->initProperty(visual.Compositor());
 		visual.Children().InsertAtTop(ele->visual);
 		YGNodeInsertChild(node, ele->node, YGNodeGetChildCount(node));
