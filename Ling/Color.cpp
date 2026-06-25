@@ -55,7 +55,7 @@ namespace Ling{
 
 	D2D1_COLOR_F Color::getD2DColor()
 	{
-		return D2D1::ColorF(r,b,b,a/255.f);
+		return D2D1::ColorF(r / 255.f,g / 255.f,b / 255.f,a/255.f);
 	}
 
 	//constexpr Color colorTransparent = 0xFF000000;

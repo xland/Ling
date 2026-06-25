@@ -155,6 +155,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Ling\D2D.cpp" />
     <ClCompile Include="Ling\Color.cpp" />
     <ClCompile Include="Ling\Element.cpp" />
     <ClCompile Include="Ling\App.cpp" />
@@ -241,6 +242,7 @@
     <ClCompile Include="Ling\Text.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ling\D2D.h" />
     <ClInclude Include="Ling\Align.h" />
     <ClInclude Include="Ling\Color.h" />
     <ClInclude Include="Ling\Edge.h" />

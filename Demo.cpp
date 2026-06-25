@@ -24,7 +24,11 @@ Demo::Demo()
 	win->addChild(right);
 
 	auto text = std::make_shared<Ling::Text>();
-	text->setText(L"测试测试");
+	text->setBackgroundColor(0xdddd66ff);
+	text->setForeColor(0x8800FFff);
+	text->setText(L"测试测试可以啦！！！");
+	text->setFontSize(18.f);
+	text->setFontFamily(L"SimSun");
 	win->addChild(text);
 
 	win->setFlexDirection(Ling::FlexDirection::Row);
