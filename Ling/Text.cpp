@@ -79,7 +79,7 @@ namespace Ling {
 		ComPtr<ID2D1SolidColorBrush> brush;
 		d2dContext->CreateSolidColorBrush(D2D1::ColorF(0x000000), brush.GetAddressOf());
 		d2dContext->DrawTextLayout({ 0, 0 }, textLayout.Get(), brush.Get());
-		d2dContext->EndDraw();
+		surfaceInterop->EndDraw();
 	}
 	YGSize Text::nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode)
 	{
