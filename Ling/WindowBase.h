@@ -4,7 +4,8 @@
 #include <yoga/Yoga.h>
 #include "Element.h"
 namespace Ling {
-	class WindowBase : public Element
+	class Text;
+	class WindowBase
 	{
 	public:
 		WindowBase();
@@ -20,8 +21,6 @@ namespace Ling {
 		void enableShadow();
 		void setTimer(const UINT& elapse, const UINT& id);
 		void killTimer(const UINT& id);
-		void setCursor(LPCWSTR cursorName);
-		void layout() override;
 		void setTitle(const std::wstring& title);
 		std::wstring getTitle();
 		std::tuple<int,int> getPosition();
@@ -31,9 +30,13 @@ namespace Ling {
 		HWND getHandle();
 		float getScaleFactor();
 		void setPosScreenCenter();
+		std::shared_ptr<Element> makeElement();
+		std::shared_ptr<Text> makeText();
 	public:
-		int xWin, yWin;
+		int x, y,w,h;
 		bool isMouseDown{ false },isMouseIn{ false };
+		Composition::Compositor compositor;
+		std::unique_ptr<Element> body;
 	protected:
 		virtual LRESULT onHitTest(WPARAM wParam, LPARAM lParam);
 		virtual void onCreated() {};
@@ -66,8 +69,8 @@ namespace Ling {
 	private:
 		HWND hwnd{ nullptr };
 		std::wstring title;
-		Composition::Compositor compositor;
 		float dpi{ 1.0 };
 		Composition::Desktop::DesktopWindowTarget winTarget{ nullptr };
+		Element* hoverElement;
 	};
 }

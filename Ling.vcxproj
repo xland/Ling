@@ -316,6 +316,12 @@
     <ClInclude Include="Ling\Screen.h" />
     <ClInclude Include="Ling\Text.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Ling\Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Ling\iconfont.ttf" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -10,6 +10,8 @@ namespace Ling {
 		ComPtr<IDWriteTextLayout> createTextLayout(const std::wstring& text, const float& w, const float& h);
 	private:
 		D2D();
+		void initFont();
+		void initDevice();
 		void initIcon();
 	private:
 		ComPtr<IDWriteFactory5> dwriteFactory;
@@ -17,6 +19,7 @@ namespace Ling {
 		ComPtr<IDWriteTextFormat> iconFormat;
 		ComPtr<ID2D1Device> d2dDevice;
 		ComPtr<ID2D1Factory1> d2dFactory;
+		ComPtr<IDWriteFontCollection1> fontCollection;
 	};
 }
 

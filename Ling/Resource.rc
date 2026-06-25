@@ -1,0 +1,6 @@
+﻿#pragma code_page(65001)
+#define APSTUDIO_READONLY_SYMBOLS
+#include "winres.h"
+#undef APSTUDIO_READONLY_SYMBOLS
+// 嵌入资源文件
+iconfont.ttf RCDATA "iconfont.ttf"

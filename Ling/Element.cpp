@@ -1,7 +1,7 @@
 ﻿#include "Element.h"
 #include "WindowBase.h"
 namespace Ling {
-	Element::Element() : node{ YGNodeNew() }
+	Element::Element(WindowBase* win) : win{ win }, node{ YGNodeNew() }, visual{win->compositor.CreateSpriteVisual()}
 	{
 		YGNodeSetContext(node, this);
 	}
@@ -14,30 +14,57 @@ namespace Ling {
 	{
 		x = YGNodeLayoutGetLeft(node);
 		y = YGNodeLayoutGetTop(node);
-		xAbs = parent->xAbs+x;
-		yAbs = parent->yAbs+y;
 		w = YGNodeLayoutGetWidth(node);
 		h = YGNodeLayoutGetHeight(node);
+		if (parent) {
+			xAbs = parent->xAbs + x;
+			yAbs = parent->yAbs + y;
+		}
 		visual.Offset({ x, y, 0.0f });
 		visual.Size({ w, h });
 		for (auto& child : children) {
 			child->layout();
 		}
 	}
+	bool Element::hover()
+	{
+		if (this->cursor) {
+			SetCursor(this->cursor);
+			return true;
+		}
+		else if(parent && parent->hover()){
+			return true;
+		}
+		return false;
+	}
+	Element* Element::hitTest(const int& x, const int& y)
+	{
+		if (x < xAbs || x > xAbs + w || y < yAbs || y > yAbs + h) {
+			return nullptr;
+		}
+
+		for (auto& child:children) {
+			auto hit = child->hitTest(x, y);
+			if (hit) return hit;
+		}
+		return this;
+	}
 	void Element::setBackgroundColor(const Color& backgroundColor)
 	{
 		this->backgroundColor = backgroundColor;
 	}
-	void Element::initProperty(const Composition::Compositor& comp)
+	void Element::setCursor(LPCWSTR cursor)
 	{
-		visual = comp.CreateSpriteVisual();
-		visual.Brush(comp.CreateColorBrush(backgroundColor.getUIColor()));
-		win = parent->win;
+		this->cursor = LoadCursor(NULL, cursor);
+	}
+	void Element::initProperty()
+	{
+		visual.Brush(win->compositor.CreateColorBrush(backgroundColor.getUIColor()));
 	}
 	void Element::insertChild(const int& index, const std::shared_ptr<Element>& ele)
 	{
 		ele->parent = this;
-		ele->initProperty(visual.Compositor());
+		ele->initProperty();
 		Composition::Visual v{nullptr};
 		int i = 0;
 		for (auto child : visual.Children())
@@ -54,7 +81,7 @@ namespace Ling {
 	void Element::addChild(const std::shared_ptr<Element>& ele)
 	{
 		ele->parent = this;
-		ele->initProperty(visual.Compositor());
+		ele->initProperty();
 		visual.Children().InsertAtTop(ele->visual);
 		YGNodeInsertChild(node, ele->node, YGNodeGetChildCount(node));
 		children.push_back(ele);

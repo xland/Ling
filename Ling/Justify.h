@@ -2,9 +2,10 @@
 namespace Ling {
     enum class Justify
     {
-        FlexStart,
+        Auto,
+        Start,
         Center,
-        FlexEnd,
+        End,
         SpaceBetween,
         SpaceAround,
         SpaceEvenly

@@ -12,12 +12,15 @@ namespace Ling {
 	class Element : public std::enable_shared_from_this<Element>
 	{
 	public:
-		Element();
+		Element(WindowBase* win);
 		~Element();
 		void insertChild(const int& index, const std::shared_ptr<Element>& ele);
 		void addChild(const std::shared_ptr<Element>& ele);
 		virtual void layout();
+		bool hover();
+		Element* hitTest(const int& x, const int& y);
 		void setBackgroundColor(const Color& backgroundColor);
+		void setCursor(LPCWSTR cursor);
 		void setWidth(const float& w);
 		void setHeight(const float& h);
 		virtual void setSize(const float& w, const float& h);
@@ -82,15 +85,16 @@ namespace Ling {
 	public:
 		float xAbs{ 0.f }, yAbs{ 0.f };
 		WindowBase* win{ nullptr };
-	protected:
-		virtual void initProperty(const Composition::Compositor& comp);
-	protected:
-		YGNodeRef node{ nullptr };
 		Composition::SpriteVisual visual{ nullptr };
+		YGNodeRef node{ nullptr };
+	protected:
+		virtual void initProperty();
+	protected:
 		Element* parent{ nullptr };
 		std::vector<std::shared_ptr<Element>> children;
 		float x{0.f}, y{ 0.f }, w{ 0.f }, h{ 0.f };
-		Color backgroundColor;
+		Color backgroundColor{0X00000000};
+		HCURSOR cursor{ nullptr };
 	private:
 	};
 }

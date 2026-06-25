@@ -1,7 +1,8 @@
 ﻿#include "Text.h"
 #include "D2D.h"
+#include "WindowBase.h"
 namespace Ling {
-	Text::Text()
+	Text::Text(WindowBase* win):Element(win)
 	{
 	}
 
@@ -29,13 +30,13 @@ namespace Ling {
 		this->fontFamily = fontFamily;
 	}
 
-	void Text::initProperty(const Composition::Compositor& comp)
+	void Text::initProperty()
 	{
-		visual = comp.CreateSpriteVisual();
-		win = parent->win;
+		visual = win->compositor.CreateSpriteVisual();
+		//win = parent->win;
 		auto d2d = D2D::get();
-		surface = d2d->createDrawingSurface(comp);
-		brush = comp.CreateSurfaceBrush(surface);
+		surface = d2d->createDrawingSurface(win->compositor);
+		brush = win->compositor.CreateSurfaceBrush(surface);
 		visual.Brush(brush);
 		textLayout = d2d->createTextLayout(text, FLT_MAX, FLT_MAX);
 		textLayout->SetFontSize(fontSize, { 0,(unsigned int)text.length() });

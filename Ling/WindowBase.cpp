@@ -1,8 +1,9 @@
 ﻿
 #include "Header.h"
 #include "WindowBase.h"
+#include "Text.h"
 namespace Ling{
-    WindowBase::WindowBase():Element(), compositor{ Composition::Compositor() }
+    WindowBase::WindowBase():compositor{ Composition::Compositor() }
     {
 
     }
@@ -66,49 +67,20 @@ namespace Ling{
         KillTimer(hwnd, WM_APP + id);
     }
 
-    void WindowBase::setCursor(LPCWSTR cursorName)
-    {
-        SetCursor(LoadCursor(NULL, cursorName));
-    }
-
-    void WindowBase::layout()
-    {
-        YGNodeStyleSetWidth(node, w);
-        YGNodeStyleSetHeight(node, h);
-        YGNodeCalculateLayout(node, w, h, YGDirectionLTR);
-        x = 0.f;
-        y = 0.f;
-        xAbs = 0.f;
-        yAbs = 0.f;
-        visual.Offset({ 0.f, 0.f, 0.0f });
-        visual.Size({ w, h });
-        for (auto& child : children) {
-            child->layout();
-        }
-    }
-
 
     void WindowBase::createNativeWindow(const DWORD& exStyle, const DWORD& style)
     {
-        hwnd = CreateWindowEx(WS_EX_NOREDIRECTIONBITMAP | exStyle, getWinClsName().c_str(), NULL, style, xWin, yWin, w, h, NULL, NULL, GetModuleHandle(nullptr), NULL); //WS_POPUP
+        hwnd = CreateWindowEx(WS_EX_NOREDIRECTIONBITMAP | exStyle, getWinClsName().c_str(), NULL, style, x, y, w, h, NULL, NULL, GetModuleHandle(nullptr), NULL); //WS_POPUP
         SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 	    dpi = GetDpiForWindow(hwnd) / 96.0f;
         auto interop = compositor.as<ABI::Windows::UI::Composition::Desktop::ICompositorDesktopInterop>();
         auto r = reinterpret_cast<ABI::Windows::UI::Composition::Desktop::IDesktopWindowTarget**>(winrt::put_abi(winTarget));
         interop->CreateDesktopWindowTarget(hwnd, false, r);
-        visual = compositor.CreateSpriteVisual();
-        auto color = ColorHelper::FromArgb(backgroundColor.getA(), backgroundColor.getR(), backgroundColor.getG(), backgroundColor.getB());
-        visual.Brush(compositor.CreateColorBrush(color));
-        winTarget.Root(visual);
-        win = this;
-        //SpriteVisual element{ nullptr };
-        //element = compositor.CreateSpriteVisual();
-        //element.RelativeSizeAdjustment({ 1.0f, 1.0f });
-        //element.Size({ (float)50, (float)50 });
-        //element.Offset({ (float)w - (float)100, (float)y - (float)100, (float)0 });
-        //CompositionColorBrush brush = compositor.CreateColorBrush(winrt::Windows::UI::Colors::Red());
-        //element.Brush(brush);
-        //visual.Children().InsertAtTop(element);
+        body = std::make_unique<Element>(this);
+        Color c(0xFFFFFFFF);
+        body->visual.Brush(compositor.CreateColorBrush(c.getUIColor()));
+        body->setCursor(IDC_ARROW);
+        winTarget.Root(body->visual);
         onCreated();
     }
 
@@ -119,8 +91,10 @@ namespace Ling{
 
     BOOL WindowBase::onCursor()
     {
-        SetCursor(LoadCursor(NULL, IDC_CROSS));
-        return TRUE;
+        if (hoverElement) {
+            return hoverElement->hover();
+        }
+        return FALSE;
     }
     std::wstring& WindowBase::getWinClsName()
     {
@@ -133,7 +107,7 @@ namespace Ling{
             wcex.cbWndExtra = 0;
             wcex.hInstance = GetModuleHandle(nullptr);
             wcex.hIcon = LoadIcon(wcex.hInstance, (LPCTSTR)IDI_WINLOGO);
-            wcex.hCursor = LoadCursor(nullptr, IDC_CROSS);
+            wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
             wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
             wcex.lpszMenuName = nullptr;
             wcex.lpszClassName = L"Ling";
@@ -256,6 +230,10 @@ namespace Ling{
             tme.hwndTrack = hwnd;
             TrackMouseEvent(&tme);
         }
+        auto ele = body->hitTest(x, y);
+        if (ele != hoverElement) {
+            hoverElement = ele;
+        }
 	    onMouseMove(x, y);
     }
 
@@ -273,7 +251,10 @@ namespace Ling{
     {
         this->w = w;
         this->h = h;
-        this->layout();
+        YGNodeStyleSetWidth(body->node, w);
+        YGNodeStyleSetHeight(body->node, h);
+        YGNodeCalculateLayout(body->node, w, h, YGDirectionLTR);
+        body->layout();
     }
 
     void WindowBase::setTitle(const std::wstring& title)
@@ -287,7 +268,7 @@ namespace Ling{
     }
     std::tuple<int, int> WindowBase::getPosition()
     {
-        return std::make_tuple(xWin,yWin);
+        return std::make_tuple(x,y);
     }
 
     std::tuple<float, float> WindowBase::getSize()
@@ -317,7 +298,15 @@ namespace Ling{
     {
         int screenWidth = GetSystemMetrics(SM_CXSCREEN);
         int screenHeight = GetSystemMetrics(SM_CYSCREEN);
-        xWin = (screenWidth - w) / 2 ;
-        yWin = (screenHeight - h) / 2;
+        x = (screenWidth - w) / 2 ;
+        y = (screenHeight - h) / 2;
+    }
+    std::shared_ptr<Element> WindowBase::makeElement()
+    {
+        return std::make_shared<Element>(this);
+    }
+    std::shared_ptr<Text> WindowBase::makeText()
+    {
+        return std::make_shared<Text>(this);
     }
 }
