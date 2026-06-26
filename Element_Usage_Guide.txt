@@ -1,0 +1,129 @@
+=========================================
+Element 使用指南
+=========================================
+
+一、两种使用方式
+=========================================
+
+方式 1：直接使用 Element（作为通用容器）
+-------------------------------------------------
+Element* container = win->makeElement();  // 返回 Element*
+container->setWidth(200);     // 非链式，返回 void
+container->addChild(child);    // 多态方法可用
+
+// 注意：Element 本身只有 get 方法和非链式的 addChild、removeChild 等
+// Element 没有 setBackgroundColor、setMargin 等链式方法！
+
+
+方式 2：使用具体子类（推荐，支持链式调用）
+-------------------------------------------------
+// Text 继承自 ElementBase<Text>
+Text* text = win->makeText();
+text->setSize(200, 50)          // 返回 Text*，支持链式
+    ->setBackgroundColor(0xFFFF0000)
+    ->setText(L"Hello");
+
+// ButtonIcon 继承自 ElementBase<ButtonIcon>
+ButtonIcon* btn = win->makeButtonIcon();
+btn->setSize(100, 100)
+   ->setBackgroundColor(0xFF00FF00)
+   ->setMargin(10)
+   ->setCursor(IDC_HAND);
+
+
+二、子类实现示例（以 Text 为例）
+=========================================
+
+// Text.h
+class Text : public ElementBase<Text>  // 注意：继承 ElementBase<Text>
+{
+public:
+    Text(WindowBase* win);
+    ~Text();
+    
+    // 子类自己的链式方法，返回 Text*
+    Text* setText(const std::wstring text);
+    Text* setFontSize(const float& fontSize);
+    Text* setForeColor(const Color& color);
+    
+protected:
+    void initProperty() override;  // 重写虚函数
+    void layout() override;         // 重写虚函数
+};
+
+// Text.cpp
+Text::Text(WindowBase* win) : ElementBase<Text>(win)  // 调用基类构造
+{
+}
+
+Text* Text::setText(const std::wstring text)
+{
+    this->text = text;
+    return this;  // 返回 this 支持链式
+}
+
+
+三、多态使用（重要！）
+=========================================
+
+// 当需要多态处理时，使用 Element* 指针
+Element* element1 = win->makeText();
+Element* element2 = win->makeButtonIcon();
+
+// 多态方法都可以正常调用
+element1->layout();
+element1->addChild(child);
+element1->onMouseEnter([](auto& e) { ... });
+
+// 但注意：多态指针不能调用链式方法！
+// element1->setBackgroundColor(0xFFFF0000);  // 错误！Element 没有这个方法
+
+// 如果需要调用链式方法，必须向下转型
+Text* text = static_cast<Text*>(element1);
+text->setBackgroundColor(0xFFFF0000);  // 正确
+
+
+四、WindowBase 中的工厂方法
+=========================================
+
+// WindowBase.h
+Element* makeElement();       // 返回基类指针
+Text* makeText();             // 返回具体子类指针
+ButtonIcon* makeButtonIcon(); // 返回具体子类指针
+
+// WindowBase.cpp
+Element* WindowBase::makeElement()
+{
+    auto ele = std::make_unique<Element>(this);
+    auto result = ele.get();
+    elements.push_back(std::move(ele));
+    return result;
+}
+
+Text* WindowBase::makeText()
+{
+    auto ele = std::make_unique<Text>(this);
+    auto result = ele.get();
+    elements.push_back(std::move(ele));
+    return result;
+}
+
+
+五、设计总结
+=========================================
+
+Element (基类, 非模板)
+├── 成员变量: x, y, w, h, children, visual, node, parent...
+├── 多态方法: addChild, removeChild, layout, hitTest...
+├── 事件注册: onMouseEnter, onMouseLeave...
+└── get 方法: getLeft, getTop, getWidth, getHeight...
+
+ElementBase<Derived> (CRTP 模板)
+├── 继承 Element
+├── 链式 set 方法: setSize, setMargin, setPadding...
+└── 所有方法返回 Derived*
+
+Text / ButtonIcon (具体子类)
+├── 继承 ElementBase<自己>
+├── 子类自己的方法和成员
+└── 可重写虚函数 (initProperty, layout)

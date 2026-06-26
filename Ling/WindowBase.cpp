@@ -2,6 +2,7 @@
 #include "Header.h"
 #include "WindowBase.h"
 #include "Text.h"
+#include "ButtonIcon.h"
 namespace Ling{
     WindowBase::WindowBase():compositor{ Composition::Compositor() }
     {
@@ -222,29 +223,67 @@ namespace Ling{
 
     void WindowBase::mouseMove(const int& x, const int& y)
     {
-        if (!body->isMouseIn)
+        if (!isMouseIn)
         {
-            body->isMouseIn = true;
+            isMouseIn = true;
             TRACKMOUSEEVENT tme{ sizeof(TRACKMOUSEEVENT) };
             tme.dwFlags = TME_LEAVE;
             tme.hwndTrack = hwnd;
             TrackMouseEvent(&tme);
         }
-        auto ele = body->hitTest(x, y);
-        if (ele != hoverElement) {
-            hoverElement = ele;
-            ele->mouseEnter(MouseEvent(x, y));
+
+        Element* newHover = body->hitTest(x, y);
+
+        if (newHover != hoverElement) {
+            MouseEvent event(x, y);
+            if (hoverElement) {
+                // 查找老的hoverElement和新的newHover的共同祖先
+                Element* commonAncestor = hoverElement->findAncestor(newHover);
+                // 从老的hoverElement向上触发mouseLeave，直到共同祖先
+                Element* current = hoverElement;
+                while (current && current != commonAncestor) {
+                    current->mouseLeave(event);
+                    current = current->parent;
+                }
+            }
+            if (newHover) {
+                // 查找共同祖先
+                Element* commonAncestor = hoverElement ? newHover->findAncestor(hoverElement) : nullptr;
+                // 从新 hover 元素向上触发 mouseEnter，直到共同祖先（不包含）
+                std::vector<Element*> pathToEnter;
+                Element* current = newHover;
+                while (current && current != commonAncestor) {
+                    pathToEnter.push_back(current);
+                    current = current->parent;
+                }
+                // 从外到内触发（父元素先于子元素触发 enter）
+                for (auto it = pathToEnter.rbegin(); it != pathToEnter.rend(); ++it) {
+                    (*it)->mouseEnter(event);
+                }
+            }
+            hoverElement = newHover;
+        }
+        if (newHover) {
+            newHover->mouseMove(MouseEvent(x, y));
         }
     }
 
     void WindowBase::mouseLeave()
     {
-        body->isMouseIn = false;
+	    isMouseIn = false;
         TRACKMOUSEEVENT tme{ sizeof(TRACKMOUSEEVENT) };
         tme.dwFlags = TME_CANCEL | TME_LEAVE;
         tme.hwndTrack = hwnd;
         TrackMouseEvent(&tme);
-	    onMouseLeave();
+        if (hoverElement) {
+            MouseEvent event(0, 0);  // 离开时坐标不重要
+            Element* current = hoverElement;
+            while (current) {
+                current->mouseLeave(event);
+                current = current->parent;
+            }
+            hoverElement = nullptr;
+        }
     }
 
     void WindowBase::sizeChange(const int& w, const int& h)
@@ -311,6 +350,13 @@ namespace Ling{
     Text* WindowBase::makeText()
     {
         auto ele = std::make_unique<Text>(this);
+        auto result = ele.get();
+        elements.push_back(std::move(ele));
+        return result;
+    }
+    ButtonIcon* WindowBase::makeButtonIcon()
+    {
+        auto ele = std::make_unique<ButtonIcon>(this);
         auto result = ele.get();
         elements.push_back(std::move(ele));
         return result;

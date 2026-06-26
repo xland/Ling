@@ -11,11 +11,16 @@
 
 namespace Ling {
 	class WindowBase;
-	class Element : public std::enable_shared_from_this<Element>
+
+	class Element
 	{
 	public:
 		Element(WindowBase* win);
-		~Element();
+		virtual ~Element();
+
+		// 多态方法
+		bool isAncestor(const Element* target);
+		Element* findAncestor(Element* other);
 		void removeSelf();
 		void removeChild(Element* ele);
 		void insertChild(const int& index, Element* ele);
@@ -24,6 +29,7 @@ namespace Ling {
 		bool hover();
 		Element* hitTest(const int& x, const int& y);
 
+		// 事件方法
 		void mouseEnter(const MouseEvent& event);
 		void mouseLeave(const MouseEvent& event);
 		void mouseMove(const MouseEvent& event);
@@ -40,84 +46,66 @@ namespace Ling {
 		void offMouseDown(const size_t& callbackId);
 		void offMouseUp(const size_t& callbackId);
 
-
-		void setBackgroundColor(const Color& backgroundColor);
+		// set 方法（非链式，返回 void）
+		void setBackgroundColor(const Color& color);
 		void setCursor(LPCWSTR cursor);
 		void setWidth(const float& w);
 		void setHeight(const float& h);
-		virtual void setSize(const float& w, const float& h);
+		void setSize(const float& w, const float& h);
 		void setWidthPercent(const float& percent);
 		void setHeightPercent(const float& percent);
 		void setSizePercent(const float& w, const float& h);
-		/// <summary>
-		/// 此元素如何在父元素主轴方向上“长大”占据剩余空间
-		/// </summary>
-		/// <param name="val"></param>
 		void setFlexGrow(const float& val);
-		/// <summary>
-		/// 此元素如何在父元素主轴方向上“收缩”
-		/// </summary>
-		/// <param name="val"></param>
 		void setFlexShrink(const float& val);
-		float getLeft();
-		float getTop();
-		float getWidth();
-		float getHeight();
-
 		void setMargin(const float& val);
 		void setMargin(const float& left, const float& top, const float& right, const float& bottom);
 		void setMarginLeft(const float& val);
 		void setMarginTop(const float& val);
 		void setMarginRight(const float& val);
 		void setMarginBottom(const float& val);
-		float getMarginLeft();
-		float getMarginTop();
-		float getMarginRight();
-		float getMarginBottom();
-
 		void setPadding(const float& val);
 		void setPadding(const float& left, const float& top, const float& right, const float& bottom);
 		void setPaddingLeft(const float& val);
 		void setPaddingTop(const float& val);
 		void setPaddingRight(const float& val);
 		void setPaddingBottom(const float& val);
+		void setFlexWrap(const Wrap& val);
+		void setAlignItems(const Align& val);
+		void setJustifyContent(const Justify& val);
+		void setFlexDirection(const FlexDirection& flexDirection);
+
+		// get 方法
+		float getLeft();
+		float getTop();
+		float getWidth();
+		float getHeight();
+
+		float getMarginLeft();
+		float getMarginTop();
+		float getMarginRight();
+		float getMarginBottom();
+
 		float getPaddingLeft();
 		float getPaddingTop();
 		float getPaddingRight();
 		float getPaddingBottom();
 
-		void setFlexWrap(const Wrap& val);
-		/// <summary>
-		/// 用来设置 子元素在交叉轴 上的对齐方式。
-		/// 主轴 ：由 flex-direction 决定（水平方向或垂直方向）。
-		/// 交叉轴 ：与主轴垂直的方向。
-		/// </summary>
-		/// <param name="val"></param>
-		void setAlignItems(const Align& val);
-		/// <summary>
-		/// 控制子元素在 主轴的分布方式
-		/// </summary>
-		/// <param name="val"></param>
-		void setJustifyContent(const Justify& val);
-		/// <summary>
-		/// 设置主轴的方向
-		/// </summary>
-		/// <param name="flexDirection"></param>
-		void setFlexDirection(const FlexDirection& flexDirection);
+	protected:
+		virtual void initProperty();
+
 	public:
 		float xAbs{ 0.f }, yAbs{ 0.f };
 		WindowBase* win{ nullptr };
 		Composition::SpriteVisual visual{ nullptr };
 		YGNodeRef node{ nullptr };
-		bool isMouseIn{ false };
-	protected:
-		virtual void initProperty();
-	protected:
 		Element* parent{ nullptr };
+
+	protected:
 		std::vector<Element*> children;
-		float x{0.f}, y{ 0.f }, w{ 0.f }, h{ 0.f };
-		Color backgroundColor{0X00000000};
+		float x{ 0.f }, y{ 0.f }, w{ 0.f }, h{ 0.f };
+		Color backgroundColor{ 0X00000000 };
 		HCURSOR cursor{ nullptr };
+
 	private:
 		size_t mouseMoveCBId{ 0 };
 		std::unordered_map<size_t, std::function<void(const MouseEvent&)>> mouseMoveCBs;

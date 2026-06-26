@@ -1,8 +1,13 @@
-﻿#include "Element.h"
+=========================================
+Element.cpp - 完整代码
+=========================================
+
+#include "Element.h"
 #include "WindowBase.h"
 
 namespace Ling {
-	Element::Element(WindowBase* win) : win(win), node(YGNodeNew()), visual{ win->compositor.CreateSpriteVisual() }
+	Element::Element(WindowBase* win)
+		: win(win), node(YGNodeNew())
 	{
 		YGNodeSetContext(node, this);
 	}
@@ -40,7 +45,6 @@ namespace Ling {
 
 	void Element::initProperty()
 	{
-		visual.Brush(win->compositor.CreateColorBrush(backgroundColor.getUIColor()));
 	}
 
 	void Element::layout()
@@ -130,119 +134,6 @@ namespace Ling {
 		visual.Children().InsertAtTop(ele->visual);
 		YGNodeInsertChild(node, ele->node, YGNodeGetChildCount(node));
 		children.push_back(ele);
-	}
-
-	// set 方法实现（非链式）
-	void Element::setBackgroundColor(const Color& color) {
-		backgroundColor = color;
-	}
-
-	void Element::setCursor(LPCWSTR cursor) {
-		this->cursor = LoadCursor(NULL, cursor);
-	}
-
-	void Element::setWidth(const float& w) {
-		YGNodeStyleSetWidth(node, w);
-	}
-
-	void Element::setHeight(const float& h) {
-		YGNodeStyleSetHeight(node, h);
-	}
-
-	void Element::setSize(const float& w, const float& h) {
-		setWidth(w);
-		setHeight(h);
-	}
-
-	void Element::setWidthPercent(const float& percent) {
-		YGNodeStyleSetWidthPercent(node, percent);
-	}
-
-	void Element::setHeightPercent(const float& percent) {
-		YGNodeStyleSetHeightPercent(node, percent);
-	}
-
-	void Element::setSizePercent(const float& w, const float& h) {
-		setWidthPercent(w);
-		setHeightPercent(h);
-	}
-
-	void Element::setFlexGrow(const float& val) {
-		YGNodeStyleSetFlexGrow(node, val);
-	}
-
-	void Element::setFlexShrink(const float& val) {
-		YGNodeStyleSetFlexShrink(node, val);
-	}
-
-	void Element::setMargin(const float& val) {
-		YGNodeStyleSetMargin(node, YGEdgeAll, val);
-	}
-
-	void Element::setMargin(const float& left, const float& top, const float& right, const float& bottom) {
-		YGNodeStyleSetMargin(node, YGEdgeLeft, left);
-		YGNodeStyleSetMargin(node, YGEdgeTop, top);
-		YGNodeStyleSetMargin(node, YGEdgeRight, right);
-		YGNodeStyleSetMargin(node, YGEdgeBottom, bottom);
-	}
-
-	void Element::setMarginLeft(const float& val) {
-		YGNodeStyleSetMargin(node, YGEdge::YGEdgeLeft, val);
-	}
-
-	void Element::setMarginTop(const float& val) {
-		YGNodeStyleSetMargin(node, YGEdge::YGEdgeTop, val);
-	}
-
-	void Element::setMarginRight(const float& val) {
-		YGNodeStyleSetMargin(node, YGEdge::YGEdgeRight, val);
-	}
-
-	void Element::setMarginBottom(const float& val) {
-		YGNodeStyleSetMargin(node, YGEdge::YGEdgeBottom, val);
-	}
-
-	void Element::setPadding(const float& val) {
-		YGNodeStyleSetPadding(node, YGEdgeAll, val);
-	}
-
-	void Element::setPadding(const float& left, const float& top, const float& right, const float& bottom) {
-		YGNodeStyleSetPadding(node, YGEdgeLeft, left);
-		YGNodeStyleSetPadding(node, YGEdgeTop, top);
-		YGNodeStyleSetPadding(node, YGEdgeRight, right);
-		YGNodeStyleSetPadding(node, YGEdgeBottom, bottom);
-	}
-
-	void Element::setPaddingLeft(const float& val) {
-		YGNodeStyleSetPadding(node, YGEdgeLeft, val);
-	}
-
-	void Element::setPaddingTop(const float& val) {
-		YGNodeStyleSetPadding(node, YGEdgeTop, val);
-	}
-
-	void Element::setPaddingRight(const float& val) {
-		YGNodeStyleSetPadding(node, YGEdgeRight, val);
-	}
-
-	void Element::setPaddingBottom(const float& val) {
-		YGNodeStyleSetPadding(node, YGEdgeBottom, val);
-	}
-
-	void Element::setFlexWrap(const Wrap& val) {
-		YGNodeStyleSetFlexWrap(node, (YGWrap)val);
-	}
-
-	void Element::setAlignItems(const Align& val) {
-		YGNodeStyleSetAlignItems(node, (YGAlign)val);
-	}
-
-	void Element::setJustifyContent(const Justify& val) {
-		YGNodeStyleSetJustifyContent(node, (YGJustify)val);
-	}
-
-	void Element::setFlexDirection(const FlexDirection& flexDirection) {
-		YGNodeStyleSetFlexDirection(node, (YGFlexDirection)flexDirection);
 	}
 
 	// 事件回调方法

@@ -250,6 +250,7 @@
     <ClInclude Include="Ling\Color.h" />
     <ClInclude Include="Ling\Edge.h" />
     <ClInclude Include="Ling\Element.h" />
+    <ClInclude Include="Ling\ElementBase.h" />
     <ClInclude Include="Ling\FlexDirection.h" />
     <ClInclude Include="Ling\Header.h" />
     <ClInclude Include="Ling\App.h" />

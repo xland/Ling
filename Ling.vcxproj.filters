@@ -84,9 +84,6 @@
     <ClCompile Include="Ling\App.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Ling\Element.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Ling\Screen.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -103,6 +100,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Ling\ButtonIcon.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\Element.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -296,9 +296,6 @@
     <ClInclude Include="Ling\Header.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Ling\Element.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Ling\Align.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -333,6 +330,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Ling\ButtonIcon.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\ElementBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\Element.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

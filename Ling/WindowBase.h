@@ -5,6 +5,7 @@
 #include "Element.h"
 namespace Ling {
 	class Text;
+	class ButtonIcon;
 	class WindowBase
 	{
 	public:
@@ -32,9 +33,10 @@ namespace Ling {
 		void setPosScreenCenter();
 		Element* makeElement();
 		Text* makeText();
+		ButtonIcon* makeButtonIcon();
 	public:
 		int x, y,w,h;
-		bool isMouseDown{ false };
+		bool isMouseDown{ false },isMouseIn{ false };
 		Composition::Compositor compositor;
 		std::unique_ptr<Element> body;
 		std::vector<std::unique_ptr<Element>> elements;
@@ -50,7 +52,6 @@ namespace Ling {
 		virtual void onKeyDown(const UINT& key) {};
 		virtual void onKeyUp() {};
 		virtual void onChar(const UINT& ch) {};
-		virtual void onMouseLeave() {};
 		virtual void onMouseWheel(const int& x, const int& y, const short& delta) {};
 		virtual void onTimer(const UINT& timerId) {};
 		virtual BOOL onCursor();
