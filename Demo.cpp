@@ -2,6 +2,7 @@
 #include "Ling/WindowBase.h"
 #include "Ling/Screen.h"
 #include "Ling/Text.h"
+#include "Ling/ButtonIcon.h"
 Demo::Demo()
 {
 	setTitle(L"Ling 示例窗口");
@@ -15,19 +16,26 @@ Demo::Demo()
 	top->setFlexDirection(Ling::FlexDirection::Row);
 	top->setJustifyContent(Ling::Justify::End);
 
-	auto closeBtn = makeElement();
-	closeBtn->setSize(42.f, 40.f);
-	closeBtn->setJustifyContent(Ling::Justify::Center);
-	closeBtn->setAlignItems(Ling::Align::Center);
-	closeBtn->setCursor(IDC_HAND);
+	auto btnIcon = makeButtonIcon();
+	btnIcon->setSize(42.f, 40.f);
+	btnIcon->setIcon(L"\ue62d");
+	btnIcon->setcolorFore(0xDD22DDFF);
+	btnIcon->setBackgroundColor(0x99DDDDFF);
+	top->addChild(btnIcon);
 
-	auto text = makeText();
-	text->setForeColor(0x8800FFff);
-	text->setText(L"\ue62d");
-	text->setFontSize(18.f);
-	text->setFontFamily(L"icon");//icon SimSun Microsoft YaHei
-	closeBtn->addChild(text);
-	top->addChild(closeBtn);
+	//auto closeBtn = makeElement();
+	//closeBtn->setSize(42.f, 40.f);
+	//closeBtn->setJustifyContent(Ling::Justify::Center);
+	//closeBtn->setAlignItems(Ling::Align::Center);
+	//closeBtn->setCursor(IDC_HAND);
+
+	//auto text = makeText();
+	//text->setForeColor(0x8800FFff);
+	//text->setText(L"\ue62d");
+	//text->setFontSize(18.f);
+	//text->setFontFamily(L"icon");//icon SimSun Microsoft YaHei
+	//closeBtn->addChild(text);
+	//top->addChild(closeBtn);
 	
 	//auto body = std::make_shared<Ling::Element>();
 	//body->setFlexGrow(1.f);

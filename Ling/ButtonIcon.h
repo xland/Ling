@@ -8,18 +8,21 @@ namespace Ling{
 		ButtonIcon(WindowBase* win);
 		~ButtonIcon();
 		void setIcon(const std::wstring& code);  // 设置图标编码
-		void setIconColor(const Color& color);    // 设置图标颜色
-		void setIconFontSize(const float& fontSize);
+		void setcolorFore(const Color& color);
+		void setcolorHoverFore(const Color& color);
+		void setcolorBackground(const Color& color);
+		void setcolorHoverBackground(const Color& color);
+		void setFontSize(const float& fontSize);
 	protected:
 		void initProperty() override;
 	private:
 		std::wstring code;
 	private:
 		Text* iconText;
-		Color iconColorFore;
-		Color iconColorHover;
-		Color bgColorNormal;
-		Color bgColorHover;
+		Color colorFore;
+		Color colorHoverFore;
+		Color colorHoverBackground;
+		float fontSize{ 12.f };
 	};
 }
 
