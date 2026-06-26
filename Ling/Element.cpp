@@ -10,6 +10,28 @@ namespace Ling {
 		YGNodeFree(node);
 	}
 
+	void Element::removeSelf()
+	{
+		if (!parent) return; //body不能删除自身
+		for (auto& child:children)
+		{
+			child->removeSelf();
+		}
+		YGNodeRemoveChild(parent->node, node);
+		parent->visual.Children().Remove(visual);
+	 	auto& siblings = parent->children;
+		siblings.erase(std::remove(siblings.begin(), siblings.end(), this), siblings.end());
+		auto& all = win->elements;
+		all.erase(std::remove_if(all.begin(), all.end(), [this](const std::unique_ptr<Element>& ptr) {
+			return ptr.get() == this;
+			}));
+	}
+
+	void Element::removeChild(Element* ele)
+	{
+		ele->removeSelf();
+	}
+
 	void Element::layout()
 	{
 		x = YGNodeLayoutGetLeft(node);
@@ -40,6 +62,10 @@ namespace Ling {
 	Element* Element::hitTest(const int& x, const int& y)
 	{
 		if (x < xAbs || x > xAbs + w || y < yAbs || y > yAbs + h) {
+			if (isMouseIn) {
+				isMouseIn = false;
+				mouseLeave(MouseEvent(x, y));
+			}
 			return nullptr;
 		}
 
@@ -49,6 +75,95 @@ namespace Ling {
 		}
 		return this;
 	}
+	void Element::mouseEnter(const MouseEvent& event)
+	{
+		for (const auto& pair : mouseEnterCBs) {
+			pair.second(event);
+		}
+	}
+
+	void Element::mouseLeave(const MouseEvent& event)
+	{
+		for (const auto& pair : mouseLeaveCBs) {
+			pair.second(event);
+		}
+	}
+
+	void Element::mouseMove(const MouseEvent& event)
+	{
+		for (const auto& pair : mouseMoveCBs) {
+			pair.second(event);
+		}
+	}
+
+	void Element::mouseDown(const MouseEvent& event)
+	{
+		for (const auto& pair : mouseDownCBs) {
+			pair.second(event);
+		}
+	}
+
+	void Element::mouseUp(const MouseEvent& event)
+	{
+		for (const auto& pair : mouseUpCBs) {
+			pair.second(event);
+		}
+	}
+
+	size_t Element::onMouseMove(std::function<void(const MouseEvent&)> callback)
+	{
+		mouseMoveCBId += 1;
+		mouseMoveCBs.insert({ mouseMoveCBId,callback });
+		return mouseMoveCBId;
+	}
+	size_t Element::onMouseDown(std::function<void(const MouseEvent&)> callback)
+	{
+		mouseDownCBId += 1;
+		mouseDownCBs.insert({ mouseDownCBId,callback });
+		return mouseDownCBId;
+	}
+	size_t Element::onMouseUp(std::function<void(const MouseEvent&)> callback)
+	{
+		mouseDownCBId += 1;
+		mouseUpCBs.insert({ mouseUpCBId,callback });
+		return mouseDownCBId;
+	}
+
+	size_t Element::onMouseEnter(std::function<void(const MouseEvent&)> callback)
+	{
+		mouseEnterCBId += 1;
+		mouseEnterCBs.insert({ mouseEnterCBId,callback });
+		return mouseEnterCBId;
+	}
+
+	size_t Element::onMouseLeave(std::function<void(const MouseEvent&)> callback)
+	{
+		mouseLeaveCBId += 1;
+		mouseLeaveCBs.insert({ mouseLeaveCBId,callback });
+		return mouseLeaveCBId;
+	}
+
+	void Element::offMouseEnter(const size_t& callbackId)
+	{
+		mouseEnterCBs.erase(callbackId);
+	}
+	void Element::offMouseLeave(const size_t& callbackId)
+	{
+		mouseLeaveCBs.erase(callbackId);
+	}
+	void Element::offMouseMove(const size_t& callbackId)
+	{
+		mouseMoveCBs.erase(callbackId);
+	}
+	void Element::offMouseDown(const size_t& callbackId)
+	{
+		mouseDownCBs.erase(callbackId);
+	}
+	void Element::offMouseUp(const size_t& callbackId)
+	{
+		mouseUpCBs.erase(callbackId);
+	}
+
 	void Element::setBackgroundColor(const Color& backgroundColor)
 	{
 		this->backgroundColor = backgroundColor;
@@ -61,7 +176,7 @@ namespace Ling {
 	{
 		visual.Brush(win->compositor.CreateColorBrush(backgroundColor.getUIColor()));
 	}
-	void Element::insertChild(const int& index, const std::shared_ptr<Element>& ele)
+	void Element::insertChild(const int& index, Element* ele)
 	{
 		ele->parent = this;
 		ele->initProperty();
@@ -78,7 +193,7 @@ namespace Ling {
 		visual.Children().InsertAbove(ele->visual,v);
 		YGNodeInsertChild(node, ele->node, index);
 	}
-	void Element::addChild(const std::shared_ptr<Element>& ele)
+	void Element::addChild(Element* ele)
 	{
 		ele->parent = this;
 		ele->initProperty();

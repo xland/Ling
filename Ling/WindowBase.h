@@ -30,19 +30,19 @@ namespace Ling {
 		HWND getHandle();
 		float getScaleFactor();
 		void setPosScreenCenter();
-		std::shared_ptr<Element> makeElement();
-		std::shared_ptr<Text> makeText();
+		Element* makeElement();
+		Text* makeText();
 	public:
 		int x, y,w,h;
-		bool isMouseDown{ false },isMouseIn{ false };
+		bool isMouseDown{ false };
 		Composition::Compositor compositor;
 		std::unique_ptr<Element> body;
+		std::vector<std::unique_ptr<Element>> elements;
 	protected:
 		virtual LRESULT onHitTest(WPARAM wParam, LPARAM lParam);
 		virtual void onCreated() {};
 		virtual void onShown() {};
 		virtual void onHidden() {};
-		virtual void onMouseMove(const int& x, const int& y) {};
 		virtual void onMouseDrag(const int& x, const int& y,const UINT_PTR& modifiers) {};
 		virtual void onMouseDown(const int& x, const int& y, bool isRight) {};
 		virtual void onMouseDoubleClick(const int& x, const int& y, bool isRight) { onMouseDown(x, y, isRight); };

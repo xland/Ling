@@ -222,9 +222,9 @@ namespace Ling{
 
     void WindowBase::mouseMove(const int& x, const int& y)
     {
-        if (!isMouseIn)
+        if (!body->isMouseIn)
         {
-            isMouseIn = true;
+            body->isMouseIn = true;
             TRACKMOUSEEVENT tme{ sizeof(TRACKMOUSEEVENT) };
             tme.dwFlags = TME_LEAVE;
             tme.hwndTrack = hwnd;
@@ -233,13 +233,13 @@ namespace Ling{
         auto ele = body->hitTest(x, y);
         if (ele != hoverElement) {
             hoverElement = ele;
+            ele->mouseEnter(MouseEvent(x, y));
         }
-	    onMouseMove(x, y);
     }
 
     void WindowBase::mouseLeave()
     {
-	    isMouseIn = false;
+        body->isMouseIn = false;
         TRACKMOUSEEVENT tme{ sizeof(TRACKMOUSEEVENT) };
         tme.dwFlags = TME_CANCEL | TME_LEAVE;
         tme.hwndTrack = hwnd;
@@ -301,12 +301,18 @@ namespace Ling{
         x = (screenWidth - w) / 2 ;
         y = (screenHeight - h) / 2;
     }
-    std::shared_ptr<Element> WindowBase::makeElement()
+    Element* WindowBase::makeElement()
     {
-        return std::make_shared<Element>(this);
+        auto ele = std::make_unique<Element>(this);
+        auto result = ele.get();
+        elements.push_back(std::move(ele));
+        return result;
     }
-    std::shared_ptr<Text> WindowBase::makeText()
+    Text* WindowBase::makeText()
     {
-        return std::make_shared<Text>(this);
+        auto ele = std::make_unique<Text>(this);
+        auto result = ele.get();
+        elements.push_back(std::move(ele));
+        return result;
     }
 }

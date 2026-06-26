@@ -99,6 +99,12 @@
     <ClCompile Include="Ling\D2D.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Ling\MouseEvent.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\ButtonIcon.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ling\yoga\algorithm\AbsoluteLayout.h">
@@ -318,6 +324,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Ling\D2D.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\MouseEvent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\MouseButton.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\ButtonIcon.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -6,6 +6,8 @@
 #include "Align.h"
 #include "Justify.h"
 #include "FlexDirection.h"
+#include "MouseButton.h"
+#include "MouseEvent.h"
 
 namespace Ling {
 	class WindowBase;
@@ -14,11 +16,31 @@ namespace Ling {
 	public:
 		Element(WindowBase* win);
 		~Element();
-		void insertChild(const int& index, const std::shared_ptr<Element>& ele);
-		void addChild(const std::shared_ptr<Element>& ele);
+		void removeSelf();
+		void removeChild(Element* ele);
+		void insertChild(const int& index, Element* ele);
+		void addChild(Element* ele);
 		virtual void layout();
 		bool hover();
 		Element* hitTest(const int& x, const int& y);
+
+		void mouseEnter(const MouseEvent& event);
+		void mouseLeave(const MouseEvent& event);
+		void mouseMove(const MouseEvent& event);
+		void mouseDown(const MouseEvent& event);
+		void mouseUp(const MouseEvent& event);
+		size_t onMouseEnter(std::function<void(const MouseEvent&)> callback);
+		size_t onMouseLeave(std::function<void(const MouseEvent&)> callback);
+		size_t onMouseMove(std::function<void(const MouseEvent&)> callback);
+		size_t onMouseDown(std::function<void(const MouseEvent&)> callback);
+		size_t onMouseUp(std::function<void(const MouseEvent&)> callback);
+		void offMouseEnter(const size_t& callbackId);
+		void offMouseLeave(const size_t& callbackId);
+		void offMouseMove(const size_t& callbackId);
+		void offMouseDown(const size_t& callbackId);
+		void offMouseUp(const size_t& callbackId);
+
+
 		void setBackgroundColor(const Color& backgroundColor);
 		void setCursor(LPCWSTR cursor);
 		void setWidth(const float& w);
@@ -87,14 +109,25 @@ namespace Ling {
 		WindowBase* win{ nullptr };
 		Composition::SpriteVisual visual{ nullptr };
 		YGNodeRef node{ nullptr };
+		bool isMouseIn{ false };
 	protected:
 		virtual void initProperty();
 	protected:
 		Element* parent{ nullptr };
-		std::vector<std::shared_ptr<Element>> children;
+		std::vector<Element*> children;
 		float x{0.f}, y{ 0.f }, w{ 0.f }, h{ 0.f };
 		Color backgroundColor{0X00000000};
 		HCURSOR cursor{ nullptr };
 	private:
+		size_t mouseMoveCBId{ 0 };
+		std::unordered_map<size_t, std::function<void(const MouseEvent&)>> mouseMoveCBs;
+		size_t mouseDownCBId{ 0 };
+		std::unordered_map<size_t, std::function<void(const MouseEvent&)>> mouseDownCBs;
+		size_t mouseUpCBId{ 0 };
+		std::unordered_map<size_t, std::function<void(const MouseEvent&)>> mouseUpCBs;
+		size_t mouseEnterCBId{ 0 };
+		std::unordered_map<size_t, std::function<void(const MouseEvent&)>> mouseEnterCBs;
+		size_t mouseLeaveCBId{ 0 };
+		std::unordered_map<size_t, std::function<void(const MouseEvent&)>> mouseLeaveCBs;
 	};
 }

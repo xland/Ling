@@ -32,8 +32,6 @@ namespace Ling {
 
 	void Text::initProperty()
 	{
-		visual = win->compositor.CreateSpriteVisual();
-		//win = parent->win;
 		auto d2d = D2D::get();
 		surface = d2d->createDrawingSurface(win->compositor);
 		brush = win->compositor.CreateSurfaceBrush(surface);
