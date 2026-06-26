@@ -2,10 +2,11 @@
 
 #include "Header.h"
 #include <yoga/Yoga.h>
-#include "Element.h"
+#include "IElement.h"
 namespace Ling {
 	class Text;
 	class ButtonIcon;
+	class Box;
 	class WindowBase
 	{
 	public:
@@ -31,15 +32,15 @@ namespace Ling {
 		HWND getHandle();
 		float getScaleFactor();
 		void setPosScreenCenter();
-		Element* makeElement();
+		Box* makeBox();
 		Text* makeText();
 		ButtonIcon* makeButtonIcon();
 	public:
 		int x, y,w,h;
 		bool isMouseDown{ false },isMouseIn{ false };
 		Composition::Compositor compositor;
-		std::unique_ptr<Element> body;
-		std::vector<std::unique_ptr<Element>> elements;
+		std::unique_ptr<Box> body;
+		std::vector<std::unique_ptr<IElement>> elements;
 		float dpi{ 1.0 };
 	protected:
 		virtual LRESULT onHitTest(WPARAM wParam, LPARAM lParam);
@@ -72,6 +73,6 @@ namespace Ling {
 		HWND hwnd{ nullptr };
 		std::wstring title;
 		Composition::Desktop::DesktopWindowTarget winTarget{ nullptr };
-		Element* hoverElement;
+		IElement* hoverElement;
 	};
 }

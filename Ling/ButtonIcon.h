@@ -2,17 +2,17 @@
 #include "Element.h"
 #include "Text.h"
 namespace Ling{
-	class ButtonIcon : public Element
+	class ButtonIcon : public Element<ButtonIcon>
 	{
 	public:
 		ButtonIcon(WindowBase* win);
 		~ButtonIcon();
-		void setIcon(const std::wstring& code);  // 设置图标编码
-		void setcolorFore(const Color& color);
-		void setcolorHoverFore(const Color& color);
-		void setcolorBackground(const Color& color);
-		void setcolorHoverBackground(const Color& color);
-		void setFontSize(const float& fontSize);
+		ButtonIcon* setIcon(const std::wstring& code);  // 设置图标编码
+		ButtonIcon* setcolorFore(const Color& color);
+		ButtonIcon* setcolorHoverFore(const Color& color);
+		ButtonIcon* setcolorBackground(const Color& color);
+		ButtonIcon* setcolorHoverBackground(const Color& color);
+		ButtonIcon* setFontSize(const float& fontSize);
 	protected:
 		void initProperty() override;
 	private:

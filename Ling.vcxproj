@@ -155,13 +155,14 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Ling\IElement.cpp" />
     <ClCompile Include="Ling\ButtonIcon.cpp" />
     <ClCompile Include="Ling\D2D.cpp" />
     <ClCompile Include="Ling\Color.cpp" />
-    <ClCompile Include="Ling\Element.cpp" />
     <ClCompile Include="Ling\App.cpp" />
     <ClCompile Include="Demo.cpp" />
     <ClCompile Include="Ling\MouseEvent.cpp" />
+    <ClCompile Include="Ling\Box.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Ling\WindowBase.cpp" />
     <ClCompile Include="Ling\yoga\algorithm\AbsoluteLayout.cpp">
@@ -244,6 +245,7 @@
     <ClCompile Include="Ling\Text.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ling\IElement.h" />
     <ClInclude Include="Ling\ButtonIcon.h" />
     <ClInclude Include="Ling\D2D.h" />
     <ClInclude Include="Ling\Align.h" />
@@ -258,6 +260,7 @@
     <ClInclude Include="Ling\Justify.h" />
     <ClInclude Include="Ling\MouseButton.h" />
     <ClInclude Include="Ling\MouseEvent.h" />
+    <ClInclude Include="Ling\Box.h" />
     <ClInclude Include="Ling\WindowBase.h" />
     <ClInclude Include="Ling\Wrap.h" />
     <ClInclude Include="Ling\yoga\algorithm\AbsoluteLayout.h" />

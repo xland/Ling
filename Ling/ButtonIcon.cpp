@@ -1,7 +1,7 @@
 #include "ButtonIcon.h"
 #include "WindowBase.h"
 namespace Ling {
-	ButtonIcon::ButtonIcon(WindowBase* win) :Element(win)
+	ButtonIcon::ButtonIcon(WindowBase* win) :Element<ButtonIcon>(win)
 	{
 		iconText = win->makeText();
 		//onMouseEnter([this](const auto& e){
@@ -15,25 +15,30 @@ namespace Ling {
 	{
 
 	}
-	void ButtonIcon::setIcon(const std::wstring& code)
+	ButtonIcon* ButtonIcon::setIcon(const std::wstring& code)
 	{
 		this->code = code;
+		return this;
 	}
-	void ButtonIcon::setcolorFore(const Color& color)
+	ButtonIcon* ButtonIcon::setcolorFore(const Color& color)
 	{
 		colorFore = color;
+		return this;
 	}
-	void ButtonIcon::setcolorHoverFore(const Color& color)
+	ButtonIcon* ButtonIcon::setcolorHoverFore(const Color& color)
 	{
 		colorHoverFore = color;
+		return this;
 	}
-	void ButtonIcon::setcolorHoverBackground(const Color& color)
+	ButtonIcon* ButtonIcon::setcolorHoverBackground(const Color& color)
 	{
 		colorHoverBackground = color;
+		return this;
 	}
-	void ButtonIcon::setFontSize(const float& fontSize)
+	ButtonIcon* ButtonIcon::setFontSize(const float& fontSize)
 	{
 		this->fontSize = fontSize;
+		return this;
 	}
 	void ButtonIcon::initProperty()
 	{

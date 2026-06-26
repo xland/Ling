@@ -100,7 +100,7 @@ namespace Ling {
 	ComPtr<IDWriteTextLayout> D2D::createTextLayout(const std::wstring& text, const float& w, const float& h)
 	{
 		ComPtr<IDWriteTextLayout> layout;
-		dwriteFactory->CreateTextLayout(text.data(), text.length(), baseTextFormat.Get(), w, h, layout.GetAddressOf());
+		dwriteFactory->CreateTextLayout(text.data(), (UINT32)(text.length()), baseTextFormat.Get(), w, h, layout.GetAddressOf());
 		return layout;
 	}
 }

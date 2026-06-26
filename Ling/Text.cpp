@@ -2,7 +2,7 @@
 #include "D2D.h"
 #include "WindowBase.h"
 namespace Ling {
-	Text::Text(WindowBase* win):Element(win)
+	Text::Text(WindowBase* win):Element<Text>(win)
 	{
 	}
 

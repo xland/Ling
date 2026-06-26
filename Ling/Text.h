@@ -2,7 +2,7 @@
 #include "Header.h"
 #include "Element.h"
 namespace Ling{
-	class Text : public Element
+	class Text : public Element<Text>
 	{
 	public:
 		Text(WindowBase* win);

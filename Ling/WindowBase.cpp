@@ -3,6 +3,7 @@
 #include "WindowBase.h"
 #include "Text.h"
 #include "ButtonIcon.h"
+#include "Box.h"
 namespace Ling{
     WindowBase::WindowBase():compositor{ Composition::Compositor() }
     {
@@ -77,7 +78,7 @@ namespace Ling{
         auto interop = compositor.as<ABI::Windows::UI::Composition::Desktop::ICompositorDesktopInterop>();
         auto r = reinterpret_cast<ABI::Windows::UI::Composition::Desktop::IDesktopWindowTarget**>(winrt::put_abi(winTarget));
         interop->CreateDesktopWindowTarget(hwnd, false, r);
-        body = std::make_unique<Element>(this);
+        body = std::make_unique<Box>(this);
         Color c(0xFFFFFFFF);
         body->visual.Brush(compositor.CreateColorBrush(c.getUIColor()));
         body->setCursor(IDC_ARROW);
@@ -232,15 +233,15 @@ namespace Ling{
             TrackMouseEvent(&tme);
         }
 
-        Element* newHover = body->hitTest(x, y);
+        IElement* newHover = body->hitTest(x, y);
 
         if (newHover != hoverElement) {
             MouseEvent event(x, y);
             if (hoverElement) {
                 // 查找老的hoverElement和新的newHover的共同祖先
-                Element* commonAncestor = hoverElement->findAncestor(newHover);
+                IElement* commonAncestor = hoverElement->findAncestor(newHover);
                 // 从老的hoverElement向上触发mouseLeave，直到共同祖先
-                Element* current = hoverElement;
+                IElement* current = hoverElement;
                 while (current && current != commonAncestor) {
                     current->mouseLeave(event);
                     current = current->parent;
@@ -248,10 +249,10 @@ namespace Ling{
             }
             if (newHover) {
                 // 查找共同祖先
-                Element* commonAncestor = hoverElement ? newHover->findAncestor(hoverElement) : nullptr;
+                IElement* commonAncestor = hoverElement ? newHover->findAncestor(hoverElement) : nullptr;
                 // 从新 hover 元素向上触发 mouseEnter，直到共同祖先（不包含）
-                std::vector<Element*> pathToEnter;
-                Element* current = newHover;
+                std::vector<IElement*> pathToEnter;
+                IElement* current = newHover;
                 while (current && current != commonAncestor) {
                     pathToEnter.push_back(current);
                     current = current->parent;
@@ -277,7 +278,7 @@ namespace Ling{
         TrackMouseEvent(&tme);
         if (hoverElement) {
             MouseEvent event(0, 0);  // 离开时坐标不重要
-            Element* current = hoverElement;
+            IElement* current = hoverElement;
             while (current) {
                 current->mouseLeave(event);
                 current = current->parent;
@@ -340,9 +341,9 @@ namespace Ling{
         x = (screenWidth - w) / 2 ;
         y = (screenHeight - h) / 2;
     }
-    Element* WindowBase::makeElement()
+    Box* WindowBase::makeBox()
     {
-        auto ele = std::make_unique<Element>(this);
+        auto ele = std::make_unique<Box>(this);
         auto result = ele.get();
         elements.push_back(std::move(ele));
         return result;

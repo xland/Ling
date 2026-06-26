@@ -102,7 +102,10 @@
     <ClCompile Include="Ling\ButtonIcon.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Ling\Element.cpp">
+    <ClCompile Include="Ling\IElement.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Ling\Box.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -336,6 +339,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Ling\Element.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\IElement.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\Box.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,7 +2,6 @@
 #include "MouseButton.h"
 
 namespace Ling {
-	class Element;
 	class MouseEvent
 	{
 		public:
