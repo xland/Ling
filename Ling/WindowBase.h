@@ -40,6 +40,7 @@ namespace Ling {
 		Composition::Compositor compositor;
 		std::unique_ptr<Element> body;
 		std::vector<std::unique_ptr<Element>> elements;
+		float dpi{ 1.0 };
 	protected:
 		virtual LRESULT onHitTest(WPARAM wParam, LPARAM lParam);
 		virtual void onCreated() {};
@@ -70,7 +71,6 @@ namespace Ling {
 	private:
 		HWND hwnd{ nullptr };
 		std::wstring title;
-		float dpi{ 1.0 };
 		Composition::Desktop::DesktopWindowTarget winTarget{ nullptr };
 		Element* hoverElement;
 	};

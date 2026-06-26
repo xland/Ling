@@ -37,7 +37,7 @@ namespace Ling {
 		brush = win->compositor.CreateSurfaceBrush(surface);
 		visual.Brush(brush);
 		textLayout = d2d->createTextLayout(text, FLT_MAX, FLT_MAX);
-		textLayout->SetFontSize(fontSize, { 0,(unsigned int)text.length() });
+		textLayout->SetFontSize(fontSize * win->dpi, { 0,(unsigned int)text.length() });
 		textLayout->SetFontFamilyName(fontFamily.data(), {0,(unsigned int)text.length()});
 		YGNodeSetMeasureFunc(node, &Text::nodeMeasureCB);
 	}

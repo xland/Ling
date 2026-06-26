@@ -60,13 +60,13 @@ namespace Ling {
 		}
 	}
 
-	bool Element::hover()
+	bool Element::setCursor()
 	{
 		if (this->cursor) {
 			SetCursor(this->cursor);
 			return true;
 		}
-		else if (parent && parent->hover()) {
+		else if (parent && parent->setCursor()) {
 			return true;
 		}
 		return false;
@@ -137,16 +137,21 @@ namespace Ling {
 		backgroundColor = color;
 	}
 
+	void Element::setHoverBackgroundColor(const Color& color)
+	{
+		hoverBackgroundColor = color;
+	}
+
 	void Element::setCursor(LPCWSTR cursor) {
 		this->cursor = LoadCursor(NULL, cursor);
 	}
 
 	void Element::setWidth(const float& w) {
-		YGNodeStyleSetWidth(node, w);
+		YGNodeStyleSetWidth(node, w * win->dpi);
 	}
 
 	void Element::setHeight(const float& h) {
-		YGNodeStyleSetHeight(node, h);
+		YGNodeStyleSetHeight(node, h * win->dpi);
 	}
 
 	void Element::setSize(const float& w, const float& h) {
@@ -176,57 +181,54 @@ namespace Ling {
 	}
 
 	void Element::setMargin(const float& val) {
-		YGNodeStyleSetMargin(node, YGEdgeAll, val);
+		setMargin(val, val, val, val);
 	}
 
 	void Element::setMargin(const float& left, const float& top, const float& right, const float& bottom) {
-		YGNodeStyleSetMargin(node, YGEdgeLeft, left);
-		YGNodeStyleSetMargin(node, YGEdgeTop, top);
-		YGNodeStyleSetMargin(node, YGEdgeRight, right);
-		YGNodeStyleSetMargin(node, YGEdgeBottom, bottom);
+		setMarginLeft(left);setMarginTop(top);setMarginRight(right);setMarginBottom(bottom);
 	}
 
 	void Element::setMarginLeft(const float& val) {
-		YGNodeStyleSetMargin(node, YGEdge::YGEdgeLeft, val);
+		YGNodeStyleSetMargin(node, YGEdge::YGEdgeLeft, val * win->dpi);
 	}
 
 	void Element::setMarginTop(const float& val) {
-		YGNodeStyleSetMargin(node, YGEdge::YGEdgeTop, val);
+		YGNodeStyleSetMargin(node, YGEdge::YGEdgeTop, val * win->dpi);
 	}
 
 	void Element::setMarginRight(const float& val) {
-		YGNodeStyleSetMargin(node, YGEdge::YGEdgeRight, val);
+		YGNodeStyleSetMargin(node, YGEdge::YGEdgeRight, val * win->dpi);
 	}
 
 	void Element::setMarginBottom(const float& val) {
-		YGNodeStyleSetMargin(node, YGEdge::YGEdgeBottom, val);
+		YGNodeStyleSetMargin(node, YGEdge::YGEdgeBottom, val * win->dpi);
 	}
 
 	void Element::setPadding(const float& val) {
-		YGNodeStyleSetPadding(node, YGEdgeAll, val);
+		setPadding(val, val, val, val);
 	}
 
 	void Element::setPadding(const float& left, const float& top, const float& right, const float& bottom) {
-		YGNodeStyleSetPadding(node, YGEdgeLeft, left);
-		YGNodeStyleSetPadding(node, YGEdgeTop, top);
-		YGNodeStyleSetPadding(node, YGEdgeRight, right);
-		YGNodeStyleSetPadding(node, YGEdgeBottom, bottom);
+		setPaddingLeft(left);
+		setPaddingTop(top);
+		setPaddingRight(right);
+		setPaddingBottom(bottom);
 	}
 
 	void Element::setPaddingLeft(const float& val) {
-		YGNodeStyleSetPadding(node, YGEdgeLeft, val);
+		YGNodeStyleSetPadding(node, YGEdgeLeft, val * win->dpi);
 	}
 
 	void Element::setPaddingTop(const float& val) {
-		YGNodeStyleSetPadding(node, YGEdgeTop, val);
+		YGNodeStyleSetPadding(node, YGEdgeTop, val * win->dpi);
 	}
 
 	void Element::setPaddingRight(const float& val) {
-		YGNodeStyleSetPadding(node, YGEdgeRight, val);
+		YGNodeStyleSetPadding(node, YGEdgeRight, val * win->dpi);
 	}
 
 	void Element::setPaddingBottom(const float& val) {
-		YGNodeStyleSetPadding(node, YGEdgeBottom, val);
+		YGNodeStyleSetPadding(node, YGEdgeBottom, val * win->dpi);
 	}
 
 	void Element::setFlexWrap(const Wrap& val) {
@@ -309,13 +311,19 @@ namespace Ling {
 	// 事件触发方法
 	void Element::mouseEnter(const MouseEvent& event)
 	{
-		for (const auto& pair : mouseEnterCBs) {
+		if (!hoverBackgroundColor.isTransparent()) {  // 只有设置了才生效
+			visual.Brush(win->compositor.CreateColorBrush(hoverBackgroundColor.getUIColor()));
+		}
+		for (const auto& pair : mouseEnterCBs) { 
 			pair.second(event);
 		}
 	}
 
 	void Element::mouseLeave(const MouseEvent& event)
 	{
+		if (!hoverBackgroundColor.isTransparent()) {  // 只有设置了才生效
+			visual.Brush(win->compositor.CreateColorBrush(backgroundColor.getUIColor()));
+		}
 		for (const auto& pair : mouseLeaveCBs) {
 			pair.second(event);
 		}

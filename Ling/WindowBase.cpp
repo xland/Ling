@@ -93,7 +93,7 @@ namespace Ling{
     BOOL WindowBase::onCursor()
     {
         if (hoverElement) {
-            return hoverElement->hover();
+            return hoverElement->setCursor();
         }
         return FALSE;
     }

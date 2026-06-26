@@ -21,6 +21,7 @@ Demo::Demo()
 	btnIcon->setIcon(L"\ue62d");
 	btnIcon->setcolorFore(0xDD22DDFF);
 	btnIcon->setBackgroundColor(0x99DDDDFF);
+	btnIcon->setHoverBackgroundColor(0x99DD22FF);
 	top->addChild(btnIcon);
 
 	//auto closeBtn = makeElement();

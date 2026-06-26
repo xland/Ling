@@ -4,12 +4,12 @@ namespace Ling {
 	ButtonIcon::ButtonIcon(WindowBase* win) :Element(win)
 	{
 		iconText = win->makeText();
-		onMouseEnter([this](const auto& e){
-			visual.Brush(this->win->compositor.CreateColorBrush(colorHoverBackground.getUIColor()));
-		});
-		onMouseLeave([this](const auto& e) {
-			visual.Brush(this->win->compositor.CreateColorBrush(backgroundColor.getUIColor()));
-	     });
+		//onMouseEnter([this](const auto& e){
+		//	visual.Brush(this->win->compositor.CreateColorBrush(colorHoverBackground.getUIColor()));
+		//});
+		//onMouseLeave([this](const auto& e) {
+		//	visual.Brush(this->win->compositor.CreateColorBrush(backgroundColor.getUIColor()));
+	 //    });
 	}
 	ButtonIcon::~ButtonIcon()
 	{

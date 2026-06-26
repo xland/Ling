@@ -26,7 +26,7 @@ namespace Ling {
 		void insertChild(const int& index, Element* ele);
 		void addChild(Element* ele);
 		virtual void layout();
-		bool hover();
+		bool setCursor();
 		Element* hitTest(const int& x, const int& y);
 
 		// 事件方法
@@ -48,6 +48,7 @@ namespace Ling {
 
 		// set 方法（非链式，返回 void）
 		void setBackgroundColor(const Color& color);
+		void setHoverBackgroundColor(const Color& color);
 		void setCursor(LPCWSTR cursor);
 		void setWidth(const float& w);
 		void setHeight(const float& h);
@@ -104,6 +105,7 @@ namespace Ling {
 		std::vector<Element*> children;
 		float x{ 0.f }, y{ 0.f }, w{ 0.f }, h{ 0.f };
 		Color backgroundColor{ 0X00000000 };
+		Color hoverBackgroundColor{ 0X00000000 };
 		HCURSOR cursor{ nullptr };
 
 	private:
