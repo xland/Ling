@@ -2,6 +2,7 @@
 #include "Header.h"
 #include "Element.h"
 namespace Ling{
+	class WindowBase;
 	class Text : public Element<Text>
 	{
 	public:

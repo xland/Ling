@@ -1,8 +1,9 @@
-#include "WindowNative.h"
+﻿#include "WindowNative.h"
 #include "WindowBase.h"
+#include "Box.h"
 
 namespace Ling {
-    WindowNative::WindowNative(WindowBase* base) :base{base}
+    WindowNative::WindowNative():WindowElementManager()
     {
 
     }
@@ -68,6 +69,51 @@ namespace Ling {
     }
 
 
+    void WindowNative::setTitle(const std::wstring& title)
+    {
+        this->title = title;
+    }
+
+    std::wstring WindowNative::getTitle()
+    {
+        return title;
+    }
+    std::tuple<int, int> WindowNative::getPosition()
+    {
+        return std::make_tuple(x, y);
+    }
+
+    std::tuple<float, float> WindowNative::getSize()
+    {
+        return std::make_tuple(w, h);
+    }
+    void WindowNative::setSize(const float& w, const float& h)
+    {
+        this->w = w;
+        this->h = h;
+    }
+
+    void WindowNative::setPosition(const int& xWin, const int& yWin)
+    {
+        this->x = x;
+        this->y = y;
+    }
+    HWND WindowNative::getHandle()
+    {
+        return hwnd;
+    }
+    float WindowNative::getScaleFactor()
+    {
+        return dpi;
+    }
+    void WindowNative::setPosScreenCenter()
+    {
+        int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+        int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+        x = (screenWidth - w) / 2;
+        y = (screenHeight - h) / 2;
+    }
+
     void WindowNative::createNativeWindow(const DWORD& exStyle, const DWORD& style)
     {
         hwnd = CreateWindowEx(WS_EX_NOREDIRECTIONBITMAP | exStyle, getWinClsName().c_str(), NULL, style, x, y, w, h, NULL, NULL, GetModuleHandle(nullptr), NULL); //WS_POPUP
@@ -76,10 +122,7 @@ namespace Ling {
         auto interop = compositor.as<ABI::Windows::UI::Composition::Desktop::ICompositorDesktopInterop>();
         auto r = reinterpret_cast<ABI::Windows::UI::Composition::Desktop::IDesktopWindowTarget**>(winrt::put_abi(winTarget));
         interop->CreateDesktopWindowTarget(hwnd, false, r);
-        body = std::make_unique<Box>(this);
-        Color c(0xFFFFFFFF);
-        body->visual.Brush(compositor.CreateColorBrush(c.getUIColor()));
-        body->setCursor(IDC_ARROW);
+        initBody();
         winTarget.Root(body->visual);
         onCreated();
     }
@@ -140,7 +183,7 @@ namespace Ling {
             }
         }
         else if (msg == WM_SETCURSOR) {
-            if (LOWORD(lParam) == HTCLIENT) return self->onCursor();
+            if (LOWORD(lParam) == HTCLIENT) return self->setCursor();
         }
         else if (msg == WM_RBUTTONDOWN)
         {
@@ -223,41 +266,7 @@ namespace Ling {
             tme.hwndTrack = hwnd;
             TrackMouseEvent(&tme);
         }
-
-        IElement* newHover = body->hitTest(x, y);
-
-        if (newHover != hoverElement) {
-            MouseEvent event(x, y);
-            if (hoverElement) {
-                // 查找老的hoverElement和新的newHover的共同祖先
-                IElement* commonAncestor = hoverElement->findAncestor(newHover);
-                // 从老的hoverElement向上触发mouseLeave，直到共同祖先
-                IElement* current = hoverElement;
-                while (current && current != commonAncestor) {
-                    current->mouseLeave(event);
-                    current = current->parent;
-                }
-            }
-            if (newHover) {
-                // 查找共同祖先
-                IElement* commonAncestor = hoverElement ? newHover->findAncestor(hoverElement) : nullptr;
-                // 从新 hover 元素向上触发 mouseEnter，直到共同祖先（不包含）
-                std::vector<IElement*> pathToEnter;
-                IElement* current = newHover;
-                while (current && current != commonAncestor) {
-                    pathToEnter.push_back(current);
-                    current = current->parent;
-                }
-                // 从外到内触发（父元素先于子元素触发 enter）
-                for (auto it = pathToEnter.rbegin(); it != pathToEnter.rend(); ++it) {
-                    (*it)->mouseEnter(event);
-                }
-            }
-            hoverElement = newHover;
-        }
-        if (newHover) {
-            newHover->mouseMove(MouseEvent(x, y));
-        }
+        mouseEnterElement(x,y);
     }
 
     void WindowNative::mouseLeave()
@@ -267,24 +276,13 @@ namespace Ling {
         tme.dwFlags = TME_CANCEL | TME_LEAVE;
         tme.hwndTrack = hwnd;
         TrackMouseEvent(&tme);
-        if (hoverElement) {
-            MouseEvent event(0, 0);  // 离开时坐标不重要
-            IElement* current = hoverElement;
-            while (current) {
-                current->mouseLeave(event);
-                current = current->parent;
-            }
-            hoverElement = nullptr;
-        }
+        mouseLeaveElement();
     }
 
     void WindowNative::sizeChange(const int& w, const int& h)
     {
         this->w = w;
         this->h = h;
-        YGNodeStyleSetWidth(body->node, w);
-        YGNodeStyleSetHeight(body->node, h);
-        YGNodeCalculateLayout(body->node, w, h, YGDirectionLTR);
-        body->layout();
+        layout((float)w,(float)h);
     }
 }

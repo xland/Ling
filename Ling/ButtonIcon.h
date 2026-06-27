@@ -2,6 +2,7 @@
 #include "Element.h"
 #include "Text.h"
 namespace Ling{
+	class WindowBase;
 	class ButtonIcon : public Element<ButtonIcon>
 	{
 	public:

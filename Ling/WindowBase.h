@@ -1,62 +1,15 @@
 ﻿#pragma once
 
 #include "Header.h"
-#include <yoga/Yoga.h>
-#include "IElement.h"
+#include "WindowNative.h"
 namespace Ling {
-	class Text;
-	class ButtonIcon;
-	class Box;
-	class WindowBase
+	class WindowBase:public WindowNative
 	{
 	public:
 		WindowBase();
 		virtual ~WindowBase();
-		void setTimer(const UINT& elapse, const UINT& id);
-		void killTimer(const UINT& id);
-		void setTitle(const std::wstring& title);
-		std::wstring getTitle();
-		std::tuple<int,int> getPosition();
-		std::tuple<float, float> getSize();
-		void setSize(const float& w, const float& h);
-		void setPosition(const int& xWin, const int& yWin);
-		HWND getHandle();
-		float getScaleFactor();
-		void setPosScreenCenter();
-		Box* makeBox();
-		Text* makeText();
-		ButtonIcon* makeButtonIcon();
 	public:
-		int x, y,w,h;
-		bool isMouseDown{ false },isMouseIn{ false };
-		Composition::Compositor compositor;
-		std::unique_ptr<Box> body;
-		std::vector<std::unique_ptr<IElement>> elements;
-		float dpi{ 1.0 };
 	protected:
-		virtual LRESULT onHitTest(WPARAM wParam, LPARAM lParam);
-		virtual void onCreated() {};
-		virtual void onShown() {};
-		virtual void onHidden() {};
-		virtual void onMouseDrag(const int& x, const int& y,const UINT_PTR& modifiers) {};
-		virtual void onMouseDown(const int& x, const int& y, bool isRight) {};
-		virtual void onMouseDoubleClick(const int& x, const int& y, bool isRight) { onMouseDown(x, y, isRight); };
-		virtual void onMouseUp(const int& x, const int& y) {};
-		virtual void onKeyDown(const UINT& key) {};
-		virtual void onKeyUp() {};
-		virtual void onChar(const UINT& ch) {};
-		virtual void onMouseWheel(const int& x, const int& y, const short& delta) {};
-		virtual void onTimer(const UINT& timerId) {};
-		virtual BOOL onCursor();
-		virtual void onIme() {};
-		virtual void onBlur() {};
-		virtual void onDestroy() {};
-		virtual void onDpiChanged() {};
-
 	private:
-		HWND hwnd{ nullptr };
-		std::wstring title;
-		Composition::Desktop::DesktopWindowTarget winTarget{ nullptr };
-		IElement* hoverElement;
 	};
 }
