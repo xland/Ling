@@ -4,9 +4,8 @@
 #include "Box.h"
 
 namespace Ling {
-    WindowNative::WindowNative():WindowElementManager()
+    WindowNative::WindowNative() :WindowElementManager()
     {
-
     }
 
     WindowNative::~WindowNative()
@@ -167,12 +166,10 @@ namespace Ling {
         else if (msg == WM_MOUSEACTIVATE) {
             return MA_NOACTIVATE;
         }
-        else if (msg == WM_NCHITTEST)
-        {
+        else if (msg == WM_NCHITTEST) {
             return self->onHitTest(wParam, lParam);
         }
-        else if (msg == WM_ERASEBKGND)
-        {
+        else if (msg == WM_ERASEBKGND) {
             return 1;
         }
         else if (msg == WM_SHOWWINDOW) {
@@ -186,17 +183,14 @@ namespace Ling {
         else if (msg == WM_SETCURSOR) {
             if (LOWORD(lParam) == HTCLIENT) return self->setCursor();
         }
-        else if (msg == WM_RBUTTONDOWN)
-        {
+        else if (msg == WM_RBUTTONDOWN) {
             self->onMouseDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), true);
         }
-        else if (msg == WM_RBUTTONDBLCLK)
-        {
+        else if (msg == WM_RBUTTONDBLCLK) {
             self->onMouseDoubleClick(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), true);
             return 0;
         }
-        else if (msg == WM_LBUTTONDBLCLK)
-        {
+        else if (msg == WM_LBUTTONDBLCLK) {
             self->onMouseDoubleClick(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), false);
             return 0;
         }
@@ -257,15 +251,14 @@ namespace Ling {
 
     void WindowNative::mouseMove(const int& x, const int& y)
     {
-        if (!isMouseIn)
-        {
+        if (!isMouseIn) {
             isMouseIn = true;
             TRACKMOUSEEVENT tme{ sizeof(TRACKMOUSEEVENT) };
             tme.dwFlags = TME_LEAVE;
             tme.hwndTrack = hwnd;
             TrackMouseEvent(&tme);
         }
-        mouseEnterElement(x,y);
+        mouseEnterElement(x, y);
     }
 
     void WindowNative::mouseLeave()
@@ -284,7 +277,6 @@ namespace Ling {
         isMouseDown = true;
         onMouseDown(x, y, false);
         hoverElement->mouseDown(MouseEvent(x, y, MouseButton::Left));
-        
         //auto cur = hoverElement.parent;
         //while (cur) {
 
@@ -295,6 +287,6 @@ namespace Ling {
     {
         this->w = w;
         this->h = h;
-        layout((float)w,(float)h);
+        layout((float)w, (float)h);
     }
 }

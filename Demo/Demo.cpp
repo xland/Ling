@@ -5,6 +5,7 @@
 #include "Ling/Box.h"
 Demo::Demo()
 {
+
 	setTitle(L"Ling 示例窗口");
 	setSize(1000, 800);
 	setPosScreenCenter();
@@ -22,7 +23,7 @@ Demo::Demo()
 		->setBackgroundColor(0x99DDDDFF)
 		->setHoverBackgroundColor(0x99DD22FF);
 	btnIcon->onMouseDown([](const auto& e) {
-		log(L"allen");
+		//log(L"allen");
 		});
 	top->addChild(btnIcon);
 	body->setFlexDirection(Ling::FlexDirection::Column);

@@ -1,5 +1,7 @@
 ﻿#pragma once
 #define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+
 #include <string>
 #include <string_view>
 #include <ranges>
@@ -14,14 +16,15 @@
 #include <filesystem>
 #include <fstream>
 #include <stdexcept>
-#include <math.h>
+#include <cmath>
 
 #include <windows.h>
+#include <unknwn.h>
+#include <wrl.h>
 #include <windowsx.h>
 #include <winuser.h>
 #include <shlobj.h>
 #include <shlwapi.h>
-#include <wrl.h>
 #include <wincodec.h>
 #include <d3d11.h>
 #include <d2d1_1.h>
@@ -37,11 +40,11 @@
 #include <winrt/Windows.Foundation.Collections.h>
 #include <windows.ui.composition.interop.h> // 如果需要互操作
 
-#include <unknwn.h>
+
 using namespace Microsoft::WRL;
 using namespace winrt::Windows::Data::Json;
 using namespace winrt::Windows::UI;
-
+//
 template<typename... Args>
 void log(std::wstring_view fmt, Args&&... args)
 {
