@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "Header.h"
+#include "pch.h"
 namespace Ling {
 	class App
 	{

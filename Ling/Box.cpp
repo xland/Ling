@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Box.h"
 #include "WindowBase.h"
 namespace Ling {

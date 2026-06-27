@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "ButtonIcon.h"
 #include "WindowBase.h"
 namespace Ling {

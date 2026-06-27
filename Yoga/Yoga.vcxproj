@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="algorithm\AbsoluteLayout.cpp" />
+    <ClCompile Include="algorithm\Baseline.cpp" />
+    <ClCompile Include="algorithm\Cache.cpp" />
+    <ClCompile Include="algorithm\CalculateLayout.cpp" />
+    <ClCompile Include="algorithm\FlexLine.cpp" />
+    <ClCompile Include="algorithm\PixelGrid.cpp" />
+    <ClCompile Include="config\Config.cpp" />
+    <ClCompile Include="debug\AssertFatal.cpp" />
+    <ClCompile Include="debug\Log.cpp" />
+    <ClCompile Include="event\event.cpp" />
+    <ClCompile Include="node\LayoutResults.cpp" />
+    <ClCompile Include="node\Node.cpp" />
+    <ClCompile Include="YGConfig.cpp" />
+    <ClCompile Include="YGEnums.cpp" />
+    <ClCompile Include="YGNode.cpp" />
+    <ClCompile Include="YGNodeLayout.cpp" />
+    <ClCompile Include="YGNodeStyle.cpp" />
+    <ClCompile Include="YGPixelGrid.cpp" />
+    <ClCompile Include="YGValue.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="algorithm\AbsoluteLayout.h" />
+    <ClInclude Include="algorithm\Align.h" />
+    <ClInclude Include="algorithm\Baseline.h" />
+    <ClInclude Include="algorithm\BoundAxis.h" />
+    <ClInclude Include="algorithm\Cache.h" />
+    <ClInclude Include="algorithm\CalculateLayout.h" />
+    <ClInclude Include="algorithm\FlexDirection.h" />
+    <ClInclude Include="algorithm\FlexLine.h" />
+    <ClInclude Include="algorithm\PixelGrid.h" />
+    <ClInclude Include="algorithm\SizingMode.h" />
+    <ClInclude Include="algorithm\TrailingPosition.h" />
+    <ClInclude Include="config\Config.h" />
+    <ClInclude Include="debug\AssertFatal.h" />
+    <ClInclude Include="debug\Log.h" />
+    <ClInclude Include="enums\Align.h" />
+    <ClInclude Include="enums\BoxSizing.h" />
+    <ClInclude Include="enums\Dimension.h" />
+    <ClInclude Include="enums\Direction.h" />
+    <ClInclude Include="enums\Display.h" />
+    <ClInclude Include="enums\Edge.h" />
+    <ClInclude Include="enums\Errata.h" />
+    <ClInclude Include="enums\ExperimentalFeature.h" />
+    <ClInclude Include="enums\FlexDirection.h" />
+    <ClInclude Include="enums\GridTrackType.h" />
+    <ClInclude Include="enums\Gutter.h" />
+    <ClInclude Include="enums\Justify.h" />
+    <ClInclude Include="enums\LogLevel.h" />
+    <ClInclude Include="enums\MeasureMode.h" />
+    <ClInclude Include="enums\NodeType.h" />
+    <ClInclude Include="enums\Overflow.h" />
+    <ClInclude Include="enums\PhysicalEdge.h" />
+    <ClInclude Include="enums\PositionType.h" />
+    <ClInclude Include="enums\Unit.h" />
+    <ClInclude Include="enums\Wrap.h" />
+    <ClInclude Include="enums\YogaEnums.h" />
+    <ClInclude Include="event\event.h" />
+    <ClInclude Include="node\CachedMeasurement.h" />
+    <ClInclude Include="node\LayoutableChildren.h" />
+    <ClInclude Include="node\LayoutResults.h" />
+    <ClInclude Include="node\Node.h" />
+    <ClInclude Include="numeric\Comparison.h" />
+    <ClInclude Include="numeric\FloatOptional.h" />
+    <ClInclude Include="style\GridLine.h" />
+    <ClInclude Include="style\GridTrack.h" />
+    <ClInclude Include="style\SmallValueBuffer.h" />
+    <ClInclude Include="style\Style.h" />
+    <ClInclude Include="style\StyleLength.h" />
+    <ClInclude Include="style\StyleSizeLength.h" />
+    <ClInclude Include="style\StyleValueHandle.h" />
+    <ClInclude Include="style\StyleValuePool.h" />
+    <ClInclude Include="YGConfig.h" />
+    <ClInclude Include="YGEnums.h" />
+    <ClInclude Include="YGMacros.h" />
+    <ClInclude Include="YGNode.h" />
+    <ClInclude Include="YGNodeLayout.h" />
+    <ClInclude Include="YGNodeStyle.h" />
+    <ClInclude Include="YGPixelGrid.h" />
+    <ClInclude Include="YGValue.h" />
+    <ClInclude Include="Yoga.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>18.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{4a6ff0da-31ed-4301-b55c-6c4459f3385b}</ProjectGuid>
+    <RootNamespace>Yoga</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Manifest>
+      <EnableSegmentHeap>true</EnableSegmentHeap>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Manifest>
+      <EnableSegmentHeap>true</EnableSegmentHeap>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Manifest>
+      <EnableSegmentHeap>true</EnableSegmentHeap>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Manifest>
+      <EnableSegmentHeap>true</EnableSegmentHeap>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

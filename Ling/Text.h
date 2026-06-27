@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "Header.h"
+#include "pch.h"
 #include "Element.h"
 namespace Ling{
 	class WindowBase;

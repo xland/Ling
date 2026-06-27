@@ -1,5 +1,4 @@
-﻿
-#include "Header.h"
+﻿#include "pch.h"
 #include "WindowBase.h"
 #include "WindowNative.h"
 #include "Text.h"

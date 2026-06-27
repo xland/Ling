@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Screen.h"
 
 namespace Ling{

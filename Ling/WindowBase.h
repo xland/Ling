@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Header.h"
+#include "pch.h"
 #include "WindowNative.h"
 namespace Ling {
 	class WindowBase:public WindowNative

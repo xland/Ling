@@ -1,4 +1,5 @@
-﻿#include "WindowElementManager.h"
+﻿#include "pch.h"
+#include "WindowElementManager.h"
 #include "Box.h"
 #include "WindowBase.h"
 namespace Ling {

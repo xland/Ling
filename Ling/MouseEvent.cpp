@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "MouseEvent.h"
 #include "Element.h"
 
@@ -8,5 +9,9 @@ namespace Ling {
 
 	MouseEvent::~MouseEvent()
 	{
+	}
+	void MouseEvent::stopPropagation()
+	{
+		isStopPropagation = true;
 	}
 }

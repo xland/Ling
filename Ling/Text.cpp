@@ -1,4 +1,5 @@
-﻿#include "Text.h"
+﻿#include "pch.h"
+#include "Text.h"
 #include "D2D.h"
 #include "WindowBase.h"
 namespace Ling {

@@ -1,4 +1,5 @@
-﻿#include "WindowNative.h"
+﻿#include "pch.h"
+#include "WindowNative.h"
 #include "WindowBase.h"
 #include "Box.h"
 
@@ -55,8 +56,8 @@ namespace Ling {
         int value = 2;
         DwmSetWindowAttribute(hwnd, DWMWA_NCRENDERING_POLICY, &value, sizeof(value));
         DwmSetWindowAttribute(hwnd, DWMWA_ALLOW_NCPAINT, &value, sizeof(value));
-        DWM_WINDOW_CORNER_PREFERENCE preference = DWMWCP_DONOTROUND;
-        DwmSetWindowAttribute(hwnd, DWMWA_WINDOW_CORNER_PREFERENCE, &preference, sizeof(preference));
+        //DWM_WINDOW_CORNER_PREFERENCE preference = DWMWCP_DONOTROUND;
+        //DwmSetWindowAttribute(hwnd, DWMWA_WINDOW_CORNER_PREFERENCE, &preference, sizeof(preference));
     }
     void WindowNative::setTimer(const UINT& elapse, const UINT& id)
     {
@@ -283,6 +284,11 @@ namespace Ling {
         isMouseDown = true;
         onMouseDown(x, y, false);
         hoverElement->mouseDown(MouseEvent(x, y, MouseButton::Left));
+        
+        //auto cur = hoverElement.parent;
+        //while (cur) {
+
+        //}
     }
 
     void WindowNative::sizeChange(const int& w, const int& h)

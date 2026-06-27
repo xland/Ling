@@ -1,4 +1,5 @@
-﻿#include "D2D.h"
+﻿#include "pch.h"
+#include "D2D.h"
 namespace Ling {
 	static std::unique_ptr<D2D> d2d;
 	D2D::D2D()

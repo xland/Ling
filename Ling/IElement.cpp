@@ -1,4 +1,5 @@
-﻿#include "IElement.h"
+﻿#include "pch.h"
+#include "IElement.h"
 #include "WindowBase.h"
 namespace Ling {
 
