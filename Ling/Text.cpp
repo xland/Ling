@@ -11,24 +11,35 @@ namespace Ling {
 	{
 	}
 
-	void Text::setText(const std::wstring text)
+	Text* Text::setText(const std::wstring text)
 	{
 		this->text = text;
+		if (textLayout.Get()) {
+			auto d2d = D2D::get();
+			textLayout = d2d->createTextLayout(text, FLT_MAX, FLT_MAX);
+			textLayout->SetFontSize(fontSize * win->dpi, { 0,(unsigned int)text.length() });
+			textLayout->SetFontFamilyName(fontFamily.data(), { 0,(unsigned int)text.length() });
+			win->layout(win->w,win->h);
+		}
+		return this;
 	}
 
-	void Text::setFontSize(const float& fontSize)
+	Text* Text::setFontSize(const float& fontSize)
 	{
 		this->fontSize = fontSize;
+		return this;
 	}
 
-	void Text::setForeColor(const Color& color)
+	Text* Text::setForeColor(const Color& color)
 	{
 		foreColor = color;
+		return this;
 	}
 
-	void Text::setFontFamily(const std::wstring& fontFamily)
+	Text* Text::setFontFamily(const std::wstring& fontFamily)
 	{
 		this->fontFamily = fontFamily;
+		return this;
 	}
 
 	void Text::initProperty()

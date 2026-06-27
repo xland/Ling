@@ -13,10 +13,10 @@ namespace Ling{
 	public:
 		Text(WindowBase* win);
 		~Text();
-		void setText(const std::wstring text);
-		void setFontSize(const float& fontSize);
-		void setForeColor(const Color& color);
-		void setFontFamily(const std::wstring& fontFamily);
+		Text* setText(const std::wstring text);
+		Text* setFontSize(const float& fontSize);
+		Text* setForeColor(const Color& color);
+		Text* setFontFamily(const std::wstring& fontFamily);
 	protected:
 		void initProperty() override;
 		void layout() override;

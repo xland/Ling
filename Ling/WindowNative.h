@@ -37,7 +37,7 @@ namespace Ling {
 		virtual void onCreated() {};
 		virtual void onShown() {};
 		virtual void onHidden() {};
-		virtual LRESULT onHitTest(WPARAM wParam, LPARAM lParam);
+		virtual LRESULT onHitTest(const int& x,const int& y) { return HTCLIENT; };
 		virtual void onMouseDrag(const int& x, const int& y, const UINT_PTR& modifiers) {};
 		virtual void onMouseDown(const int& x, const int& y, bool isRight) {};
 		virtual void onMouseDoubleClick(const int& x, const int& y, bool isRight) { onMouseDown(x, y, isRight); };

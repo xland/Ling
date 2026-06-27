@@ -127,17 +127,12 @@ namespace Ling {
         onCreated();
     }
 
-    LRESULT WindowNative::onHitTest(WPARAM wParam, LPARAM lParam)
-    {
-        return DefWindowProc(hwnd, WM_NCHITTEST, wParam, lParam);
-    }
-
     std::wstring& WindowNative::getWinClsName()
     {
         static std::wstring clsName = [] {
             WNDCLASSEXW wcex;
             wcex.cbSize = sizeof(WNDCLASSEX);
-            wcex.style = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
+            wcex.style = CS_HREDRAW | CS_VREDRAW;
             wcex.lpfnWndProc = &WindowNative::winProc;
             wcex.cbClsExtra = 0;
             wcex.cbWndExtra = 0;
@@ -163,11 +158,22 @@ namespace Ling {
         if (!self) {
             return DefWindowProc(hwnd, msg, wParam, lParam);
         }
-        else if (msg == WM_MOUSEACTIVATE) {
-            return MA_NOACTIVATE;
-        }
         else if (msg == WM_NCHITTEST) {
-            return self->onHitTest(wParam, lParam);
+            auto x = GET_X_LPARAM(lParam) - self->x;
+            auto y = GET_Y_LPARAM(lParam) - self->y;
+            if (x > 0 && x < 100 && y>0 && y < 60) {
+                return HTCAPTION;
+            }
+            else if (x<0 || x>self->w || y<0 || y>self->h) {
+                return HTNOWHERE;
+            }
+            //if (hoverElement == titleBox) {
+            //	return HTCAPTION;
+            //}
+            else {
+                return HTCLIENT;
+            }
+            //return self->onHitTest(GET_X_LPARAM(lParam)-self->x, GET_Y_LPARAM(lParam)-self->y);
         }
         else if (msg == WM_ERASEBKGND) {
             return 1;
@@ -195,7 +201,7 @@ namespace Ling {
             return 0;
         }
         else if (msg == WM_LBUTTONDOWN) {
-            self->mouseDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), false);
+            //self->mouseDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), false);
         }
         else if (msg == WM_LBUTTONUP) {
             ReleaseCapture();
