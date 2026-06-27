@@ -56,12 +56,9 @@ Demo::~Demo()
 
 LRESULT Demo::onHitTest(const int& x, const int& y)
 {
-	if (x > 0 && x < 100 && y>0 && y < 60) {
+	if (titleBox->containPosition(x,y)) {
 		return HTCAPTION;
 	}
-	//if (hoverElement == titleBox) {
-	//	return HTCAPTION;
-	//}
 	else {
 		return HTCLIENT;
 	}

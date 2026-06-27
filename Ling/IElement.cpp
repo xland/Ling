@@ -79,6 +79,14 @@ namespace Ling {
 		return this;
 	}
 
+	bool IElement::containPosition(const int& x, const int& y)
+	{
+		if (x < xAbs || x > xAbs + w || y < yAbs || y > yAbs + h) {
+			return false;
+		}
+		return true;
+	}
+
 	void IElement::removeSelf()
 	{
 		if (!parent) return;

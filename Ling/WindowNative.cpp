@@ -93,7 +93,7 @@ namespace Ling {
         this->h = h;
     }
 
-    void WindowNative::setPosition(const int& xWin, const int& yWin)
+    void WindowNative::setPosition(const int& x, const int& y)
     {
         this->x = x;
         this->y = y;
@@ -132,7 +132,7 @@ namespace Ling {
         static std::wstring clsName = [] {
             WNDCLASSEXW wcex;
             wcex.cbSize = sizeof(WNDCLASSEX);
-            wcex.style = CS_HREDRAW | CS_VREDRAW;
+            wcex.style = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
             wcex.lpfnWndProc = &WindowNative::winProc;
             wcex.cbClsExtra = 0;
             wcex.cbWndExtra = 0;
@@ -159,21 +159,7 @@ namespace Ling {
             return DefWindowProc(hwnd, msg, wParam, lParam);
         }
         else if (msg == WM_NCHITTEST) {
-            auto x = GET_X_LPARAM(lParam) - self->x;
-            auto y = GET_Y_LPARAM(lParam) - self->y;
-            if (x > 0 && x < 100 && y>0 && y < 60) {
-                return HTCAPTION;
-            }
-            else if (x<0 || x>self->w || y<0 || y>self->h) {
-                return HTNOWHERE;
-            }
-            //if (hoverElement == titleBox) {
-            //	return HTCAPTION;
-            //}
-            else {
-                return HTCLIENT;
-            }
-            //return self->onHitTest(GET_X_LPARAM(lParam)-self->x, GET_Y_LPARAM(lParam)-self->y);
+            return self->onHitTest(GET_X_LPARAM(lParam)-self->x, GET_Y_LPARAM(lParam)-self->y);
         }
         else if (msg == WM_ERASEBKGND) {
             return 1;
@@ -221,7 +207,7 @@ namespace Ling {
             return 0;
         }
         else if (msg == WM_MOUSEWHEEL) {
-            POINT pt{ (short)GET_X_LPARAM(lParam), (short)GET_Y_LPARAM(lParam) };
+            POINT pt{ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
             ScreenToClient(hwnd, &pt);
             self->onMouseWheel(pt.x, pt.y, (short)HIWORD(wParam));
             return 0;
@@ -249,8 +235,11 @@ namespace Ling {
             return 0;
         }
         else if (msg == WM_SIZE) {
-            self->sizeChange(LOWORD(lParam), HIWORD(lParam));
+            self->sizeChange(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
             return 0;
+        }
+        else if (msg == WM_MOVE) {
+            self->positionChange(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
         }
         return DefWindowProc(hwnd, msg, wParam, lParam);
     }
@@ -296,5 +285,12 @@ namespace Ling {
         this->w = w;
         this->h = h;
         layout((float)w, (float)h);
+        onSizeChange(w, h);
+    }
+    void WindowNative::positionChange(const int& x, const int& y)
+    {
+        this->x = x;
+        this->y = y;
+        onPositionChange(x, y);
     }
 }

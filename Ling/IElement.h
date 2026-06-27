@@ -31,6 +31,7 @@ namespace Ling {
 		virtual void layout();
 		bool setCursor();
 		IElement* hitTest(const int& x, const int& y);
+		bool containPosition(const int& x, const int& y);
 
 		// 事件方法
 		void mouseEnter(const MouseEvent& event);

@@ -25,7 +25,7 @@ namespace Ling {
 		std::tuple<int, int> getPosition();
 		std::tuple<float, float> getSize();
 		void setSize(const float& w, const float& h);
-		void setPosition(const int& xWin, const int& yWin);
+		void setPosition(const int& x, const int& y);
 		HWND getHandle();
 		float getScaleFactor();
 		void setPosScreenCenter();
@@ -51,6 +51,8 @@ namespace Ling {
 		virtual void onBlur() {};
 		virtual void onDestroy() {};
 		virtual void onDpiChanged() {};
+		virtual void onSizeChange(const int& w, const int& h) {};
+		virtual void onPositionChange(const int& x, const int& y) {};
 	private:
 		std::wstring& getWinClsName();
 		static LRESULT CALLBACK winProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -60,6 +62,7 @@ namespace Ling {
 		void paint();
 		void dpiChange(WPARAM wParam, LPARAM lParam);
 		void sizeChange(const int& w, const int& h);
+		void positionChange(const int& x, const int& y);
 	private:
 		HWND hwnd{ nullptr };
 		std::wstring title;
