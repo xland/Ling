@@ -243,6 +243,7 @@
     </ClCompile>
     <ClCompile Include="Ling\Screen.cpp" />
     <ClCompile Include="Ling\Text.cpp" />
+    <ClCompile Include="Ling\WindowNative.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ling\IElement.h" />
@@ -324,6 +325,7 @@
     <ClInclude Include="Ling\yoga\Yoga.h" />
     <ClInclude Include="Ling\Screen.h" />
     <ClInclude Include="Ling\Text.h" />
+    <ClInclude Include="Ling\WindowNative.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Ling\Resource.rc" />

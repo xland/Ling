@@ -108,6 +108,9 @@
     <ClCompile Include="Ling\Box.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Ling\WindowNative.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ling\yoga\algorithm\AbsoluteLayout.h">
@@ -345,6 +348,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Ling\Box.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ling\WindowNative.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
