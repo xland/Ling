@@ -12,15 +12,6 @@ namespace Ling {
 	public:
 		WindowBase();
 		virtual ~WindowBase();
-		void show();
-		void hide();
-		void refresh();
-		void close();
-		void move(const int& x, const int& y);
-		void resize(const int& w, const int& h);
-		void createNativeWindow(const DWORD& exStyle=NULL, const DWORD& style=NULL);
-		HRESULT createBitmap();
-		void enableShadow();
 		void setTimer(const UINT& elapse, const UINT& id);
 		void killTimer(const UINT& id);
 		void setTitle(const std::wstring& title);
@@ -61,14 +52,7 @@ namespace Ling {
 		virtual void onBlur() {};
 		virtual void onDestroy() {};
 		virtual void onDpiChanged() {};
-	private:
-		std::wstring& getWinClsName();
-		static LRESULT CALLBACK winProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
-		void mouseMove(const int& x, const int& y);
-		void mouseLeave();
-		void paint();
-		void dpiChange(WPARAM wParam, LPARAM lParam);
-		void sizeChange(const int& w, const int& h);
+
 	private:
 		HWND hwnd{ nullptr };
 		std::wstring title;
