@@ -116,7 +116,7 @@ namespace Ling {
 
     void WindowNative::createNativeWindow(const DWORD& exStyle, const DWORD& style)
     {
-        hwnd = CreateWindowEx(WS_EX_NOREDIRECTIONBITMAP | exStyle, getWinClsName().c_str(), NULL, style, x, y, w, h, NULL, NULL, GetModuleHandle(nullptr), NULL); //WS_POPUP
+        hwnd = CreateWindowEx(WS_EX_NOREDIRECTIONBITMAP | exStyle, getWinClsName().data(), title.data(), style, x, y, w, h, NULL, NULL, GetModuleHandle(nullptr), NULL); //WS_POPUP
         SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
         dpi = GetDpiForWindow(hwnd) / 96.0f;
         auto interop = compositor.as<ABI::Windows::UI::Composition::Desktop::ICompositorDesktopInterop>();
@@ -187,7 +187,7 @@ namespace Ling {
             return 0;
         }
         else if (msg == WM_LBUTTONDOWN) {
-            //self->mouseDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), false);
+            self->mouseDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), false);
         }
         else if (msg == WM_LBUTTONUP) {
             ReleaseCapture();

@@ -2,6 +2,7 @@
 #include "App.h"
 
 namespace Ling {
+    static std::unique_ptr<App> app;
     Ling::App::App()
     {
     }
@@ -18,10 +19,21 @@ namespace Ling {
             MessageBox(NULL, L"无法创建DispatcherQueueController", L"系统提示", MB_OK);
             ExitProcess(-1);
         }
+        auto ptr = new App();
+        app.reset(ptr);
+    }
+
+    App* App::get()
+    {
+        return app.get();
     }
 
     Ling::App::~App()
     {
+    }
+    void App::quit(const int& code)
+    {
+        PostQuitMessage(code);
     }
 }
 

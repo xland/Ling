@@ -1,12 +1,13 @@
 ﻿#include "Demo.h"
+#include "Ling/App.h"
 #include "Ling/WindowBase.h"
 #include "Ling/Text.h"
 #include "Ling/ButtonIcon.h"
 #include "Ling/Box.h"
 Demo::Demo()
 {
-
-	setTitle(L"Ling 示例窗口");
+	std::wstring winTitle{ L"Ling 示例窗口" };
+	setTitle(winTitle);
 	setSize(1000, 800);
 	setPosScreenCenter();
 	createNativeWindow(0, WS_POPUP| WS_MAXIMIZEBOX | WS_MINIMIZEBOX); //必须先创建窗口，再创建元素
@@ -26,7 +27,7 @@ Demo::Demo()
 	top->addChild(titleBox);
 
 	auto title = makeText()
-		->setText(L"窗口标题")
+		->setText(winTitle)
 		->setForeColor(0x000000ff)
 		->setFontSize(14.f)
 		->setFlexShrink(1.f);
@@ -38,9 +39,10 @@ Demo::Demo()
 		->setIcon(L"\ue62d")
 		->setcolorFore(0xDD22DDFF)
 		->setHoverBackgroundColor(0x99DD22FF);
-	btnIcon->onMouseDown([title](const auto& e) {
-		title->setText(L"这是修改过的标题！！！");
+	btnIcon->onMouseDown([this](const auto& e) {
+		this->close();
 		OutputDebugString(L"allen");
+		Ling::App::get()->quit(0);
 	});	
 	top->addChild(btnIcon);
 
