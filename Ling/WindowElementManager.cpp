@@ -1,7 +1,6 @@
 ﻿#include "WindowElementManager.h"
-#include "Text.h"
-#include "ButtonIcon.h"
 #include "Box.h"
+#include "WindowBase.h"
 namespace Ling {
     WindowElementManager::WindowElementManager():compositor{ Composition::Compositor() }
     {
@@ -9,36 +8,17 @@ namespace Ling {
     WindowElementManager::~WindowElementManager()
     {
     }
-    Box* WindowElementManager::makeBox()
-    {
-        auto ele = std::make_unique<Box>(this);
-        auto result = ele.get();
-        elements.push_back(std::move(ele));
-        return result;
-    }
-    Text* WindowElementManager::makeText()
-    {
-        auto ele = std::make_unique<Text>(this);
-        auto result = ele.get();
-        elements.push_back(std::move(ele));
-        return result;
-    }
-    ButtonIcon* WindowElementManager::makeButtonIcon()
-    {
-        auto ele = std::make_unique<ButtonIcon>(this);
-        auto result = ele.get();
-        elements.push_back(std::move(ele));
-        return result;
-    }
+    
     void WindowElementManager::layout(const float& w, const float& h)
     {
-        body->setSize(w, h);
+        YGNodeStyleSetWidth(body->node, w);
+        YGNodeStyleSetHeight(body->node, h);
         YGNodeCalculateLayout(body->node, w, h, YGDirectionLTR);
         body->layout();
     }
     void WindowElementManager::initBody()
     {
-        body = std::make_unique<Box>(this);
+        body = std::make_unique<Box>((WindowBase*)this);
         Color c(0xFFFFFFFF);
         body->visual.Brush(compositor.CreateColorBrush(c.getUIColor()));
         body->setCursor(IDC_ARROW);

@@ -1,5 +1,5 @@
 #include "Box.h"
-#include "WindowElementManager.h"
+#include "WindowBase.h"
 namespace Ling {
 	Box::Box(WindowBase* win) :Element<Box>(win)
 	{

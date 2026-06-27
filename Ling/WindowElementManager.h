@@ -11,9 +11,6 @@ namespace Ling {
 	public:
 		WindowElementManager();
 		virtual ~WindowElementManager();
-		Box* makeBox();
-		Text* makeText();
-		ButtonIcon* makeButtonIcon();
 		void layout(const float& w,const float& h);
 	public:
 		std::unique_ptr<Box> body;
