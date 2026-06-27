@@ -38,7 +38,7 @@
 #include <winrt/Windows.Graphics.DirectX.Direct3D11.h>
 #include <winrt/Windows.Data.Json.h>
 #include <winrt/Windows.Foundation.Collections.h>
-#include <windows.ui.composition.interop.h> // 如果需要互操作
+#include <Windows.UI.Composition.Interop.h> // 如果需要互操作
 
 
 using namespace Microsoft::WRL;

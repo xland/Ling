@@ -1,7 +1,8 @@
 #pragma once
-#include "pch.h"
 #include <string>
 #include <cstdint>
+#include <d2d1_1.h>
+#include <winrt/Windows.UI.h>
 
 namespace Ling {
 	class Color
@@ -10,16 +11,16 @@ namespace Ling {
 		Color();
 		Color(const uint8_t& r, const uint8_t& g, const uint8_t& b, const uint8_t& a=255);
 		/// <summary>
-		/// 传入0x000000FF 得到黑色
-		/// 传入0xFFFFFFFF 得到白色
-		/// 传入0x00000000 得到透明
+		/// 浼犲叆0x000000FF 寰楀埌榛戣壊
+		/// 浼犲叆0xFFFFFFFF 寰楀埌鐧借壊
+		/// 浼犲叆0x00000000 寰楀埌閫忔槑
 		/// </summary>
 		/// <param name="argb"></param>
 		Color(const uint32_t& rgba);
 		/// <summary>
-		/// 传入"000000FF" 得到黑色
-		/// 传入"FFFFFFFF" 得到白色
-		/// 传入"00000000" 得到透明
+		/// 浼犲叆"000000FF" 寰楀埌榛戣壊
+		/// 浼犲叆"FFFFFFFF" 寰楀埌鐧借壊
+		/// 浼犲叆"00000000" 寰楀埌閫忔槑
 		/// </summary>
 		/// <param name="rgbaStr"></param>
 		Color(const std::string& rgbaStr);

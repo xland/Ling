@@ -1,7 +1,10 @@
 ﻿#pragma once
+#include <winrt/Windows.UI.Composition.h>
+#include <winrt/Windows.UI.Composition.Desktop.h>
 #include "WindowElementManager.h"
 
 namespace Ling {
+	using namespace winrt::Windows::UI;
 	class WindowNative:public WindowElementManager
 	{
 	public:

@@ -14,5 +14,6 @@ namespace Ling {
 	void MouseEvent::stopPropagation()
 	{
 		isStopPropagation = true;
+		
 	}
 }

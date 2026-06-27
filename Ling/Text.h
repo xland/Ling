@@ -1,7 +1,12 @@
 ﻿#pragma once
-#include "pch.h"
+#include <string>
+#include <wrl.h>
+#include <dwrite_3.h>
+#include <yoga/Yoga.h>
+#include <winrt/Windows.UI.Composition.h>
 #include "Element.h"
 namespace Ling{
+	using namespace Microsoft::WRL;
 	class WindowBase;
 	class Text : public Element<Text>
 	{

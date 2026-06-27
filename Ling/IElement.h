@@ -1,6 +1,10 @@
 ﻿#pragma once
-#include "pch.h"
+#include <functional>
+#include <vector>
+#include <unordered_map>
+#include <Windows.h>
 #include <yoga/Yoga.h>
+#include <winrt/Windows.UI.Composition.h>
 #include "Color.h"
 #include "Wrap.h"
 #include "Align.h"
@@ -10,6 +14,7 @@
 #include "MouseEvent.h"
 
 namespace Ling {
+	using namespace winrt::Windows::UI;
 	class WindowBase;
 	class IElement
 	{
@@ -64,6 +69,7 @@ namespace Ling {
 		Composition::SpriteVisual visual{ nullptr };
 		YGNodeRef node{ nullptr };
 		IElement* parent{ nullptr };
+		std::wstring id;
 	protected:
 		virtual void initProperty() {};
 	protected:

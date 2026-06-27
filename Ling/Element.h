@@ -9,6 +9,10 @@ namespace Ling {
 	public:
 		Element(WindowBase* win) :IElement(win) {}
 		virtual ~Element() {}
+		Derived* setId(const std::wstring& id) {
+			this->id = id;
+			return static_cast<Derived*>(this);
+		}
 		Derived* setBackgroundColor(const Color& color) {
 			backgroundColor = color;
 			return static_cast<Derived*>(this);

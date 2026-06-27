@@ -1,5 +1,10 @@
 #pragma once
-#include "pch.h"
+#include <string>
+#include <wrl.h>
+#include <d2d1_1.h>
+#include <dwrite_3.h>
+#include <winrt/Windows.UI.Composition.h>
+using namespace Microsoft::WRL;
 namespace Ling {
 	class D2D
 	{

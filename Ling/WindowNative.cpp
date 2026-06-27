@@ -268,7 +268,7 @@ namespace Ling {
         tme.dwFlags = TME_CANCEL | TME_LEAVE;
         tme.hwndTrack = hwnd;
         TrackMouseEvent(&tme);
-        mouseLeaveElement();
+        mouseLeaveElement();        
     }
 
     void WindowNative::mouseDown(const int& x, const int& y, bool isRight)
@@ -276,11 +276,13 @@ namespace Ling {
         SetCapture(hwnd);
         isMouseDown = true;
         onMouseDown(x, y, false);
-        hoverElement->mouseDown(MouseEvent(x, y, MouseButton::Left));
-        //auto cur = hoverElement.parent;
-        //while (cur) {
-
-        //}
+        MouseEvent e(x, y, MouseButton::Left);
+        hoverElement->mouseDown(e);
+        auto cur = hoverElement->parent;
+        while (cur) {
+            cur->mouseDown(e);
+            cur = cur->parent;
+        }
     }
 
     void WindowNative::sizeChange(const int& w, const int& h)

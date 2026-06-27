@@ -1,8 +1,12 @@
 ﻿#pragma once
-#include "pch.h"
+#include <vector>
+#include <memory>
+#include <Windows.h>
 #include <yoga/Yoga.h>
+#include <winrt/Windows.UI.Composition.h>
 #include "IElement.h"
 namespace Ling {
+	using namespace winrt::Windows::UI;
 	class Text;
 	class ButtonIcon;
 	class Box;

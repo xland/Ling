@@ -1,5 +1,5 @@
 #pragma once
-#include "pch.h"
+#include <tuple>
 namespace Ling {
 	class Screen
 	{
