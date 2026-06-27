@@ -21,7 +21,8 @@ namespace Ling {
 		void mouseEnterElement(const int& x,const int& y);
 		void mouseLeaveElement();
 		BOOL setCursor();
-	private:
+	protected:
 		IElement* hoverElement;
+	private:
 	};
 }

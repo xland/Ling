@@ -21,6 +21,9 @@ Demo::Demo()
 		->setcolorFore(0xDD22DDFF)
 		->setBackgroundColor(0x99DDDDFF)
 		->setHoverBackgroundColor(0x99DD22FF);
+	btnIcon->onMouseDown([](const auto& e) {
+		log(L"allen");
+		});
 	top->addChild(btnIcon);
 	body->setFlexDirection(Ling::FlexDirection::Column);
 	body->addChild(top);

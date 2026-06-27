@@ -200,9 +200,7 @@ namespace Ling {
             return 0;
         }
         else if (msg == WM_LBUTTONDOWN) {
-            SetCapture(hwnd);
-            self->isMouseDown = true;
-            self->onMouseDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), false);
+            self->mouseDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), false);
         }
         else if (msg == WM_LBUTTONUP) {
             ReleaseCapture();
@@ -277,6 +275,14 @@ namespace Ling {
         tme.hwndTrack = hwnd;
         TrackMouseEvent(&tme);
         mouseLeaveElement();
+    }
+
+    void WindowNative::mouseDown(const int& x, const int& y, bool isRight)
+    {
+        SetCapture(hwnd);
+        isMouseDown = true;
+        onMouseDown(x, y, false);
+        hoverElement->mouseDown(MouseEvent(x, y, MouseButton::Left));
     }
 
     void WindowNative::sizeChange(const int& w, const int& h)

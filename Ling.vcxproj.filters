@@ -368,4 +368,7 @@
   <ItemGroup>
     <Font Include="Ling\iconfont.ttf" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Ling\Ling.props" />
+  </ItemGroup>
 </Project>

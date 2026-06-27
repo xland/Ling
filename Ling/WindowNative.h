@@ -53,6 +53,7 @@ namespace Ling {
 		static LRESULT CALLBACK winProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		void mouseMove(const int& x, const int& y);
 		void mouseLeave();
+		void mouseDown(const int& x, const int& y, bool isRight);
 		void paint();
 		void dpiChange(WPARAM wParam, LPARAM lParam);
 		void sizeChange(const int& w, const int& h);
