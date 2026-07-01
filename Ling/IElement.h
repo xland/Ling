@@ -54,12 +54,10 @@ namespace Ling {
 		float getTop();
 		float getWidth();
 		float getHeight();
-
 		float getMarginLeft();
 		float getMarginTop();
 		float getMarginRight();
 		float getMarginBottom();
-
 		float getPaddingLeft();
 		float getPaddingTop();
 		float getPaddingRight();
