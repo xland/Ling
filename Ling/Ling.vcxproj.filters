@@ -75,7 +75,7 @@
     <ClInclude Include="Wrap.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Style\StyleBase.h">
+    <ClInclude Include="Property.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -119,7 +119,7 @@
     <ClCompile Include="WindowNative.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Style\StyleBase.cpp">
+    <ClCompile Include="Property.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

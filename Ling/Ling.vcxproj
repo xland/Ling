@@ -178,7 +178,7 @@
     <ClInclude Include="MouseEvent.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Screen.h" />
-    <ClInclude Include="Style\StyleBase.h" />
+    <ClInclude Include="Property.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="WindowBase.h" />
     <ClInclude Include="WindowElementManager.h" />
@@ -200,7 +200,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Screen.cpp" />
-    <ClCompile Include="Style\StyleBase.cpp" />
+    <ClCompile Include="Property.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="WindowBase.cpp" />
     <ClCompile Include="WindowElementManager.cpp" />
