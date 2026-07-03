@@ -23,6 +23,8 @@ namespace Ling {
 		const std::wstring& getStr(const std::wstring& name);
 	private:
 		void notifyChange(const std::wstring& name, const std::variant<float, int, bool, std::wstring>& value);
+		bool setFloat(const PropertyType& type, const float& value);
+		void set(const PropertyType& type, const int& value);
 	private:
 		std::unordered_map<PropertyType, float> dataFloat;
 		std::unordered_map<PropertyType, int> dataInt;

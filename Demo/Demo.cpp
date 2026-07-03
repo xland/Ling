@@ -15,11 +15,11 @@ Demo::Demo()
 	enableShadow();
 
 	auto prop = std::make_shared<Ling::Property>();
-	prop->onChangeFloat([this](const std::wstring& name, const float& val) {
-		int a = 1;
-	});
+	//prop->onChangeFloat([this](const std::wstring& name, const float& val) {
+	//	int a = 1;
+	//});
 
-	prop->set(L"test", 1.f);
+	//prop->set(L"test", 1.f);
 
 	auto titleBarH{ 36.f };
 	auto top = makeBox()

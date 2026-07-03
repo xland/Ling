@@ -13,20 +13,14 @@ namespace Ling {
 	void Property::set(const PropertyType& type, const std::variant<float, int, bool, std::wstring>& value)
 	{
 		if (type == PropertyType::Width) {
-
+			auto& val = std::get<float>(value);
+			if (setFloat(type, val)) {
+				for (auto& ele: elements)
+				{
+					//ele.setWidth(std::get<float>(value));
+				}
+			}
 		}
-
-
-		//if (dataFloat.contains(name)) {
-		//	if (dataFloat[name] != val) {
-		//		dataFloat[name] = val;
-		//		notifyChange(name, val);
-		//	}
-		//}
-		//else {
-		//	dataFloat.insert({ name,val });
-		//	notifyChange(name, val);
-		//}
 	}
 
 	void Property::notifyChange(const std::wstring& name, const std::variant<float, int, bool, std::wstring>& value)
@@ -35,6 +29,20 @@ namespace Ling {
 		{
 			ele->changeProperty(name, value);
 		}
+	}
+	bool Property::setFloat(const PropertyType& type, const float& value)
+	{
+		if (dataFloat.contains(type)) {
+			if (dataFloat[type] != value) {
+				dataFloat[type] = value;
+				return true;
+			}
+		}
+		else {
+			dataFloat.insert({ type,value });
+			return true;
+		}
+		return false;
 	}
 	const float& Property::getFloat(const std::wstring& name)
 	{
