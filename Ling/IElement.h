@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <Windows.h>
 #include <yoga/Yoga.h>
+#include <variant>
 #include <winrt/Windows.UI.Composition.h>
 #include "Color.h"
 #include "Wrap.h"
@@ -32,6 +33,7 @@ namespace Ling {
 		bool setCursor();
 		IElement* hitTest(const int& x, const int& y);
 		bool containPosition(const int& x, const int& y);
+		void changeProperty(const std::wstring& name, const std::variant<float, int, bool, std::wstring>& value);
 
 		// 事件方法
 		void mouseEnter(const MouseEvent& event);
@@ -49,19 +51,6 @@ namespace Ling {
 		void offMouseMove(const size_t& callbackId);
 		void offMouseDown(const size_t& callbackId);
 		void offMouseUp(const size_t& callbackId);
-		// get 方法
-		float getLeft();
-		float getTop();
-		float getWidth();
-		float getHeight();
-		float getMarginLeft();
-		float getMarginTop();
-		float getMarginRight();
-		float getMarginBottom();
-		float getPaddingLeft();
-		float getPaddingTop();
-		float getPaddingRight();
-		float getPaddingBottom();
 	public:
 		float xAbs{ 0.f }, yAbs{ 0.f };
 		WindowBase* win{ nullptr };

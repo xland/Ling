@@ -236,66 +236,7 @@ namespace Ling {
 			pair.second(event);
 		}
 	}
-	// get 方法
-	float IElement::getLeft()
-	{
-		return YGNodeLayoutGetLeft(node);
-	}
-
-	float IElement::getTop()
-	{
-		return YGNodeLayoutGetTop(node);
-	}
-
-	float IElement::getWidth()
-	{
-		return YGNodeLayoutGetWidth(node);
-	}
-
-	float IElement::getHeight()
-	{
-		return YGNodeLayoutGetHeight(node);
-	}
-
-	float IElement::getMarginLeft()
-	{
-		return YGNodeStyleGetMargin(node, YGEdge::YGEdgeLeft).value;
-	}
-
-	float IElement::getMarginTop()
-	{
-		return YGNodeStyleGetMargin(node, YGEdge::YGEdgeTop).value;
-	}
-
-	float IElement::getMarginRight()
-	{
-		return YGNodeStyleGetMargin(node, YGEdge::YGEdgeRight).value;
-	}
-
-	float IElement::getMarginBottom()
-	{
-		return YGNodeStyleGetMargin(node, YGEdge::YGEdgeBottom).value;
-	}
-
-	float IElement::getPaddingLeft()
-	{
-		return YGNodeStyleGetPadding(node, YGEdge::YGEdgeLeft).value;
-	}
-
-	float IElement::getPaddingTop()
-	{
-		return YGNodeStyleGetPadding(node, YGEdge::YGEdgeTop).value;
-	}
-
-	float IElement::getPaddingRight()
-	{
-		return YGNodeStyleGetPadding(node, YGEdge::YGEdgeRight).value;
-	}
-
-	float IElement::getPaddingBottom()
-	{
-		return YGNodeStyleGetPadding(node, YGEdge::YGEdgeBottom).value;
-	}
+	
 }
 
 

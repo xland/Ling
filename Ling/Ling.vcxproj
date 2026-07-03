@@ -177,6 +177,7 @@
     <ClInclude Include="MouseButton.h" />
     <ClInclude Include="MouseEvent.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="PropertyType.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="Property.h" />
     <ClInclude Include="Text.h" />

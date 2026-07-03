@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include "Property.h"
+#include "IElement.h"
 namespace Ling {
 	Property::Property()
 	{
@@ -9,124 +10,46 @@ namespace Ling {
 	{
 	}
 
-	winrt::event_token Property::onChangeFloat(winrt::delegate<void(const std::wstring&, const float&)> const& handler)
+	void Property::set(const PropertyType& type, const std::variant<float, int, bool, std::wstring>& value)
 	{
-		return eventsFloat.add(handler);
-	}
+		if (type == PropertyType::Width) {
 
-
-	winrt::event_token Property::onChangeInt(winrt::delegate<void(const std::wstring&, const int&)> const& handler)
-	{
-		return eventsInt.add(handler);
-	}
-	
-	winrt::event_token Property::onChangeBool(winrt::delegate<void(const std::wstring&, const bool&)> const& handler)
-	{
-		return eventsBool.add(handler);
-	}
-
-	winrt::event_token Property::onChangeStr(winrt::delegate<void(const std::wstring&, const std::wstring&)> const& handler)
-	{
-		return eventsStr.add(handler);
-	}
-
-
-	void Property::offChangeFloat(winrt::event_token const& token)
-	{
-		eventsFloat.remove(token);
-	}
-
-	void Property::offChangeInt(winrt::event_token const& token)
-	{
-		eventsInt.remove(token);
-	}
-
-	void Property::offChangeBool(winrt::event_token const& token)
-	{
-		eventsBool.remove(token);
-	}
-
-	void Property::offChangeStr(winrt::event_token const& token)
-	{
-		eventsStr.remove(token);
-	}
-
-
-
-	void Property::set(const std::wstring& name, const float& val)
-	{
-		if (dataFloat.contains(name)) {
-			if (dataFloat[name] != val) {
-				dataFloat[name] = val;
-				eventsFloat(name, val);
-			}
 		}
-		else {
-			dataFloat.insert({ name,val });
-			eventsFloat(name, val);
+
+
+		//if (dataFloat.contains(name)) {
+		//	if (dataFloat[name] != val) {
+		//		dataFloat[name] = val;
+		//		notifyChange(name, val);
+		//	}
+		//}
+		//else {
+		//	dataFloat.insert({ name,val });
+		//	notifyChange(name, val);
+		//}
+	}
+
+	void Property::notifyChange(const std::wstring& name, const std::variant<float, int, bool, std::wstring>& value)
+	{
+		for (auto& ele:elements)
+		{
+			ele->changeProperty(name, value);
 		}
 	}
-
-	void Property::set(const std::wstring& name, const int& val)
+	const float& Property::getFloat(const std::wstring& name)
 	{
-		if (dataInt.contains(name)) {
-			if (dataInt[name] != val) {
-				dataInt[name] = val;
-				eventsInt(name, val);
-			}
-		}
-		else {
-			dataInt.insert({ name,val });
-			eventsInt(name, val);
-		}
+		// TODO: 在此处插入 return 语句
 	}
-
-	void Property::set(const std::wstring& name,const bool val)
+	const int& Property::getInt(const std::wstring& name)
 	{
-		if (dataBool.contains(name)) {
-			if (dataBool[name] != val) {
-				dataBool[name] = val;
-				eventsBool(name, val);
-			}
-		}
-		else {
-			dataBool.insert({ name,val });
-			eventsBool(name, val);
-		}
+		// TODO: 在此处插入 return 语句
 	}
-	void Property::set(const std::wstring& name, const std::wstring& val)
+	const bool& Property::getBool(const std::wstring& name)
 	{
-		if (dataStr.contains(name)) {
-			if (dataStr[name] != val) {
-				dataStr[name] = val;
-				eventsStr(name, val);
-			}
-		}
-		else {
-			dataStr.insert({ name,val });
-			eventsStr(name, val);
-		}
+		// TODO: 在此处插入 return 语句
 	}
-	void Property::setMargin(const float& val)
+	const std::wstring& Property::getStr(const std::wstring& name)
 	{
-		setMargin(val, val, val, val);
-	}
-	void Property::setMargin(const float& left, const float& top, const float& right, const float& bottom)
-	{
-		set(L"margin-left", left);
-		set(L"margin-top", top);
-		set(L"margin-right", right);
-		set(L"margin-bottom", bottom);
-	}
-	void Property::setPadding(const float& val)
-	{
-		setPadding(val, val, val, val);
-	}
-	void Property::setPadding(const float& left, const float& top, const float& right, const float& bottom)
-	{
-		set(L"padding-left", left);
-		set(L"padding-top", top);
-		set(L"padding-right", right);
-		set(L"padding-bottom", bottom);
+		// TODO: 在此处插入 return 语句
 	}
 }
