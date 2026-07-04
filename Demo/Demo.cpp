@@ -14,19 +14,15 @@ Demo::Demo()
 	createNativeWindow(0, WS_POPUP| WS_MAXIMIZEBOX | WS_MINIMIZEBOX); //必须先创建窗口，再创建元素
 	enableShadow();
 
-	auto prop = std::make_shared<Ling::Property>();
-	//prop->onChangeFloat([this](const std::wstring& name, const float& val) {
-	//	int a = 1;
-	//});
-
-	//prop->set(L"test", 1.f);
-
 	auto titleBarH{ 36.f };
-	auto top = makeBox()
-		->setId(L"top")
-		->setSize(SizeNaN, titleBarH)
-		->setBackgroundColor(0xDDDDDDFF)
-		->setFlexDirection(Ling::FlexDirection::Row);
+	auto prop = std::make_shared<Ling::Property>();
+	prop->setSize(SizeNaN, titleBarH);
+	prop->setColorBackground(0xDDDDDDFF);
+	prop->setFlexDirection(Ling::FlexDirection::Row);
+	auto top = makeBox();
+	top->setProperty(prop);
+
+
 
 	titleBox = makeBox()
 		->setSize(SizeNaN, titleBarH)

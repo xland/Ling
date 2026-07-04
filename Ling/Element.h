@@ -22,6 +22,7 @@ namespace Ling {
 	class Property;
 	class Element
 	{
+		friend class Property;
 	public:
 		Element(WindowBase* win);
 		virtual ~Element();
@@ -97,7 +98,13 @@ namespace Ling {
 		void setAlign(const Align& align);
 		void setJustify(const Justify& justify);
 		void setFlexDirection(const FlexDirection& flexDirection);
+
+		void setColorBackground(const Color& color);
+		void setColorBackgroundHover(const Color& color);
+		void setColorForeground(const Color& color);
+		void setColorForegroundHover(const Color& color);
 	private:
+		bool isMouseEnter{ false };
 		winrt::event<winrt::delegate<void(const std::wstring&, const float&)>> eventMouseMove;
 		winrt::event<winrt::delegate<void(const std::wstring&, const float&)>> eventMouseDown;
 		winrt::event<winrt::delegate<void(const std::wstring&, const float&)>> eventMouseUp;

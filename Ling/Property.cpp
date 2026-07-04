@@ -16,7 +16,7 @@ namespace Ling {
 		if (setFloat(PropertyType::Width, width)) {
 			for (auto& ele : elements)
 			{
-				//ele.setWidth(val);
+				ele->setWidth(width);
 			}
 		}
 	}
@@ -26,7 +26,7 @@ namespace Ling {
 		if (setFloat(PropertyType::Height, height)) {
 			for (auto& ele : elements)
 			{
-				//ele.setHeight(val);
+				ele->setHeight(height);
 			}
 		}
 	}
@@ -42,7 +42,7 @@ namespace Ling {
 		if (setFloat(PropertyType::WidthPercent, widthPercent)) {
 			for (auto& ele : elements)
 			{
-				//ele.WidthPercent(val);
+				ele->setWidthPercent(widthPercent);
 			}
 		}
 	}
@@ -52,7 +52,7 @@ namespace Ling {
 		if (setFloat(PropertyType::WidthPercent, heightPercent)) {
 			for (auto& ele : elements)
 			{
-				//ele.WidthPercent(val);
+				ele->setHeightPercent(heightPercent);
 			}
 		}
 	}
@@ -68,7 +68,7 @@ namespace Ling {
 		if (setFloat(PropertyType::MarginLeft, marginLeft)) {
 			for (auto& ele : elements)
 			{
-				//ele.setWidth(val);
+				ele->setMarginLeft(marginLeft);
 			}
 		}
 	}
@@ -78,7 +78,7 @@ namespace Ling {
 		if (setFloat(PropertyType::MarginTop, marginTop)) {
 			for (auto& ele : elements)
 			{
-				//ele.setWidth(val);
+				ele->setMarginTop(marginTop);
 			}
 		}
 	}
@@ -88,7 +88,7 @@ namespace Ling {
 		if (setFloat(PropertyType::MarginRight, marginRight)) {
 			for (auto& ele : elements)
 			{
-				//ele.setWidth(val);
+				ele->setMarginRight(marginRight);
 			}
 		}
 	}
@@ -98,7 +98,7 @@ namespace Ling {
 		if (setFloat(PropertyType::MarginBottom, marginBottom)) {
 			for (auto& ele : elements)
 			{
-				//ele.setWidth(val);
+				ele->setMarginBottom(marginBottom);
 			}
 		}
 	}
@@ -124,7 +124,7 @@ namespace Ling {
 		if (setFloat(PropertyType::PaddingLeft, paddingLeft)) {
 			for (auto& ele : elements)
 			{
-				//ele.setWidth(val);
+				ele->setPaddingLeft(paddingLeft);
 			}
 		}
 	}
@@ -134,7 +134,7 @@ namespace Ling {
 		if (setFloat(PropertyType::PaddingTop, paddingTop)) {
 			for (auto& ele : elements)
 			{
-				//ele.setWidth(val);
+				ele->setPaddingTop(paddingTop);
 			}
 		}
 	}
@@ -144,7 +144,7 @@ namespace Ling {
 		if (setFloat(PropertyType::PaddingRight, paddingRight)) {
 			for (auto& ele : elements)
 			{
-				//ele.setWidth(val);
+				ele->setPaddingRight(paddingRight);
 			}
 		}
 	}
@@ -154,7 +154,7 @@ namespace Ling {
 		if (setFloat(PropertyType::PaddingBottom, paddingBottom)) {
 			for (auto& ele : elements)
 			{
-				//ele.setWidth(val);
+				ele->setPaddingBottom(paddingBottom);
 			}
 		}
 	}
@@ -180,7 +180,7 @@ namespace Ling {
 		if (setFloat(PropertyType::FlexGrow, flexGrow)) {
 			for (auto& ele : elements)
 			{
-				//ele.setWidth(val);
+				ele->setFlexGrow(flexGrow);
 			}
 		}
 	}
@@ -190,7 +190,7 @@ namespace Ling {
 		if (setFloat(PropertyType::FlexGrow, flexShrink)) {
 			for (auto& ele : elements)
 			{
-				//ele.setWidth(val);
+				ele->setFlexShrink(flexShrink);
 			}
 		}
 	}
@@ -200,7 +200,7 @@ namespace Ling {
 		if (setInt(PropertyType::Wrap, (int&)wrap)) {
 			for (auto& ele : elements)
 			{
-				//ele.setWidth(val);
+				ele->setWrap(wrap);
 			}
 		}
 	}
@@ -210,7 +210,7 @@ namespace Ling {
 		if (setInt(PropertyType::Align, (int&)align)) {
 			for (auto& ele : elements)
 			{
-				//ele.setWidth(val);
+				ele->setAlign(align);
 			}
 		}
 	}
@@ -220,7 +220,7 @@ namespace Ling {
 		if (setInt(PropertyType::Justify, (int&)justify)) {
 			for (auto& ele : elements)
 			{
-				//ele.setWidth(val);
+				ele->setJustify(justify);
 			}
 		}
 	}
@@ -230,7 +230,7 @@ namespace Ling {
 		if (setInt(PropertyType::FlexDirection, (int&)flexDirection)) {
 			for (auto& ele : elements)
 			{
-				//ele.setWidth(val);
+				ele->setFlexDirection(flexDirection);
 			}
 		}
 	}
@@ -240,7 +240,7 @@ namespace Ling {
 		if (setColor(PropertyType::ColorBackground, color)) {
 			for (auto& ele : elements)
 			{
-				//ele.setWidth(val);
+				ele->setColorBackground(color);
 			}
 		}
 	}
@@ -250,7 +250,7 @@ namespace Ling {
 		if (setColor(PropertyType::ColorBackgroundHover, color)) {
 			for (auto& ele : elements)
 			{
-				//ele.setWidth(val);
+				ele->setColorBackgroundHover(color);
 			}
 		}
 	}

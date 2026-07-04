@@ -15,6 +15,66 @@ namespace Ling {
 	void Element::setProperty(const std::shared_ptr<Property>& property)
 	{
 		this->property = property;
+		for (auto& pair:property->dataFloat)
+		{
+			if (pair.first == PropertyType::Width) {
+				setWidth(pair.second);
+			}
+			else if (pair.first == PropertyType::Height) {
+				setHeight(pair.second);
+			}
+			else if (pair.first == PropertyType::WidthPercent) {
+				setWidthPercent(pair.second);
+			}
+			else if (pair.first == PropertyType::HeightPercent) {
+				setHeightPercent(pair.second);
+			}
+			else if (pair.first == PropertyType::MarginLeft) {
+				setMarginLeft(pair.second);
+			}
+			else if (pair.first == PropertyType::MarginTop) {
+				setMarginTop(pair.second);
+			}
+			else if (pair.first == PropertyType::MarginRight) {
+				setMarginRight(pair.second);
+			}
+			else if (pair.first == PropertyType::MarginBottom) {
+				setMarginBottom(pair.second);
+			}
+			else if (pair.first == PropertyType::PaddingLeft) {
+				setPaddingLeft(pair.second);
+			}
+			else if (pair.first == PropertyType::PaddingTop) {
+				setPaddingTop(pair.second);
+			}
+			else if (pair.first == PropertyType::PaddingRight) {
+				setPaddingRight(pair.second);
+			}
+			else if (pair.first == PropertyType::PaddingBottom) {
+				setPaddingBottom(pair.second);
+			}
+			else if (pair.first == PropertyType::FlexGrow) {
+				setFlexGrow(pair.second);
+			}
+			else if (pair.first == PropertyType::FlexShrink) {
+				setFlexShrink(pair.second);
+			}
+		}
+		for (auto& pair : property->dataColor)
+		{
+			if (pair.first == PropertyType::ColorBackground) {
+				setColorBackground(pair.second);
+			}
+			else if (pair.first == PropertyType::ColorBackgroundHover) {
+				setColorBackgroundHover(pair.second);
+			}
+			else if (pair.first == PropertyType::ColorForeground) {
+				setColorForeground(pair.second);
+			}
+			else if (pair.first == PropertyType::ColorForegroundHover) {
+				setColorForegroundHover(pair.second);
+			}
+		}
 
 	}
 	bool Element::isAncestor(const Element* target)
@@ -203,6 +263,7 @@ namespace Ling {
 		if (!hoverBackgroundColor.isTransparent()) {  // 只有设置了才生效
 			visual.Brush(win->compositor.CreateColorBrush(hoverBackgroundColor.getUIColor()));
 		}
+		isMouseEnter = true;
 		eventMouseEnter(event);
 	}
 
@@ -212,6 +273,7 @@ namespace Ling {
 		if (!backgroundColor.isTransparent()) {  // 只有设置了才生效
 			visual.Brush(win->compositor.CreateColorBrush(backgroundColor.getUIColor()));
 		}
+		isMouseEnter = false;
 		eventMouseLeave(event);
 	}
 
@@ -319,6 +381,20 @@ namespace Ling {
 	void Element::setFlexDirection(const FlexDirection& flexDirection)
 	{
 		YGNodeStyleSetFlexDirection(node, (YGFlexDirection)flexDirection);
+	}
+
+	void Element::setColorBackground(const Color& color)
+	{
+		if (!isMouseEnter || property->getColorBackgroundHover().isTransparent()) {
+			visual.Brush(win->compositor.CreateColorBrush(color.getUIColor()));
+		}
+	}
+
+	void Element::setColorBackgroundHover(const Color& color)
+	{
+		if (isMouseEnter) {
+			visual.Brush(win->compositor.CreateColorBrush(color.getUIColor()));
+		}
 	}
 
 }
