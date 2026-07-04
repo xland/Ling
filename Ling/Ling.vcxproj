@@ -170,9 +170,8 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="D2D.h" />
     <ClInclude Include="Edge.h" />
-    <ClInclude Include="Element.h" />
     <ClInclude Include="FlexDirection.h" />
-    <ClInclude Include="IElement.h" />
+    <ClInclude Include="Element.h" />
     <ClInclude Include="Justify.h" />
     <ClInclude Include="MouseButton.h" />
     <ClInclude Include="MouseEvent.h" />
@@ -192,7 +191,7 @@
     <ClCompile Include="ButtonIcon.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="D2D.cpp" />
-    <ClCompile Include="IElement.cpp" />
+    <ClCompile Include="Element.cpp" />
     <ClCompile Include="MouseEvent.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

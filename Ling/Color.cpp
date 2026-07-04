@@ -32,6 +32,10 @@ namespace Ling{
 	{
 		return a == 0;
 	}
+	bool Color::equals(const Color& other) const
+	{
+		return (r == other.r && g == other.g && b == other.b && a == other.a);
+	}
 	std::uint8_t Color::getA() const
 	{
 		return a;

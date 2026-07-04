@@ -25,5 +25,7 @@ namespace Ling {
 		ColorBackgroundHover,
 		ColorForeground,
 		ColorForegroundHover,
+		Visible,
+		Text
 	};
 }

@@ -1,6 +1,6 @@
 ﻿#include "pch.h"
 #include "Property.h"
-#include "IElement.h"
+#include "Element.h"
 namespace Ling {
 
 	Property::Property()
@@ -235,6 +235,71 @@ namespace Ling {
 		}
 	}
 
+	void Property::setColorBackground(const Color& color)
+	{
+		if (setColor(PropertyType::ColorBackground, color)) {
+			for (auto& ele : elements)
+			{
+				//ele.setWidth(val);
+			}
+		}
+	}
+
+	void Property::setColorBackgroundHover(const Color& color)
+	{
+		if (setColor(PropertyType::ColorBackgroundHover, color)) {
+			for (auto& ele : elements)
+			{
+				//ele.setWidth(val);
+			}
+		}
+	}
+
+	void Property::setColorForeground(const Color& color)
+	{
+		if (setColor(PropertyType::ColorForeground, color)) {
+			for (auto& ele : elements)
+			{
+				//ele.setWidth(val);
+			}
+		}
+	}
+
+	void Property::setColorForegroundHover(const Color& color)
+	{
+		if (setColor(PropertyType::ColorBackgroundHover, color)) {
+			for (auto& ele : elements)
+			{
+				//ele.setWidth(val);
+			}
+		}
+	}
+
+	void Property::setVisible(bool flag)
+	{
+		if (setBool(PropertyType::Visible, flag)) {
+			for (auto& ele : elements)
+			{
+				//ele.setWidth(val);
+			}
+		}
+	}
+
+	void Property::setText(const std::wstring& text)
+	{
+		if (setText(PropertyType::Text, text)) {
+			for (auto& ele : elements)
+			{
+				//ele.setWidth(val);
+			}
+		}
+	}
+
+	void Property::setCustomData(const std::wstring& key, const std::any& value)
+	{
+		dataCustom[key] = value;
+	}
+
 	float Property::getWidth()
 	{
 		return dataFloat[PropertyType::Width];
@@ -290,7 +355,7 @@ namespace Ling {
 	float Property::getFlexShrink()
 	{
 		return dataFloat[PropertyType::FlexShrink];
-	}
+	}	
 	Wrap Property::getWrap()
 	{
 		return (Wrap)dataInt[PropertyType::Wrap];
@@ -307,8 +372,37 @@ namespace Ling {
 	{
 		return (FlexDirection)dataInt[PropertyType::FlexDirection];
 	}
+	Color Property::getColorBackground()
+	{
+		return dataColor[PropertyType::ColorBackground];
+	}
+	Color Property::getColorBackgroundHover()
+	{
+		return dataColor[PropertyType::ColorBackgroundHover];
+	}
+	Color Property::getColorForeground()
+	{
+		return dataColor[PropertyType::ColorForeground];
+	}
+	Color Property::getColorForegroundHover()
+	{
+		return dataColor[PropertyType::ColorForegroundHover];
+	}
 
+	bool Property::getVisible()
+	{
+		return dataBool[PropertyType::Visible];
+	}
 
+	std::wstring Property::getText()
+	{
+		return dataText[PropertyType::Text];
+	}
+
+	std::any Property::getCustomData(const std::wstring& key)
+	{
+		return dataCustom[key];
+	}
 	
 	bool Property::setFloat(const PropertyType& type, const float& value)
 	{
@@ -335,6 +429,51 @@ namespace Ling {
 		}
 		else {
 			dataInt.insert({ type,value });
+			return true;
+		}
+		return false;
+	}
+
+	bool Property::setBool(const PropertyType& type, const bool& value)
+	{
+		if (dataBool.contains(type)) {
+			if (dataBool[type] != value) {
+				dataBool[type] = value;
+				return true;
+			}
+		}
+		else {
+			dataBool.insert({ type,value });
+			return true;
+		}
+		return false;
+	}
+
+	bool Property::setText(const PropertyType& type, const std::wstring& value)
+	{
+		if (dataText.contains(type)) {
+			if (dataText[type] != value) {
+				dataText[type] = value;
+				return true;
+			}
+		}
+		else {
+			dataText.insert({ type,value });
+			return true;
+		}
+		return false;
+	}
+
+	bool Property::setColor(const PropertyType& type, const Color& value)
+	{
+		if (dataColor.contains(type)) {
+			if (dataColor[type].equals(value)) {
+				dataColor[type] = value;
+				return true;
+			}
+		}
+		else {
+			dataColor.insert({ type,value });
 			return true;
 		}
 		return false;

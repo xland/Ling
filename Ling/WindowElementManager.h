@@ -4,7 +4,7 @@
 #include <Windows.h>
 #include <yoga/Yoga.h>
 #include <winrt/Windows.UI.Composition.h>
-#include "IElement.h"
+#include "Element.h"
 namespace Ling {
 	using namespace winrt::Windows::UI;
 	class Text;
@@ -18,7 +18,7 @@ namespace Ling {
 		void layout(const float& w,const float& h);
 	public:
 		std::unique_ptr<Box> body;
-		std::vector<std::unique_ptr<IElement>> elements;
+		std::vector<std::unique_ptr<Element>> elements;
 		Composition::Compositor compositor;
 	protected:
 		void initBody();
@@ -26,7 +26,7 @@ namespace Ling {
 		void mouseLeaveElement();
 		BOOL setCursor();
 	protected:
-		IElement* hoverElement;
+		Element* hoverElement;
 	private:
 	};
 }

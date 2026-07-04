@@ -26,14 +26,14 @@ namespace Ling {
     }
     void WindowElementManager::mouseEnterElement(const int& x, const int& y)
     {
-        IElement* newHover = body->hitTest(x, y);
+        Element* newHover = body->hitTest(x, y);
         if (newHover != hoverElement) {
             MouseEvent event(x, y);
             if (hoverElement) {
                 // 查找老的hoverElement和新的newHover的共同祖先
-                IElement* commonAncestor = hoverElement->findAncestor(newHover);
+                Element* commonAncestor = hoverElement->findAncestor(newHover);
                 // 从老的hoverElement向上触发mouseLeave，直到共同祖先
-                IElement* current = hoverElement;
+                Element* current = hoverElement;
                 while (current && current != commonAncestor) {
                     current->mouseLeave(event);
                     current = current->parent;
@@ -41,10 +41,10 @@ namespace Ling {
             }
             if (newHover) {
                 // 查找共同祖先
-                IElement* commonAncestor = hoverElement ? newHover->findAncestor(hoverElement) : nullptr;
+                Element* commonAncestor = hoverElement ? newHover->findAncestor(hoverElement) : nullptr;
                 // 从新 hover 元素向上触发 mouseEnter，直到共同祖先（不包含）
-                std::vector<IElement*> pathToEnter;
-                IElement* current = newHover;
+                std::vector<Element*> pathToEnter;
+                Element* current = newHover;
                 while (current && current != commonAncestor) {
                     pathToEnter.push_back(current);
                     current = current->parent;
@@ -64,7 +64,7 @@ namespace Ling {
     {
         if (hoverElement) {
             MouseEvent event(0, 0);  // 离开时坐标不重要
-            IElement* current = hoverElement;
+            Element* current = hoverElement;
             while (current) {
                 current->mouseLeave(event);
                 current = current->parent;

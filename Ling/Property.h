@@ -10,9 +10,10 @@
 #include "FlexDirection.h"
 #include "PropertyType.h"
 namespace Ling {
-	class IElement;
+	class Element;
 	class Property
 	{
+		friend class Element;
 	public:
 		Property();
 		virtual ~Property();	
@@ -45,6 +46,16 @@ namespace Ling {
 		void setAlign(const Align& align);
 		void setJustify(const Justify& justify);
 		void setFlexDirection(const FlexDirection& flexDirection);
+
+		void setColorBackground(const Color& color);
+		void setColorBackgroundHover(const Color& color);
+		void setColorForeground(const Color& color);
+		void setColorForegroundHover(const Color& color);
+
+		void setVisible(bool flag);
+		void setText(const std::wstring& text);
+
+		void setCustomData(const std::wstring& key,const std::any& value);
 		
 		float getWidth();
 		float getHeight();
@@ -60,6 +71,13 @@ namespace Ling {
 		float getPaddingBottom();
 		float getFlexGrow();
 		float getFlexShrink();
+		Color getColorBackground();
+		Color getColorBackgroundHover();
+		Color getColorForeground();
+		Color getColorForegroundHover();
+		bool getVisible();
+		std::wstring getText();
+		std::any getCustomData(const std::wstring& key);
 
 		Wrap getWrap();
 		Align getAlign();
@@ -68,13 +86,18 @@ namespace Ling {
 	private:
 		bool setFloat(const PropertyType& type, const float& value);
 		bool setInt(const PropertyType& type, const int& value);
+		bool setBool(const PropertyType& type, const bool& value);
+		bool setText(const PropertyType& type, const std::wstring& value);
+		bool setColor(const PropertyType& type, const Color& value);
 	private:
 		std::unordered_map<PropertyType, float> dataFloat;
 		std::unordered_map<PropertyType, int> dataInt;
 		std::unordered_map<PropertyType, bool> dataBool;
-		std::unordered_map<PropertyType, std::wstring> dataStr;
+		std::unordered_map<PropertyType, std::wstring> dataText;
+		std::unordered_map<PropertyType, Color> dataColor;
+
 		std::unordered_map<std::wstring, std::any> dataCustom;
-		std::vector<IElement*> elements;
+		std::vector<Element*> elements;
 	};
 }
 

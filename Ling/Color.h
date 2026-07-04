@@ -9,6 +9,7 @@ namespace Ling {
 	{
 	public:
 		Color();
+		~Color();
 		Color(const uint8_t& r, const uint8_t& g, const uint8_t& b, const uint8_t& a=255);
 		/// <summary>
 		/// 传入0x000000FF 得到黑色
@@ -24,8 +25,8 @@ namespace Ling {
 		/// </summary>
 		/// <param name="rgbaStr"></param>
 		Color(const std::string& rgbaStr);
-		~Color();
 		bool isTransparent();
+		bool equals(const Color& other) const;
 		uint8_t getA() const;
 		uint8_t getR() const;
 		uint8_t getG() const;
