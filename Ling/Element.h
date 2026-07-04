@@ -7,6 +7,7 @@
 #include <variant>
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.UI.Composition.h>
+#include <any>
 #include "Color.h"
 #include "Wrap.h"
 #include "Align.h"
@@ -14,10 +15,10 @@
 #include "FlexDirection.h"
 #include "MouseButton.h"
 #include "MouseEvent.h"
+#include "PropertyType.h"
 
 namespace Ling {
 	using namespace winrt::Windows::UI;
-	using namespace winrt::Windows::Foundation;
 	class WindowBase;
 	class Property;
 	class Element
@@ -38,7 +39,6 @@ namespace Ling {
 		bool setCursor();
 		Element* hitTest(const int& x, const int& y);
 		bool containPosition(const int& x, const int& y);
-		void changeProperty(const std::wstring& name, const std::variant<float, int, bool, std::wstring>& value);
 		// 事件方法
 		void mouseEnter(const MouseEvent& event);
 		void mouseLeave(const MouseEvent& event);
@@ -67,7 +67,6 @@ namespace Ling {
 	protected:
 		std::vector<Element*> children;
 		float x{ 0.f }, y{ 0.f }, w{ 0.f }, h{ 0.f };
-		HCURSOR cursor{ nullptr };
 	private:
 		void setWidth(const float& width);
 		void setHeight(const float& height);
@@ -103,13 +102,21 @@ namespace Ling {
 		void setColorBackgroundHover(const Color& color);
 		void setColorForeground(const Color& color);
 		void setColorForegroundHover(const Color& color);
+		
+		virtual void propertyFloatChanged(const Ling::PropertyType& key, const float& val);
+		virtual void propertyIntChanged(const Ling::PropertyType& key, const int& val);
+		virtual void propertyColorChanged(const Ling::PropertyType& key, const Color& val);
+		virtual void propertyBoolChanged(const Ling::PropertyType& key, const bool& val);
+		virtual void propertyTextChanged(const Ling::PropertyType& key, const std::wstring& val);
+		virtual void propertyOtherChanged(const Ling::PropertyType& key, const std::any& val);
+
 	private:
 		bool isMouseEnter{ false };
-		winrt::event<winrt::delegate<void(const std::wstring&, const float&)>> eventMouseMove;
-		winrt::event<winrt::delegate<void(const std::wstring&, const float&)>> eventMouseDown;
-		winrt::event<winrt::delegate<void(const std::wstring&, const float&)>> eventMouseUp;
-		winrt::event<winrt::delegate<void(const std::wstring&, const float&)>> eventMouseEnter;
-		winrt::event<winrt::delegate<void(const std::wstring&, const float&)>> eventMouseLeave;
+		winrt::event<winrt::delegate<void(const MouseEvent&)>> eventMouseMove;
+		winrt::event<winrt::delegate<void(const MouseEvent&)>> eventMouseDown;
+		winrt::event<winrt::delegate<void(const MouseEvent&)>> eventMouseUp;
+		winrt::event<winrt::delegate<void(const MouseEvent&)>> eventMouseEnter;
+		winrt::event<winrt::delegate<void(const MouseEvent&)>> eventMouseLeave;
 		std::shared_ptr<Property> property;
 	};
 }

@@ -15,67 +15,32 @@ namespace Ling {
 	void Element::setProperty(const std::shared_ptr<Property>& property)
 	{
 		this->property = property;
-		for (auto& pair:property->dataFloat)
+		for (auto& [first,second] : property->dataFloat)
 		{
-			if (pair.first == PropertyType::Width) {
-				setWidth(pair.second);
-			}
-			else if (pair.first == PropertyType::Height) {
-				setHeight(pair.second);
-			}
-			else if (pair.first == PropertyType::WidthPercent) {
-				setWidthPercent(pair.second);
-			}
-			else if (pair.first == PropertyType::HeightPercent) {
-				setHeightPercent(pair.second);
-			}
-			else if (pair.first == PropertyType::MarginLeft) {
-				setMarginLeft(pair.second);
-			}
-			else if (pair.first == PropertyType::MarginTop) {
-				setMarginTop(pair.second);
-			}
-			else if (pair.first == PropertyType::MarginRight) {
-				setMarginRight(pair.second);
-			}
-			else if (pair.first == PropertyType::MarginBottom) {
-				setMarginBottom(pair.second);
-			}
-			else if (pair.first == PropertyType::PaddingLeft) {
-				setPaddingLeft(pair.second);
-			}
-			else if (pair.first == PropertyType::PaddingTop) {
-				setPaddingTop(pair.second);
-			}
-			else if (pair.first == PropertyType::PaddingRight) {
-				setPaddingRight(pair.second);
-			}
-			else if (pair.first == PropertyType::PaddingBottom) {
-				setPaddingBottom(pair.second);
-			}
-			else if (pair.first == PropertyType::FlexGrow) {
-				setFlexGrow(pair.second);
-			}
-			else if (pair.first == PropertyType::FlexShrink) {
-				setFlexShrink(pair.second);
-			}
+			propertyFloatChanged(first, second);
 		}
-		for (auto& pair : property->dataColor)
+		for (auto& [first, second] : property->dataColor)
 		{
-			if (pair.first == PropertyType::ColorBackground) {
-				setColorBackground(pair.second);
-			}
-			else if (pair.first == PropertyType::ColorBackgroundHover) {
-				setColorBackgroundHover(pair.second);
-			}
-			else if (pair.first == PropertyType::ColorForeground) {
-				setColorForeground(pair.second);
-			}
-			else if (pair.first == PropertyType::ColorForegroundHover) {
-				setColorForegroundHover(pair.second);
-			}
+			propertyColorChanged(first, second);
 		}
-
+		property->changeFloatEvent([this](const Ling::PropertyType& key, const float& val) {
+			this->propertyFloatChanged(key, val);
+			});
+		property->changeIntEvent([this](const Ling::PropertyType& key, const int& val) {
+			this->propertyIntChanged(key, val);
+			});
+		property->changeBoolEvent([this](const Ling::PropertyType& key, const bool& val) {
+			this->propertyBoolChanged(key, val);
+			});
+		property->changeTextEvent([this](const Ling::PropertyType& key, const std::wstring& val) {
+			this->propertyTextChanged(key, val);
+			});
+		property->changeColorEvent([this](const Ling::PropertyType& key, const Color& val) {
+			this->propertyColorChanged(key, val);
+			});
+		property->changeOtherEvent([this](const Ling::PropertyType& key, const std::any& val) {
+			this->propertyOtherChanged(key, val);
+		});
 	}
 	bool Element::isAncestor(const Element* target)
 	{
@@ -122,9 +87,11 @@ namespace Ling {
 
 	bool Element::setCursor()
 	{
-		if (this->cursor) {
-			SetCursor(this->cursor);
-			return true;
+		if (property.get()) {
+			if (property->dataOther.contains(PropertyType::cursor)) {
+				SetCursor(std::any_cast<HCURSOR>(property->dataOther[PropertyType::cursor]));
+				return true;
+			}
 		}
 		else if (parent && parent->setCursor()) {
 			return true;
@@ -395,6 +362,90 @@ namespace Ling {
 		if (isMouseEnter) {
 			visual.Brush(win->compositor.CreateColorBrush(color.getUIColor()));
 		}
+	}
+
+	void Element::propertyFloatChanged(const Ling::PropertyType& key, const float& val)
+	{
+		if (key == PropertyType::Width) {
+			setWidth(val);
+		}
+		else if (key == PropertyType::Height) {
+			setHeight(val);
+		}
+		else if (key == PropertyType::WidthPercent) {
+			setWidthPercent(val);
+		}
+		else if (key == PropertyType::HeightPercent) {
+			setHeightPercent(val);
+		}
+		else if (key == PropertyType::MarginLeft) {
+			setMarginLeft(val);
+		}
+		else if (key == PropertyType::MarginTop) {
+			setMarginTop(val);
+		}
+		else if (key == PropertyType::MarginRight) {
+			setMarginRight(val);
+		}
+		else if (key == PropertyType::MarginBottom) {
+			setMarginBottom(val);
+		}
+		else if (key == PropertyType::PaddingLeft) {
+			setPaddingLeft(val);
+		}
+		else if (key == PropertyType::PaddingTop) {
+			setPaddingTop(val);
+		}
+		else if (key == PropertyType::PaddingRight) {
+			setPaddingRight(val);
+		}
+		else if (key == PropertyType::PaddingBottom) {
+			setPaddingBottom(val);
+		}
+		else if (key == PropertyType::FlexGrow) {
+			setFlexGrow(val);
+		}
+		else if (key == PropertyType::FlexShrink) {
+			setFlexShrink(val);
+		}
+	}
+
+	void Element::propertyIntChanged(const Ling::PropertyType& key, const int& val)
+	{
+		if (key == PropertyType::Wrap) {
+			setWrap((Ling::Wrap&)val);
+		}
+		else if (key == PropertyType::Justify) {
+			setJustify((Ling::Justify&)val);
+		}
+		else if (key == PropertyType::Align) {
+			setAlign((Ling::Align&)val);
+		}
+		else if (key == PropertyType::FlexDirection) {
+			setFlexDirection((Ling::FlexDirection&)val);
+		}
+	}
+
+	void Element::propertyColorChanged(const Ling::PropertyType& key, const Color& val)
+	{
+		if (key == PropertyType::ColorBackground) {
+			setColorBackground(val);
+		}
+		else if (key == PropertyType::ColorBackgroundHover) {
+			setColorBackgroundHover(val);
+		}
+	}
+
+	void Element::propertyBoolChanged(const Ling::PropertyType& key, const bool& val)
+	{
+	}
+
+	void Element::propertyTextChanged(const Ling::PropertyType& key, const std::wstring& val)
+	{
+	}
+
+	void Element::propertyOtherChanged(const Ling::PropertyType& key, const std::any& val)
+	{
 	}
 
 }

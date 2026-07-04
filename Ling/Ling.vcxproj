@@ -165,7 +165,6 @@
   <ItemGroup>
     <ClInclude Include="Align.h" />
     <ClInclude Include="App.h" />
-    <ClInclude Include="Box.h" />
     <ClInclude Include="ButtonIcon.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="D2D.h" />
@@ -187,7 +186,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
-    <ClCompile Include="Box.cpp" />
     <ClCompile Include="ButtonIcon.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="D2D.cpp" />

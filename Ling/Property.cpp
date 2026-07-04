@@ -13,22 +13,12 @@ namespace Ling {
 
 	void Property::setWidth(const float& width)
 	{
-		if (setFloat(PropertyType::Width, width)) {
-			for (auto& ele : elements)
-			{
-				ele->setWidth(width);
-			}
-		}
+		setFloat(PropertyType::Width, width);
 	}
 
 	void Property::setHeight(const float& height)
 	{
-		if (setFloat(PropertyType::Height, height)) {
-			for (auto& ele : elements)
-			{
-				ele->setHeight(height);
-			}
-		}
+		setFloat(PropertyType::Height, height);
 	}
 
 	void Property::setSize(const float& width, const float& height)
@@ -39,22 +29,12 @@ namespace Ling {
 
 	void Property::setWidthPercent(const float& widthPercent)
 	{
-		if (setFloat(PropertyType::WidthPercent, widthPercent)) {
-			for (auto& ele : elements)
-			{
-				ele->setWidthPercent(widthPercent);
-			}
-		}
+		setFloat(PropertyType::WidthPercent, widthPercent);
 	}
 
 	void Property::setHeightPercent(const float& heightPercent)
 	{
-		if (setFloat(PropertyType::WidthPercent, heightPercent)) {
-			for (auto& ele : elements)
-			{
-				ele->setHeightPercent(heightPercent);
-			}
-		}
+		setFloat(PropertyType::WidthPercent, heightPercent);
 	}
 
 	void Property::setSizePercent(const float& widthPercent, const float& heightPercent)
@@ -65,42 +45,22 @@ namespace Ling {
 
 	void Property::setMarginLeft(const float& marginLeft)
 	{
-		if (setFloat(PropertyType::MarginLeft, marginLeft)) {
-			for (auto& ele : elements)
-			{
-				ele->setMarginLeft(marginLeft);
-			}
-		}
+		setFloat(PropertyType::MarginLeft, marginLeft);
 	}
 
 	void Property::setMarginTop(const float& marginTop)
 	{
-		if (setFloat(PropertyType::MarginTop, marginTop)) {
-			for (auto& ele : elements)
-			{
-				ele->setMarginTop(marginTop);
-			}
-		}
+		setFloat(PropertyType::MarginTop, marginTop);
 	}
 
 	void Property::setMarginRight(const float& marginRight)
 	{
-		if (setFloat(PropertyType::MarginRight, marginRight)) {
-			for (auto& ele : elements)
-			{
-				ele->setMarginRight(marginRight);
-			}
-		}
+		setFloat(PropertyType::MarginRight, marginRight);
 	}
 
 	void Property::setMarginBottom(const float& marginBottom)
 	{
-		if (setFloat(PropertyType::MarginBottom, marginBottom)) {
-			for (auto& ele : elements)
-			{
-				ele->setMarginBottom(marginBottom);
-			}
-		}
+		setFloat(PropertyType::MarginBottom, marginBottom);
 	}
 
 	void Property::setMargin(const float& margin)
@@ -121,42 +81,22 @@ namespace Ling {
 
 	void Property::setPaddingLeft(const float& paddingLeft)
 	{
-		if (setFloat(PropertyType::PaddingLeft, paddingLeft)) {
-			for (auto& ele : elements)
-			{
-				ele->setPaddingLeft(paddingLeft);
-			}
-		}
+		setFloat(PropertyType::PaddingLeft, paddingLeft);
 	}
 
 	void Property::setPaddingTop(const float& paddingTop)
 	{
-		if (setFloat(PropertyType::PaddingTop, paddingTop)) {
-			for (auto& ele : elements)
-			{
-				ele->setPaddingTop(paddingTop);
-			}
-		}
+		setFloat(PropertyType::PaddingTop, paddingTop);
 	}
 
 	void Property::setPaddingRight(const float& paddingRight)
 	{
-		if (setFloat(PropertyType::PaddingRight, paddingRight)) {
-			for (auto& ele : elements)
-			{
-				ele->setPaddingRight(paddingRight);
-			}
-		}
+		setFloat(PropertyType::PaddingRight, paddingRight);
 	}
 
 	void Property::setPaddingBottom(const float& paddingBottom)
 	{
-		if (setFloat(PropertyType::PaddingBottom, paddingBottom)) {
-			for (auto& ele : elements)
-			{
-				ele->setPaddingBottom(paddingBottom);
-			}
-		}
+		setFloat(PropertyType::PaddingBottom, paddingBottom);
 	}
 
 	void Property::setPadding(const float& padding)
@@ -177,122 +117,67 @@ namespace Ling {
 
 	void Property::setFlexGrow(const float& flexGrow)
 	{
-		if (setFloat(PropertyType::FlexGrow, flexGrow)) {
-			for (auto& ele : elements)
-			{
-				ele->setFlexGrow(flexGrow);
-			}
-		}
+		setFloat(PropertyType::FlexGrow, flexGrow);
 	}
 
 	void Property::setFlexShrink(const float& flexShrink)
 	{
-		if (setFloat(PropertyType::FlexGrow, flexShrink)) {
-			for (auto& ele : elements)
-			{
-				ele->setFlexShrink(flexShrink);
-			}
-		}
+		setFloat(PropertyType::FlexGrow, flexShrink);
 	}
 
 	void Property::setWrap(const Wrap& wrap)
 	{
-		if (setInt(PropertyType::Wrap, (int&)wrap)) {
-			for (auto& ele : elements)
-			{
-				ele->setWrap(wrap);
-			}
-		}
+		setInt(PropertyType::Wrap, (int&)wrap);
 	}
 
 	void Property::setAlign(const Align& align)
 	{
-		if (setInt(PropertyType::Align, (int&)align)) {
-			for (auto& ele : elements)
-			{
-				ele->setAlign(align);
-			}
-		}
+		setInt(PropertyType::Align, (int&)align);
 	}
 
 	void Property::setJustify(const Justify& justify)
 	{
-		if (setInt(PropertyType::Justify, (int&)justify)) {
-			for (auto& ele : elements)
-			{
-				ele->setJustify(justify);
-			}
-		}
+		setInt(PropertyType::Justify, (int&)justify);
 	}
 
 	void Property::setFlexDirection(const FlexDirection& flexDirection)
 	{
-		if (setInt(PropertyType::FlexDirection, (int&)flexDirection)) {
-			for (auto& ele : elements)
-			{
-				ele->setFlexDirection(flexDirection);
-			}
-		}
+		setInt(PropertyType::FlexDirection, (int&)flexDirection);
 	}
 
 	void Property::setColorBackground(const Color& color)
 	{
-		if (setColor(PropertyType::ColorBackground, color)) {
-			for (auto& ele : elements)
-			{
-				ele->setColorBackground(color);
-			}
-		}
+		setColor(PropertyType::ColorBackground, color);
 	}
 
 	void Property::setColorBackgroundHover(const Color& color)
 	{
-		if (setColor(PropertyType::ColorBackgroundHover, color)) {
-			for (auto& ele : elements)
-			{
-				ele->setColorBackgroundHover(color);
-			}
-		}
+		setColor(PropertyType::ColorBackgroundHover, color);
 	}
 
 	void Property::setColorForeground(const Color& color)
 	{
-		if (setColor(PropertyType::ColorForeground, color)) {
-			for (auto& ele : elements)
-			{
-				//ele.setWidth(val);
-			}
-		}
+		setColor(PropertyType::ColorForeground, color);
 	}
 
 	void Property::setColorForegroundHover(const Color& color)
 	{
-		if (setColor(PropertyType::ColorBackgroundHover, color)) {
-			for (auto& ele : elements)
-			{
-				//ele.setWidth(val);
-			}
-		}
+		setColor(PropertyType::ColorBackgroundHover, color);
 	}
 
 	void Property::setVisible(bool flag)
 	{
-		if (setBool(PropertyType::Visible, flag)) {
-			for (auto& ele : elements)
-			{
-				//ele.setWidth(val);
-			}
-		}
+		setBool(PropertyType::Visible, flag);
 	}
 
 	void Property::setText(const std::wstring& text)
 	{
-		if (setText(PropertyType::Text, text)) {
-			for (auto& ele : elements)
-			{
-				//ele.setWidth(val);
-			}
-		}
+		setText(PropertyType::Text, text);
+	}
+
+	void Property::setCursor(const HCURSOR cursor)
+	{
+		setOther(PropertyType::cursor, (std::any)cursor);
 	}
 
 	void Property::setCustomData(const std::wstring& key, const std::any& value)
@@ -399,84 +284,90 @@ namespace Ling {
 		return dataText[PropertyType::Text];
 	}
 
+	const HCURSOR Property::getCursor()
+	{
+		return std::any_cast<HCURSOR>(dataOther[PropertyType::cursor]);
+	}
+
 	const std::any& Property::getCustomData(const std::wstring& key)
 	{
 		return dataCustom[key];
 	}
 	
-	bool Property::setFloat(const PropertyType& type, const float& value)
+	void Property::setFloat(const PropertyType& type, const float& value)
 	{
 		if (dataFloat.contains(type)) {
 			if (dataFloat[type] != value) {
 				dataFloat[type] = value;
-				return true;
+				changeFloatEvent(type, value);
 			}
 		}
 		else {
 			dataFloat.insert({ type,value });
-			return true;
+			changeFloatEvent(type, value);
 		}
-		return false;
 	}
 
-	bool Property::setInt(const PropertyType& type, const int& value)
+	void Property::setInt(const PropertyType& type, const int& value)
 	{
 		if (dataInt.contains(type)) {
 			if (dataInt[type] != value) {
 				dataInt[type] = value;
-				return true;
+				changeIntEvent(type, value);
 			}
 		}
 		else {
 			dataInt.insert({ type,value });
-			return true;
+			changeIntEvent(type, value);
 		}
-		return false;
 	}
 
-	bool Property::setBool(const PropertyType& type, const bool& value)
+	void Property::setBool(const PropertyType& type, const bool& value)
 	{
 		if (dataBool.contains(type)) {
 			if (dataBool[type] != value) {
 				dataBool[type] = value;
-				return true;
+				changeBoolEvent(type, value);
 			}
 		}
 		else {
 			dataBool.insert({ type,value });
-			return true;
+			changeBoolEvent(type, value);
 		}
-		return false;
 	}
 
-	bool Property::setText(const PropertyType& type, const std::wstring& value)
+	void Property::setText(const PropertyType& type, const std::wstring& value)
 	{
 		if (dataText.contains(type)) {
 			if (dataText[type] != value) {
 				dataText[type] = value;
-				return true;
+				changeTextEvent(type, value);
 			}
 		}
 		else {
 			dataText.insert({ type,value });
-			return true;
+			changeTextEvent(type, value);
 		}
-		return false;
 	}
 
-	bool Property::setColor(const PropertyType& type, const Color& value)
+	void Property::setColor(const PropertyType& type, const Color& value)
 	{
 		if (dataColor.contains(type)) {
 			if (dataColor[type].equals(value)) {
 				dataColor[type] = value;
-				return true;
+				changeColorEvent(type, value);
 			}
 		}
 		else {
 			dataColor.insert({ type,value });
-			return true;
+			changeColorEvent(type, value);
 		}
-		return false;
+	}
+
+	void Property::setOther(const Ling::PropertyType& type, const std::any& value)
+	{
+		dataOther[type] = value;
+		changeOtherEvent(type, value);
 	}
 
 }

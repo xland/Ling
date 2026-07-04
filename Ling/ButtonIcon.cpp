@@ -2,7 +2,7 @@
 #include "ButtonIcon.h"
 #include "WindowBase.h"
 namespace Ling {
-	ButtonIcon::ButtonIcon(WindowBase* win) :Element<ButtonIcon>(win)
+	ButtonIcon::ButtonIcon(WindowBase* win) :Element(win)
 	{
 		iconText = win->makeText();
 		//onMouseEnter([this](const auto& e){
@@ -43,9 +43,6 @@ namespace Ling {
 	}
 	void ButtonIcon::initProperty()
 	{
-		visual.Brush(win->compositor.CreateColorBrush(backgroundColor.getUIColor()));
-		setJustifyContent(Ling::Justify::Center);
-		setAlignItems(Ling::Align::Center);
 		setCursor(IDC_HAND);
 
 		iconText->setForeColor(colorFore);

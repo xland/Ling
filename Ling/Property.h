@@ -54,6 +54,7 @@ namespace Ling {
 
 		void setVisible(bool flag);
 		void setText(const std::wstring& text);
+		void setCursor(const HCURSOR cursor);
 
 		void setCustomData(const std::wstring& key,const std::any& value);
 		
@@ -77,6 +78,7 @@ namespace Ling {
 		const Color& getColorForegroundHover();
 		const bool& getVisible();
 		const std::wstring& getText();
+		const HCURSOR getCursor();
 		const std::any& getCustomData(const std::wstring& key);
 
 		const Wrap& getWrap();
@@ -84,20 +86,28 @@ namespace Ling {
 		const Justify& getJustify();
 		const FlexDirection& getFlexDirection();
 	private:
-		bool setFloat(const PropertyType& type, const float& value);
-		bool setInt(const PropertyType& type, const int& value);
-		bool setBool(const PropertyType& type, const bool& value);
-		bool setText(const PropertyType& type, const std::wstring& value);
-		bool setColor(const PropertyType& type, const Color& value);
+		void setFloat(const Ling::PropertyType& type, const float& value);
+		void setInt(const Ling::PropertyType& type, const int& value);
+		void setBool(const Ling::PropertyType& type, const bool& value);
+		void setText(const Ling::PropertyType& type, const std::wstring& value);
+		void setColor(const Ling::PropertyType& type, const Color& value);
+		void setOther(const Ling::PropertyType& type, const std::any& value);
 	private:
-		std::unordered_map<PropertyType, float> dataFloat;
-		std::unordered_map<PropertyType, int> dataInt;
-		std::unordered_map<PropertyType, bool> dataBool;
-		std::unordered_map<PropertyType, std::wstring> dataText;
-		std::unordered_map<PropertyType, Color> dataColor;
+		std::unordered_map<Ling::PropertyType, float> dataFloat;
+		std::unordered_map<Ling::PropertyType, int> dataInt;
+		std::unordered_map<Ling::PropertyType, bool> dataBool;
+		std::unordered_map<Ling::PropertyType, std::wstring> dataText;
+		std::unordered_map<Ling::PropertyType, Color> dataColor;
+		std::unordered_map<Ling::PropertyType, std::any> dataOther;
 
 		std::unordered_map<std::wstring, std::any> dataCustom;
-		std::vector<Element*> elements;
+
+		winrt::event<winrt::delegate<void(const Ling::PropertyType&, const float&)>> changeFloatEvent;
+		winrt::event<winrt::delegate<void(const Ling::PropertyType&, const int&)>> changeIntEvent;
+		winrt::event<winrt::delegate<void(const Ling::PropertyType&, const bool&)>> changeBoolEvent;
+		winrt::event<winrt::delegate<void(const Ling::PropertyType&, const std::wstring&)>> changeTextEvent;
+		winrt::event<winrt::delegate<void(const Ling::PropertyType&, const Color&)>> changeColorEvent;
+		winrt::event<winrt::delegate<void(const Ling::PropertyType&, const std::any&)>> changeOtherEvent;
 	};
 }
 
