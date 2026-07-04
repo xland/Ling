@@ -57,32 +57,32 @@ namespace Ling {
 
 		void setCustomData(const std::wstring& key,const std::any& value);
 		
-		float getWidth();
-		float getHeight();
-		float getWidthPercent();
-		float getHeightPercent();
-		float getMarginLeft();
-		float getMarginTop();
-		float getMarginRight();
-		float getMarginBottom();
-		float getPaddingLeft();
-		float getPaddingTop();
-		float getPaddingRight();
-		float getPaddingBottom();
-		float getFlexGrow();
-		float getFlexShrink();
-		Color getColorBackground();
-		Color getColorBackgroundHover();
-		Color getColorForeground();
-		Color getColorForegroundHover();
-		bool getVisible();
-		std::wstring getText();
-		std::any getCustomData(const std::wstring& key);
+		const float& getWidth();
+		const float& getHeight();
+		const float& getWidthPercent();
+		const float& getHeightPercent();
+		const float& getMarginLeft();
+		const float& getMarginTop();
+		const float& getMarginRight();
+		const float& getMarginBottom();
+		const float& getPaddingLeft();
+		const float& getPaddingTop();
+		const float& getPaddingRight();
+		const float& getPaddingBottom();
+		const float& getFlexGrow();
+		const float& getFlexShrink();
+		const Color& getColorBackground();
+		const Color& getColorBackgroundHover();
+		const Color& getColorForeground();
+		const Color& getColorForegroundHover();
+		const bool& getVisible();
+		const std::wstring& getText();
+		const std::any& getCustomData(const std::wstring& key);
 
-		Wrap getWrap();
-		Align getAlign();
-		Justify getJustify();
-		FlexDirection getFlexDirection();
+		const Wrap& getWrap();
+		const Align& getAlign();
+		const Justify& getJustify();
+		const FlexDirection& getFlexDirection();
 	private:
 		bool setFloat(const PropertyType& type, const float& value);
 		bool setInt(const PropertyType& type, const int& value);

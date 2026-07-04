@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "Element.h"
 #include "WindowBase.h"
+#include "Property.h"
 namespace Ling {
 
 	Element::Element(WindowBase* win) : win(win), node(YGNodeNew()), visual{ win->compositor.CreateSpriteVisual() }
@@ -10,6 +11,11 @@ namespace Ling {
 	Element::~Element()
 	{
 		YGNodeFree(node);
+	}
+	void Element::setProperty(const std::shared_ptr<Property>& property)
+	{
+		this->property = property;
+
 	}
 	bool Element::isAncestor(const Element* target)
 	{
@@ -135,106 +141,93 @@ namespace Ling {
 	}
 
 	// 事件回调方法
-	size_t Element::onMouseEnter(std::function<void(const MouseEvent&)> callback)
+
+	winrt::event_token Element::onMouseEnter(winrt::delegate<void(const MouseEvent&)> const& handler)
 	{
-		mouseEnterCBId += 1;
-		mouseEnterCBs.insert({ mouseEnterCBId, callback });
-		return mouseEnterCBId;
+		return eventMouseEnter.add(handler);
 	}
 
-	size_t Element::onMouseLeave(std::function<void(const MouseEvent&)> callback)
+
+	winrt::event_token Element::onMouseLeave(winrt::delegate<void(const MouseEvent&)> const& handler)
 	{
-		mouseLeaveCBId += 1;
-		mouseLeaveCBs.insert({ mouseLeaveCBId, callback });
-		return mouseLeaveCBId;
+		return eventMouseLeave.add(handler);
 	}
 
-	size_t Element::onMouseMove(std::function<void(const MouseEvent&)> callback)
+
+	winrt::event_token Element::onMouseMove(winrt::delegate<void(const MouseEvent&)> const& handler)
 	{
-		mouseMoveCBId += 1;
-		mouseMoveCBs.insert({ mouseMoveCBId, callback });
-		return mouseMoveCBId;
+		return eventMouseMove.add(handler);
 	}
 
-	size_t Element::onMouseDown(std::function<void(const MouseEvent&)> callback)
+
+	winrt::event_token Element::onMouseDown(winrt::delegate<void(const MouseEvent&)> const& handler)
 	{
-		mouseDownCBId += 1;
-		mouseDownCBs.insert({ mouseDownCBId, callback });
-		return mouseDownCBId;
+		return eventMouseDown.add(handler);
 	}
 
-	size_t Element::onMouseUp(std::function<void(const MouseEvent&)> callback)
+
+	winrt::event_token Element::onMouseUp(winrt::delegate<void(const MouseEvent&)> const& handler)
 	{
-		mouseUpCBId += 1;
-		mouseUpCBs.insert({ mouseUpCBId, callback });
-		return mouseUpCBId;
+		return eventMouseUp.add(handler);
 	}
 
-	void Element::offMouseEnter(const size_t& callbackId)
+	void Element::offMouseEnter(const winrt::event_token& callbackId)
 	{
-		mouseEnterCBs.erase(callbackId);
+		eventMouseEnter.remove(callbackId);
 	}
 
-	void Element::offMouseLeave(const size_t& callbackId)
+	void Element::offMouseLeave(const winrt::event_token& callbackId)
 	{
-		mouseLeaveCBs.erase(callbackId);
+		eventMouseLeave.remove(callbackId);
 	}
 
-	void Element::offMouseMove(const size_t& callbackId)
+	void Element::offMouseMove(const winrt::event_token& callbackId)
 	{
-		mouseMoveCBs.erase(callbackId);
+		eventMouseMove.remove(callbackId);
 	}
 
-	void Element::offMouseDown(const size_t& callbackId)
+	void Element::offMouseDown(const winrt::event_token& callbackId)
 	{
-		mouseDownCBs.erase(callbackId);
+		eventMouseDown.remove(callbackId);
 	}
 
-	void Element::offMouseUp(const size_t& callbackId)
+	void Element::offMouseUp(const winrt::event_token& callbackId)
 	{
-		mouseUpCBs.erase(callbackId);
+		eventMouseUp.remove(callbackId);
 	}
 
 	// 事件触发方法
 	void Element::mouseEnter(const MouseEvent& event)
 	{
+		auto& hoverBackgroundColor = property->getColorBackgroundHover();
 		if (!hoverBackgroundColor.isTransparent()) {  // 只有设置了才生效
 			visual.Brush(win->compositor.CreateColorBrush(hoverBackgroundColor.getUIColor()));
 		}
-		for (const auto& pair : mouseEnterCBs) {
-			pair.second(event);
-		}
+		eventMouseEnter(event);
 	}
 
 	void Element::mouseLeave(const MouseEvent& event)
 	{
-		if (!hoverBackgroundColor.isTransparent()) {  // 只有设置了才生效
+		auto& backgroundColor = property->getColorBackground();
+		if (!backgroundColor.isTransparent()) {  // 只有设置了才生效
 			visual.Brush(win->compositor.CreateColorBrush(backgroundColor.getUIColor()));
 		}
-		for (const auto& pair : mouseLeaveCBs) {
-			pair.second(event);
-		}
+		eventMouseLeave(event);
 	}
 
 	void Element::mouseMove(const MouseEvent& event)
 	{
-		for (const auto& pair : mouseMoveCBs) {
-			pair.second(event);
-		}
+		eventMouseMove(event);
 	}
 
 	void Element::mouseDown(const MouseEvent& event)
 	{
-		for (const auto& pair : mouseDownCBs) {
-			pair.second(event);
-		}
+		eventMouseDown(event);
 	}
 
 	void Element::mouseUp(const MouseEvent& event)
 	{
-		for (const auto& pair : mouseUpCBs) {
-			pair.second(event);
-		}
+		eventMouseUp(event);
 	}
 
 	

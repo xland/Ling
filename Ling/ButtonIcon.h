@@ -3,7 +3,7 @@
 #include "Text.h"
 namespace Ling{
 	class WindowBase;
-	class ButtonIcon : public Element<ButtonIcon>
+	class ButtonIcon : public Element
 	{
 	public:
 		ButtonIcon(WindowBase* win);

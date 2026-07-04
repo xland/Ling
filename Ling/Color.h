@@ -25,14 +25,14 @@ namespace Ling {
 		/// </summary>
 		/// <param name="rgbaStr"></param>
 		Color(const std::string& rgbaStr);
-		bool isTransparent();
+		bool isTransparent() const;
 		bool equals(const Color& other) const;
 		uint8_t getA() const;
 		uint8_t getR() const;
 		uint8_t getG() const;
 		uint8_t getB() const;
-		winrt::Windows::UI::Color getUIColor();
-		D2D1_COLOR_F getD2DColor();
+		winrt::Windows::UI::Color getUIColor() const;
+		D2D1_COLOR_F getD2DColor() const;
 		
 	private:
 		uint8_t a{ 0 };

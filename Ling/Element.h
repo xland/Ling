@@ -5,6 +5,7 @@
 #include <Windows.h>
 #include <yoga/Yoga.h>
 #include <variant>
+#include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.UI.Composition.h>
 #include "Color.h"
 #include "Wrap.h"
@@ -16,16 +17,15 @@
 
 namespace Ling {
 	using namespace winrt::Windows::UI;
+	using namespace winrt::Windows::Foundation;
 	class WindowBase;
+	class Property;
 	class Element
 	{
 	public:
 		Element(WindowBase* win);
 		virtual ~Element();
-
-
-
-
+		void setProperty(const std::shared_ptr<Property>& property);
 		// 多态方法
 		bool isAncestor(const Element* target);
 		Element* findAncestor(Element* other);
@@ -38,23 +38,22 @@ namespace Ling {
 		Element* hitTest(const int& x, const int& y);
 		bool containPosition(const int& x, const int& y);
 		void changeProperty(const std::wstring& name, const std::variant<float, int, bool, std::wstring>& value);
-
 		// 事件方法
 		void mouseEnter(const MouseEvent& event);
 		void mouseLeave(const MouseEvent& event);
 		void mouseMove(const MouseEvent& event);
 		void mouseDown(const MouseEvent& event);
 		void mouseUp(const MouseEvent& event);
-		size_t onMouseEnter(std::function<void(const MouseEvent&)> callback);
-		size_t onMouseLeave(std::function<void(const MouseEvent&)> callback);
-		size_t onMouseMove(std::function<void(const MouseEvent&)> callback);
-		size_t onMouseDown(std::function<void(const MouseEvent&)> callback);
-		size_t onMouseUp(std::function<void(const MouseEvent&)> callback);
-		void offMouseEnter(const size_t& callbackId);
-		void offMouseLeave(const size_t& callbackId);
-		void offMouseMove(const size_t& callbackId);
-		void offMouseDown(const size_t& callbackId);
-		void offMouseUp(const size_t& callbackId);
+		winrt::event_token onMouseEnter(winrt::delegate<void(const MouseEvent&)> const& handler);
+		winrt::event_token onMouseLeave(winrt::delegate<void(const MouseEvent&)> const& handler);
+		winrt::event_token onMouseMove(winrt::delegate<void(const MouseEvent&)> const& handler);
+		winrt::event_token onMouseDown(winrt::delegate<void(const MouseEvent&)> const& handler);
+		winrt::event_token onMouseUp(winrt::delegate<void(const MouseEvent&)> const& handler);
+		void offMouseEnter(const winrt::event_token& callbackId);
+		void offMouseLeave(const winrt::event_token& callbackId);
+		void offMouseMove(const winrt::event_token& callbackId);
+		void offMouseDown(const winrt::event_token& callbackId);
+		void offMouseUp(const winrt::event_token& callbackId);
 	public:
 		float xAbs{ 0.f }, yAbs{ 0.f };
 		WindowBase* win{ nullptr };
@@ -67,8 +66,6 @@ namespace Ling {
 	protected:
 		std::vector<Element*> children;
 		float x{ 0.f }, y{ 0.f }, w{ 0.f }, h{ 0.f };
-		Color backgroundColor{ 0X00000000 };
-		Color hoverBackgroundColor{ 0X00000000 };
 		HCURSOR cursor{ nullptr };
 	private:
 		void setWidth(const float& width);
@@ -101,16 +98,12 @@ namespace Ling {
 		void setJustify(const Justify& justify);
 		void setFlexDirection(const FlexDirection& flexDirection);
 	private:
-		size_t mouseMoveCBId{ 0 };
-		std::unordered_map<size_t, std::function<void(const MouseEvent&)>> mouseMoveCBs;
-		size_t mouseDownCBId{ 0 };
-		std::unordered_map<size_t, std::function<void(const MouseEvent&)>> mouseDownCBs;
-		size_t mouseUpCBId{ 0 };
-		std::unordered_map<size_t, std::function<void(const MouseEvent&)>> mouseUpCBs;
-		size_t mouseEnterCBId{ 0 };
-		std::unordered_map<size_t, std::function<void(const MouseEvent&)>> mouseEnterCBs;
-		size_t mouseLeaveCBId{ 0 };
-		std::unordered_map<size_t, std::function<void(const MouseEvent&)>> mouseLeaveCBs;
+		winrt::event<winrt::delegate<void(const std::wstring&, const float&)>> eventMouseMove;
+		winrt::event<winrt::delegate<void(const std::wstring&, const float&)>> eventMouseDown;
+		winrt::event<winrt::delegate<void(const std::wstring&, const float&)>> eventMouseUp;
+		winrt::event<winrt::delegate<void(const std::wstring&, const float&)>> eventMouseEnter;
+		winrt::event<winrt::delegate<void(const std::wstring&, const float&)>> eventMouseLeave;
+		std::shared_ptr<Property> property;
 	};
 }
 

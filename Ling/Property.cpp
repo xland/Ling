@@ -300,106 +300,106 @@ namespace Ling {
 		dataCustom[key] = value;
 	}
 
-	float Property::getWidth()
+	const float& Property::getWidth()
 	{
 		return dataFloat[PropertyType::Width];
 	}
-	float Property::getHeight()
+	const float& Property::getHeight()
 	{
 		return dataFloat[PropertyType::Height];
 	}
-	float Property::getWidthPercent()
+	const float& Property::getWidthPercent()
 	{
 		return dataFloat[PropertyType::WidthPercent];
 	}
-	float Property::getHeightPercent()
+	const float& Property::getHeightPercent()
 	{
 		return dataFloat[PropertyType::HeightPercent];
 	}
-	float Property::getMarginLeft()
+	const float& Property::getMarginLeft()
 	{
 		return dataFloat[PropertyType::MarginLeft];
 	}
-	float Property::getMarginTop()
+	const float& Property::getMarginTop()
 	{
 		return dataFloat[PropertyType::MarginTop];
 	}
-	float Property::getMarginRight()
+	const float& Property::getMarginRight()
 	{
 		return dataFloat[PropertyType::MarginRight];
 	}
-	float Property::getMarginBottom()
+	const float& Property::getMarginBottom()
 	{
 		return dataFloat[PropertyType::MarginBottom];
 	}
-	float Property::getPaddingLeft()
+	const float& Property::getPaddingLeft()
 	{
 		return dataFloat[PropertyType::PaddingLeft];
 	}
-	float Property::getPaddingTop()
+	const float& Property::getPaddingTop()
 	{
 		return dataFloat[PropertyType::PaddingTop];
 	}
-	float Property::getPaddingRight()
+	const float& Property::getPaddingRight()
 	{
 		return dataFloat[PropertyType::PaddingRight];
 	}
-	float Property::getPaddingBottom()
+	const float& Property::getPaddingBottom()
 	{
 		return dataFloat[PropertyType::PaddingBottom];
 	}
-	float Property::getFlexGrow()
+	const float& Property::getFlexGrow()
 	{
 		return dataFloat[PropertyType::FlexGrow];
 	}
-	float Property::getFlexShrink()
+	const float& Property::getFlexShrink()
 	{
 		return dataFloat[PropertyType::FlexShrink];
 	}	
-	Wrap Property::getWrap()
+	const Wrap& Property::getWrap()
 	{
 		return (Wrap)dataInt[PropertyType::Wrap];
 	}
-	Align Property::getAlign()
+	const Align& Property::getAlign()
 	{
 		return (Align)dataInt[PropertyType::Align];
 	}
-	Justify Property::getJustify()
+	const Justify& Property::getJustify()
 	{
 		return (Justify)dataInt[PropertyType::Justify];
 	}
-	FlexDirection Property::getFlexDirection()
+	const FlexDirection& Property::getFlexDirection()
 	{
 		return (FlexDirection)dataInt[PropertyType::FlexDirection];
 	}
-	Color Property::getColorBackground()
+	const Color& Property::getColorBackground()
 	{
 		return dataColor[PropertyType::ColorBackground];
 	}
-	Color Property::getColorBackgroundHover()
+	const Color& Property::getColorBackgroundHover()
 	{
 		return dataColor[PropertyType::ColorBackgroundHover];
 	}
-	Color Property::getColorForeground()
+	const Color& Property::getColorForeground()
 	{
 		return dataColor[PropertyType::ColorForeground];
 	}
-	Color Property::getColorForegroundHover()
+	const Color& Property::getColorForegroundHover()
 	{
 		return dataColor[PropertyType::ColorForegroundHover];
 	}
 
-	bool Property::getVisible()
+	const bool& Property::getVisible()
 	{
 		return dataBool[PropertyType::Visible];
 	}
 
-	std::wstring Property::getText()
+	const std::wstring& Property::getText()
 	{
 		return dataText[PropertyType::Text];
 	}
 
-	std::any Property::getCustomData(const std::wstring& key)
+	const std::any& Property::getCustomData(const std::wstring& key)
 	{
 		return dataCustom[key];
 	}

@@ -28,7 +28,7 @@ namespace Ling{
 	Color::~Color()
 	{
 	}
-	bool Color::isTransparent()
+	bool Color::isTransparent() const
 	{
 		return a == 0;
 	}
@@ -53,12 +53,12 @@ namespace Ling{
 		return b;
 	}
 
-	winrt::Windows::UI::Color Color::getUIColor()
+	winrt::Windows::UI::Color Color::getUIColor() const
 	{
 		return ColorHelper::FromArgb(a, r, g,b);
 	}
 
-	D2D1_COLOR_F Color::getD2DColor()
+	D2D1_COLOR_F Color::getD2DColor() const
 	{
 		return D2D1::ColorF(r / 255.f,g / 255.f,b / 255.f,a/255.f);
 	}

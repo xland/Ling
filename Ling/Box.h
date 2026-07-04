@@ -3,7 +3,7 @@
 #include "Text.h"
 namespace Ling{
 	class WindowBase;
-	class Box : public Element<Box>
+	class Box : public Element
 	{
 	public:
 		Box(WindowBase* win);

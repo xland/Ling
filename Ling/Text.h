@@ -8,7 +8,7 @@
 namespace Ling{
 	using namespace Microsoft::WRL;
 	class WindowBase;
-	class Text : public Element<Text>
+	class Text : public Element
 	{
 	public:
 		Text(WindowBase* win);
