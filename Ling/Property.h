@@ -47,17 +47,44 @@ namespace Ling {
 		void setJustify(const Justify& justify);
 		void setFlexDirection(const FlexDirection& flexDirection);
 
-		void setColorBackground(const Color& color);
-		void setColorBackgroundHover(const Color& color);
-		void setColorForeground(const Color& color);
-		void setColorForegroundHover(const Color& color);
+		void setBackgroundColor(const Color& color);
+		void setBackgroundHoverColor(const Color& color);
+		void setForegroundColor(const Color& color);
+		void setForegroundHoverColor(const Color& color);
 
 		void setVisible(bool flag);
 		void setText(const std::wstring& text);
+		void setFontSize(const float& fontSize);
+		void setFontFamily(const std::wstring& fontFamily);
 		void setCursor(const HCURSOR cursor);
 
 		void setCustomData(const std::wstring& key,const std::any& value);
 		
+		const bool hasWidth();
+		const bool hasHeight();
+		const bool hasWidthPercent();
+		const bool hasHeightPercent();
+		const bool hasMarginLeft();
+		const bool hasMarginTop();
+		const bool hasMarginRight();
+		const bool hasMarginBottom();
+		const bool hasPaddingLeft();
+		const bool hasPaddingTop();
+		const bool hasPaddingRight();
+		const bool hasPaddingBottom();
+		const bool hasFlexGrow();
+		const bool hasFlexShrink();
+		const bool hasColorBackground();
+		const bool hasColorBackgroundHover();
+		const bool hasColorForeground();
+		const bool hasColorForegroundHover();
+		const bool hasVisible();
+		const bool hasText();
+		const bool hasFontSize();
+		const bool hasFontFamily();
+		const bool hasFontWeight();
+		const bool hasCursor();
+
 		const float& getWidth();
 		const float& getHeight();
 		const float& getWidthPercent();
@@ -72,12 +99,14 @@ namespace Ling {
 		const float& getPaddingBottom();
 		const float& getFlexGrow();
 		const float& getFlexShrink();
+		const float& getFontSize();
 		const Color& getColorBackground();
 		const Color& getColorBackgroundHover();
 		const Color& getColorForeground();
 		const Color& getColorForegroundHover();
 		const bool& getVisible();
 		const std::wstring& getText();
+		const std::wstring& getFontFamily();
 		const HCURSOR getCursor();
 		const std::any& getCustomData(const std::wstring& key);
 
@@ -91,23 +120,17 @@ namespace Ling {
 		void setBool(const Ling::PropertyType& type, const bool& value);
 		void setText(const Ling::PropertyType& type, const std::wstring& value);
 		void setColor(const Ling::PropertyType& type, const Color& value);
-		void setOther(const Ling::PropertyType& type, const std::any& value);
+		void setOther(const Ling::PropertyType& type, void* value);
+		void changeElementProperty(const Ling::PropertyType& type, const void* value);
 	private:
 		std::unordered_map<Ling::PropertyType, float> dataFloat;
 		std::unordered_map<Ling::PropertyType, int> dataInt;
 		std::unordered_map<Ling::PropertyType, bool> dataBool;
 		std::unordered_map<Ling::PropertyType, std::wstring> dataText;
 		std::unordered_map<Ling::PropertyType, Color> dataColor;
-		std::unordered_map<Ling::PropertyType, std::any> dataOther;
-
+		std::unordered_map<Ling::PropertyType, void*> dataOther;
 		std::unordered_map<std::wstring, std::any> dataCustom;
-
-		winrt::event<winrt::delegate<void(const Ling::PropertyType&, const float&)>> changeFloatEvent;
-		winrt::event<winrt::delegate<void(const Ling::PropertyType&, const int&)>> changeIntEvent;
-		winrt::event<winrt::delegate<void(const Ling::PropertyType&, const bool&)>> changeBoolEvent;
-		winrt::event<winrt::delegate<void(const Ling::PropertyType&, const std::wstring&)>> changeTextEvent;
-		winrt::event<winrt::delegate<void(const Ling::PropertyType&, const Color&)>> changeColorEvent;
-		winrt::event<winrt::delegate<void(const Ling::PropertyType&, const std::any&)>> changeOtherEvent;
+		std::vector<Element*> elements;
 	};
 }
 

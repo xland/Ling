@@ -2,8 +2,9 @@
 #include "Text.h"
 #include "D2D.h"
 #include "WindowBase.h"
+#include "Property.h"
 namespace Ling {
-	Text::Text(WindowBase* win):Element<Text>(win)
+	Text::Text(WindowBase* win):Element(win)
 	{
 	}
 
@@ -11,48 +12,36 @@ namespace Ling {
 	{
 	}
 
-	Text* Text::setText(const std::wstring text)
+	void Text::propertyChanged(const Ling::PropertyType& key, const void* value)
 	{
-		this->text = text;
-		if (textLayout.Get()) {
+		Element::propertyChanged(key, value);
+		if (key == PropertyType::Text) {
 			auto d2d = D2D::get();
-			textLayout = d2d->createTextLayout(text, FLT_MAX, FLT_MAX);
-			textLayout->SetFontSize(fontSize * win->dpi, { 0,(unsigned int)text.length() });
-			textLayout->SetFontFamilyName(fontFamily.data(), { 0,(unsigned int)text.length() });
-			win->layout(win->w,win->h);
+			surface = d2d->createDrawingSurface(win->compositor);
+			brush = win->compositor.CreateSurfaceBrush(surface);
+			visual.Brush(brush);
+			auto str = (std::wstring*)value;
+			textLayout = d2d->createTextLayout(str->data(), FLT_MAX, FLT_MAX);
+			if (property->hasFontFamily()) {
+				textLayout->SetFontFamilyName(property->getFontFamily().data(), {0,MAXINT});
+			}
+			if (property->hasFontSize()) {
+				textLayout->SetFontSize(property->getFontSize() * win->dpi, { 0,MAXINT });
+			}
+			YGNodeSetMeasureFunc(node, &Text::nodeMeasureCB);
 		}
-		return this;
+		else if (key == PropertyType::FontSize) {
+			if (textLayout.Get()) {
+				textLayout->SetFontSize(*(float*)value * win->dpi, { 0,MAXINT });
+			}
+		}
+		else if (key == PropertyType::FontFamily) {
+			if (textLayout.Get()) {
+				textLayout->SetFontFamilyName(((std::wstring*)value)->data(), { 0,MAXINT });
+			}
+		}
 	}
 
-	Text* Text::setFontSize(const float& fontSize)
-	{
-		this->fontSize = fontSize;
-		return this;
-	}
-
-	Text* Text::setForeColor(const Color& color)
-	{
-		foreColor = color;
-		return this;
-	}
-
-	Text* Text::setFontFamily(const std::wstring& fontFamily)
-	{
-		this->fontFamily = fontFamily;
-		return this;
-	}
-
-	void Text::initProperty()
-	{
-		auto d2d = D2D::get();
-		surface = d2d->createDrawingSurface(win->compositor);
-		brush = win->compositor.CreateSurfaceBrush(surface);
-		visual.Brush(brush);
-		textLayout = d2d->createTextLayout(text, FLT_MAX, FLT_MAX);
-		textLayout->SetFontSize(fontSize * win->dpi, { 0,(unsigned int)text.length() });
-		textLayout->SetFontFamilyName(fontFamily.data(), {0,(unsigned int)text.length()});
-		YGNodeSetMeasureFunc(node, &Text::nodeMeasureCB);
-	}
 	void Text::layout()
 	{
 		x = YGNodeLayoutGetLeft(node);
@@ -64,17 +53,7 @@ namespace Ling {
 		visual.Offset({ x, y, 0.0f });
 		visual.Size({ w, h });
 		surface.Resize({(int)w,(int)h});
-		auto surfaceInterop = surface.as<ABI::Windows::UI::Composition::ICompositionDrawingSurfaceInterop>();
-		ComPtr<ID2D1DeviceContext> d2dContext;
-		POINT offset{};
-		HRESULT hr = surfaceInterop->BeginDraw(nullptr,__uuidof(ID2D1DeviceContext),reinterpret_cast<void**>(d2dContext.GetAddressOf()),&offset);
-		auto trans = D2D1::Matrix3x2F::Translation(static_cast<float>(offset.x), static_cast<float>(offset.y));
-		d2dContext->SetTransform(trans);
-		d2dContext->Clear(backgroundColor.getD2DColor());
-		ComPtr<ID2D1SolidColorBrush> brush;
-		d2dContext->CreateSolidColorBrush(foreColor.getD2DColor(), brush.GetAddressOf());
-		d2dContext->DrawTextLayout({ 0, 0 }, textLayout.Get(), brush.Get());
-		surfaceInterop->EndDraw();
+		paint();
 	}
 	YGSize Text::nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode)
 	{
@@ -85,5 +64,20 @@ namespace Ling {
 		DWRITE_TEXT_METRICS metrics;
 		self->textLayout->GetMetrics(&metrics);
 		return { metrics.width, metrics.height };
+	}
+	void Text::paint()
+	{
+		auto surfaceInterop = surface.as<ABI::Windows::UI::Composition::ICompositionDrawingSurfaceInterop>();
+		ComPtr<ID2D1DeviceContext> d2dContext;
+		POINT offset{};
+		HRESULT hr = surfaceInterop->BeginDraw(nullptr, __uuidof(ID2D1DeviceContext), reinterpret_cast<void**>(d2dContext.GetAddressOf()), &offset);
+		auto trans = D2D1::Matrix3x2F::Translation(static_cast<float>(offset.x), static_cast<float>(offset.y));
+		d2dContext->SetTransform(trans);
+		d2dContext->Clear(0);
+		ComPtr<ID2D1SolidColorBrush> brush;
+		auto color = property->getColorForeground().getD2DColor();
+		d2dContext->CreateSolidColorBrush(color, brush.GetAddressOf());
+		d2dContext->DrawTextLayout({ 0, 0 }, textLayout.Get(), brush.Get());
+		surfaceInterop->EndDraw();
 	}
 }

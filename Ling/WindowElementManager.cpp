@@ -1,6 +1,5 @@
 ﻿#include "pch.h"
 #include "WindowElementManager.h"
-#include "Box.h"
 #include "WindowBase.h"
 namespace Ling {
     WindowElementManager::WindowElementManager():compositor{ Composition::Compositor() }
@@ -19,10 +18,10 @@ namespace Ling {
     }
     void WindowElementManager::initBody()
     {
-        body = std::make_unique<Box>((WindowBase*)this);
+        body = std::make_unique<Element>((WindowBase*)this);
         Color c(0xFFFFFFFF);
         body->visual.Brush(compositor.CreateColorBrush(c.getUIColor()));
-        body->setCursor(IDC_ARROW);
+        //body->setCursor(IDC_ARROW);
     }
     void WindowElementManager::mouseEnterElement(const int& x, const int& y)
     {

@@ -63,52 +63,37 @@ namespace Ling {
 		Element* parent{ nullptr };
 		std::wstring id;
 	protected:
-		virtual void initProperty() {};
+		virtual void propertyChanged(const Ling::PropertyType& key, const void* value);
 	protected:
+		std::shared_ptr<Property> property;
 		std::vector<Element*> children;
 		float x{ 0.f }, y{ 0.f }, w{ 0.f }, h{ 0.f };
 	private:
-		void setWidth(const float& width);
-		void setHeight(const float& height);
-		void setSize(const float& width, const float& height);
-
-		void setWidthPercent(const float& widthPercent);
-		void setHeightPercent(const float& heightPercent);
-		void setSizePercent(const float& widthPercent, const float& heightPercent);
-
-		void setMarginLeft(const float& marginLeft);
-		void setMarginTop(const float& marginTop);
-		void setMarginRight(const float& marginRight);
-		void setMarginBottom(const float& marginBottom);
-		void setMargin(const float& margin);
-		void setMargin(const float& left, const float& top, const float& right, const float& bottom);
-
-		void setPaddingLeft(const float& paddingLeft);
-		void setPaddingTop(const float& paddingTop);
-		void setPaddingRight(const float& paddingRight);
-		void setPaddingBottom(const float& paddingBottom);
-		void setPadding(const float& padding);
-		void setPadding(const float& left, const float& top, const float& right, const float& bottom);
-
-		void setFlexGrow(const float& flexGrow);
-		void setFlexShrink(const float& flexShrink);
-
-		void setWrap(const Wrap& wrap);
-		void setAlign(const Align& align);
-		void setJustify(const Justify& justify);
-		void setFlexDirection(const FlexDirection& flexDirection);
-
-		void setColorBackground(const Color& color);
-		void setColorBackgroundHover(const Color& color);
-		void setColorForeground(const Color& color);
-		void setColorForegroundHover(const Color& color);
-		
-		virtual void propertyFloatChanged(const Ling::PropertyType& key, const float& val);
-		virtual void propertyIntChanged(const Ling::PropertyType& key, const int& val);
-		virtual void propertyColorChanged(const Ling::PropertyType& key, const Color& val);
-		virtual void propertyBoolChanged(const Ling::PropertyType& key, const bool& val);
-		virtual void propertyTextChanged(const Ling::PropertyType& key, const std::wstring& val);
-		virtual void propertyOtherChanged(const Ling::PropertyType& key, const std::any& val);
+		virtual void setWidth(const float& width);
+		virtual void setHeight(const float& height);
+		virtual void setWidthPercent(const float& widthPercent);
+		virtual void setHeightPercent(const float& heightPercent);
+		virtual void setMarginLeft(const float& marginLeft);
+		virtual void setMarginTop(const float& marginTop);
+		virtual void setMarginRight(const float& marginRight);
+		virtual void setMarginBottom(const float& marginBottom);
+		virtual void setPaddingLeft(const float& paddingLeft);
+		virtual void setPaddingTop(const float& paddingTop);
+		virtual void setPaddingRight(const float& paddingRight);
+		virtual void setPaddingBottom(const float& paddingBottom);
+		virtual void setFlexGrow(const float& flexGrow);
+		virtual void setFlexShrink(const float& flexShrink);
+		virtual void setWrap(const Wrap& wrap);
+		virtual void setAlign(const Align& align);
+		virtual void setJustify(const Justify& justify);
+		virtual void setFlexDirection(const FlexDirection& flexDirection);
+		virtual void setBackgroundColor(const Color& color);
+		virtual void setBackgroundHoverColor(const Color& color);
+		virtual void setForegroundColor(const Color& color);
+		virtual void setForegroundHoverColor(const Color& color);
+		virtual void setVisible(const bool& flag);
+		virtual void setText(const std::wstring& text);
+		virtual void setCursor(const HCURSOR cursor);
 
 	private:
 		bool isMouseEnter{ false };
@@ -117,7 +102,6 @@ namespace Ling {
 		winrt::event<winrt::delegate<void(const MouseEvent&)>> eventMouseUp;
 		winrt::event<winrt::delegate<void(const MouseEvent&)>> eventMouseEnter;
 		winrt::event<winrt::delegate<void(const MouseEvent&)>> eventMouseLeave;
-		std::shared_ptr<Property> property;
 	};
 }
 

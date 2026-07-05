@@ -8,8 +8,6 @@
 namespace Ling {
 	using namespace winrt::Windows::UI;
 	class Text;
-	class ButtonIcon;
-	class Box;
 	class WindowElementManager
 	{
 	public:
@@ -17,7 +15,7 @@ namespace Ling {
 		virtual ~WindowElementManager();
 		void layout(const float& w,const float& h);
 	public:
-		std::unique_ptr<Box> body;
+		std::unique_ptr<Element> body;
 		std::vector<std::unique_ptr<Element>> elements;
 		Composition::Compositor compositor;
 	protected:

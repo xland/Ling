@@ -13,23 +13,16 @@ namespace Ling{
 	public:
 		Text(WindowBase* win);
 		~Text();
-		Text* setText(const std::wstring text);
-		Text* setFontSize(const float& fontSize);
-		Text* setForeColor(const Color& color);
-		Text* setFontFamily(const std::wstring& fontFamily);
 	protected:
-		void initProperty() override;
+		void propertyChanged(const Ling::PropertyType& key, const void* value) override;
 		void layout() override;
 	private:
 		static YGSize nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode);
+		void paint();
 	private:
 		ComPtr<IDWriteTextLayout> textLayout;
-		std::wstring text;
 		Composition::CompositionSurfaceBrush brush{nullptr};
 		Composition::CompositionDrawingSurface surface{ nullptr };
-		Color foreColor;
-		float fontSize;
-		std::wstring fontFamily;
 	};
 }
 

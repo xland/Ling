@@ -1,7 +1,6 @@
 ﻿#include "pch.h"
 #include "WindowNative.h"
 #include "WindowBase.h"
-#include "Box.h"
 
 namespace Ling {
     WindowNative::WindowNative() :WindowElementManager()

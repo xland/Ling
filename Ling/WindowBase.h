@@ -6,9 +6,7 @@ namespace Ling {
 	public:
 		WindowBase();
 		virtual ~WindowBase();
-		Box* makeBox();
 		Text* makeText();
-		ButtonIcon* makeButtonIcon();
 	public:
 	protected:
 	private:

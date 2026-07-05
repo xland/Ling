@@ -2,8 +2,6 @@
 #include "Ling/App.h"
 #include "Ling/WindowBase.h"
 #include "Ling/Text.h"
-#include "Ling/ButtonIcon.h"
-#include "Ling/Box.h"
 #include "Ling/Property.h"
 Demo::Demo()
 {
@@ -17,42 +15,15 @@ Demo::Demo()
 	auto titleBarH{ 36.f };
 	auto prop = std::make_shared<Ling::Property>();
 	prop->setSize(SizeNaN, titleBarH);
-	prop->setColorBackground(0xDDDDDDFF);
+	prop->setBackgroundColor(0xDDDDDDFF);
+	prop->setForegroundColor(0x000000FF);
 	prop->setFlexDirection(Ling::FlexDirection::Row);
-	auto top = makeBox();
-	top->setProperty(prop);
-
-
-
-	titleBox = makeBox()
-		->setSize(SizeNaN, titleBarH)
-		->setFlexGrow(1.f)
-		->setJustifyContent(Ling::Justify::Center)
-		->setPaddingLeft(14.f);
-	top->addChild(titleBox);
-
-	auto title = makeText()
-		->setText(winTitle)
-		->setForeColor(0x000000ff)
-		->setFontSize(14.f)
-		->setFlexShrink(1.f);
-	titleBox->addChild(title);
-
-	auto btnIcon = makeButtonIcon()
-		->setId(L"btnIcon")
-		->setSize(42.f, titleBarH)
-		->setIcon(L"\ue62d")
-		->setcolorFore(0xDD22DDFF)
-		->setHoverBackgroundColor(0x99DD22FF);
-	btnIcon->onMouseDown([this](const auto& e) {
-		this->close();
-		OutputDebugString(L"allen");
-		Ling::App::get()->quit(0);
-	});	
-	top->addChild(btnIcon);
-
-	body->setFlexDirection(Ling::FlexDirection::Column);
-	body->addChild(top);
+	prop->setFontFamily(L"Microsoft YaHei");
+	prop->setFontSize(16.f);
+	prop->setText(winTitle);
+	auto title = makeText();
+	title->setProperty(prop);
+	body->addChild(title);
 	show();
 	layout(w, h);
 }
@@ -63,11 +34,11 @@ Demo::~Demo()
 
 LRESULT Demo::onHitTest(const int& x, const int& y)
 {
-	if (titleBox->containPosition(x,y)) {
-		return HTCAPTION;
-	}
-	else {
+	//if (titleBox->containPosition(x,y)) {
+	//	return HTCAPTION;
+	//}
+	//else {
 		return HTCLIENT;
-	}
+	//}
 }
 
