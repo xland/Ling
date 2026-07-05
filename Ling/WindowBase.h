@@ -1,12 +1,13 @@
 ﻿#pragma once
 #include "WindowNative.h"
 namespace Ling {
+	class Label;
 	class WindowBase:public WindowNative
 	{
 	public:
 		WindowBase();
 		virtual ~WindowBase();
-		Text* makeText();
+		Label* makeLabel();
 	public:
 	protected:
 	private:

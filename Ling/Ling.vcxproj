@@ -176,8 +176,9 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="PropertyType.h" />
     <ClInclude Include="Screen.h" />
-    <ClInclude Include="Property.h" />
-    <ClInclude Include="Text.h" />
+    <ClInclude Include="ElementStyle.h" />
+    <ClInclude Include="Label.h" />
+    <ClInclude Include="LabelStyle.h" />
     <ClInclude Include="WindowBase.h" />
     <ClInclude Include="WindowElementManager.h" />
     <ClInclude Include="WindowNative.h" />
@@ -196,8 +197,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Screen.cpp" />
-    <ClCompile Include="Property.cpp" />
-    <ClCompile Include="Text.cpp" />
+    <ClCompile Include="ElementStyle.cpp" />
+    <ClCompile Include="Label.cpp" />
+    <ClCompile Include="LabelStyle.cpp" />
     <ClCompile Include="WindowBase.cpp" />
     <ClCompile Include="WindowElementManager.cpp" />
     <ClCompile Include="WindowNative.cpp" />

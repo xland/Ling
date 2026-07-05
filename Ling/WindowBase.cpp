@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include "WindowBase.h"
 #include "WindowNative.h"
-#include "Text.h"
+#include "Label.h"
 namespace Ling{
     WindowBase::WindowBase():WindowNative()
     {
@@ -11,12 +11,11 @@ namespace Ling{
     WindowBase::~WindowBase()
     {
     }
-    Text* WindowBase::makeText()
+    Label* WindowBase::makeLabel()
     {
-        auto ele = std::make_unique<Text>(this);
+        auto ele = std::make_unique<Label>(this);
         auto result = ele.get();
         elements.push_back(std::move(ele));
         return result;
-    }
-    
+    }    
 }

@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include "Element.h"
 #include "WindowBase.h"
-#include "Property.h"
+#include "ElementStyle.h"
 namespace Ling {
 
 	Element::Element(WindowBase* win) : win(win), node(YGNodeNew()), visual{ win->compositor.CreateSpriteVisual() }
@@ -12,112 +12,20 @@ namespace Ling {
 	{
 		YGNodeFree(node);
 	}
-	void Element::setProperty(const std::shared_ptr<Property>& property)
+	std::shared_ptr<ElementStyle> Element::createStyle()
 	{
-		if (this->property.get()) {
-			this->property->elements.erase(std::remove(this->property->elements.begin(), this->property->elements.end(), this), this->property->elements.end());
-		}
-		this->property = property;
-		this->property->elements.push_back(this);
-		for (auto& [first,second] : property->dataFloat)
-		{
-			propertyChanged(first, &second);
-		}
-		for (auto& [first, second] : property->dataInt)
-		{
-			propertyChanged(first, &second);
-		}
-		for (auto& [first, second] : property->dataBool)
-		{
-			propertyChanged(first, &second);
-		}
-		for (auto& [first, second] : property->dataText)
-		{
-			propertyChanged(first, &second);
-		}
-		for (auto& [first, second] : property->dataColor)
-		{
-			propertyChanged(first, &second);
-		}
+		this->style = std::shared_ptr<ElementStyle>(new ElementStyle());
+		this->style->elements.push_back(this);
+		return style;
 	}
-	void Element::propertyChanged(const Ling::PropertyType& key, const void* value)
+	void Element::shareStyle(const std::shared_ptr<ElementStyle>& style)
 	{
-		if (key == PropertyType::Width) {
-			setWidth(*(float*)value);
+		if (this->style) {
+			this->style->elements.erase(std::remove(this->style->elements.begin(), this->style->elements.end(), this), this->style->elements.end());
 		}
-		else if (key == PropertyType::Height) {
-			setHeight(*(float*)value);
-		}
-		else if (key == PropertyType::WidthPercent) {
-			setWidthPercent(*(float*)value);
-		}
-		else if (key == PropertyType::HeightPercent) {
-			setHeightPercent(*(float*)value);
-		}
-		else if (key == PropertyType::MarginLeft) {
-			setMarginLeft(*(float*)value);
-		}
-		else if (key == PropertyType::MarginTop) {
-			setMarginTop(*(float*)value);
-		}
-		else if (key == PropertyType::MarginRight) {
-			setMarginRight(*(float*)value);
-		}
-		else if (key == PropertyType::MarginBottom) {
-			setMarginBottom(*(float*)value);
-		}
-		else if (key == PropertyType::PaddingLeft) {
-			setPaddingLeft(*(float*)value);
-		}
-		else if (key == PropertyType::PaddingTop) {
-			setPaddingTop(*(float*)value);
-		}
-		else if (key == PropertyType::PaddingRight) {
-			setPaddingRight(*(float*)value);
-		}
-		else if (key == PropertyType::PaddingBottom) {
-			setPaddingBottom(*(float*)value);
-		}
-		else if (key == PropertyType::FlexGrow) {
-			setFlexGrow(*(float*)value);
-		}
-		else if (key == PropertyType::FlexShrink) {
-			setFlexShrink(*(float*)value);
-		}
-		else if (key == PropertyType::Wrap) {
-			setWrap(*(Ling::Wrap*)value);
-		}
-		else if (key == PropertyType::Justify) {
-			setJustify(*(Ling::Justify*)value);
-		}
-		else if (key == PropertyType::Align) {
-			setAlign(*(Ling::Align*)value);
-		}
-		else if (key == PropertyType::FlexDirection) {
-			setFlexDirection(*(Ling::FlexDirection*)value);
-		}
-		else if (key == PropertyType::BackgroundColor) {
-			setBackgroundColor(*(Color*)value);
-		}
-		else if (key == PropertyType::BackgroundHoverColor) {
-			setBackgroundHoverColor(*(Color*)value);
-		}
-		else if (key == PropertyType::ForegroundColor) {
-			setForegroundColor(*(Color*)value);
-		}
-		else if (key == PropertyType::ForegroundHoverColor) {
-			setForegroundHoverColor(*(Color*)value);
-		}
-		else if (key == PropertyType::Visible) {
-			setVisible(*(bool*)value);
-		}
-		else if (key == PropertyType::Text) {
-			setText(*(std::wstring*)value);
-		}
-		else if (key == PropertyType::Cursor) {
-			setCursor((HCURSOR)value);
-		}
-	}
+		this->style = style;
+		this->style->elements.push_back(this);
+	}	
 	bool Element::isAncestor(const Element* target)
 	{
 		const Element* current = target;
@@ -163,9 +71,9 @@ namespace Ling {
 
 	bool Element::setCursor()
 	{
-		if (property.get()) {
-			if (property->hasCursor()) {
-				SetCursor(property->getCursor());
+		if (style.get()) {
+			if (auto cursor = style->getCursor()) {
+				SetCursor(cursor);
 				return true;
 			}
 		}
@@ -300,7 +208,7 @@ namespace Ling {
 	// 事件触发方法
 	void Element::mouseEnter(const MouseEvent& event)
 	{
-		auto& hoverBackgroundColor = property->getColorBackgroundHover();
+		auto hoverBackgroundColor = style->getBackgroundHoverColor();
 		if (!hoverBackgroundColor.isTransparent()) {  // 只有设置了才生效
 			visual.Brush(win->compositor.CreateColorBrush(hoverBackgroundColor.getUIColor()));
 		}
@@ -310,7 +218,7 @@ namespace Ling {
 
 	void Element::mouseLeave(const MouseEvent& event)
 	{
-		auto& backgroundColor = property->getColorBackground();
+		auto backgroundColor = style->getColorBackground();
 		if (!backgroundColor.isTransparent()) {  // 只有设置了才生效
 			visual.Brush(win->compositor.CreateColorBrush(backgroundColor.getUIColor()));
 		}
@@ -425,7 +333,7 @@ namespace Ling {
 
 	void Element::setBackgroundColor(const Color& color)
 	{
-		//if (!isMouseEnter || property->getColorBackgroundHover().isTransparent()) {
+		//if (!isMouseEnter || property->getBackgroundHoverColor().isTransparent()) {
 		//	visual.Brush(win->compositor.CreateColorBrush(color.getUIColor()));
 		//}
 	}

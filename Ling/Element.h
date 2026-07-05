@@ -15,19 +15,19 @@
 #include "FlexDirection.h"
 #include "MouseButton.h"
 #include "MouseEvent.h"
-#include "PropertyType.h"
 
 namespace Ling {
 	using namespace winrt::Windows::UI;
 	class WindowBase;
-	class Property;
+	class ElementStyle;
 	class Element
 	{
-		friend class Property;
+		friend class ElementStyle;
 	public:
 		Element(WindowBase* win);
 		virtual ~Element();
-		void setProperty(const std::shared_ptr<Property>& property);
+		std::shared_ptr<ElementStyle> createStyle();
+		virtual void shareStyle(const std::shared_ptr<ElementStyle>& style);
 		// 多态方法
 		bool isAncestor(const Element* target);
 		Element* findAncestor(Element* other);
@@ -63,10 +63,9 @@ namespace Ling {
 		Element* parent{ nullptr };
 		std::wstring id;
 	protected:
-		virtual void propertyChanged(const Ling::PropertyType& key, const void* value);
 	protected:
-		std::shared_ptr<Property> property;
 		std::vector<Element*> children;
+		std::shared_ptr<ElementStyle> style;
 		float x{ 0.f }, y{ 0.f }, w{ 0.f }, h{ 0.f };
 	private:
 		virtual void setWidth(const float& width);

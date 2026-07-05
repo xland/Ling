@@ -51,7 +51,7 @@
     <ClInclude Include="Screen.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Text.h">
+    <ClInclude Include="Label.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="WindowBase.h">
@@ -66,10 +66,13 @@
     <ClInclude Include="Wrap.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Property.h">
+    <ClInclude Include="PropertyType.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="PropertyType.h">
+    <ClInclude Include="ElementStyle.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LabelStyle.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -95,7 +98,7 @@
     <ClCompile Include="Screen.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Text.cpp">
+    <ClCompile Include="Label.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="WindowBase.cpp">
@@ -107,7 +110,10 @@
     <ClCompile Include="WindowNative.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Property.cpp">
+    <ClCompile Include="ElementStyle.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LabelStyle.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
