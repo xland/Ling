@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "../include/WinBase.h"
+#include "../include/Node.h"
 
 namespace Ling {
 	WinBase::WinBase() :Event(), compositor{ Composition::Compositor() }
@@ -28,7 +29,6 @@ namespace Ling {
 		if (!hwnd) return;
 		SetWindowLongPtr(hwnd, GWLP_USERDATA, NULL);
 		DestroyWindow(hwnd);
-		//emit(EventType::Destroy,nullptr);
 	}
 
 	void WinBase::minimize()
@@ -47,13 +47,13 @@ namespace Ling {
 		DwmSetWindowAttribute(hwnd, DWMWA_ALLOW_NCPAINT, &value, sizeof(value));
 	}
 
-	void WinBase::setTimer(const UINT& elapse, const UINT& id)
+	void WinBase::setTimer(UINT elapse, UINT id)
 	{
 		if (!hwnd) return;
 		SetTimer(hwnd, WM_APP + id, elapse, nullptr);
 	}
 
-	void WinBase::killTimer(const UINT& id)
+	void WinBase::killTimer(UINT id)
 	{
 		if (!hwnd) return;
 		KillTimer(hwnd, WM_APP + id);
@@ -67,22 +67,7 @@ namespace Ling {
 		}
 	}
 
-	std::wstring WinBase::getTitle()
-	{
-		return title;
-	}
-
-	std::tuple<int, int> WinBase::getPosition()
-	{
-		return std::make_tuple(x, y);
-	}
-
-	std::tuple<float, float> WinBase::getSize()
-	{
-		return std::make_tuple(w, h);
-	}
-
-	void WinBase::setSize(const float& w, const float& h)
+	void WinBase::setSize(float w, float h)
 	{
 		this->w = w * dpi;
 		this->h = h * dpi;
@@ -91,23 +76,13 @@ namespace Ling {
 		}
 	}
 
-	void WinBase::setPosition(const int& x, const int& y)
+	void WinBase::setPosition(int x, int y)
 	{
 		this->x = x;
 		this->y = y;
 		if (hwnd) {
 			SetWindowPos(hwnd, nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOREDRAW);
 		}
-	}
-
-	HWND WinBase::getHWND()
-	{
-		return hwnd;
-	}
-
-	float WinBase::getDPI()
-	{
-		return dpi;
 	}
 
 	void WinBase::setCenter()
@@ -125,36 +100,47 @@ namespace Ling {
 		setPosition(x, y);
 	}
 
-	void WinBase::createNativeWindow(const DWORD& exStyle, const DWORD& style)
+	Node* WinBase::createNode(const std::string& id)
 	{
-		hwnd = CreateWindowEx(WS_EX_NOREDIRECTIONBITMAP | exStyle, getWinClsName().data(), title.data(), style,
-			x, y, static_cast<int>(w), static_cast<int>(h), NULL, NULL, GetModuleHandle(nullptr), NULL); //WS_POPUP
+		auto ptr = new Node(this);
+		body->visual.Children().InsertAtTop(ptr->visual);
+		std::unique_ptr<Node> node(ptr);
+		nodes.insert({ id,std::move(node) });
+		return ptr;
+	}
+
+	void WinBase::createNativeWindow(int iconId, DWORD exStyle, DWORD style)
+	{
+		auto hIns = GetModuleHandle(nullptr);
+		auto cls = getWinClsName(hIns,iconId);
+		hwnd = CreateWindowEx(WS_EX_NOREDIRECTIONBITMAP | exStyle, cls.data(), title.data(), style, x, y, (float)w, (float)h, NULL, NULL, hIns, NULL); //WS_POPUP
 		SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 		auto interop = compositor.as<ABI::Windows::UI::Composition::Desktop::ICompositorDesktopInterop>();
 		auto r = reinterpret_cast<ABI::Windows::UI::Composition::Desktop::IDesktopWindowTarget**>(winrt::put_abi(winTarget));
 		interop->CreateDesktopWindowTarget(hwnd, false, r);
 
-		visual = compositor.CreateSpriteVisual();
-		winTarget.Root(visual);
-		visual.Offset({ 0.f,0.f,0.f });
-		visual.RelativeSizeAdjustment({ 1.f,1.f });
+		body = std::unique_ptr<Node>(new Node(this));;
+		winTarget.Root(body->visual);
+		body->setPosSize(0.f, 0.f, w, h);
 		onCreated();
 	}
 
-	std::wstring& WinBase::getWinClsName()
+	std::wstring& WinBase::getWinClsName(HINSTANCE hIns, const int& iconId)
 	{
-		static std::wstring clsName = [] {
+		static std::wstring clsName = [&hIns,&iconId] {
 			WNDCLASSEXW wcex;
 			wcex.cbSize = sizeof(WNDCLASSEX);
 			wcex.style = CS_HREDRAW | CS_VREDRAW;
 			wcex.lpfnWndProc = &WinBase::winProc;
-			wcex.hInstance = GetModuleHandle(nullptr);
+			wcex.hInstance = hIns;
 			wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
 			wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 			wcex.lpszMenuName = nullptr;
 			wcex.lpszClassName = L"ImageReader";
-			wcex.hIcon = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(100));  // 任务栏大图标
-			wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(100));  // 标题栏小图标
+			if (iconId > 0) {
+				wcex.hIcon = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(100));
+				wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(100));
+			}
 			auto r = RegisterClassEx(&wcex);
 			return wcex.lpszClassName;
 			}();
@@ -171,7 +157,7 @@ namespace Ling {
 			return 1;
 		}
 		else if (msg == WM_NCHITTEST) {
-			return self->onHitTest((float)((GET_X_LPARAM(lParam) - self->x)), (float)(GET_Y_LPARAM(lParam) - self->y));
+			return self->onHitTest(POINT{ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) });
 		}
 		else if (msg == WM_SETCURSOR) {
 			if (LOWORD(lParam) == HTCLIENT) return self->setCursor();
@@ -216,6 +202,9 @@ namespace Ling {
 		else if (msg == WM_GETMINMAXINFO) {
 			self->onMinMaxInfo((PMINMAXINFO)lParam);
 		}
+		else if (msg == WM_NCDESTROY) {
+			self->emit(EventType::Destroy, nullptr);
+		}
 		return DefWindowProc(hwnd, msg, wParam, lParam);
 	}
 
@@ -229,19 +218,19 @@ namespace Ling {
 		return TRUE;
 	}
 
-	void WinBase::mouseDown(const float& x, const float& y, bool isRight)
+	void WinBase::mouseDown(float x, float y, bool isRight)
 	{
 		auto arg = std::make_tuple(x, y, isRight);
 		emit(EventType::MouseDown, &arg);
 	}
 
-	void WinBase::mouseUp(const float& x, const float& y, bool isRight)
+	void WinBase::mouseUp(float x, float y, bool isRight)
 	{
 		auto arg = std::make_tuple(x, y, isRight);
 		emit(EventType::MouseUp, &arg);
 	}
 
-	void WinBase::mouseMove(const float& x, const float& y)
+	void WinBase::mouseMove(float x, float y)
 	{
 		auto arg = std::make_tuple(x, y);
 		emit(EventType::MouseMove, &arg);
@@ -255,13 +244,13 @@ namespace Ling {
 		emit(EventType::MouseWheel, &arg);
 	}
 
-	void WinBase::keyDown(const UINT& key)
+	void WinBase::keyDown(UINT key)
 	{
 		UINT keyVal = key;
 		emit(EventType::KeyDown, &keyVal);
 	}
 
-	void WinBase::timer(const UINT& id) 
+	void WinBase::timer(UINT id) 
 	{
 		UINT idVal = id;
 		emit(EventType::Timer, &idVal);
@@ -275,8 +264,11 @@ namespace Ling {
 		auto w{ prcNewWindow->right - prcNewWindow->left };
 		auto h{ prcNewWindow->bottom - prcNewWindow->top };
 		SetWindowPos(hwnd, nullptr, prcNewWindow->left, prcNewWindow->top, w, h, SWP_NOSIZE| SWP_NOREPOSITION | SWP_NOZORDER | SWP_NOACTIVATE);
-		posChange(prcNewWindow->left, prcNewWindow->top);
-		sizeChange(w, h);
+		this->x = prcNewWindow->left;
+		this->y = prcNewWindow->top;
+		this->w = (float)w;
+		this->h = (float)h;
+		body->setPosSize(0.f, 0.f, w, h);
 		emit(EventType::DpiChanged, nullptr);
 	}
 
@@ -299,11 +291,12 @@ namespace Ling {
 		}
 		w = static_cast<float>(GET_X_LPARAM(lParam));
 		h = static_cast<float>(GET_Y_LPARAM(lParam));
+		body->setPosSize(0.f, 0.f, w, h);
 		if (w <= 0 || h <= 0) return;
 		emit(EventType::SizeChanged, nullptr);
 	}
 
-	void WinBase::posChange(const int& x, const int& y)
+	void WinBase::posChange(int x, int y)
 	{
 		this->x = x;
 		this->y = y;

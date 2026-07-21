@@ -71,7 +71,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\Temp</IntDir>
+    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)Temp\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)Temp\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -157,13 +160,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\App.h" />
+    <ClInclude Include="include\Color.h" />
     <ClInclude Include="include\Event.h" />
     <ClInclude Include="include\EventType.h" />
     <ClInclude Include="include\Ling.h" />
+    <ClInclude Include="include\Node.h" />
     <ClInclude Include="include\WinBase.h" />
     <ClInclude Include="src\pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Color.cpp" />
+    <ClCompile Include="src\Node.cpp" />
     <ClCompile Include="src\App.cpp" />
     <ClCompile Include="src\Event.cpp" />
     <ClCompile Include="src\Ling.cpp" />
