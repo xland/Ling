@@ -1,9 +1,7 @@
 <Solution>
   <Configurations>
     <Platform Name="x64" />
-    <Platform Name="Win32" />
+    <Platform Name="x86" />
   </Configurations>
-  <Project Path="Demo/Demo.vcxproj" Id="8497ee79-3673-43c1-a4d6-eeafe8e2ac45" />
-  <Project Path="Ling/Ling.vcxproj" Id="01a63ff2-825e-4d66-ba57-c2c3d34bd572" />
-  <Project Path="Yoga/Yoga.vcxproj" Id="4a6ff0da-31ed-4301-b55c-6c4459f3385b" />
+  <Project Path="Ling.vcxproj" Id="540bb258-d062-4159-8cf3-fe9ab9e4b0ae" />
 </Solution>
