@@ -12,9 +12,12 @@ namespace Ling {
 		void onDown(void* e);
 		void onUp(void* e);
 		void onMove(void* e);
+		void setAutoSize(float paddingLeftRight, float paddingTopBottom);
 	public:
+		Composition::CompositionDrawingSurface surface{ nullptr };
+		ComPtr<IDWriteTextLayout> textLayout;
 	private:
-		NodeText(WinBase* win);
+		NodeText(WinBase* win,const std::wstring& text);
 	private:		
 	};
 }

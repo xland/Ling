@@ -161,17 +161,20 @@
   <ItemGroup>
     <ClInclude Include="include\App.h" />
     <ClInclude Include="include\Color.h" />
+    <ClInclude Include="include\D2D.h" />
     <ClInclude Include="include\Event.h" />
     <ClInclude Include="include\EventType.h" />
     <ClInclude Include="include\Ling.h" />
     <ClInclude Include="include\Node.h" />
     <ClInclude Include="include\NodeScroller.h" />
     <ClInclude Include="include\NodeText.h" />
+    <ClInclude Include="include\Util.h" />
     <ClInclude Include="include\WinBase.h" />
     <ClInclude Include="src\pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Color.cpp" />
+    <ClCompile Include="src\D2D.cpp" />
     <ClCompile Include="src\Node.cpp" />
     <ClCompile Include="src\App.cpp" />
     <ClCompile Include="src\Event.cpp" />
@@ -184,6 +187,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Util.cpp" />
     <ClCompile Include="src\WinBase.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
