@@ -46,6 +46,7 @@ namespace Ling {
 		static LRESULT CALLBACK winProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		BOOL setCursor();
 		void mouseMove(float x, float y);
+		void mouseLeave();
 		void mouseDown(float x, float y, bool isRight);
 		void mouseUp(float x, float y, bool isRight);
 		void mouseWheel(WPARAM wParam, LPARAM lParam);

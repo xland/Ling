@@ -195,7 +195,7 @@ namespace Ling {
 			self->mouseMove((float)(GET_X_LPARAM(lParam)), (float)(GET_Y_LPARAM(lParam)));
 		}
 		else if (msg == WM_MOUSELEAVE) {
-			self->mouseMove(FLT_MAX, FLT_MAX);
+			self->mouseLeave();
 		}
 		else if (msg == WM_MOUSEWHEEL) {
 			self->mouseWheel(wParam, lParam);
@@ -249,7 +249,25 @@ namespace Ling {
 
 	void WinBase::mouseMove(float x, float y)
 	{
+		if (!isMouseIn) {
+			isMouseIn = true;
+			TRACKMOUSEEVENT tme{ sizeof(TRACKMOUSEEVENT) };
+			tme.dwFlags = TME_LEAVE;
+			tme.hwndTrack = hwnd;
+			TrackMouseEvent(&tme);
+		}
 		auto arg = std::make_tuple(x, y);
+		emit(EventType::MouseMove, &arg);
+	}
+
+	void WinBase::mouseLeave()
+	{
+		isMouseIn = false;
+		TRACKMOUSEEVENT tme{ sizeof(TRACKMOUSEEVENT) };
+		tme.dwFlags = TME_CANCEL | TME_LEAVE;
+		tme.hwndTrack = hwnd;
+		TrackMouseEvent(&tme);
+		auto arg = std::make_tuple(FLT_MAX, FLT_MAX);
 		emit(EventType::MouseMove, &arg);
 	}
 

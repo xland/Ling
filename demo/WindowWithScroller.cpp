@@ -14,7 +14,16 @@ WindowWithScroller::~WindowWithScroller()
 
 void WindowWithScroller::onCreated()
 {
+    on(Ling::EventType::SizeChanged, [this](void* arg) {this->onSize(arg);});
     body->setBg(0xFFFFFFFF);
+    scrollerBox = createNodeScroller("scrollerBox");    
     enableShadow();
     show();
+    onSize(nullptr);
+}
+
+void WindowWithScroller::onSize(void* arg)
+{
+    scrollerBox->setPosSize(0, 0, w, h);
+    scrollerBox->setContentHeight(2 * h);
 }

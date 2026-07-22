@@ -7,10 +7,11 @@ namespace Ling {
 
 	NodeScroller::NodeScroller(WinBase* win) :Node(win) 
 	{
-		colorVisibleScroller = win->compositor.CreateColorBrush(Color(0xEEEEEE33).getUIColor());
+		colorVisibleScroller = win->compositor.CreateColorBrush(Color(0x666666FF).getUIColor());
 		colorHoverScroller = win->compositor.CreateColorBrush(Color(0xEEEEEE88).getUIColor());
 		colorVisibleThumb = win->compositor.CreateColorBrush(Color(0xEEEEEE88).getUIColor());
 		colorHoverThumb = win->compositor.CreateColorBrush(Color(0xEEEEEEFF).getUIColor());
+		colorTransparent = win->compositor.CreateColorBrush(Color(0x00000000).getUIColor());
 
 
 		visual.Clip(win->compositor.CreateInsetClip());
@@ -105,8 +106,8 @@ namespace Ling {
 		auto parentPos = visual.Offset();
 		auto parentSize = visual.Size();
 		if (y < parentPos.y || y > parentPos.y + parentSize.y || x < parentPos.x || x>parentPos.x + parentSize.x) {
-			visualScroller.Brush(nullptr);
-			visualThumb.Brush(nullptr);
+			visualScroller.Brush(colorTransparent);
+			visualThumb.Brush(colorTransparent);
 			return;
 		}
 		auto sbW{ 6 * win->dpi };
