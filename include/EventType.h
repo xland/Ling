@@ -19,7 +19,7 @@ namespace Ling {
 		Destroy,
 		Maximize,
 		Minimize,
-		Restore,
+		Restore
 	};
 }
 

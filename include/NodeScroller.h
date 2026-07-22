@@ -14,11 +14,13 @@ namespace Ling {
 		void onDown(void* e);
 		void onUp(void* e);
 		void onMove(void* e);
+	public:
+		winrt::Windows::UI::Composition::SpriteVisual visualContent{ nullptr };
 	private:
 		NodeScroller(WinBase* win);
 		void setScroll(float y);
 	private:
-		winrt::Windows::UI::Composition::SpriteVisual visualContent{ nullptr };
+		
 		winrt::Windows::UI::Composition::SpriteVisual visualScroller{ nullptr };
 		winrt::Windows::UI::Composition::SpriteVisual visualThumb{ nullptr };
 		winrt::Windows::UI::Composition::CompositionColorBrush colorVisibleScroller{ nullptr }, 

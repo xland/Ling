@@ -5,12 +5,12 @@
 
 namespace Ling {
 
-	NodeScroller::NodeScroller(WinBase* win) :Node(win) 
+	NodeScroller::NodeScroller(WinBase* win) :Node(win)
 	{
-		colorVisibleScroller = win->compositor.CreateColorBrush(Color(0x666666FF).getUIColor());
-		colorHoverScroller = win->compositor.CreateColorBrush(Color(0xEEEEEE88).getUIColor());
-		colorVisibleThumb = win->compositor.CreateColorBrush(Color(0xEEEEEE88).getUIColor());
-		colorHoverThumb = win->compositor.CreateColorBrush(Color(0xEEEEEEFF).getUIColor());
+		colorVisibleScroller = win->compositor.CreateColorBrush(Color(0x88888822).getUIColor());
+		colorHoverScroller = win->compositor.CreateColorBrush(Color(0x88888833).getUIColor());
+		colorVisibleThumb = win->compositor.CreateColorBrush(Color(0x88888866).getUIColor());
+		colorHoverThumb = win->compositor.CreateColorBrush(Color(0x88888888).getUIColor());
 		colorTransparent = win->compositor.CreateColorBrush(Color(0x00000000).getUIColor());
 
 
@@ -32,11 +32,6 @@ namespace Ling {
 		win->on(EventType::MouseMove, [this](void* e) {this->onMove(e);});
 		win->on(EventType::MouseUp, [this](void* e) {this->onUp(e);});
 		win->on(EventType::MouseDown, [this](void* e) {this->onDown(e);});
-
-
-		//auto expression = win->compositor.CreateExpressionAnimation(L"Parent.Size.X - 200.0f");
-		//expression.SetReferenceParameter(L"Parent", visual);
-		//visualContent.StartAnimation(L"Offset.X", expression);
 	}
 
 	NodeScroller::~NodeScroller()
@@ -45,10 +40,6 @@ namespace Ling {
 
 	void NodeScroller::setContentHeight(float h)
 	{
-
-		//auto contentSize = visualContent.Size();
-		//setContentHeight(contentSize.y);
-
 		auto parentSize = visual.Size();
 		visualContent.Size({ parentSize.x,h });
 		scrollY = 0;
@@ -82,7 +73,8 @@ namespace Ling {
 		auto pos = visual.Offset();
 		auto size = visual.Size();
 		auto sbW{ 6 * win->dpi };
-		if (y < pos.y || y > pos.y + size.y || x < pos.x + size.x - sbW || x > pos.x + size.x) {
+		// 只在点击滚动条条形区域内才启动拖动
+		if (y >= pos.y && y <= pos.y + size.y && x >= pos.x + size.x - sbW && x <= pos.x + size.x) {
 			SetCapture(win->hwnd);
 			scrollerDragging = true;
 			dragStartMouseY = (float)y;
@@ -105,7 +97,7 @@ namespace Ling {
 		auto [x, y] = *tuplePtr;
 		auto parentPos = visual.Offset();
 		auto parentSize = visual.Size();
-		if (y < parentPos.y || y > parentPos.y + parentSize.y || x < parentPos.x || x>parentPos.x + parentSize.x) {
+		if (!scrollerDragging && (y < parentPos.y || y > parentPos.y + parentSize.y || x < parentPos.x || x>parentPos.x + parentSize.x)) {
 			visualScroller.Brush(colorTransparent);
 			visualThumb.Brush(colorTransparent);
 			return;
@@ -122,7 +114,7 @@ namespace Ling {
 			setScroll(dragStartScrollY + ratio * maxScroll);
 		}
 		else {
-			if (x < parentSize.x + parentSize.x - sbW) {
+			if (x < parentPos.x + parentSize.x - sbW) {
 				visualScroller.Brush(colorVisibleScroller);
 				visualThumb.Brush(colorVisibleThumb);
 			}
@@ -139,7 +131,7 @@ namespace Ling {
 		auto contentSize = visualContent.Size();
 		auto parentSize = visual.Size();
 		float maxScroll = std::max(0.f, contentSize.y - parentSize.y);
-		y = std::clamp(y, 0.f, maxScroll); //将一个值限制在指定的上下界范围内
+		y = std::clamp(y, 0.f, maxScroll);
 		scrollY = y;
 		visualContent.Offset({ 0.f, -scrollY, 0.f });
 		if (contentSize.y > parentSize.y) {
@@ -147,7 +139,8 @@ namespace Ling {
 			float thumbH = std::max(minH, parentSize.y * parentSize.y / contentSize.y);
 			float maxScroll = contentSize.y - parentSize.y;
 			float top = maxScroll > 0 ? scrollY * (parentSize.y - thumbH) / maxScroll : 0.f;
-			visualThumb.Offset({ 0.f, scrollY ,0.f });
+			visualThumb.Offset({ 0.f, top ,0.f });
+			visualThumb.Size({ 6 * win->dpi, thumbH });
 		}
 	}
 

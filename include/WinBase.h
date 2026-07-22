@@ -37,6 +37,7 @@ namespace Ling {
 		std::wstring title;
 		bool isMouseIn{ false }, wasMaximized{ false };
 		std::unique_ptr<Node> body;
+		winrt::Windows::UI::Composition::Compositor compositor{ nullptr };
 	protected:
 		virtual void onCreated() {};
 		virtual LRESULT onHitTest(const POINT& pos) { return HTCLIENT; };
@@ -57,7 +58,6 @@ namespace Ling {
 		void posChange(int x, int y);
 	private:	
 		winrt::Windows::UI::Composition::Desktop::DesktopWindowTarget winTarget{ nullptr };
-		winrt::Windows::UI::Composition::Compositor compositor{nullptr};
 		std::unordered_map<std::string, std::unique_ptr<Node>> nodes;
 		std::unordered_map<std::string, std::unique_ptr<NodeScroller>> nodeScrollers;
 	};

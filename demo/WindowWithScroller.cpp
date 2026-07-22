@@ -1,5 +1,8 @@
-﻿#include "WindowWithScroller.h"
+﻿#include <winrt/Windows.UI.Composition.h>
+#include <winrt/Windows.Foundation.Collections.h>
+#include "WindowWithScroller.h"
 #include "include/Node.h"
+#include "include/Color.h"
 
 WindowWithScroller::WindowWithScroller():Ling::WinBase()
 {
@@ -24,6 +27,17 @@ void WindowWithScroller::onCreated()
 
 void WindowWithScroller::onSize(void* arg)
 {
+
     scrollerBox->setPosSize(0, 0, w, h);
     scrollerBox->setContentHeight(2 * h);
+
+    auto linearBrush = compositor.CreateLinearGradientBrush();
+    linearBrush.StartPoint({ 0.5f, 0.0f });
+    linearBrush.EndPoint({ 0.5f, 1.0f });
+    auto stop1 = compositor.CreateColorGradientStop(0.0f, Ling::Color(0x00FFFFFF).getUIColor());
+    auto stop2 = compositor.CreateColorGradientStop(1.0f, Ling::Color(0xFFFF00FF).getUIColor());
+    linearBrush.ColorStops().Append(stop1);
+    linearBrush.ColorStops().Append(stop2);
+
+    scrollerBox->visualContent.Brush(linearBrush);
 }

@@ -263,10 +263,6 @@ namespace Ling {
 	void WinBase::mouseLeave()
 	{
 		isMouseIn = false;
-		TRACKMOUSEEVENT tme{ sizeof(TRACKMOUSEEVENT) };
-		tme.dwFlags = TME_CANCEL | TME_LEAVE;
-		tme.hwndTrack = hwnd;
-		TrackMouseEvent(&tme);
 		auto arg = std::make_tuple(FLT_MAX, FLT_MAX);
 		emit(EventType::MouseMove, &arg);
 	}
