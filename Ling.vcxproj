@@ -166,6 +166,7 @@
     <ClInclude Include="include\Ling.h" />
     <ClInclude Include="include\Node.h" />
     <ClInclude Include="include\NodeScroller.h" />
+    <ClInclude Include="include\NodeText.h" />
     <ClInclude Include="include\WinBase.h" />
     <ClInclude Include="src\pch.h" />
   </ItemGroup>
@@ -176,6 +177,7 @@
     <ClCompile Include="src\Event.cpp" />
     <ClCompile Include="src\Ling.cpp" />
     <ClCompile Include="src\NodeScroller.cpp" />
+    <ClCompile Include="src\NodeText.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
