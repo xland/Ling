@@ -1,5 +1,6 @@
-#pragma once
+﻿#pragma once
+#include <Windows.h>
 namespace Ling {
-	static void init();
-	static void dispose();
+	bool init();
+	void dispose();
 }

@@ -1,6 +1,7 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "../include/WinBase.h"
 #include "../include/Node.h"
+#include "../include/NodeScroller.h"
 
 namespace Ling {
 	WinBase::WinBase() :Event(), compositor{ Composition::Compositor() }
@@ -109,6 +110,15 @@ namespace Ling {
 		return ptr;
 	}
 
+	NodeScroller* WinBase::createNodeScroller(const std::string& id)
+	{
+		auto ptr = new NodeScroller(this);
+		body->visual.Children().InsertAtTop(ptr->visual);
+		std::unique_ptr<NodeScroller> node(ptr);
+		nodeScrollers.insert({ id,std::move(node) });
+		return ptr;
+	}
+
 	void WinBase::createNativeWindow(int iconId, DWORD exStyle, DWORD style)
 	{
 		auto hIns = GetModuleHandle(nullptr);
@@ -119,7 +129,7 @@ namespace Ling {
 		auto r = reinterpret_cast<ABI::Windows::UI::Composition::Desktop::IDesktopWindowTarget**>(winrt::put_abi(winTarget));
 		interop->CreateDesktopWindowTarget(hwnd, false, r);
 
-		body = std::unique_ptr<Node>(new Node(this));;
+		body = std::unique_ptr<Node>(new Node(this));
 		winTarget.Root(body->visual);
 		body->setPosSize(0.f, 0.f, w, h);
 		onCreated();
@@ -128,7 +138,7 @@ namespace Ling {
 	std::wstring& WinBase::getWinClsName(HINSTANCE hIns, const int& iconId)
 	{
 		static std::wstring clsName = [&hIns,&iconId] {
-			WNDCLASSEXW wcex;
+			WNDCLASSEXW wcex{};
 			wcex.cbSize = sizeof(WNDCLASSEX);
 			wcex.style = CS_HREDRAW | CS_VREDRAW;
 			wcex.lpfnWndProc = &WinBase::winProc;
@@ -136,12 +146,19 @@ namespace Ling {
 			wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
 			wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 			wcex.lpszMenuName = nullptr;
-			wcex.lpszClassName = L"ImageReader";
+			wcex.lpszClassName = L"Ling";
 			if (iconId > 0) {
-				wcex.hIcon = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(100));
-				wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(100));
+				wcex.hIcon   = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(iconId));
+				wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(iconId));
 			}
-			auto r = RegisterClassEx(&wcex);
+			else {
+				wcex.hIcon   = LoadIcon(nullptr, IDI_APPLICATION);
+				wcex.hIconSm = LoadIcon(nullptr, IDI_APPLICATION);
+			}
+			ATOM atom = RegisterClassEx(&wcex);
+			if (atom == 0) {
+				assert("RegisterClassEx failed");
+			}
 			return wcex.lpszClassName;
 			}();
 		return clsName;
@@ -240,7 +257,9 @@ namespace Ling {
 	{
 		POINT pt{ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
 		ScreenToClient(hwnd, &pt);
-		auto arg = std::make_tuple((float)pt.x,(float)pt.y, (short)HIWORD(wParam));
+		auto delta{ (short)HIWORD(wParam) };
+		auto space = (delta / (float)WHEEL_DELTA) * 60.f * dpi;
+		auto arg = std::make_tuple((float)pt.x,(float)pt.y, space);
 		emit(EventType::MouseWheel, &arg);
 	}
 

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <tuple>
 #include <winrt/Windows.UI.Composition.h>
 #include "Color.h"
@@ -18,7 +18,7 @@ namespace Ling {
 		public:
 			WinBase* win;
 			winrt::Windows::UI::Composition::SpriteVisual visual{ nullptr };
-		private:
+		protected:
 			Node(WinBase* win);
 	};
 }

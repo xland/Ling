@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 namespace Ling {
 	enum class EventType

@@ -7,9 +7,11 @@
 
 namespace Ling {
 	class Node;
+	class NodeScroller;
 	class WinBase:public Event
 	{
 		friend class Node;
+		friend class NodeScroller;
 	public:
 		WinBase();
 		~WinBase();
@@ -26,6 +28,7 @@ namespace Ling {
 		void setPosition(int x, int y);
 		void setCenter();
 		Node* createNode(const std::string& id);
+		NodeScroller* createNodeScroller(const std::string& id);
 	public:
 		int x{ 0 }, y{ 0 };      // 屏幕坐标：物理像素
 		float w{ 0 }, h{ 0 };    // 客户区大小：物理像素
@@ -55,5 +58,6 @@ namespace Ling {
 		winrt::Windows::UI::Composition::Desktop::DesktopWindowTarget winTarget{ nullptr };
 		winrt::Windows::UI::Composition::Compositor compositor{nullptr};
 		std::unordered_map<std::string, std::unique_ptr<Node>> nodes;
+		std::unordered_map<std::string, std::unique_ptr<NodeScroller>> nodeScrollers;
 	};
 }

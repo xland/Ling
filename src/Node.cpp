@@ -16,6 +16,11 @@ namespace Ling {
 
 	bool Node::isPosIn(float x, float y)
 	{
+		auto pos = visual.Offset();
+		auto size = visual.Size();
+		if (x > pos.x && x<pos.x + size.x && y>pos.y && y < pos.y + size.y) {
+			return true;
+		}
 		return false;
 	}
 
