@@ -1,17 +1,17 @@
 ﻿#include "pch.h"
-#include "../include/EventType.h"
+#include "../include/EventBase.h"
 #include "../include/Event.h"
 
 namespace Ling {
-	Event::Event()
+	EventBase::EventBase()
 	{
 	}
 
-	Event::~Event()
+	EventBase::~EventBase()
 	{
 	}
 
-	size_t Event::on(const EventType& eventName, std::function<void(void*)> cb)
+	size_t EventBase::on(const Event& eventName, std::function<void(void*)> cb)
 	{
 		// 每个 Event 实例自己维护计数器，避免跨实例冲突
 		auto id = ++nextId;
@@ -19,7 +19,7 @@ namespace Ling {
 		return id;
 	}
 
-	void Event::off(const EventType& eventName, const size_t& id)
+	void EventBase::off(const Event& eventName, const size_t& id)
 	{
 		auto it = events.find(eventName);
 		if (it == events.end()) return;
@@ -30,7 +30,7 @@ namespace Ling {
 		if (vec.empty()) events.erase(it);
 	}
 
-	void Event::emit(const EventType& eventName, void* arg)
+	void EventBase::emit(const Event& eventName, void* arg)
 	{
 		auto it = events.find(eventName);
 		if (it == events.end()) return;

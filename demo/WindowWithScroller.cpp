@@ -17,7 +17,7 @@ WindowWithScroller::~WindowWithScroller()
 
 void WindowWithScroller::onCreated()
 {
-    on(Ling::EventType::SizeChanged, [this](void* arg) {this->onSize(arg);});
+    on(Ling::Event::SizeChanged, [this](void* arg) {this->onSize(arg);});
     body->setBg(0xFFFFFFFF);
     scrollerBox = createNodeScroller("scrollerBox");    
     enableShadow();

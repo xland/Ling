@@ -3,12 +3,12 @@
 #include <Windows.h>
 #include <winrt/Windows.UI.Composition.h>
 #include <winrt/Windows.UI.Composition.Desktop.h>
-#include "Event.h"
+#include "EventBase.h"
 
 namespace Ling {
 	class Node;
 	class NodeScroller;
-	class WinBase:public Event
+	class WinBase:public EventBase
 	{
 		friend class Node;
 		friend class NodeScroller;

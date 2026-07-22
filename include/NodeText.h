@@ -1,5 +1,6 @@
 #pragma once
-
+#include <wrl.h>
+#include <winrt/Windows.UI.Composition.h>
 #include "Node.h"
 
 namespace Ling {
@@ -14,8 +15,8 @@ namespace Ling {
 		void onMove(void* e);
 		void setAutoSize(float paddingLeftRight, float paddingTopBottom);
 	public:
-		Composition::CompositionDrawingSurface surface{ nullptr };
-		ComPtr<IDWriteTextLayout> textLayout;
+		winrt::Windows::UI::Composition::CompositionDrawingSurface surface{ nullptr };
+		Microsoft::WRL::ComPtr<IDWriteTextLayout> textLayout;
 	private:
 		NodeText(WinBase* win,const std::wstring& text);
 	private:		

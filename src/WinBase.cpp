@@ -4,7 +4,7 @@
 #include "../include/NodeScroller.h"
 
 namespace Ling {
-	WinBase::WinBase() :Event(), compositor{ Composition::Compositor() }
+	WinBase::WinBase() :EventBase(), compositor{ Composition::Compositor() }
 	{
 		dpi = static_cast<float>(GetDpiForSystem()) / 96.f;
 	}
@@ -220,7 +220,7 @@ namespace Ling {
 			self->onMinMaxInfo((PMINMAXINFO)lParam);
 		}
 		else if (msg == WM_NCDESTROY) {
-			self->emit(EventType::Destroy, nullptr);
+			self->emit(Event::Destroy, nullptr);
 		}
 		return DefWindowProc(hwnd, msg, wParam, lParam);
 	}
@@ -228,7 +228,7 @@ namespace Ling {
 	BOOL WinBase::setCursor()
 	{
 		HCURSOR cursor{ nullptr };
-		emit(EventType::Cursor, &cursor);
+		emit(Event::Cursor, &cursor);
 		if (!cursor) {
 			SetCursor(LoadCursor(nullptr, IDC_ARROW));
 		}
@@ -238,13 +238,13 @@ namespace Ling {
 	void WinBase::mouseDown(float x, float y, bool isRight)
 	{
 		auto arg = std::make_tuple(x, y, isRight);
-		emit(EventType::MouseDown, &arg);
+		emit(Event::MouseDown, &arg);
 	}
 
 	void WinBase::mouseUp(float x, float y, bool isRight)
 	{
 		auto arg = std::make_tuple(x, y, isRight);
-		emit(EventType::MouseUp, &arg);
+		emit(Event::MouseUp, &arg);
 	}
 
 	void WinBase::mouseMove(float x, float y)
@@ -257,14 +257,14 @@ namespace Ling {
 			TrackMouseEvent(&tme);
 		}
 		auto arg = std::make_tuple(x, y);
-		emit(EventType::MouseMove, &arg);
+		emit(Event::MouseMove, &arg);
 	}
 
 	void WinBase::mouseLeave()
 	{
 		isMouseIn = false;
 		auto arg = std::make_tuple(FLT_MAX, FLT_MAX);
-		emit(EventType::MouseMove, &arg);
+		emit(Event::MouseMove, &arg);
 	}
 
 	void WinBase::mouseWheel(WPARAM wParam, LPARAM lParam)
@@ -274,19 +274,19 @@ namespace Ling {
 		auto delta{ (short)HIWORD(wParam) };
 		auto space = (delta / (float)WHEEL_DELTA) * 60.f * dpi;
 		auto arg = std::make_tuple((float)pt.x,(float)pt.y, space);
-		emit(EventType::MouseWheel, &arg);
+		emit(Event::MouseWheel, &arg);
 	}
 
 	void WinBase::keyDown(UINT key)
 	{
 		UINT keyVal = key;
-		emit(EventType::KeyDown, &keyVal);
+		emit(Event::KeyDown, &keyVal);
 	}
 
 	void WinBase::timer(UINT id) 
 	{
 		UINT idVal = id;
-		emit(EventType::Timer, &idVal);
+		emit(Event::Timer, &idVal);
 	}
 
 	void WinBase::dpiChange(WPARAM wParam, LPARAM lParam)
@@ -302,31 +302,31 @@ namespace Ling {
 		this->w = (float)w;
 		this->h = (float)h;
 		body->setPosSize(0.f, 0.f, w, h);
-		emit(EventType::DpiChanged, nullptr);
+		emit(Event::DpiChanged, nullptr);
 	}
 
 	void WinBase::sizeChange(WPARAM wParam, LPARAM lParam)
 	{
 		if (wParam == SIZE_MINIMIZED) {
 			mouseMove(FLT_MAX, FLT_MAX);
-			emit(EventType::Minimize, nullptr);
+			emit(Event::Minimize, nullptr);
 			return;
 		}
 		if (wParam == SIZE_MAXIMIZED) {
 			wasMaximized = true;
-			emit(EventType::Maximize, nullptr);
+			emit(Event::Maximize, nullptr);
 		}
 		else if (wParam == SIZE_RESTORED) {
 			if (wasMaximized) {
 				wasMaximized = false;
-				emit(EventType::Restore, nullptr);
+				emit(Event::Restore, nullptr);
 			}
 		}
 		w = static_cast<float>(GET_X_LPARAM(lParam));
 		h = static_cast<float>(GET_Y_LPARAM(lParam));
 		body->setPosSize(0.f, 0.f, w, h);
 		if (w <= 0 || h <= 0) return;
-		emit(EventType::SizeChanged, nullptr);
+		emit(Event::SizeChanged, nullptr);
 	}
 
 	void WinBase::posChange(int x, int y)
@@ -334,6 +334,6 @@ namespace Ling {
 		this->x = x;
 		this->y = y;
 		auto arg = std::make_tuple(x, y);
-		emit(EventType::PosChanged, nullptr);
+		emit(Event::PosChanged, nullptr);
 	}
 }

@@ -1,9 +1,8 @@
 ﻿#pragma once
 #include <dispatcherqueue.h>
 #include <winrt/Windows.System.h>
-#include "Ling.h"
-
 namespace Ling {
+	bool init();
 	class App
 	{
 		public:

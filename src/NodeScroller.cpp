@@ -1,5 +1,5 @@
 ﻿#include "pch.h"
-#include "../include/EventType.h"
+#include "../include/Event.h"
 #include "../include/NodeScroller.h"
 #include "../include/WinBase.h"
 
@@ -28,10 +28,10 @@ namespace Ling {
 		visualScroller.Children().InsertAtTop(visualThumb);
 
 
-		win->on(EventType::MouseWheel, [this](void* e) {this->onWheel(e);});
-		win->on(EventType::MouseMove, [this](void* e) {this->onMove(e);});
-		win->on(EventType::MouseUp, [this](void* e) {this->onUp(e);});
-		win->on(EventType::MouseDown, [this](void* e) {this->onDown(e);});
+		win->on(Event::MouseWheel, [this](void* e) {this->onWheel(e);});
+		win->on(Event::MouseMove, [this](void* e) {this->onMove(e);});
+		win->on(Event::MouseUp, [this](void* e) {this->onUp(e);});
+		win->on(Event::MouseDown, [this](void* e) {this->onDown(e);});
 	}
 
 	NodeScroller::~NodeScroller()
