@@ -103,7 +103,10 @@ namespace Ling {
 
 	void WinBase::layout()
 	{
-		body->setSize(w, h);
+		// body 是根节点，尺寸完全由窗口物理尺寸决定 —— 直接设给 yoga，不走 Node::setSize
+		// （那会把 w/h 当成逻辑值再乘一遍 dpi，导致翻倍）
+		YGNodeStyleSetWidth(body->node, w);
+		YGNodeStyleSetHeight(body->node, h);
 		YGNodeCalculateLayout(body->node, w, h, YGDirectionLTR);
 		body->layout();
 	}
@@ -281,16 +284,24 @@ namespace Ling {
 	{
 		const UINT newDPI = HIWORD(wParam);
 		dpi = newDPI / 96.f;
-		RECT* prcNewWindow = reinterpret_cast<RECT*>(lParam);
-		auto w{ prcNewWindow->right - prcNewWindow->left };
-		auto h{ prcNewWindow->bottom - prcNewWindow->top };
-		SetWindowPos(hwnd, nullptr, prcNewWindow->left, prcNewWindow->top, w, h, SWP_NOSIZE| SWP_NOREPOSITION | SWP_NOZORDER | SWP_NOACTIVATE);
-		this->x = prcNewWindow->left;
-		this->y = prcNewWindow->top;
-		this->w = (float)w;
-		this->h = (float)h;
+		// 用新 dpi 把整棵树的逻辑值重新推给 yoga，并触发子类的 onDpiChanged。
+		// 放在 SetWindowPos 之前：SetWindowPos 会派发 WM_SIZE，sizeChange 里会调
+		// layout()，那时 yoga 样式必须已经按新 dpi 就绪。
+		if (body) body->applyDpiChange();
 		emit(Event::DpiChanged, nullptr);
-		layout();
+
+		// lParam 是系统建议的新窗口矩形（含非客户区）。真正 resize + move 窗口。
+		// 不带 SWP_NOSIZE / SWP_NOREPOSITION —— 否则 HWND 客户区不会跟着 dpi 变化，
+		// Composition 视觉树按新 dpi 缩小后，周围没被覆盖的区域会透出背景。
+		RECT* prcNewWindow = reinterpret_cast<RECT*>(lParam);
+		const int newW = prcNewWindow->right - prcNewWindow->left;
+		const int newH = prcNewWindow->bottom - prcNewWindow->top;
+		SetWindowPos(hwnd, nullptr,
+			prcNewWindow->left, prcNewWindow->top, newW, newH,
+			SWP_NOZORDER | SWP_NOACTIVATE);
+		// 不用在这里刷 this->x/y/w/h 或调 layout()：
+		// SetWindowPos 触发的 WM_MOVE / WM_SIZE 会走 posChange / sizeChange，
+		// sizeChange 结尾会调用 layout()。
 	}
 
 	void WinBase::sizeChange(WPARAM wParam, LPARAM lParam)

@@ -8,7 +8,6 @@ namespace Ling {
 
 	NodeText::NodeText(WinBase* win) :Node(win)
 	{
-
 	}
 
 	NodeText::~NodeText()
@@ -17,18 +16,31 @@ namespace Ling {
 
 	void NodeText::setText(const std::wstring& text, float fontSize, const std::wstring& fontFamily)
 	{
+		this->text = text;
+		this->fontSize = fontSize;
+		this->fontFamily = fontFamily;
+		rebuildTextLayout();
+	}
+
+	void NodeText::rebuildTextLayout()
+	{
+		if (text.empty()) return;
 		auto d2d = D2D::get();
-		surface = d2d->createDrawingSurface(win->compositor);
-		Composition::CompositionSurfaceBrush brush = win->compositor.CreateSurfaceBrush(surface);
-		visual.Brush(brush);
+		if (!surface) {
+			surface = d2d->createDrawingSurface(win->compositor);
+			Composition::CompositionSurfaceBrush brush = win->compositor.CreateSurfaceBrush(surface);
+			visual.Brush(brush);
+		}
 		textLayout = d2d->createTextLayout(text, FLT_MAX, FLT_MAX);
-		textLayout->SetFontSize(fontSize * win->dpi, {0,INT_MAX}); //todo
+		textLayout->SetFontSize(fontSize * win->dpi, { 0, INT_MAX });
 		if (!fontFamily.empty()) {
-			textLayout->SetFontFamilyName(fontFamily.data(), {0,INT_MAX});
+			textLayout->SetFontFamilyName(fontFamily.data(), { 0, INT_MAX });
 		}
 		DWRITE_TEXT_METRICS metrics;
 		textLayout->GetMetrics(&metrics);
-		setSize(metrics.width, metrics.height);
+		// textLayout 里已经是物理像素了，直接设给 yoga，不再走 setSize（那会把它当逻辑值再乘一遍 dpi）
+		YGNodeStyleSetWidth(node, metrics.width);
+		YGNodeStyleSetHeight(node, metrics.height);
 		surface.Resize({ (int)metrics.width, (int)metrics.height });
 	}
 
@@ -37,9 +49,15 @@ namespace Ling {
 		this->color = color;
 	}
 
+	void NodeText::onDpiChanged()
+	{
+		rebuildTextLayout();
+	}
+
 	void NodeText::layout()
 	{
 		Node::layout();
+		if (!textLayout || !surface) return;
 		auto s = surface.as<ABI::Windows::UI::Composition::ICompositionDrawingSurfaceInterop>();
 		ComPtr<ID2D1DeviceContext> ctx;
 		POINT offset{};   // 物理像素
@@ -51,12 +69,9 @@ namespace Ling {
 
 		ComPtr<ID2D1SolidColorBrush> brush;
 		ctx->CreateSolidColorBrush(color.getD2DColor(), brush.GetAddressOf());
-		ctx->DrawTextLayout({0.f,0.f}, textLayout.Get(), brush.Get());
+		ctx->DrawTextLayout({ 0.f, 0.f }, textLayout.Get(), brush.Get());
 
 		s->EndDraw();
-
-
-		
 	}
 
 }

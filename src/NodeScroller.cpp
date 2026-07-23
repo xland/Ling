@@ -5,12 +5,13 @@
 
 namespace Ling {
 
-	constexpr float sliderW{ 8.f }, sliderMinH{22.f};
+	// 逻辑像素常量
+	constexpr float sliderW{ 8.f }, sliderMinH{ 22.f };
 
 	NodeScroller::NodeScroller(WinBase* win) : Node(win)
 	{
 		YGNodeStyleSetOverflow(node, YGOverflowScroll);   // 内容溢出走滚动，不参与父级 flex-basis
-		YGNodeStyleSetMinHeight(node, 0.f);  // 关键：解除 flex 项目的 min-content 下限
+		YGNodeStyleSetMinHeight(node, 0.f);               // 关键：解除 flex 项目的 min-content 下限
 		YGNodeStyleSetFlexShrink(node, 1.f);              // 允许被父级压缩到剩余空间
 
 		colorVisibleScroller = win->compositor.CreateColorBrush(Color(0x88888822).getUIColor());
@@ -30,9 +31,9 @@ namespace Ling {
 		visualScroller.Children().InsertAtTop(visualThumb);
 
 		onWheelId = win->on(Event::MouseWheel, [this](void* e) { this->onWheel(e); });
-		onMoveId = win->on(Event::MouseMove, [this](void* e) { this->onMove(e);  });
-		onUpId = win->on(Event::MouseUp, [this](void* e) { this->onUp(e);    });
-		onDownId = win->on(Event::MouseDown, [this](void* e) { this->onDown(e);  });
+		onMoveId  = win->on(Event::MouseMove,  [this](void* e) { this->onMove(e); });
+		onUpId    = win->on(Event::MouseUp,    [this](void* e) { this->onUp(e); });
+		onDownId  = win->on(Event::MouseDown,  [this](void* e) { this->onDown(e); });
 	}
 
 	NodeScroller::~NodeScroller()
@@ -45,6 +46,8 @@ namespace Ling {
 
 	void NodeScroller::setContentHeight(float h)
 	{
+		// 参数 h 是逻辑像素；透传给 Node::setHeight 后由它乘 dpi。
+		contentHeightLogical = h;
 		content->setWidthPercent(100.f);
 		content->setHeight(h);
 		scrollY = 0;
@@ -113,7 +116,6 @@ namespace Ling {
 				visualThumb.Brush(colorHoverThumb);
 			}
 		}
-
 	}
 
 	void NodeScroller::setScroll(float y)
@@ -125,20 +127,26 @@ namespace Ling {
 		if (content->h > h) {
 			float minH = sliderMinH * win->dpi;
 			float thumbH = std::max(minH, h * h / content->h);
-			float maxScroll = content->h - h;
 			float top = maxScroll > 0 ? scrollY * (h - thumbH) / maxScroll : 0.f;
-			visualThumb.Offset({ 0.f, top ,0.f });
-			visualThumb.Size({ 6 * win->dpi, thumbH });
+			visualThumb.Offset({ 0.f, top, 0.f });
+			visualThumb.Size({ sliderW * win->dpi, thumbH });
 		}
+	}
+
+	void NodeScroller::onDpiChanged()
+	{
+		// 滑块所有尺寸都是 dpi 派生量。这里不用做任何事：
+		// applyDpiChange 结束后 WinBase 会 relayout，layout() 里会调 setScroll
+		// 重算 visualThumb 的 offset/size；visualScroller 的 offset/size 也在 layout 里更新。
 	}
 
 	void NodeScroller::layout()
 	{
 		Node::layout();
 		if (content->h > h) { //有滚动条
-			auto sbW{ 6 * win->dpi };
-			visualScroller.Offset({ w - sbW, 0.f ,0.f });
-			visualScroller.Size({ sbW,h });
+			auto sbW{ sliderW * win->dpi };
+			visualScroller.Offset({ w - sbW, 0.f, 0.f });
+			visualScroller.Size({ sbW, h });
 			visualScroller.IsVisible(true);
 			setScroll(scrollY);
 		}

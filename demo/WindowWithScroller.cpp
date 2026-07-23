@@ -1,4 +1,7 @@
-﻿#include "WindowWithScroller.h"
+﻿#include <winrt/Windows.UI.Composition.h>
+#include <winrt/Windows.Foundation.Collections.h>
+
+#include "WindowWithScroller.h"
 #include "include/Ling.h"
 
 WindowWithScroller::WindowWithScroller():Ling::WinBase()
@@ -20,7 +23,7 @@ void WindowWithScroller::onCreated()
 
     auto titleBar = body->makeChild<Ling::Node>();
     titleBar->setWidthPercent(100.f);
-    titleBar->setHeight(30.f * dpi);
+    titleBar->setHeight(30.f);
     titleBar->setBg(0xF8F8F8FF);
     titleBar->setFlexDirection(Ling::FlexDirection::Row);
 
@@ -40,7 +43,7 @@ void WindowWithScroller::onCreated()
         btn->setJustifyContent(Ling::Justify::Center);
         btn->setAlignItems(Ling::Align::Center);
         btn->setBg(0xCCCCCCFF);
-        btn->setWidth(32.f * dpi);
+        btn->setWidth(32.f);
         auto icon = btn->makeChild<Ling::NodeText>();
         icon->setText(iconCodes[i], 13.f, L"icon");
     }
@@ -89,7 +92,9 @@ void WindowWithScroller::initScrollerBox()
     scrollerBox->setWidthPercent(100.f);
     scrollerBox->setFlexGrow(1.f);
     //scrollerBox->setHeight(900.f);
-    scrollerBox->setContentHeight(2 * h);
+    // h 是窗口的物理像素高；content 高度想要"窗口物理高的 2 倍"，
+    // 换算成逻辑像素传给 setContentHeight（内部会再乘 dpi）。
+    scrollerBox->setContentHeight(2 * h / dpi);
     auto linearBrush = compositor.CreateLinearGradientBrush();
     linearBrush.StartPoint({ 0.5f, 0.0f });
     linearBrush.EndPoint({ 0.5f, 1.0f });
