@@ -27,8 +27,7 @@ namespace Ling {
 		void setSize(float w, float h);
 		void setPosition(int x, int y);
 		void setCenter();
-		Node* createNode(const std::string& id);
-		NodeScroller* createNodeScroller(const std::string& id);
+		void layout();
 	public:
 		int x{ 0 }, y{ 0 };      // 屏幕坐标：物理像素
 		float w{ 0 }, h{ 0 };    // 客户区大小：物理像素
@@ -46,19 +45,17 @@ namespace Ling {
 		std::wstring& getWinClsName(HINSTANCE hIns, const int& iconId);
 		static LRESULT CALLBACK winProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		BOOL setCursor();
-		void mouseMove(float x, float y);
+		void mouseMove(POINT pos);
 		void mouseLeave();
-		void mouseDown(float x, float y, bool isRight);
-		void mouseUp(float x, float y, bool isRight);
+		void mouseDown(POINT pos, bool isRight);
+		void mouseUp(POINT pos, bool isRight);
 		void mouseWheel(WPARAM wParam, LPARAM lParam);
 		void keyDown(UINT key);
 		void timer(UINT id);
 		void dpiChange(WPARAM wParam, LPARAM lParam);
 		void sizeChange(WPARAM wParam, LPARAM lParam);
-		void posChange(int x, int y);
+		void posChange(POINT pos);
 	private:	
 		winrt::Windows::UI::Composition::Desktop::DesktopWindowTarget winTarget{ nullptr };
-		std::unordered_map<std::string, std::unique_ptr<Node>> nodes;
-		std::unordered_map<std::string, std::unique_ptr<NodeScroller>> nodeScrollers;
 	};
 }

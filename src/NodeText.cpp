@@ -6,7 +6,7 @@
 
 namespace Ling {
 
-	NodeText::NodeText(WinBase* win, const std::wstring& text) :Node(win)
+	NodeText::NodeText(Node* parent, const std::wstring& text) :Node(parent)
 	{
 		auto d2d = D2D::get();
 		surface = d2d->createDrawingSurface(win->compositor);
@@ -37,7 +37,7 @@ namespace Ling {
 		textLayout->GetMetrics(&metrics);
 		auto w = metrics.width + 2 * paddingLeftRight;
 		auto h = metrics.height + 2 * paddingTopBottom;
-		visual.Size({ w,h });
+		setSize(w, h);
 	}
 
 }

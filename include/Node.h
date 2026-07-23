@@ -13,14 +13,15 @@ namespace Ling {
 	{
 		friend class WinBase;
 		public:
+			Node(Node* parent);
 			virtual ~Node();
-			bool isPosIn(float x,float y);
-			void setPosSize(const float& x, const float& y, const float& w, const float& h);
-			std::tuple<float, float, float, float> getPosSize();
+			void removeSelf();
+			void removeChild(Node* ele);
+			bool isPosIn(POINT pos);
 			void hide();
 			void show();
 			void setBg(const Color& color);
-			void layout();
+			virtual void layout();
 
 			/// <summary>
 			/// 此元素如何在父元素主轴方向上“长大”占据剩余空间
@@ -34,7 +35,7 @@ namespace Ling {
 			void setFlexShrink(const float& val);
 			void setWidth(const float& w);
 			void setHeight(const float& h);
-			virtual void setSize(const float& w, const float& h);
+			void setSize(const float& w, const float& h);
 			void setWidthPercent(const float& percent);
 			void setHeightPercent(const float& percent);
 			void setSizePercent(const float& w, const float& h);
@@ -86,6 +87,6 @@ namespace Ling {
 			Node* parent{ nullptr };
 			std::vector<Node*> children;
 		protected:
-			Node(WinBase* win);
+			Node(WinBase* parent);
 	};
 }

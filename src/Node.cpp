@@ -4,37 +4,41 @@
 
 namespace Ling {
 
-	Node::Node(WinBase* win):win{win}
+	Node::Node(Node* parent) :parent{parent}, win{parent-> win }, node(YGNodeNew()), visual{ win->compositor.CreateSpriteVisual() }
 	{
-		visual = win->compositor.CreateSpriteVisual();
-		//win->visual.Children().InsertAtTop(visual);
+		parent->visual.Children().InsertAtTop(visual);
+		YGNodeInsertChild(parent->node, node, YGNodeGetChildCount(node));
+		parent->children.push_back(this);
 	}
-
+	Node::Node(WinBase* win) :parent{ nullptr }, win{ win }, node(YGNodeNew()), visual{ win->compositor.CreateSpriteVisual() }
+	{
+	}
 	Node::~Node()
 	{
+		YGNodeFree(node);
+	}
+	void Node::removeSelf()
+	{
+		if (!parent) return;
+		for (auto& child : children) {
+			child->removeSelf();
+		}
+		YGNodeRemoveChild(parent->node, node);
+		parent->visual.Children().Remove(visual);
+		auto& siblings = parent->children;
+		siblings.erase(std::remove(siblings.begin(), siblings.end(), this), siblings.end());
 	}
 
-	bool Node::isPosIn(float x, float y)
+	void Node::removeChild(Node* ele)
 	{
-		auto pos = visual.Offset();
-		auto size = visual.Size();
-		if (x > pos.x && x<pos.x + size.x && y>pos.y && y < pos.y + size.y) {
+		ele->removeSelf();
+	}
+	bool Node::isPosIn(POINT pos)
+	{
+		if (pos.x > x && pos.x<x + w && pos.y>y && pos.y < y + h) {
 			return true;
 		}
 		return false;
-	}
-
-	void Node::setPosSize(const float& x, const float& y, const float& w, const float& h)
-	{
-		visual.Offset({ x,y,0.f });
-		visual.Size({ w,h });
-	}
-
-	std::tuple<float, float, float, float> Node::getPosSize()
-	{
-		auto pos = visual.Offset();
-		auto size = visual.Size();
-		return std::make_tuple(pos.x,pos.y,size.x,size.y);
 	}
 	void Node::hide()
 	{
@@ -57,12 +61,12 @@ namespace Ling {
 		y = YGNodeLayoutGetTop(node);
 		w = YGNodeLayoutGetWidth(node);
 		h = YGNodeLayoutGetHeight(node);
+		visual.Offset({ x, y, 0.0f });
+		visual.Size({ w, h });
 		if (parent) {
 			x = parent->x + x;
 			y = parent->y + y;
 		}
-		visual.Offset({ x, y, 0.0f });
-		visual.Size({ w, h });
 		for (auto& child : children) {
 			child->layout();
 		}
@@ -86,6 +90,7 @@ namespace Ling {
 	{
 		YGNodeStyleSetHeight(node, h);
 	}
+
 	void Node::setSize(const float& w, const float& h)
 	{
 		YGNodeStyleSetWidth(node, w);

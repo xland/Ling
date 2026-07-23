@@ -5,7 +5,9 @@
 
 namespace Ling {
 
-	NodeScroller::NodeScroller(WinBase* win) :Node(win)
+	constexpr float sliderW{ 6.f }, sliderMinH{22.f};
+
+	NodeScroller::NodeScroller(Node* parent) : Node(parent)
 	{
 		colorVisibleScroller = win->compositor.CreateColorBrush(Color(0x88888822).getUIColor());
 		colorHoverScroller = win->compositor.CreateColorBrush(Color(0x88888833).getUIColor());
@@ -27,15 +29,18 @@ namespace Ling {
 		visualThumb = win->compositor.CreateSpriteVisual();
 		visualScroller.Children().InsertAtTop(visualThumb);
 
-
-		win->on(Event::MouseWheel, [this](void* e) {this->onWheel(e);});
-		win->on(Event::MouseMove, [this](void* e) {this->onMove(e);});
-		win->on(Event::MouseUp, [this](void* e) {this->onUp(e);});
-		win->on(Event::MouseDown, [this](void* e) {this->onDown(e);});
+		onWheelId = win->on(Event::MouseWheel, [this](void* e) { this->onWheel(e); });
+		onMoveId = win->on(Event::MouseMove, [this](void* e) { this->onMove(e);  });
+		onUpId = win->on(Event::MouseUp, [this](void* e) { this->onUp(e);    });
+		onDownId = win->on(Event::MouseDown, [this](void* e) { this->onDown(e);  });
 	}
 
 	NodeScroller::~NodeScroller()
 	{
+		win->off(Event::MouseWheel, onWheelId);
+		win->off(Event::MouseMove, onMoveId);
+		win->off(Event::MouseUp, onUpId);
+		win->off(Event::MouseDown, onDownId);
 	}
 
 	void NodeScroller::setContentHeight(float h)
@@ -43,38 +48,26 @@ namespace Ling {
 		auto parentSize = visual.Size();
 		visualContent.Size({ parentSize.x,h });
 		scrollY = 0;
-		if (h > parentSize.y) { //有滚动条
-			auto sbW{ 6 * win->dpi };
-			visualScroller.Offset({ parentSize.x - sbW, 0.f ,0.f});
-			visualScroller.Size({ sbW,parentSize.y });
-			visualScroller.IsVisible(true);
-			setScroll(0.f);
-		}
-		else {
-			visualScroller.IsVisible(false);
-		}
 	}
 
 	void NodeScroller::onWheel(void* e)
 	{
 		if (!visualScroller.IsVisible()) return;
-		auto tuplePtr = static_cast<std::tuple<float,float, float>*>(e);
-		auto [x,y, space] = *tuplePtr;
-		if (!isPosIn(x,y)) return;
+		auto tuplePtr = static_cast<std::tuple<POINT, float>*>(e);
+		auto [pos, space] = *tuplePtr;
+		if (!isPosIn(pos)) return;
 		setScroll(scrollY - space);
 	}
 
 	void NodeScroller::onDown(void* e)
 	{
 		if (!visual.IsVisible()) return;
-		auto tuplePtr = static_cast<std::tuple<float, float, bool>*>(e);
-		auto [x, y, isRight] = *tuplePtr;
+		auto tuplePtr = static_cast<std::tuple<POINT, bool>*>(e);
+		auto [pos, isRight] = *tuplePtr;
 		if (isRight) return;
-		auto pos = visual.Offset();
-		auto size = visual.Size();
-		auto sbW{ 6 * win->dpi };
+		auto sbW{ sliderW * win->dpi };
 		// 只在点击滚动条条形区域内才启动拖动
-		if (y >= pos.y && y <= pos.y + size.y && x >= pos.x + size.x - sbW && x <= pos.x + size.x) {
+		if (pos.y >= y && pos.y <= y + h && pos.x >= x + w - sbW && pos.x <= x + w) {
 			SetCapture(win->hwnd);
 			scrollerDragging = true;
 			dragStartMouseY = (float)y;
@@ -93,28 +86,26 @@ namespace Ling {
 	void NodeScroller::onMove(void* e)
 	{
 		if (!visual.IsVisible()) return;
-		auto tuplePtr = static_cast<std::tuple<float, float>*>(e);
-		auto [x, y] = *tuplePtr;
-		auto parentPos = visual.Offset();
-		auto parentSize = visual.Size();
-		if (!scrollerDragging && (y < parentPos.y || y > parentPos.y + parentSize.y || x < parentPos.x || x>parentPos.x + parentSize.x)) {
+		auto tuplePtr = static_cast<std::tuple<POINT>*>(e);
+		auto [pos] = *tuplePtr;
+		if (!scrollerDragging && !isPosIn(pos)) {
 			visualScroller.Brush(colorTransparent);
 			visualThumb.Brush(colorTransparent);
 			return;
 		}
-		auto sbW{ 6 * win->dpi };
+		auto sbW{ sliderW * win->dpi };
 		if (scrollerDragging) {
 			auto contentSize = visualContent.Size();
-			float maxScroll = std::max(0.f, contentSize.y - parentSize.y);
-			float minH = 22.f * win->dpi;
-			float thumbH = std::max(minH, parentSize.y * parentSize.y / contentSize.y);
-			float trackFree = parentSize.y - thumbH;
+			float maxScroll = std::max(0.f, contentSize.y - h);
+			float minH = sliderMinH * win->dpi;
+			float thumbH = std::max(minH, h * h / contentSize.y);
+			float trackFree = h - thumbH;
 			if (trackFree <= 0) return;
 			float ratio = (y - dragStartMouseY) / trackFree;
 			setScroll(dragStartScrollY + ratio * maxScroll);
 		}
 		else {
-			if (x < parentPos.x + parentSize.x - sbW) {
+			if (pos.x < x + w - sbW) {
 				visualScroller.Brush(colorVisibleScroller);
 				visualThumb.Brush(colorVisibleThumb);
 			}
@@ -129,19 +120,35 @@ namespace Ling {
 	void NodeScroller::setScroll(float y)
 	{
 		auto contentSize = visualContent.Size();
-		auto parentSize = visual.Size();
-		float maxScroll = std::max(0.f, contentSize.y - parentSize.y);
+		float maxScroll = std::max(0.f, contentSize.y - h);
 		y = std::clamp(y, 0.f, maxScroll);
 		scrollY = y;
 		visualContent.Offset({ 0.f, -scrollY, 0.f });
-		if (contentSize.y > parentSize.y) {
-			float minH = 22.f * win->dpi;
-			float thumbH = std::max(minH, parentSize.y * parentSize.y / contentSize.y);
-			float maxScroll = contentSize.y - parentSize.y;
-			float top = maxScroll > 0 ? scrollY * (parentSize.y - thumbH) / maxScroll : 0.f;
+		if (contentSize.y > h) {
+			float minH = sliderMinH * win->dpi;
+			float thumbH = std::max(minH, h * h / contentSize.y);
+			float maxScroll = contentSize.y - h;
+			float top = maxScroll > 0 ? scrollY * (h - thumbH) / maxScroll : 0.f;
 			visualThumb.Offset({ 0.f, top ,0.f });
 			visualThumb.Size({ 6 * win->dpi, thumbH });
 		}
 	}
 
+	void NodeScroller::layout()
+	{
+		Node::layout();
+		auto parentSize = visual.Size();
+		auto contentSize = visualContent.Size();
+		visualContent.Size({ parentSize.x,contentSize.y });
+		if (contentSize.y > parentSize.y) { //有滚动条
+			auto sbW{ 6 * win->dpi };
+			visualScroller.Offset({ parentSize.x - sbW, 0.f ,0.f });
+			visualScroller.Size({ sbW,parentSize.y });
+			visualScroller.IsVisible(true);
+			setScroll(scrollY);
+		}
+		else {
+			visualScroller.IsVisible(false);
+		}
+	}
 }

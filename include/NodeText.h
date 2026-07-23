@@ -9,6 +9,7 @@ namespace Ling {
 	{
 		friend class WinBase;
 	public:
+		NodeText(Node* parent, const std::wstring& text);
 		~NodeText();
 		void onDown(void* e);
 		void onUp(void* e);
@@ -18,7 +19,6 @@ namespace Ling {
 		winrt::Windows::UI::Composition::CompositionDrawingSurface surface{ nullptr };
 		Microsoft::WRL::ComPtr<IDWriteTextLayout> textLayout;
 	private:
-		NodeText(WinBase* win,const std::wstring& text);
 	private:		
 	};
 }

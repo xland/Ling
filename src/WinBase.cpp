@@ -101,22 +101,11 @@ namespace Ling {
 		setPosition(x, y);
 	}
 
-	Node* WinBase::createNode(const std::string& id)
+	void WinBase::layout()
 	{
-		auto ptr = new Node(this);
-		body->visual.Children().InsertAtTop(ptr->visual);
-		std::unique_ptr<Node> node(ptr);
-		nodes.insert({ id,std::move(node) });
-		return ptr;
-	}
-
-	NodeScroller* WinBase::createNodeScroller(const std::string& id)
-	{
-		auto ptr = new NodeScroller(this);
-		body->visual.Children().InsertAtTop(ptr->visual);
-		std::unique_ptr<NodeScroller> node(ptr);
-		nodeScrollers.insert({ id,std::move(node) });
-		return ptr;
+		body->setSize(w, h);
+		YGNodeCalculateLayout(body->node, w, h, YGDirectionLTR);
+		body->layout();
 	}
 
 	void WinBase::createNativeWindow(int iconId, DWORD exStyle, DWORD style)
@@ -128,11 +117,10 @@ namespace Ling {
 		auto interop = compositor.as<ABI::Windows::UI::Composition::Desktop::ICompositorDesktopInterop>();
 		auto r = reinterpret_cast<ABI::Windows::UI::Composition::Desktop::IDesktopWindowTarget**>(winrt::put_abi(winTarget));
 		interop->CreateDesktopWindowTarget(hwnd, false, r);
-
 		body = std::unique_ptr<Node>(new Node(this));
 		winTarget.Root(body->visual);
-		body->setPosSize(0.f, 0.f, w, h);
 		onCreated();
+		layout();
 	}
 
 	std::wstring& WinBase::getWinClsName(HINSTANCE hIns, const int& iconId)
@@ -174,25 +162,25 @@ namespace Ling {
 			return 1;
 		}
 		else if (msg == WM_NCHITTEST) {
-			return self->onHitTest(POINT{ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) });
+			return self->onHitTest({ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) });
 		}
 		else if (msg == WM_SETCURSOR) {
 			if (LOWORD(lParam) == HTCLIENT) return self->setCursor();
 		}
 		else if (msg == WM_RBUTTONDOWN) {
-			self->mouseDown((float)(GET_X_LPARAM(lParam)), (float)(GET_Y_LPARAM(lParam)), true);
+			self->mouseDown({ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) }, true);
 		}
 		else if (msg == WM_RBUTTONUP) {
-			self->mouseUp((float)(GET_X_LPARAM(lParam)), (float)(GET_Y_LPARAM(lParam)), true);
+			self->mouseUp({ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) }, true);
 		}
 		else if (msg == WM_LBUTTONDOWN) {
-			self->mouseDown((float)(GET_X_LPARAM(lParam)), (float)(GET_Y_LPARAM(lParam)), false);
+			self->mouseDown({ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) }, false);
 		}
 		else if (msg == WM_LBUTTONUP) {
-			self->mouseUp((float)(GET_X_LPARAM(lParam)), (float)(GET_Y_LPARAM(lParam)), false);
+			self->mouseUp({ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) }, false);
 		}
 		else if (msg == WM_MOUSEMOVE) {
-			self->mouseMove((float)(GET_X_LPARAM(lParam)), (float)(GET_Y_LPARAM(lParam)));
+			self->mouseMove({ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) });
 		}
 		else if (msg == WM_MOUSELEAVE) {
 			self->mouseLeave();
@@ -214,7 +202,7 @@ namespace Ling {
 			return 0;
 		}
 		else if (msg == WM_MOVE) {
-			self->posChange(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+			self->posChange({ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) });
 		}
 		else if (msg == WM_GETMINMAXINFO) {
 			self->onMinMaxInfo((PMINMAXINFO)lParam);
@@ -235,19 +223,19 @@ namespace Ling {
 		return TRUE;
 	}
 
-	void WinBase::mouseDown(float x, float y, bool isRight)
+	void WinBase::mouseDown(POINT pos, bool isRight)
 	{
-		auto arg = std::make_tuple(x, y, isRight);
+		auto arg = std::make_tuple(pos, isRight);
 		emit(Event::MouseDown, &arg);
 	}
 
-	void WinBase::mouseUp(float x, float y, bool isRight)
+	void WinBase::mouseUp(POINT pos, bool isRight)
 	{
-		auto arg = std::make_tuple(x, y, isRight);
+		auto arg = std::make_tuple(pos, isRight);
 		emit(Event::MouseUp, &arg);
 	}
 
-	void WinBase::mouseMove(float x, float y)
+	void WinBase::mouseMove(POINT pos)
 	{
 		if (!isMouseIn) {
 			isMouseIn = true;
@@ -256,7 +244,7 @@ namespace Ling {
 			tme.hwndTrack = hwnd;
 			TrackMouseEvent(&tme);
 		}
-		auto arg = std::make_tuple(x, y);
+		auto arg = std::make_tuple(pos);
 		emit(Event::MouseMove, &arg);
 	}
 
@@ -273,7 +261,7 @@ namespace Ling {
 		ScreenToClient(hwnd, &pt);
 		auto delta{ (short)HIWORD(wParam) };
 		auto space = (delta / (float)WHEEL_DELTA) * 60.f * dpi;
-		auto arg = std::make_tuple((float)pt.x,(float)pt.y, space);
+		auto arg = std::make_tuple(pt, space);
 		emit(Event::MouseWheel, &arg);
 	}
 
@@ -301,14 +289,14 @@ namespace Ling {
 		this->y = prcNewWindow->top;
 		this->w = (float)w;
 		this->h = (float)h;
-		body->setPosSize(0.f, 0.f, w, h);
+		layout();
 		emit(Event::DpiChanged, nullptr);
 	}
 
 	void WinBase::sizeChange(WPARAM wParam, LPARAM lParam)
 	{
 		if (wParam == SIZE_MINIMIZED) {
-			mouseMove(FLT_MAX, FLT_MAX);
+			mouseMove(POINT{INT_MAX,INT_MAX});
 			emit(Event::Minimize, nullptr);
 			return;
 		}
@@ -324,16 +312,16 @@ namespace Ling {
 		}
 		w = static_cast<float>(GET_X_LPARAM(lParam));
 		h = static_cast<float>(GET_Y_LPARAM(lParam));
-		body->setPosSize(0.f, 0.f, w, h);
 		if (w <= 0 || h <= 0) return;
+		layout();
 		emit(Event::SizeChanged, nullptr);
 	}
 
-	void WinBase::posChange(int x, int y)
+	void WinBase::posChange(POINT pos)
 	{
-		this->x = x;
-		this->y = y;
-		auto arg = std::make_tuple(x, y);
+		this->x = pos.x;
+		this->y = pos.y;
+		auto arg = std::make_tuple(pos);
 		emit(Event::PosChanged, nullptr);
 	}
 }

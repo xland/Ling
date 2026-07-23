@@ -8,6 +8,7 @@ namespace Ling {
 	{
 		friend class WinBase;
 	public:
+		NodeScroller(Node* parent);
 		~NodeScroller();
 		void setContentHeight(float h);
 		void onWheel(void* e);
@@ -17,10 +18,10 @@ namespace Ling {
 	public:
 		winrt::Windows::UI::Composition::SpriteVisual visualContent{ nullptr };
 	private:
-		NodeScroller(WinBase* win);
 		void setScroll(float y);
+		void layout() override;
 	private:
-		
+		size_t onWheelId, onMoveId, onUpId, onDownId;
 		winrt::Windows::UI::Composition::SpriteVisual visualScroller{ nullptr };
 		winrt::Windows::UI::Composition::SpriteVisual visualThumb{ nullptr };
 		winrt::Windows::UI::Composition::CompositionColorBrush colorVisibleScroller{ nullptr }, 
