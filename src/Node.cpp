@@ -14,47 +14,44 @@ namespace Ling {
 		YGNodeFree(node);
 	}
 
-	void Node::insertChild(const int& index, Node* node)
-	{
-		node->parent = this;
-		Composition::Visual v{ nullptr };
-		int i = 0;
-		for (auto child : visual.Children()) {
-			if (i == index) {
-				v = child;
-				break;
-			}
-			i++;
-		}
-		visual.Children().InsertAbove(node->visual, v);
-		YGNodeInsertChild(this->node, node->node, index);
-		children.insert(children.begin() + index, node);
+	//void Node::insertChild(const int& index, Node* node)
+	//{
+	//	node->parent = this;
+	//	Composition::Visual v{ nullptr };
+	//	int i = 0;
+	//	for (auto child : visual.Children()) {
+	//		if (i == index) {
+	//			v = child;
+	//			break;
+	//		}
+	//		i++;
+	//	}
+	//	visual.Children().InsertAbove(node->visual, v);
+	//	YGNodeInsertChild(this->node, node->node, index);
+	//	children.insert(children.begin() + index, node);
+	//}
+	//void Node::addChild(Node* node)
+	//{
+	//	node->parent = this;
+	//	visual.Children().InsertAtTop(node->visual);
+	//	YGNodeInsertChild(this->node, node->node, YGNodeGetChildCount(this->node));
+	//	children.push_back(node);
+	//}
+
+
+	std::unique_ptr<Node> Node::detachChild(Node* child) {
+		auto it = std::find_if(children.begin(), children.end(), [child](const std::unique_ptr<Node>& p) { return p.get() == child; });
+		if (it == children.end()) return nullptr;
+		YGNodeRemoveChild(node, child->node);
+		visual.Children().Remove(child->visual);
+		child->parent = nullptr;
+		std::unique_ptr<Node> owned = std::move(*it);
+		children.erase(it);
+		return owned;
 	}
 
-	void Node::addChild(Node* node)
-	{
-		node->parent = this;
-		visual.Children().InsertAtTop(node->visual);
-		YGNodeInsertChild(this->node, node->node, YGNodeGetChildCount(this->node));
-		children.push_back(node);
-	}
-
-
-	void Node::removeSelf()
-	{
-		if (!parent) return;
-		for (auto& child : children) {
-			child->removeSelf();
-		}
-		YGNodeRemoveChild(parent->node, node);
-		parent->visual.Children().Remove(visual);
-		auto& siblings = parent->children;
-		siblings.erase(std::remove(siblings.begin(), siblings.end(), this), siblings.end());
-	}
-
-	void Node::removeChild(Node* ele)
-	{
-		ele->removeSelf();
+	void Node::removeChild(Node* child) {
+		detachChild(child);
 	}
 
 	bool Node::isPosIn(POINT pos)

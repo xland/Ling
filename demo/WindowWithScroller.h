@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "include/WinBase.h"
 #include "include/NodeScroller.h"
+#include "include/NodeText.h"
 class WindowWithScroller : public Ling::WinBase
 {
 public:
@@ -8,9 +9,10 @@ public:
 	~WindowWithScroller();
 private:
 	void onCreated() override;
+	LRESULT onHitTest(const POINT& pos) override;
 	void initScrollerBox();
 private:
-	std::unique_ptr<Ling::NodeScroller> scrollerBox;
-	std::unique_ptr<Ling::Node> titleBar;
+	Ling::NodeScroller* scrollerBox;
+	Ling::Node* titleBox;
 };
 

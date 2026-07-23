@@ -1,5 +1,8 @@
 ﻿#pragma once
 #include <Windows.h>
+#include <winrt/Windows.UI.Composition.h>
+#include <winrt/Windows.Foundation.Collections.h>
+
 #include "Align.h"
 #include "Wrap.h"
 #include "Edge.h"

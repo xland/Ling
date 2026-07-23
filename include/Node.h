@@ -15,15 +15,14 @@ namespace Ling {
 		public:
 			Node(WinBase* parent);
 			virtual ~Node();
-			void insertChild(const int& index, Node* node);
-			void addChild(Node* node);
-			void removeSelf();
-			void removeChild(Node* node);
+			template<typename T> requires std::derived_from<T, Node>
+			T* makeChild();
+			std::unique_ptr<Node> detachChild(Node* child); 
+			void removeChild(Node* child);            
 			bool isPosIn(POINT pos);
 			void hide();
 			void show();
 			void setBg(const Color& color);
-			virtual void layout();
 
 			/// <summary>
 			/// 此元素如何在父元素主轴方向上“长大”占据剩余空间
@@ -87,8 +86,21 @@ namespace Ling {
 			float x{ 0.f }, y{ 0.f }, w{ 0.f }, h{ 0.f };
 			YGNodeRef node{ nullptr };
 			Node* parent{ nullptr };
-			std::vector<Node*> children;
+			std::vector<std::unique_ptr<Node>> children;
 		protected:
+			virtual void layout();
 		private:
 	};
+
+	template<typename T> requires std::derived_from<T, Node>
+	T* Node::makeChild() {
+		auto node = new T(win);
+		node->parent = this;
+		visual.Children().InsertAtTop(node->visual);
+		YGNodeInsertChild(this->node, node->node, YGNodeGetChildCount(this->node));
+
+		auto savePtr = std::unique_ptr<T>(node);
+		children.push_back(std::move(savePtr));
+		return node;
+	}
 }

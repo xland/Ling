@@ -5,7 +5,7 @@
 
 namespace Ling {
 
-	constexpr float sliderW{ 6.f }, sliderMinH{22.f};
+	constexpr float sliderW{ 8.f }, sliderMinH{22.f};
 
 	NodeScroller::NodeScroller(WinBase* win) : Node(win)
 	{
@@ -20,8 +20,7 @@ namespace Ling {
 		colorTransparent = win->compositor.CreateColorBrush(Color(0x00000000).getUIColor());
 		visual.Clip(win->compositor.CreateInsetClip());
 
-		content = std::make_unique<Node>(win);
-		this->addChild(content.get());
+		content = makeChild<Node>();
 
 		visualScroller = win->compositor.CreateSpriteVisual();
 		visual.Children().InsertAtTop(visualScroller);
