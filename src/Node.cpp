@@ -4,22 +4,41 @@
 
 namespace Ling {
 
-	Node::Node(Node* parent) :parent{parent}, win{parent-> win }, node(YGNodeNew()), visual{ win->compositor.CreateSpriteVisual() }
+	Node::Node(WinBase* win) :win{ win }, node(YGNodeNew()), visual{ win->compositor.CreateSpriteVisual() }
 	{
-		parent->visual.Children().InsertAtTop(visual);
-		auto index{ YGNodeGetChildCount(parent->node) };
-		YGNodeInsertChild(parent->node, node, index);
-		parent->children.push_back(this);
-	}
-
-	Node::Node(WinBase* win) :parent{ nullptr }, win{ win }, node(YGNodeNew()), visual{ win->compositor.CreateSpriteVisual() }
-	{
+		//YGNodeStyleSetFlexBasis(this->node, 0.f);
 	}
 
 	Node::~Node()
 	{
 		YGNodeFree(node);
 	}
+
+	void Node::insertChild(const int& index, Node* node)
+	{
+		node->parent = this;
+		Composition::Visual v{ nullptr };
+		int i = 0;
+		for (auto child : visual.Children()) {
+			if (i == index) {
+				v = child;
+				break;
+			}
+			i++;
+		}
+		visual.Children().InsertAbove(node->visual, v);
+		YGNodeInsertChild(this->node, node->node, index);
+		children.insert(children.begin() + index, node);
+	}
+
+	void Node::addChild(Node* node)
+	{
+		node->parent = this;
+		visual.Children().InsertAtTop(node->visual);
+		YGNodeInsertChild(this->node, node->node, YGNodeGetChildCount(this->node));
+		children.push_back(node);
+	}
+
 
 	void Node::removeSelf()
 	{

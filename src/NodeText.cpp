@@ -6,7 +6,7 @@
 
 namespace Ling {
 
-	NodeText::NodeText(Node* parent, const std::wstring& text) :Node(parent)
+	NodeText::NodeText(WinBase* win, const std::wstring& text) :Node(win)
 	{
 		auto d2d = D2D::get();
 		surface = d2d->createDrawingSurface(win->compositor);

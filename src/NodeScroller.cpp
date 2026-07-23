@@ -7,8 +7,12 @@ namespace Ling {
 
 	constexpr float sliderW{ 6.f }, sliderMinH{22.f};
 
-	NodeScroller::NodeScroller(Node* parent) : Node(parent)
+	NodeScroller::NodeScroller(WinBase* win) : Node(win)
 	{
+		YGNodeStyleSetOverflow(node, YGOverflowScroll);   // 内容溢出走滚动，不参与父级 flex-basis
+		YGNodeStyleSetMinHeight(node, 0.f);  // 关键：解除 flex 项目的 min-content 下限
+		YGNodeStyleSetFlexShrink(node, 1.f);              // 允许被父级压缩到剩余空间
+
 		colorVisibleScroller = win->compositor.CreateColorBrush(Color(0x88888822).getUIColor());
 		colorHoverScroller = win->compositor.CreateColorBrush(Color(0x88888833).getUIColor());
 		colorVisibleThumb = win->compositor.CreateColorBrush(Color(0x88888866).getUIColor());
@@ -16,11 +20,8 @@ namespace Ling {
 		colorTransparent = win->compositor.CreateColorBrush(Color(0x00000000).getUIColor());
 		visual.Clip(win->compositor.CreateInsetClip());
 
-		content = std::make_unique<Node>(this);
-
-		visualContent = win->compositor.CreateSpriteVisual();
-		visualContent.Offset({ 0.f,0.f,0.f });
-		visual.Children().InsertAtTop(visualContent);
+		content = std::make_unique<Node>(win);
+		this->addChild(content.get());
 
 		visualScroller = win->compositor.CreateSpriteVisual();
 		visual.Children().InsertAtTop(visualScroller);
@@ -45,7 +46,8 @@ namespace Ling {
 
 	void NodeScroller::setContentHeight(float h)
 	{
-		visualContent.Size({ w,h });
+		content->setWidthPercent(100.f);
+		content->setHeight(h);
 		scrollY = 0;
 	}
 
@@ -94,10 +96,9 @@ namespace Ling {
 		}
 		auto sbW{ sliderW * win->dpi };
 		if (scrollerDragging) {
-			auto contentSize = visualContent.Size();
-			float maxScroll = std::max(0.f, contentSize.y - h);
+			float maxScroll = std::max(0.f, content->h - h);
 			float minH = sliderMinH * win->dpi;
-			float thumbH = std::max(minH, h * h / contentSize.y);
+			float thumbH = std::max(minH, h * h / content->h);
 			float trackFree = h - thumbH;
 			if (trackFree <= 0) return;
 			float ratio = (pos.y - dragStartMouseY) / trackFree;
@@ -118,15 +119,14 @@ namespace Ling {
 
 	void NodeScroller::setScroll(float y)
 	{
-		auto contentSize = visualContent.Size();
-		float maxScroll = std::max(0.f, contentSize.y - h);
+		float maxScroll = std::max(0.f, content->h - h);
 		y = std::clamp(y, 0.f, maxScroll);
 		scrollY = y;
-		visualContent.Offset({ 0.f, -scrollY, 0.f });
-		if (contentSize.y > h) {
+		content->visual.Offset({ 0.f, -scrollY, 0.f }); //todo 重要，命中测试时，要考虑此偏移
+		if (content->h > h) {
 			float minH = sliderMinH * win->dpi;
-			float thumbH = std::max(minH, h * h / contentSize.y);
-			float maxScroll = contentSize.y - h;
+			float thumbH = std::max(minH, h * h / content->h);
+			float maxScroll = content->h - h;
 			float top = maxScroll > 0 ? scrollY * (h - thumbH) / maxScroll : 0.f;
 			visualThumb.Offset({ 0.f, top ,0.f });
 			visualThumb.Size({ 6 * win->dpi, thumbH });
@@ -136,9 +136,7 @@ namespace Ling {
 	void NodeScroller::layout()
 	{
 		Node::layout();
-		auto contentSize = visualContent.Size();
-		visualContent.Size({ w,contentSize.y });
-		if (contentSize.y > h) { //有滚动条
+		if (content->h > h) { //有滚动条
 			auto sbW{ 6 * win->dpi };
 			visualScroller.Offset({ w - sbW, 0.f ,0.f });
 			visualScroller.Size({ sbW,h });
@@ -149,4 +147,5 @@ namespace Ling {
 			visualScroller.IsVisible(false);
 		}
 	}
+
 }

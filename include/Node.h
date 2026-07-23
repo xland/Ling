@@ -13,10 +13,12 @@ namespace Ling {
 	{
 		friend class WinBase;
 		public:
-			Node(Node* parent);
+			Node(WinBase* parent);
 			virtual ~Node();
+			void insertChild(const int& index, Node* node);
+			void addChild(Node* node);
 			void removeSelf();
-			void removeChild(Node* ele);
+			void removeChild(Node* node);
 			bool isPosIn(POINT pos);
 			void hide();
 			void show();
@@ -87,6 +89,6 @@ namespace Ling {
 			Node* parent{ nullptr };
 			std::vector<Node*> children;
 		protected:
-			Node(WinBase* parent);
+		private:
 	};
 }

@@ -9,7 +9,7 @@ namespace Ling {
 	{
 		friend class WinBase;
 	public:
-		NodeText(Node* parent, const std::wstring& text);
+		NodeText(WinBase* win, const std::wstring& text);
 		~NodeText();
 		void onDown(void* e);
 		void onUp(void* e);

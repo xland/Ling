@@ -8,7 +8,7 @@ namespace Ling {
 	{
 		friend class WinBase;
 	public:
-		NodeScroller(Node* parent);
+		NodeScroller(WinBase* win);
 		~NodeScroller();
 		void setContentHeight(float h);
 		void onWheel(void* e);
