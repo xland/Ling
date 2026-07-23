@@ -15,9 +15,9 @@ namespace Ling {
 		~D2D();
 		static D2D* get();
 		static ID2D1Factory1* getFactory();
-		winrt::Windows::UI::Composition::CompositionDrawingSurface createDrawingSurface(const winrt::Windows::UI::Composition::Compositor& comp, const float& w = 0, const float& h = 0);
-		Microsoft::WRL::ComPtr<IDWriteTextLayout> createTextLayout(const std::wstring& text, const float& w, const float& h);
-		void setEllipsis(IDWriteTextLayout* layout, const float& maxW, const float& maxH);
+		winrt::Windows::UI::Composition::CompositionDrawingSurface createDrawingSurface(const winrt::Windows::UI::Composition::Compositor& comp, float w = 0, float h = 0);
+		Microsoft::WRL::ComPtr<IDWriteTextLayout> createTextLayout(const std::wstring& text, float w, float h);
+		void setEllipsis(IDWriteTextLayout* layout, float maxW, float maxH);
 		Microsoft::WRL::ComPtr<ID2D1Bitmap> createBitmap(const std::wstring& imgPath);
 		Microsoft::WRL::ComPtr<ID2D1PathGeometry> createPath(const std::vector<float>& points);
 	private:

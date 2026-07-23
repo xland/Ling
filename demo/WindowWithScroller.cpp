@@ -9,6 +9,9 @@ WindowWithScroller::WindowWithScroller():Ling::WinBase()
     setTitle(L"图像文字识别工具");
     setSize(800, 600);
     setCenter();
+
+    onMoveId = on(Ling::Event::MouseMove, [this](void* e) { this->onMove(e); });
+    onDownId = on(Ling::Event::MouseDown, [this](void* e) { this->onDown(e); });
 }
 
 WindowWithScroller::~WindowWithScroller()
@@ -42,14 +45,11 @@ void WindowWithScroller::onCreated()
         auto btn = titleBar->makeChild<Ling::Node>();
         btn->setJustifyContent(Ling::Justify::Center);
         btn->setAlignItems(Ling::Align::Center);
-        btn->setBg(0xCCCCCCFF);
         btn->setWidth(32.f);
         auto icon = btn->makeChild<Ling::NodeText>();
         icon->setText(iconCodes[i], 13.f, L"icon");
-    }
-
-
-
+        btns.push_back(btn);
+    } 
     initScrollerBox();
     show();
 }
@@ -57,22 +57,17 @@ void WindowWithScroller::onCreated()
 LRESULT WindowWithScroller::onHitTest(const POINT& pos)
 {
     POINT pt = pos;
-    ScreenToClient(hwnd, &pt);
-    // 3) 边框命中区厚度（逻辑像素 → 物理像素）
+    ScreenToClient(hwnd, &pt); 
     const int border = static_cast<int>(4 * dpi);
     if (!wasMaximized) {
         const bool onLeft = pt.x >= 0 && pt.x < border;
         const bool onRight = pt.x <= w && pt.x >= w - border;
         const bool onTop = pt.y >= 0 && pt.y < border;
-        const bool onBottom = pt.y <= h && pt.y >= h - border;
-
-        // 四个角（角块是 border × border 的正方形，必须先于四边判断）
+        const bool onBottom = pt.y <= h && pt.y >= h - border; 
         if (onTop && onLeft)  return HTTOPLEFT;
         if (onTop && onRight) return HTTOPRIGHT;
         if (onBottom && onLeft)  return HTBOTTOMLEFT;
-        if (onBottom && onRight) return HTBOTTOMRIGHT;
-
-        // 四条边
+        if (onBottom && onRight) return HTBOTTOMRIGHT; 
         if (onLeft)   return HTLEFT;
         if (onRight)  return HTRIGHT;
         if (onTop)    return HTTOP;
@@ -91,9 +86,6 @@ void WindowWithScroller::initScrollerBox()
     scrollerBox = body->makeChild<Ling::NodeScroller>();
     scrollerBox->setWidthPercent(100.f);
     scrollerBox->setFlexGrow(1.f);
-    //scrollerBox->setHeight(900.f);
-    // h 是窗口的物理像素高；content 高度想要"窗口物理高的 2 倍"，
-    // 换算成逻辑像素传给 setContentHeight（内部会再乘 dpi）。
     scrollerBox->setContentHeight(2 * h / dpi);
     auto linearBrush = compositor.CreateLinearGradientBrush();
     linearBrush.StartPoint({ 0.5f, 0.0f });
@@ -103,4 +95,33 @@ void WindowWithScroller::initScrollerBox()
     linearBrush.ColorStops().Append(stop1);
     linearBrush.ColorStops().Append(stop2);
     scrollerBox->content->visual.Brush(linearBrush);
+}
+
+void WindowWithScroller::onMove(void* e)
+{
+    auto tuplePtr = static_cast<std::tuple<POINT>*>(e);
+    auto [pos] = *tuplePtr;
+    int index{ -1 };
+    for (size_t i = 0; i < btns.size(); i++)
+    {
+        auto btn = btns[i];
+        if (btn->isPosIn(pos)) {
+            index = i;
+            break;
+        }
+    }
+    if (hoverTitleBtnIndex != index) {
+        if (hoverTitleBtnIndex != -1) {
+            btns[hoverTitleBtnIndex]->setBg(0x00000000);
+        }
+        if (index != -1) {
+            btns[index]->setBg(0xE6E6E6FF);
+        }
+        hoverTitleBtnIndex = index;
+    }
+}
+
+void WindowWithScroller::onDown(void* e)
+{
+
 }

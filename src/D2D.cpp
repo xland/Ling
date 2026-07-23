@@ -86,7 +86,7 @@ namespace Ling {
 	{
 		return d2d->d2dFactory.Get();
 	}
-	Composition::CompositionDrawingSurface D2D::createDrawingSurface(const Composition::Compositor& comp, const float& w, const float& h)
+	Composition::CompositionDrawingSurface D2D::createDrawingSurface(const Composition::Compositor& comp, float w, float h)
 	{
 		Composition::CompositionGraphicsDevice graphicsDevice{ nullptr };
 		auto interop = comp.as<ABI::Windows::UI::Composition::ICompositorInterop>();
@@ -97,14 +97,14 @@ namespace Ling {
 			winrt::Windows::Graphics::DirectX::DirectXAlphaMode::Premultiplied
 		);
 	}
-	ComPtr<IDWriteTextLayout> D2D::createTextLayout(const std::wstring& text, const float& w, const float& h)
+	ComPtr<IDWriteTextLayout> D2D::createTextLayout(const std::wstring& text, float w, float h)
 	{
 		ComPtr<IDWriteTextLayout> layout;
 		dwriteFactory->CreateTextLayout(text.data(), (UINT32)(text.length()), baseTextFormat.Get(), w, h, layout.GetAddressOf());
 		return layout;
 	}
 
-	void D2D::setEllipsis(IDWriteTextLayout* layout, const float& maxW, const float& maxH)
+	void D2D::setEllipsis(IDWriteTextLayout* layout, float maxW, float maxH)
 	{
 		// 单行排布，让 trimming 直接在 maxW 处按字符下刀；否则默认 WRAP 会按单词换行，
 		// 即使 granularity=CHARACTER 也只能在单词边界截断。

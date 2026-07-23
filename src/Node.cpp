@@ -88,51 +88,51 @@ namespace Ling {
 		}
 	}
 
-	void Node::setFlexGrow(const float& val)
+	void Node::setFlexGrow(float val)
 	{
 		YGNodeStyleSetFlexGrow(node, val);
 	}
 
-	void Node::setFlexShrink(const float& val)
+	void Node::setFlexShrink(float val)
 	{
 		YGNodeStyleSetFlexShrink(node, val);
 	}
 
-	void Node::setWidth(const float& w)
+	void Node::setWidth(float w)
 	{
 		logical.width = w;
 		YGNodeStyleSetWidth(node, w * win->dpi);
 	}
-	void Node::setHeight(const float& h)
+	void Node::setHeight(float h)
 	{
 		logical.height = h;
 		YGNodeStyleSetHeight(node, h * win->dpi);
 	}
 
-	void Node::setSize(const float& w, const float& h)
+	void Node::setSize(float w, float h)
 	{
 		setWidth(w);
 		setHeight(h);
 	}
 
-	void Node::setWidthPercent(const float& percent)
+	void Node::setWidthPercent(float percent)
 	{
 		// 百分比不随 dpi 变化，直接透传给 yoga
 		YGNodeStyleSetWidthPercent(node, percent);
 	}
 
-	void Node::setHeightPercent(const float& percent)
+	void Node::setHeightPercent(float percent)
 	{
 		YGNodeStyleSetHeightPercent(node, percent);
 	}
 
-	void Node::setSizePercent(const float& w, const float& h)
+	void Node::setSizePercent(float w, float h)
 	{
 		YGNodeStyleSetWidthPercent(node, w);
 		YGNodeStyleSetHeightPercent(node, h);
 	}
 
-	void Node::setMargin(const float& val)
+	void Node::setMargin(float val)
 	{
 		logical.margin[0] = val;
 		logical.margin[1] = val;
@@ -141,7 +141,7 @@ namespace Ling {
 		YGNodeStyleSetMargin(node, YGEdgeAll, val * win->dpi);
 	}
 
-	void Node::setMargin(const float& left, const float& top, const float& right, const float& bottom)
+	void Node::setMargin(float left, float top, float right, float bottom)
 	{
 		setMarginLeft(left);
 		setMarginTop(top);
@@ -154,31 +154,31 @@ namespace Ling {
 	float Node::getMarginRight()  { return logical.margin[2].value_or(0.f); }
 	float Node::getMarginBottom() { return logical.margin[3].value_or(0.f); }
 
-	void Node::setMarginLeft(const float& val)
+	void Node::setMarginLeft(float val)
 	{
 		logical.margin[0] = val;
 		YGNodeStyleSetMargin(node, YGEdgeLeft, val * win->dpi);
 	}
 
-	void Node::setMarginTop(const float& val)
+	void Node::setMarginTop(float val)
 	{
 		logical.margin[1] = val;
 		YGNodeStyleSetMargin(node, YGEdgeTop, val * win->dpi);
 	}
 
-	void Node::setMarginRight(const float& val)
+	void Node::setMarginRight(float val)
 	{
 		logical.margin[2] = val;
 		YGNodeStyleSetMargin(node, YGEdgeRight, val * win->dpi);
 	}
 
-	void Node::setMarginBottom(const float& val)
+	void Node::setMarginBottom(float val)
 	{
 		logical.margin[3] = val;
 		YGNodeStyleSetMargin(node, YGEdgeBottom, val * win->dpi);
 	}
 
-	void Node::setPadding(const float& val)
+	void Node::setPadding(float val)
 	{
 		logical.padding[0] = val;
 		logical.padding[1] = val;
@@ -187,7 +187,7 @@ namespace Ling {
 		YGNodeStyleSetPadding(node, YGEdgeAll, val * win->dpi);
 	}
 
-	void Node::setPadding(const float& left, const float& top, const float& right, const float& bottom)
+	void Node::setPadding(float left, float top, float right, float bottom)
 	{
 		setPaddingLeft(left);
 		setPaddingTop(top);
@@ -195,25 +195,25 @@ namespace Ling {
 		setPaddingBottom(bottom);
 	}
 
-	void Node::setPaddingLeft(const float& val)
+	void Node::setPaddingLeft(float val)
 	{
 		logical.padding[0] = val;
 		YGNodeStyleSetPadding(node, YGEdgeLeft, val * win->dpi);
 	}
 
-	void Node::setPaddingTop(const float& val)
+	void Node::setPaddingTop(float val)
 	{
 		logical.padding[1] = val;
 		YGNodeStyleSetPadding(node, YGEdgeTop, val * win->dpi);
 	}
 
-	void Node::setPaddingRight(const float& val)
+	void Node::setPaddingRight(float val)
 	{
 		logical.padding[2] = val;
 		YGNodeStyleSetPadding(node, YGEdgeRight, val * win->dpi);
 	}
 
-	void Node::setPaddingBottom(const float& val)
+	void Node::setPaddingBottom(float val)
 	{
 		logical.padding[3] = val;
 		YGNodeStyleSetPadding(node, YGEdgeBottom, val * win->dpi);

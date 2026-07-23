@@ -26,34 +26,34 @@ namespace Ling {
 			void setBg(const Color& color);
 
 			// 下列所有 setter 一律接收“逻辑像素”，内部乘 dpi 塞给 yoga。
-			void setFlexGrow(const float& val);
+			void setFlexGrow(float val);
 			/// <summary>
 			/// 此元素如何在父元素主轴方向上“收缩”
 			/// </summary>
-			void setFlexShrink(const float& val);
-			void setWidth(const float& w);
-			void setHeight(const float& h);
-			void setSize(const float& w, const float& h);
-			void setWidthPercent(const float& percent);
-			void setHeightPercent(const float& percent);
-			void setSizePercent(const float& w, const float& h);
-			void setMargin(const float& val);
-			void setMargin(const float& left, const float& top, const float& right, const float& bottom);
-			void setMarginLeft(const float& val);
-			void setMarginTop(const float& val);
-			void setMarginRight(const float& val);
-			void setMarginBottom(const float& val);
+			void setFlexShrink(float val);
+			void setWidth(float w);
+			void setHeight(float h);
+			void setSize(float w, float h);
+			void setWidthPercent(float percent);
+			void setHeightPercent(float percent);
+			void setSizePercent(float w, float h);
+			void setMargin(float val);
+			void setMargin(float left, float top, float right, float bottom);
+			void setMarginLeft(float val);
+			void setMarginTop(float val);
+			void setMarginRight(float val);
+			void setMarginBottom(float val);
 			float getMarginLeft();
 			float getMarginTop();
 			float getMarginRight();
 			float getMarginBottom();
 
-			void setPadding(const float& val);
-			void setPadding(const float& left, const float& top, const float& right, const float& bottom);
-			void setPaddingLeft(const float& val);
-			void setPaddingTop(const float& val);
-			void setPaddingRight(const float& val);
-			void setPaddingBottom(const float& val);
+			void setPadding(float val);
+			void setPadding(float left, float top, float right, float bottom);
+			void setPaddingLeft(float val);
+			void setPaddingTop(float val);
+			void setPaddingRight(float val);
+			void setPaddingBottom(float val);
 			float getPaddingLeft();
 			float getPaddingTop();
 			float getPaddingRight();

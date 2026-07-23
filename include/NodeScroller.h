@@ -12,9 +12,9 @@ namespace Ling {
 		~NodeScroller();
 		void setContentHeight(float h);
 		void onWheel(void* e);
+		void onMove(void* e);
 		void onDown(void* e);
 		void onUp(void* e);
-		void onMove(void* e);
 	public:
 		//winrt::Windows::UI::Composition::SpriteVisual visualContent{ nullptr };
 		Node* content;
