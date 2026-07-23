@@ -16,7 +16,8 @@ namespace Ling {
 		void onUp(void* e);
 		void onMove(void* e);
 	public:
-		winrt::Windows::UI::Composition::SpriteVisual visualContent{ nullptr };
+		//winrt::Windows::UI::Composition::SpriteVisual visualContent{ nullptr };
+		std::unique_ptr<Node> content;
 	private:
 		void setScroll(float y);
 		void layout() override;

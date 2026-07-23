@@ -14,12 +14,12 @@ namespace Ling {
 		colorVisibleThumb = win->compositor.CreateColorBrush(Color(0x88888866).getUIColor());
 		colorHoverThumb = win->compositor.CreateColorBrush(Color(0x88888888).getUIColor());
 		colorTransparent = win->compositor.CreateColorBrush(Color(0x00000000).getUIColor());
-
-
 		visual.Clip(win->compositor.CreateInsetClip());
+
+		content = std::make_unique<Node>(this);
+
 		visualContent = win->compositor.CreateSpriteVisual();
 		visualContent.Offset({ 0.f,0.f,0.f });
-		visualContent.RelativeSizeAdjustment({ 1.f,1.f });
 		visual.Children().InsertAtTop(visualContent);
 
 		visualScroller = win->compositor.CreateSpriteVisual();
@@ -45,8 +45,7 @@ namespace Ling {
 
 	void NodeScroller::setContentHeight(float h)
 	{
-		auto parentSize = visual.Size();
-		visualContent.Size({ parentSize.x,h });
+		visualContent.Size({ w,h });
 		scrollY = 0;
 	}
 
@@ -70,7 +69,7 @@ namespace Ling {
 		if (pos.y >= y && pos.y <= y + h && pos.x >= x + w - sbW && pos.x <= x + w) {
 			SetCapture(win->hwnd);
 			scrollerDragging = true;
-			dragStartMouseY = (float)y;
+			dragStartMouseY = (float)pos.y;
 			dragStartScrollY = scrollY;
 		}
 	}
@@ -101,7 +100,7 @@ namespace Ling {
 			float thumbH = std::max(minH, h * h / contentSize.y);
 			float trackFree = h - thumbH;
 			if (trackFree <= 0) return;
-			float ratio = (y - dragStartMouseY) / trackFree;
+			float ratio = (pos.y - dragStartMouseY) / trackFree;
 			setScroll(dragStartScrollY + ratio * maxScroll);
 		}
 		else {
@@ -137,13 +136,12 @@ namespace Ling {
 	void NodeScroller::layout()
 	{
 		Node::layout();
-		auto parentSize = visual.Size();
 		auto contentSize = visualContent.Size();
-		visualContent.Size({ parentSize.x,contentSize.y });
-		if (contentSize.y > parentSize.y) { //有滚动条
+		visualContent.Size({ w,contentSize.y });
+		if (contentSize.y > h) { //有滚动条
 			auto sbW{ 6 * win->dpi };
-			visualScroller.Offset({ parentSize.x - sbW, 0.f ,0.f });
-			visualScroller.Size({ sbW,parentSize.y });
+			visualScroller.Offset({ w - sbW, 0.f ,0.f });
+			visualScroller.Size({ sbW,h });
 			visualScroller.IsVisible(true);
 			setScroll(scrollY);
 		}

@@ -8,8 +8,9 @@ public:
 	~WindowWithScroller();
 private:
 	void onCreated() override;
-	void onSize(void* arg);
+	void initScrollerBox();
 private:
-	Ling::NodeScroller* scrollerBox;
+	std::unique_ptr<Ling::NodeScroller> scrollerBox;
+	std::unique_ptr<Ling::Node> titleBar;
 };
 

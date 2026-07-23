@@ -7,16 +7,20 @@ namespace Ling {
 	Node::Node(Node* parent) :parent{parent}, win{parent-> win }, node(YGNodeNew()), visual{ win->compositor.CreateSpriteVisual() }
 	{
 		parent->visual.Children().InsertAtTop(visual);
-		YGNodeInsertChild(parent->node, node, YGNodeGetChildCount(node));
+		auto index{ YGNodeGetChildCount(parent->node) };
+		YGNodeInsertChild(parent->node, node, index);
 		parent->children.push_back(this);
 	}
+
 	Node::Node(WinBase* win) :parent{ nullptr }, win{ win }, node(YGNodeNew()), visual{ win->compositor.CreateSpriteVisual() }
 	{
 	}
+
 	Node::~Node()
 	{
 		YGNodeFree(node);
 	}
+
 	void Node::removeSelf()
 	{
 		if (!parent) return;
@@ -33,6 +37,7 @@ namespace Ling {
 	{
 		ele->removeSelf();
 	}
+
 	bool Node::isPosIn(POINT pos)
 	{
 		if (pos.x > x && pos.x<x + w && pos.y>y && pos.y < y + h) {

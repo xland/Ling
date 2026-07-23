@@ -19,12 +19,24 @@ WindowWithScroller::~WindowWithScroller()
 void WindowWithScroller::onCreated()
 {
     enableShadow();
-    on(Ling::Event::SizeChanged, [this](void* arg) {this->onSize(arg);});
     body->setBg(0xFFFFFFFF);
-    scrollerBox = new Ling::NodeScroller(body.get());    
-    scrollerBox->setSize(w, h);
-    scrollerBox->setContentHeight(2 * h);
+    body->setFlexDirection(Ling::FlexDirection::Column); // 默认主轴就是 Column（垂直方向），这里显式设置更清晰
 
+    titleBar = std::make_unique<Ling::Node>(body.get());
+    titleBar->setWidthPercent(100.f);
+    titleBar->setHeight(30.f * dpi);
+    titleBar->setBg(0xF8F8F8FF);
+
+    initScrollerBox();
+    show();
+}
+
+void WindowWithScroller::initScrollerBox()
+{
+    scrollerBox = std::make_unique<Ling::NodeScroller>(body.get());
+    scrollerBox->setWidthPercent(100.f);
+    scrollerBox->setFlexGrow(1.f);
+    scrollerBox->setContentHeight(2 * h);
     auto linearBrush = compositor.CreateLinearGradientBrush();
     linearBrush.StartPoint({ 0.5f, 0.0f });
     linearBrush.EndPoint({ 0.5f, 1.0f });
@@ -32,14 +44,5 @@ void WindowWithScroller::onCreated()
     auto stop2 = compositor.CreateColorGradientStop(1.0f, Ling::Color(0xFFFF00FF).getUIColor());
     linearBrush.ColorStops().Append(stop1);
     linearBrush.ColorStops().Append(stop2);
-
     scrollerBox->visualContent.Brush(linearBrush);
-
-    show();
-}
-
-void WindowWithScroller::onSize(void* arg)
-{
-
-
 }

@@ -6,9 +6,8 @@ namespace Ling{
 	Color::Color()
 	{
 	}
-	Color::Color(const std::uint8_t& a, const std::uint8_t& r, const std::uint8_t& g, const std::uint8_t& b) : a{ a }, r{ r }, g{ g }, b{ b }
+	Color::Color(const std::uint8_t& r, const std::uint8_t& g, const std::uint8_t& b, const std::uint8_t& a) : r{ r }, g{ g }, b{ b }, a{ a }
 	{
-
 	}
 	Color::Color(const uint32_t& rgba)
 	{

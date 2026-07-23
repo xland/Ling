@@ -289,8 +289,8 @@ namespace Ling {
 		this->y = prcNewWindow->top;
 		this->w = (float)w;
 		this->h = (float)h;
-		layout();
 		emit(Event::DpiChanged, nullptr);
+		layout();
 	}
 
 	void WinBase::sizeChange(WPARAM wParam, LPARAM lParam)
@@ -313,8 +313,8 @@ namespace Ling {
 		w = static_cast<float>(GET_X_LPARAM(lParam));
 		h = static_cast<float>(GET_Y_LPARAM(lParam));
 		if (w <= 0 || h <= 0) return;
-		layout();
 		emit(Event::SizeChanged, nullptr);
+		layout();
 	}
 
 	void WinBase::posChange(POINT pos)

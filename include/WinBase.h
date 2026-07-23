@@ -29,8 +29,8 @@ namespace Ling {
 		void setCenter();
 		void layout();
 	public:
-		int x{ 0 }, y{ 0 };      // 屏幕坐标：物理像素
-		float w{ 0 }, h{ 0 };    // 客户区大小：物理像素
+		int x{ 0 }, y{ 0 };  
+		float w{ 0 }, h{ 0 };
 		float dpi{ 1.0 };
 		HWND hwnd{ nullptr };
 		std::wstring title;
