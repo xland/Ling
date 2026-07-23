@@ -14,6 +14,7 @@
 #include "Event.h"
 #include "NodeText.h"
 #include "NodeScroller.h"
+#include "Button.h"
 #include "Util.h"
 #include "WinBase.h"
 

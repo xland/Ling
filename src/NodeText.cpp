@@ -14,12 +14,31 @@ namespace Ling {
 	{
 	}
 
-	void NodeText::setText(const std::wstring& text, float fontSize, const std::wstring& fontFamily)
+	void NodeText::setText(const std::wstring& text)
 	{
 		this->text = text;
-		this->fontSize = fontSize;
-		this->fontFamily = fontFamily;
-		rebuildTextLayout();
+		if (textLayout.Get()) {
+			rebuildTextLayout();
+			paint();
+		}
+	}
+
+	void NodeText::setFontSize(float val)
+	{
+		this->fontSize = val;
+		if (textLayout.Get()) {
+			rebuildTextLayout();
+			paint();
+		}
+	}
+
+	void NodeText::setFontFamily(const std::wstring& val)
+	{
+		this->fontFamily = val;
+		if (textLayout.Get()) {
+			rebuildTextLayout();
+			paint();
+		}
 	}
 
 	void NodeText::rebuildTextLayout()
@@ -46,18 +65,21 @@ namespace Ling {
 
 	void NodeText::setColor(Color color)
 	{
-		this->color = color;
+		if (!this->color.equals(color)) {
+			this->color = color;
+			if (textLayout.Get()) {
+				paint();
+			}
+		}
 	}
 
 	void NodeText::onDpiChanged()
 	{
-		rebuildTextLayout();
+		//rebuildTextLayout();
 	}
 
-	void NodeText::layout()
+	void NodeText::paint()
 	{
-		Node::layout();
-		if (!textLayout || !surface) return;
 		auto s = surface.as<ABI::Windows::UI::Composition::ICompositionDrawingSurfaceInterop>();
 		ComPtr<ID2D1DeviceContext> ctx;
 		POINT offset{};   // 物理像素
@@ -66,12 +88,17 @@ namespace Ling {
 		auto trans = D2D1::Matrix3x2F::Translation(static_cast<float>(offset.x), static_cast<float>(offset.y));
 		ctx->SetTransform(trans);
 		ctx->Clear(0);
-
 		ComPtr<ID2D1SolidColorBrush> brush;
 		ctx->CreateSolidColorBrush(color.getD2DColor(), brush.GetAddressOf());
 		ctx->DrawTextLayout({ 0.f, 0.f }, textLayout.Get(), brush.Get());
-
 		s->EndDraw();
+	}
+
+	void NodeText::layout()
+	{
+		rebuildTextLayout();
+		Node::layout(); 
+		paint();
 	}
 
 }

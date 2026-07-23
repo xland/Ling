@@ -66,6 +66,9 @@
     <ClInclude Include="include\Wrap.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\Button.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Ling.cpp">
@@ -99,6 +102,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Util.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Button.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

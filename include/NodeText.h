@@ -5,13 +5,17 @@
 
 namespace Ling {
 	class WinBase;
+	class Button;
 	class NodeText :public Node
 	{
 		friend class WinBase;
+		friend class Button;
 	public:
 		NodeText(WinBase* win);
 		~NodeText();
-		void setText(const std::wstring& text, float fontSize = 13.f, const std::wstring& fontFamily = L"");
+		void setText(const std::wstring& text);
+		void setFontSize(float val);
+		void setFontFamily(const std::wstring& val);
 		void setColor(Color color);
 	public:
 		winrt::Windows::UI::Composition::CompositionDrawingSurface surface{ nullptr };
@@ -50,11 +54,9 @@ namespace Ling {
 
 		void layout() override;
 		void onDpiChanged() override;
-		// dpi 变化后按新 dpi 重建 textLayout 并更新 yoga 尺寸
+		void paint();
 		void rebuildTextLayout();
-
 		Color color{ 0x333333FF };
-		// 逻辑参数缓存 —— dpi 变化时用它重建 textLayout
 		std::wstring text;
 		std::wstring fontFamily;
 		float fontSize{ 13.f };

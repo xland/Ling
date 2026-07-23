@@ -81,23 +81,19 @@ namespace Ling {
 		public:
 			WinBase* win;
 			winrt::Windows::UI::Composition::SpriteVisual visual{ nullptr };
-			// 布局输出：物理像素（yoga 计算结果）
 			float x{ 0.f }, y{ 0.f }, w{ 0.f }, h{ 0.f };
 			YGNodeRef node{ nullptr };
 			Node* parent{ nullptr };
 			std::vector<std::unique_ptr<Node>> children;
 		protected:
 			virtual void layout();
-			// 子类覆盖：dpi 变化后重建自身依赖 dpi 的资源（字体大小、缓存位图等）
 			virtual void onDpiChanged() {}
+		protected:
+			Color bgColor{0};
 		private:
-			// 逻辑像素缓存 —— 只保存跟 dpi 相关的样式项。
-			// 没设置过的项为 std::nullopt，applyDpiChange 时跳过。
-			struct LogicalStyle {
-				std::optional<float> width, height;
-				std::optional<float> margin[4];   // left, top, right, bottom
-				std::optional<float> padding[4];
-			} logical;
+			std::optional<float> width, height;
+			std::optional<float> margin[4];   // left, top, right, bottom
+			std::optional<float> padding[4];
 	};
 
 	template<typename T> requires std::derived_from<T, Node>

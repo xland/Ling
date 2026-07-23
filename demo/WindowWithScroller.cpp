@@ -32,24 +32,36 @@ void WindowWithScroller::onCreated()
 
     titleBox = titleBar->makeChild<Ling::Node>();
     titleBox->setJustifyContent(Ling::Justify::Center);
-    titleBox->setPaddingLeft(12.f);
+    titleBox->setAlignItems(Ling::Align::FlexStart);
+    //titleBox->setPaddingLeft(12.f);
     titleBox->setFlexGrow(1.f);
 
     auto titleText = titleBox->makeChild<Ling::NodeText>();
     titleText->setText(L"窗口标题");
+    titleText->setColor(0X000000FF);
+    titleText->setFontSize(12.f);
 
-    std::vector<std::wstring> iconCodes = { L"\ue6e8",L"\ue6e8",L"\ue6e8" };
+    
 
-    for (size_t i = 0; i < iconCodes.size(); i++)
-    {
-        auto btn = titleBar->makeChild<Ling::Node>();
-        btn->setJustifyContent(Ling::Justify::Center);
-        btn->setAlignItems(Ling::Align::Center);
-        btn->setWidth(32.f);
-        auto icon = btn->makeChild<Ling::NodeText>();
-        icon->setText(iconCodes[i], 13.f, L"icon");
-        btns.push_back(btn);
-    } 
+    auto btn = titleBar->makeChild<Ling::Button>();
+    btn->setWidth(32.f);
+    btn->setHeight(30.f);
+    btn->setText(L"\ue6e8");
+    btn->setFontFamily(L"icon");
+    btn->setHoverColor(0X000000FF);
+    btn->setFontSize(12.f);
+
+    //std::vector<std::wstring> iconCodes = { L"\ue6e8",L"\ue6e8",L"\ue6e8" };
+    //for (size_t i = 0; i < iconCodes.size(); i++)
+    //{
+    //    auto btn = titleBar->makeChild<Ling::Node>();
+    //    btn->setJustifyContent(Ling::Justify::Center);
+    //    btn->setAlignItems(Ling::Align::Center);
+    //    btn->setWidth(32.f);
+    //    auto icon = btn->makeChild<Ling::NodeText>();
+    //    icon->setText(iconCodes[i], 13.f, L"icon");
+    //    btns.push_back(btn);
+    //} 
     initScrollerBox();
     show();
 }

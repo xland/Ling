@@ -163,6 +163,7 @@
   <ItemGroup>
     <ClInclude Include="include\Align.h" />
     <ClInclude Include="include\App.h" />
+    <ClInclude Include="include\Button.h" />
     <ClInclude Include="include\Color.h" />
     <ClInclude Include="include\D2D.h" />
     <ClInclude Include="include\Edge.h" />
@@ -180,6 +181,7 @@
     <ClInclude Include="src\pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Button.cpp" />
     <ClCompile Include="src\Color.cpp" />
     <ClCompile Include="src\D2D.cpp" />
     <ClCompile Include="src\Node.cpp" />

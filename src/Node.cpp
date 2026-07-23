@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "../include/WinBase.h"
 #include "../include/Node.h"
 
@@ -47,6 +47,7 @@ namespace Ling {
 
 	void Node::setBg(const Color& color)
 	{
+		bgColor = color;
 		visual.Brush(win->compositor.CreateColorBrush(color.getUIColor()));
 	}
 
@@ -70,19 +71,17 @@ namespace Ling {
 	void Node::applyDpiChange()
 	{
 		const float d = win->dpi;
-		if (logical.width)  YGNodeStyleSetWidth (node, *logical.width  * d);
-		if (logical.height) YGNodeStyleSetHeight(node, *logical.height * d);
-		if (logical.margin[0])  YGNodeStyleSetMargin(node, YGEdgeLeft,   *logical.margin[0]  * d);
-		if (logical.margin[1])  YGNodeStyleSetMargin(node, YGEdgeTop,    *logical.margin[1]  * d);
-		if (logical.margin[2])  YGNodeStyleSetMargin(node, YGEdgeRight,  *logical.margin[2]  * d);
-		if (logical.margin[3])  YGNodeStyleSetMargin(node, YGEdgeBottom, *logical.margin[3]  * d);
-		if (logical.padding[0]) YGNodeStyleSetPadding(node, YGEdgeLeft,   *logical.padding[0] * d);
-		if (logical.padding[1]) YGNodeStyleSetPadding(node, YGEdgeTop,    *logical.padding[1] * d);
-		if (logical.padding[2]) YGNodeStyleSetPadding(node, YGEdgeRight,  *logical.padding[2] * d);
-		if (logical.padding[3]) YGNodeStyleSetPadding(node, YGEdgeBottom, *logical.padding[3] * d);
-
+		if (width)  YGNodeStyleSetWidth (node, *width  * d);
+		if (height) YGNodeStyleSetHeight(node, *height * d);
+		if (margin[0])  YGNodeStyleSetMargin(node, YGEdgeLeft,   *margin[0]  * d);
+		if (margin[1])  YGNodeStyleSetMargin(node, YGEdgeTop,    *margin[1]  * d);
+		if (margin[2])  YGNodeStyleSetMargin(node, YGEdgeRight,  *margin[2]  * d);
+		if (margin[3])  YGNodeStyleSetMargin(node, YGEdgeBottom, *margin[3]  * d);
+		if (padding[0]) YGNodeStyleSetPadding(node, YGEdgeLeft,   *padding[0] * d);
+		if (padding[1]) YGNodeStyleSetPadding(node, YGEdgeTop,    *padding[1] * d);
+		if (padding[2]) YGNodeStyleSetPadding(node, YGEdgeRight,  *padding[2] * d);
+		if (padding[3]) YGNodeStyleSetPadding(node, YGEdgeBottom, *padding[3] * d);
 		onDpiChanged();
-
 		for (auto& child : children) {
 			child->applyDpiChange();
 		}
@@ -100,12 +99,12 @@ namespace Ling {
 
 	void Node::setWidth(float w)
 	{
-		logical.width = w;
+		width = w;
 		YGNodeStyleSetWidth(node, w * win->dpi);
 	}
 	void Node::setHeight(float h)
 	{
-		logical.height = h;
+		height = h;
 		YGNodeStyleSetHeight(node, h * win->dpi);
 	}
 
@@ -134,10 +133,10 @@ namespace Ling {
 
 	void Node::setMargin(float val)
 	{
-		logical.margin[0] = val;
-		logical.margin[1] = val;
-		logical.margin[2] = val;
-		logical.margin[3] = val;
+		margin[0] = val;
+		margin[1] = val;
+		margin[2] = val;
+		margin[3] = val;
 		YGNodeStyleSetMargin(node, YGEdgeAll, val * win->dpi);
 	}
 
@@ -149,41 +148,41 @@ namespace Ling {
 		setMarginBottom(bottom);
 	}
 
-	float Node::getMarginLeft()   { return logical.margin[0].value_or(0.f); }
-	float Node::getMarginTop()    { return logical.margin[1].value_or(0.f); }
-	float Node::getMarginRight()  { return logical.margin[2].value_or(0.f); }
-	float Node::getMarginBottom() { return logical.margin[3].value_or(0.f); }
+	float Node::getMarginLeft()   { return margin[0].value_or(0.f); }
+	float Node::getMarginTop()    { return margin[1].value_or(0.f); }
+	float Node::getMarginRight()  { return margin[2].value_or(0.f); }
+	float Node::getMarginBottom() { return margin[3].value_or(0.f); }
 
 	void Node::setMarginLeft(float val)
 	{
-		logical.margin[0] = val;
+		margin[0] = val;
 		YGNodeStyleSetMargin(node, YGEdgeLeft, val * win->dpi);
 	}
 
 	void Node::setMarginTop(float val)
 	{
-		logical.margin[1] = val;
+		margin[1] = val;
 		YGNodeStyleSetMargin(node, YGEdgeTop, val * win->dpi);
 	}
 
 	void Node::setMarginRight(float val)
 	{
-		logical.margin[2] = val;
+		margin[2] = val;
 		YGNodeStyleSetMargin(node, YGEdgeRight, val * win->dpi);
 	}
 
 	void Node::setMarginBottom(float val)
 	{
-		logical.margin[3] = val;
+		margin[3] = val;
 		YGNodeStyleSetMargin(node, YGEdgeBottom, val * win->dpi);
 	}
 
 	void Node::setPadding(float val)
 	{
-		logical.padding[0] = val;
-		logical.padding[1] = val;
-		logical.padding[2] = val;
-		logical.padding[3] = val;
+		padding[0] = val;
+		padding[1] = val;
+		padding[2] = val;
+		padding[3] = val;
 		YGNodeStyleSetPadding(node, YGEdgeAll, val * win->dpi);
 	}
 
@@ -197,32 +196,32 @@ namespace Ling {
 
 	void Node::setPaddingLeft(float val)
 	{
-		logical.padding[0] = val;
+		padding[0] = val;
 		YGNodeStyleSetPadding(node, YGEdgeLeft, val * win->dpi);
 	}
 
 	void Node::setPaddingTop(float val)
 	{
-		logical.padding[1] = val;
+		padding[1] = val;
 		YGNodeStyleSetPadding(node, YGEdgeTop, val * win->dpi);
 	}
 
 	void Node::setPaddingRight(float val)
 	{
-		logical.padding[2] = val;
+		padding[2] = val;
 		YGNodeStyleSetPadding(node, YGEdgeRight, val * win->dpi);
 	}
 
 	void Node::setPaddingBottom(float val)
 	{
-		logical.padding[3] = val;
+		padding[3] = val;
 		YGNodeStyleSetPadding(node, YGEdgeBottom, val * win->dpi);
 	}
 
-	float Node::getPaddingLeft()   { return logical.padding[0].value_or(0.f); }
-	float Node::getPaddingTop()    { return logical.padding[1].value_or(0.f); }
-	float Node::getPaddingRight()  { return logical.padding[2].value_or(0.f); }
-	float Node::getPaddingBottom() { return logical.padding[3].value_or(0.f); }
+	float Node::getPaddingLeft()   { return padding[0].value_or(0.f); }
+	float Node::getPaddingTop()    { return padding[1].value_or(0.f); }
+	float Node::getPaddingRight()  { return padding[2].value_or(0.f); }
+	float Node::getPaddingBottom() { return padding[3].value_or(0.f); }
 
 	void Node::setAlignItems(const Align& val)
 	{
