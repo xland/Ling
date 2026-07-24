@@ -8,7 +8,7 @@ namespace Ling {
 	{
 		setJustifyContent(Ling::Justify::Center);
 		setAlignItems(Ling::Align::Center);
-		label = makeChild<Ling::NodeText>();
+		label = makeChild<Ling::Label>();
 		onMoveId = win->on(Ling::Event::MouseMove, [this](void* e) { this->onMove(e); });
 		onDownId = win->on(Ling::Event::MouseDown, [this](void* e) { this->onDown(e); });
 	}

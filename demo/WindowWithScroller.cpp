@@ -69,7 +69,7 @@ void WindowWithScroller::initTitleBar()
     titleBox->setPaddingLeft(12.f);
     titleBox->setFlexGrow(1.f);
 
-    auto titleText = titleBox->makeChild<Ling::NodeText>();
+    auto titleText = titleBox->makeChild<Ling::Label>();
     titleText->setText(title);
 
     std::vector<std::wstring> iconCodes = { L"\ue6e8",L"\ue6e5",L"\ue6e7" };
@@ -97,26 +97,15 @@ void WindowWithScroller::initTitleBar()
 
 void WindowWithScroller::initScrollerBox()
 {
-    scrollerBox = body->makeChild<Ling::NodeScroller>();
+    scrollerBox = body->makeChild<Ling::ScrollerBox>();
     scrollerBox->setWidthPercent(100.f);
     scrollerBox->setFlexGrow(1.f);
     for (size_t i = 0; i < 100; i++)
     {
-        auto text = scrollerBox->makeChild<Ling::NodeText>();
+        auto text = scrollerBox->makeChild<Ling::Label>();
         text->setText(std::format(L"这是一行文本，看看能渲染多少条{}", i));        
         text->setMargin(12.f, 8.f, 12.f, 8.f);
     }
-    
-
-
-    //auto linearBrush = compositor.CreateLinearGradientBrush();
-    //linearBrush.StartPoint({ 0.5f, 0.0f });
-    //linearBrush.EndPoint({ 0.5f, 1.0f });
-    //auto stop1 = compositor.CreateColorGradientStop(0.0f, Ling::Color(0x00FFFFFF).getUIColor());
-    //auto stop2 = compositor.CreateColorGradientStop(1.0f, Ling::Color(0xFFFF00FF).getUIColor());
-    //linearBrush.ColorStops().Append(stop1);
-    //linearBrush.ColorStops().Append(stop2);
-    //scrollerBox->content->visual.Brush(linearBrush);
 }
 
 void WindowWithScroller::onMove(void* e)

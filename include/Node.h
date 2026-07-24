@@ -59,6 +59,7 @@ namespace Ling {
 			float getPaddingTop();
 			float getPaddingRight();
 			float getPaddingBottom();
+			std::tuple<float, float, float, float> getPadding();
 
 			void setFlexWrap(const Wrap& val);
 			/// <summary>
@@ -88,14 +89,12 @@ namespace Ling {
 			std::vector<std::unique_ptr<Node>> children;
 			std::string id;
 		protected:
-			virtual void beforeLayout() {};
 			virtual void layout();
 			virtual void onDpiChanged() {}
 			virtual void setChild(Node* child);
 		protected:
 			Color bgColor{0};
 		private:
-			void _beforeLayout();
 		private:
 			std::optional<float> width, height;
 			std::optional<float> margin[4];   // left, top, right, bottom

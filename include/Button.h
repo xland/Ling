@@ -19,7 +19,7 @@ namespace Ling {
 		void onMove(void* e);
 		void onDown(void* e);
 	private:
-		NodeText* label;
+		Label* label;
 		size_t onMoveId, onDownId;
 		Color hoverColor{ 0x333333FF }, hoverBg{ 0 },color{ 0x333333FF };
 		bool isHover;

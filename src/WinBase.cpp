@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include "../include/WinBase.h"
 #include "../include/Node.h"
-#include "../include/NodeScroller.h"
+#include "../include/ScrollerBox.h"
 
 namespace Ling {
 	WinBase::WinBase() :EventBase(), compositor{ Composition::Compositor() }
@@ -116,7 +116,6 @@ namespace Ling {
 
 	void WinBase::layout()
 	{
-		body->_beforeLayout();
 		// body 是根节点，尺寸完全由窗口物理尺寸决定 —— 直接设给 yoga，不走 Node::setSize （那会把 w/h 当成逻辑值再乘一遍 dpi，导致翻倍）
 		YGNodeStyleSetWidth(body->node, w);
 		YGNodeStyleSetHeight(body->node, h);

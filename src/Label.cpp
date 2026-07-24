@@ -1,20 +1,49 @@
 ﻿#include "pch.h"
 #include "../include/Event.h"
-#include "../include/NodeText.h"
+#include "../include/Label.h"
 #include "../include/WinBase.h"
 #include "../include/D2D.h"
 
 namespace Ling {
 
-	NodeText::NodeText(WinBase* win) :Node(win)
+	Label::Label(WinBase* win) :Node(win)
+	{
+		YGNodeSetContext(this->node, this);
+		YGNodeSetMeasureFunc(this->node, &Label::nodeMeasureCB);
+	}
+
+	Label::~Label()
 	{
 	}
 
-	NodeText::~NodeText()
+	YGSize Label::nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode)
 	{
+		//如果你在 YGNodeStyleSetWidth(node, 100) / YGNodeStyleSetHeight(node, 50) 里已经指定了固定大小，Yoga 就直接用这个值，不会去调用 measureFunc。
+		//如果父容器已经约束住了大小，比如 flex : 1 填充满了，Yoga 也不会再问 measureFunc。
+		auto self = static_cast<Label*>(YGNodeGetContext(node));
+		DWRITE_TEXT_METRICS metrics;
+		self->textLayout->GetMetrics(&metrics);
+
+
+		const int pxW = static_cast<int>(std::ceil(metrics.width));
+		const int pxH = static_cast<int>(std::ceil(metrics.height));
+		YGNodeStyleSetWidth(self->node, static_cast<float>(pxW));
+		YGNodeStyleSetHeight(self->node, static_cast<float>(pxH));
+		if (!self->surface) {
+			auto d2d = D2D::get();
+			self->surface = d2d->createDrawingSurface(self->win->compositor, pxW, pxH);
+			Composition::CompositionSurfaceBrush brush = self->win->compositor.CreateSurfaceBrush(self->surface);
+			self->visual.Brush(brush);
+		}
+		else {
+			self->surface.Resize({ pxW, pxH });
+		}
+
+
+		return { metrics.width, metrics.height };
 	}
 
-	void NodeText::setText(const std::wstring& text)
+	void Label::setText(const std::wstring& text)
 	{
 		this->text = text;
 		auto d2d = D2D::get();
@@ -28,7 +57,7 @@ namespace Ling {
 		}
 	}
 
-	void NodeText::setFontSize(float val)
+	void Label::setFontSize(float val)
 	{
 		this->fontSize = val;
 		if (textLayout.Get()) {
@@ -39,7 +68,7 @@ namespace Ling {
 		}
 	}
 
-	void NodeText::setFontFamily(const std::wstring& val)
+	void Label::setFontFamily(const std::wstring& val)
 	{
 		this->fontFamily = val;
 		if (textLayout.Get() && !fontFamily.empty()) {
@@ -50,7 +79,7 @@ namespace Ling {
 		}
 	}
 
-	void NodeText::setColor(Color color)
+	void Label::setColor(Color color)
 	{
 		if (this->color == color)  return;
 		this->color = color;
@@ -59,7 +88,7 @@ namespace Ling {
 		}
 	}
 
-	void NodeText::paint()
+	void Label::paint()
 	{
 		auto s = surface.as<ABI::Windows::UI::Composition::ICompositionDrawingSurfaceInterop>();
 		ComPtr<ID2D1DeviceContext> ctx;
@@ -75,32 +104,9 @@ namespace Ling {
 		s->EndDraw();
 	}
 
-	void NodeText::layout()
+	void Label::layout()
 	{
 		Node::layout(); 
 		paint();
 	}
-
-	void NodeText::beforeLayout()
-	{
-		DWRITE_TEXT_METRICS metrics;
-		textLayout->GetMetrics(&metrics);
-		// DirectWrite 输出的 width/height 是分数。直接塞给 yoga 会让布局出的 x/y
-		// 也带分数，Composition 亚像素偏移会让 ClearType 文本看起来发糊。向上
-		// 取整到整像素，surface 也用同一份整数尺寸，避免 SurfaceBrush 拉伸重采样。
-		const int pxW = static_cast<int>(std::ceil(metrics.width));
-		const int pxH = static_cast<int>(std::ceil(metrics.height));
-		YGNodeStyleSetWidth(node, static_cast<float>(pxW));
-		YGNodeStyleSetHeight(node, static_cast<float>(pxH));
-		if (!surface) {
-			auto d2d = D2D::get();
-			surface = d2d->createDrawingSurface(win->compositor, pxW, pxH);
-			Composition::CompositionSurfaceBrush brush = win->compositor.CreateSurfaceBrush(surface);
-			visual.Brush(brush);
-		}
-		else {
-			surface.Resize({ pxW, pxH });
-		}
-	}
-
 }

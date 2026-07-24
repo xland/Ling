@@ -6,13 +6,13 @@
 namespace Ling {
 	class WinBase;
 	class Button;
-	class NodeText :public Node
+	class Label :public Node
 	{
 		friend class WinBase;
 		friend class Button;
 	public:
-		NodeText(WinBase* win);
-		~NodeText();
+		Label(WinBase* win);
+		~Label();
 		void setText(const std::wstring& text);
 		void setFontSize(float val);
 		void setFontFamily(const std::wstring& val);
@@ -23,33 +23,15 @@ namespace Ling {
 		Microsoft::WRL::ComPtr<IDWriteTextLayout> textLayout;
 	private:
 		using Node::makeChild;
-		using Node::setFlexShrink;
-		using Node::setWidth;
-		using Node::setHeight;
-		using Node::setSize;
-		using Node::setWidthPercent;
-		using Node::setHeightPercent;
-		using Node::setSizePercent;
-		using Node::setPadding;
-		using Node::setPaddingLeft;
-		using Node::setPaddingTop;
-		using Node::setPaddingRight;
-		using Node::setPaddingBottom;
-		using Node::getPaddingLeft;
-		using Node::getPaddingTop;
-		using Node::getPaddingRight;
-		using Node::getPaddingBottom;
-		using Node::setFlexWrap;
 		using Node::setAlignItems;
 		using Node::setJustifyContent;
 		using Node::setFlexDirection;
-
+		static YGSize nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode);
 		void layout() override;
-		void beforeLayout() override;
+	private:
 		Color color{ 0x333333FF };
 		std::wstring text;
 		std::wstring fontFamily;
 		float fontSize{ 12.f };
-	private:
 	};
 }

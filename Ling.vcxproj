@@ -173,8 +173,8 @@
     <ClInclude Include="include\Justify.h" />
     <ClInclude Include="include\Ling.h" />
     <ClInclude Include="include\Node.h" />
-    <ClInclude Include="include\NodeScroller.h" />
-    <ClInclude Include="include\NodeText.h" />
+    <ClInclude Include="include\ScrollerBox.h" />
+    <ClInclude Include="include\Label.h" />
     <ClInclude Include="include\Util.h" />
     <ClInclude Include="include\WinBase.h" />
     <ClInclude Include="include\Wrap.h" />
@@ -188,8 +188,8 @@
     <ClCompile Include="src\App.cpp" />
     <ClCompile Include="src\EventBase.cpp" />
     <ClCompile Include="src\Ling.cpp" />
-    <ClCompile Include="src\NodeScroller.cpp" />
-    <ClCompile Include="src\NodeText.cpp" />
+    <ClCompile Include="src\ScrollerBox.cpp" />
+    <ClCompile Include="src\Label.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

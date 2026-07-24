@@ -8,11 +8,11 @@
 
 namespace Ling {
 	class Node;
-	class NodeScroller;
+	class ScrollerBox;
 	class WinBase:public EventBase
 	{
 		friend class Node;
-		friend class NodeScroller;
+		friend class ScrollerBox;
 	public:
 		WinBase();
 		~WinBase();

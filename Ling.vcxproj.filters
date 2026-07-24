@@ -39,10 +39,10 @@
     <ClInclude Include="include\Color.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\NodeScroller.h">
+    <ClInclude Include="include\ScrollerBox.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\NodeText.h">
+    <ClInclude Include="include\Label.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\D2D.h">
@@ -92,10 +92,10 @@
     <ClCompile Include="src\Color.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\NodeScroller.cpp">
+    <ClCompile Include="src\ScrollerBox.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\NodeText.cpp">
+    <ClCompile Include="src\Label.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\D2D.cpp">

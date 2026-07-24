@@ -13,7 +13,7 @@ private:
 	void onMove(void* e);
 	void onDown(void* e);
 private:
-	Ling::NodeScroller* scrollerBox;
+	Ling::ScrollerBox* scrollerBox;
 	Ling::Node* titleBox;
 	std::vector<Ling::Button*> btns;
 	size_t onMoveId, onDownId;

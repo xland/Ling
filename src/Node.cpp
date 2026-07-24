@@ -78,14 +78,6 @@ namespace Ling {
 		}
 	}
 
-	void Node::_beforeLayout()
-	{
-		for (auto& child : children) {
-			child->beforeLayout();
-			child->_beforeLayout();
-		}
-	}
-
 	void Node::applyDpiChange()
 	{
 		const float d = win->dpi;
@@ -240,6 +232,15 @@ namespace Ling {
 	float Node::getPaddingTop()    { return padding[1].value_or(0.f); }
 	float Node::getPaddingRight()  { return padding[2].value_or(0.f); }
 	float Node::getPaddingBottom() { return padding[3].value_or(0.f); }
+
+	std::tuple<float, float, float, float>  Node::getPadding() {
+		return std::make_tuple(
+			padding[0].value_or(0.f),
+			padding[1].value_or(0.f),
+			padding[2].value_or(0.f),
+			padding[3].value_or(0.f)
+		);
+	}
 
 	void Node::setAlignItems(const Align& val)
 	{

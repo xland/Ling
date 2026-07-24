@@ -4,12 +4,12 @@
 
 namespace Ling {
 	class WinBase;
-	class NodeScroller:public Node
+	class ScrollerBox:public Node
 	{
 		friend class WinBase;
 	public:
-		NodeScroller(WinBase* win);
-		~NodeScroller();
+		ScrollerBox(WinBase* win);
+		~ScrollerBox();
 		void onWheel(void* e);
 		void onMove(void* e);
 		void onDown(void* e);

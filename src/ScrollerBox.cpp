@@ -1,6 +1,6 @@
 ﻿#include "pch.h"
 #include "../include/Event.h"
-#include "../include/NodeScroller.h"
+#include "../include/ScrollerBox.h"
 #include "../include/WinBase.h"
 
 namespace Ling {
@@ -8,7 +8,7 @@ namespace Ling {
 	// 逻辑像素常量
 	constexpr float sliderW{ 8.f }, sliderMinH{ 22.f };
 
-	NodeScroller::NodeScroller(WinBase* win) : Node(win)
+	ScrollerBox::ScrollerBox(WinBase* win) : Node(win)
 	{
 		YGNodeStyleSetOverflow(node, YGOverflowScroll);   // 内容溢出走滚动，不参与父级 flex-basis
 		YGNodeStyleSetMinHeight(node, 0.f);               // 关键：解除 flex 项目的 min-content 下限
@@ -41,7 +41,7 @@ namespace Ling {
 		onDownId  = win->on(Event::MouseDown,  [this](void* e) { this->onDown(e); });
 	}
 
-	NodeScroller::~NodeScroller()
+	ScrollerBox::~ScrollerBox()
 	{
 		win->off(Event::MouseWheel, onWheelId);
 		win->off(Event::MouseMove, onMoveId);
@@ -49,7 +49,7 @@ namespace Ling {
 		win->off(Event::MouseDown, onDownId);
 	}
 
-	void NodeScroller::onWheel(void* e)
+	void ScrollerBox::onWheel(void* e)
 	{
 		if (!visualScroller.IsVisible()) return;
 		auto tuplePtr = static_cast<std::tuple<POINT, float>*>(e);
@@ -58,7 +58,7 @@ namespace Ling {
 		setScroll(scrollY - space);
 	}
 
-	void NodeScroller::onDown(void* e)
+	void ScrollerBox::onDown(void* e)
 	{
 		if (!visual.IsVisible()) return;
 		auto tuplePtr = static_cast<std::tuple<POINT, bool>*>(e);
@@ -74,7 +74,7 @@ namespace Ling {
 		}
 	}
 
-	void NodeScroller::onUp(void* e)
+	void ScrollerBox::onUp(void* e)
 	{
 		if (scrollerDragging) {
 			ReleaseCapture();
@@ -82,7 +82,7 @@ namespace Ling {
 		}
 	}
 
-	void NodeScroller::onMove(void* e)
+	void ScrollerBox::onMove(void* e)
 	{
 		if (!visual.IsVisible()) return;
 		auto tuplePtr = static_cast<std::tuple<POINT>*>(e);
@@ -114,7 +114,7 @@ namespace Ling {
 		}
 	}
 
-	void NodeScroller::setScroll(float y)
+	void ScrollerBox::setScroll(float y)
 	{
 		float maxScroll = std::max(0.f, content->h - h);
 		y = std::clamp(y, 0.f, maxScroll);
@@ -133,21 +133,21 @@ namespace Ling {
 		}
 	}
 
-	void NodeScroller::onDpiChanged()
+	void ScrollerBox::onDpiChanged()
 	{
 		// 滑块所有尺寸都是 dpi 派生量。这里不用做任何事：
 		// applyDpiChange 结束后 WinBase 会 relayout，layout() 里会调 setScroll
 		// 重算 visualThumb 的 offset/size；visualScroller 的 offset/size 也在 layout 里更新。
 	}
 
-	void NodeScroller::setChild(Node* child)
+	void ScrollerBox::setChild(Node* child)
 	{
 		child->parent = content;
 		content->visual.Children().InsertAtTop(child->visual);
 		YGNodeInsertChild(content->node, child->node, YGNodeGetChildCount(content->node));
 	}
 
-	void NodeScroller::layout()
+	void ScrollerBox::layout()
 	{
 		Node::layout();
 		if (content->h > h) { //有滚动条
