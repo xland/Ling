@@ -7,7 +7,6 @@ WindowImage::WindowImage():Ling::WinBase()
     setTitle(L"图像控件演示");
     setSize(800, 600);
     setCenter();
-    on(Ling::Event::MouseDown, [this](auto arg) {this->onDown(arg);});
     on(Ling::Event::Destroy, [this](void* e) { Ling::App::get()->quit(); });
 }
 
@@ -21,13 +20,15 @@ void WindowImage::onCreated()
     body->setBg(0xFFFFFFFF);
     body->setFlexDirection(Ling::FlexDirection::Column);
     titleBar = std::make_unique<TitleBar>(this);
-    tipLabel = body->makeChild<Ling::Label>();
-    tipLabel->setText(L"点击加载图像");
-    tipLabel->setFontSize(36.f);
-    tipLabel->setColor(0x888888FF);
-    tipLabel->setFlexGrow(1.f);
-    tipLabel->setJustifyContent(Ling::Justify::Center);
-    tipLabel->setAlignItems(Ling::Align::Center);
+    btn = body->makeChild<Ling::Button>();
+    btn->setText(L"点击加载图像");
+    btn->setFontSize(36.f);
+    btn->setColor(0x888888FF);
+    btn->setHoverColor(0x888888FF);
+    btn->setFlexGrow(1.f);
+    btn->setJustifyContent(Ling::Justify::Center);
+    btn->setAlignItems(Ling::Align::Center);
+    btn->on(Ling::Event::MouseDown, [this](auto arg) {this->onDown(arg);});
     show();
 }
 
@@ -44,6 +45,7 @@ LRESULT WindowImage::onHitTest(const POINT pos)
 
 void WindowImage::onDown(void* e)
 {
+    
     COMDLG_FILTERSPEC types[] = {
     { L"png", L"*.png" },
     { L"jpeg", L"*.jpg;*.jpeg" },

@@ -1,33 +1,25 @@
 ﻿#pragma once
-#include <wrl.h>
-#include <winrt/Windows.UI.Composition.h>
+#include <string>
 #include "Node.h"
+#include "Color.h"
 
 namespace Ling {
-	class WinBase;
-	class Label :public Node
-	{
-	public:
-		Label(WinBase* win);
-		~Label();
-		void setText(const std::wstring& text);
-		void setFontSize(float val);
-		void setFontFamily(const std::wstring& val);
-		void setColor(Color color);
-		void setBg(const Color& color) override;
-		void paint();
-	public:
-		winrt::Windows::UI::Composition::CompositionDrawingSurface surface{ nullptr };
-		Microsoft::WRL::ComPtr<IDWriteTextLayout> textLayout;
-	private:
-		using Node::makeChild;
-		using Node::setFlexDirection;
-		static YGSize nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode);
-		void layout() override;
-	private:
-		Color color{ 0x333333FF };
-		std::wstring text;
-		std::wstring fontFamily;
-		float fontSize{ 12.f }, metricW, metricH;
-	};
+    class WinBase;
+    class Text;   // 实现在 src/Text.h，Label 只持有指针，头文件无需可见
+
+    // 复合组件：外层是一个标准 flex 容器（支持 flexGrow/setBg/对齐 等所有 Node 特性），
+    // 内层是一个私有的 Text 节点，负责实际的文本绘制。
+    // surface 尺寸只随文字 metric 走，与容器尺寸无关。
+    class Label : public Node
+    {
+    public:
+        Label(WinBase* win);
+        ~Label();
+        void setText(const std::wstring& text);
+        void setFontSize(float val);
+        void setFontFamily(const std::wstring& val);
+        void setColor(Color color);
+    private:
+        Text* text{ nullptr };
+    };
 }

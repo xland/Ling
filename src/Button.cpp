@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "../include/Button.h"
 #include "../include/WinBase.h"
+#include "../include/Text.h"
 
 namespace Ling {
 
@@ -8,7 +9,7 @@ namespace Ling {
 	{
 		setJustifyContent(Ling::Justify::Center);
 		setAlignItems(Ling::Align::Center);
-		label = makeChild<Ling::Label>();
+		text = makeChild<Text>();
 		onMoveId = win->on(Ling::Event::MouseMove, [this](void* e) { this->onMove(e); });
 		onDownId = win->on(Ling::Event::MouseDown, [this](void* e) { this->onDown(e); });
 	}
@@ -18,26 +19,28 @@ namespace Ling {
 		win->off(Ling::Event::MouseMove, onMoveId);
 		win->off(Ling::Event::MouseDown, onDownId);
 	}
-	void Button::setText(const std::wstring& text)
+	void Button::setText(const std::wstring& s)
 	{
-		label->setText(text);
+		text->setText(s);
 	}
 	void Button::setFontSize(float val)
 	{
-		label->setFontSize(val);
+		text->setFontSize(val);
 	}
 	void Button::setFontFamily(const std::wstring& val)
 	{
-		label->setFontFamily(val);
+		text->setFontFamily(val);
 	}
 	void Button::setColor(Color color)
 	{
-		label->setColor(color);
+		text->setColor(color);
 		this->color = color;
 	}
 	void Button::setBg(const Color& color)
 	{
 		bgColor = color;
+		normalBrush = win->compositor.CreateColorBrush(color.getUIColor());
+		if (!isHover) visual.Brush(normalBrush);
 	}
 	void Button::setHoverColor(Color color)
 	{
@@ -46,22 +49,24 @@ namespace Ling {
 	void Button::setHoverBg(Color color)
 	{
 		hoverBg = color;
+		hoverBrush = win->compositor.CreateColorBrush(color.getUIColor());
+		if (isHover) visual.Brush(hoverBrush);
 	}
 	void Button::onMove(void* e)
 	{
 		auto tuplePtr = static_cast<std::tuple<POINT>*>(e);
 		auto [pos] = *tuplePtr;
 		auto hoverFlag = isPosIn(pos);
-		if (isHover != hoverFlag) {
-			isHover = hoverFlag;
-			if (isHover) {
-				visual.Brush(win->compositor.CreateColorBrush(hoverBg.getUIColor()));
-				label->setColor(hoverColor);
-			}
-			else {
-				visual.Brush(win->compositor.CreateColorBrush(bgColor.getUIColor()));
-				label->setColor(color);
-			}
+		if (isHover == hoverFlag) return;
+		isHover = hoverFlag;
+		// 背景色如果配置一致则不需要换 brush；text->setColor 内部已判等，可放心调。
+		if (isHover) {
+			if (hoverBg != bgColor && hoverBrush) visual.Brush(hoverBrush);
+			text->setColor(hoverColor);
+		}
+		else {
+			if (hoverBg != bgColor && normalBrush) visual.Brush(normalBrush);
+			text->setColor(color);
 		}
 	}
 	void Button::onDown(void* e)

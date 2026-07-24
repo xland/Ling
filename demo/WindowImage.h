@@ -12,6 +12,6 @@ private:
 	void onDown(void* e);
 private:
 	std::unique_ptr<TitleBar> titleBar;
-	Ling::Label* tipLabel;
+	Ling::Button* btn;
 };
 
