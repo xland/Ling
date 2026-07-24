@@ -138,6 +138,36 @@ namespace Ling {
 		layout();
 	}
 
+	LRESULT WinBase::borderHitTest(const POINT pt)
+	{
+		int border = static_cast<int>(4 * dpi);
+		bool onLeft = pt.x >= 0 && pt.x < border;
+		bool onRight = pt.x <= w && pt.x >= w - border;
+		bool onTop = pt.y >= 0 && pt.y < border;
+		bool onBottom = pt.y <= h && pt.y >= h - border;
+		if (onTop && onLeft)  return HTTOPLEFT;
+		if (onTop && onRight) return HTTOPRIGHT;
+		if (onBottom && onLeft)  return HTBOTTOMLEFT;
+		if (onBottom && onRight) return HTBOTTOMRIGHT;
+		if (onLeft)   return HTLEFT;
+		if (onRight)  return HTRIGHT;
+		if (onTop)    return HTTOP;
+		if (onBottom) return HTBOTTOM;
+		return HTCLIENT;
+	}
+
+	void WinBase::onMinMaxInfo(MINMAXINFO* mmi)
+	{
+		RECT workAreaRect;
+		BOOL getWorkAreaSuccess = SystemParametersInfo(SPI_GETWORKAREA, 0, &workAreaRect, 0);
+		mmi->ptMaxPosition.x = workAreaRect.left;
+		mmi->ptMaxPosition.y = workAreaRect.top;
+		mmi->ptMaxSize.x = workAreaRect.right - workAreaRect.left;
+		mmi->ptMaxSize.y = workAreaRect.bottom - workAreaRect.top;
+		mmi->ptMinTrackSize.x = 500;
+		mmi->ptMinTrackSize.y = 360;
+	}
+
 	std::wstring& WinBase::getWinClsName(HINSTANCE hIns, const int& iconId)
 	{
 		static std::wstring clsName = [&hIns,&iconId] {

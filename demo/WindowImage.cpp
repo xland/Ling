@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
-#include "WindowWithScroller.h"
+#include "WindowImage.h"
 
-WindowWithScroller::WindowWithScroller():Ling::WinBase()
+WindowImage::WindowImage():Ling::WinBase()
 {
     setTitle(L"图像文字识别工具");
     setSize(800, 600);
@@ -14,11 +14,11 @@ WindowWithScroller::WindowWithScroller():Ling::WinBase()
     on(Ling::Event::Destroy, [this](void* e) { Ling::App::get()->quit(); });
 }
 
-WindowWithScroller::~WindowWithScroller()
+WindowImage::~WindowImage()
 {
 }
 
-void WindowWithScroller::onCreated()
+void WindowImage::onCreated()
 {
     enableShadow();
     body->setBg(0xFFFFFFFF);
@@ -28,14 +28,24 @@ void WindowWithScroller::onCreated()
     show();
 }
 
-LRESULT WindowWithScroller::onHitTest(const POINT pos)
+LRESULT WindowImage::onHitTest(const POINT pos)
 {
     POINT pt = pos;
     ScreenToClient(hwnd, &pt); 
     const int border = static_cast<int>(4 * dpi);
     if (!isMaximized) {
-        auto result = borderHitTest(pos);
-        if (result != HTCLIENT) return result;
+        const bool onLeft = pt.x >= 0 && pt.x < border;
+        const bool onRight = pt.x <= w && pt.x >= w - border;
+        const bool onTop = pt.y >= 0 && pt.y < border;
+        const bool onBottom = pt.y <= h && pt.y >= h - border; 
+        if (onTop && onLeft)  return HTTOPLEFT;
+        if (onTop && onRight) return HTTOPRIGHT;
+        if (onBottom && onLeft)  return HTBOTTOMLEFT;
+        if (onBottom && onRight) return HTBOTTOMRIGHT; 
+        if (onLeft)   return HTLEFT;
+        if (onRight)  return HTRIGHT;
+        if (onTop)    return HTTOP;
+        if (onBottom) return HTBOTTOM;
     }
     if (titleBox) {
         if (pt.y >= 0 && pt.y < titleBox->h && pt.x < titleBox->w) {
@@ -45,7 +55,7 @@ LRESULT WindowWithScroller::onHitTest(const POINT pos)
     return HTCLIENT;
 }
 
-void WindowWithScroller::initTitleBar()
+void WindowImage::initTitleBar()
 {
     auto titleBar = body->makeChild<Ling::Node>();
     titleBar->setWidthPercent(100.f);
@@ -85,7 +95,7 @@ void WindowWithScroller::initTitleBar()
     }
 }
 
-void WindowWithScroller::initScrollerBox()
+void WindowImage::initScrollerBox()
 {
     scrollerBox = body->makeChild<Ling::ScrollerBox>();
     scrollerBox->setWidthPercent(100.f);
@@ -98,7 +108,7 @@ void WindowWithScroller::initScrollerBox()
     }
 }
 
-void WindowWithScroller::onMove(void* e)
+void WindowImage::onMove(void* e)
 {
     auto tuplePtr = static_cast<std::tuple<POINT>*>(e);
     auto [pos] = *tuplePtr;
@@ -122,7 +132,7 @@ void WindowWithScroller::onMove(void* e)
     }
 }
 
-void WindowWithScroller::onDown(void* e)
+void WindowImage::onDown(void* e)
 {
     auto btn = (Ling::Button*)e;
     if (btn == btns[0]) {
@@ -139,4 +149,16 @@ void WindowWithScroller::onDown(void* e)
     else if (btn == btns[2]) {
         close();
     }
+}
+
+void WindowImage::onMinMaxInfo(MINMAXINFO* mmi)
+{
+    RECT workAreaRect;
+    BOOL getWorkAreaSuccess = SystemParametersInfo(SPI_GETWORKAREA, 0, &workAreaRect, 0);
+    mmi->ptMaxPosition.x = workAreaRect.left;
+    mmi->ptMaxPosition.y = workAreaRect.top;
+    mmi->ptMaxSize.x = workAreaRect.right - workAreaRect.left;
+    mmi->ptMaxSize.y = workAreaRect.bottom - workAreaRect.top;
+    mmi->ptMinTrackSize.x = 500;
+    mmi->ptMinTrackSize.y = 360;
 }

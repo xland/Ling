@@ -1,13 +1,14 @@
 ﻿#pragma once
 #include "include/Ling.h"
-class WindowWithScroller : public Ling::WinBase
+class WindowImage : public Ling::WinBase
 {
 public:
-	WindowWithScroller();
-	~WindowWithScroller();
+	WindowImage();
+	~WindowImage();
 private:
 	void onCreated() override;
 	LRESULT onHitTest(const POINT pos) override;
+	void onMinMaxInfo(MINMAXINFO* mmi) override;
 	void initTitleBar();
 	void initScrollerBox();
 	void onMove(void* e);

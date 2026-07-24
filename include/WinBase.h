@@ -17,6 +17,7 @@ namespace Ling {
 		WinBase();
 		~WinBase();
 		void enableShadow();
+		void enableBorderResize();
 		void show();
 		void hide();
 		void close();
@@ -42,8 +43,9 @@ namespace Ling {
 		winrt::Windows::UI::Composition::Compositor compositor{ nullptr };
 	protected:
 		virtual void onCreated() {};
-		virtual LRESULT onHitTest(const POINT& pos) { return HTCLIENT; };
-		virtual void onMinMaxInfo(MINMAXINFO* mmi) {};
+		virtual LRESULT onHitTest(const POINT pos) { return HTCLIENT; };
+		LRESULT borderHitTest(const POINT pt);
+		virtual void onMinMaxInfo(MINMAXINFO* mmi);
 	private:
 		std::wstring& getWinClsName(HINSTANCE hIns, const int& iconId);
 		static LRESULT CALLBACK winProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
