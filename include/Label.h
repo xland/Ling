@@ -14,14 +14,13 @@ namespace Ling {
 		void setFontSize(float val);
 		void setFontFamily(const std::wstring& val);
 		void setColor(Color color);
+		void setBg(const Color& color) override;
 		void paint();
 	public:
 		winrt::Windows::UI::Composition::CompositionDrawingSurface surface{ nullptr };
 		Microsoft::WRL::ComPtr<IDWriteTextLayout> textLayout;
 	private:
 		using Node::makeChild;
-		using Node::setAlignItems;
-		using Node::setJustifyContent;
 		using Node::setFlexDirection;
 		static YGSize nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode);
 		void layout() override;
@@ -29,6 +28,6 @@ namespace Ling {
 		Color color{ 0x333333FF };
 		std::wstring text;
 		std::wstring fontFamily;
-		float fontSize{ 12.f };
+		float fontSize{ 12.f }, metricW, metricH;
 	};
 }

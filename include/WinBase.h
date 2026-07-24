@@ -1,6 +1,9 @@
 ﻿#pragma once
 #include <unordered_map>
+#include <span>
 #include <Windows.h>
+#include <shlobj.h>
+#include <shlwapi.h>
 #include <winrt/Windows.UI.Composition.h>
 #include <winrt/Windows.UI.Composition.Desktop.h>
 #include <yoga/Yoga.h>
@@ -32,6 +35,17 @@ namespace Ling {
 		void setPosition(int x, int y);
 		void setCenter();
 		void layout();
+		/// <summary>
+		/// COMDLG_FILTERSPEC types[] = {
+		/// 	{ L"png", L"*.png" },
+		/// 	{ L"jpeg", L"*.jpg;*.jpeg" },
+		/// 	{ L"all files", L"*.*" }
+		/// };
+		/// auto path = loader.getFilePath(types);
+		/// </summary>
+		/// <param name="filter"></param>
+		/// <returns></returns>
+		std::wstring openFileDialog(std::span<const COMDLG_FILTERSPEC> filter);
 	public:
 		int x{ 0 }, y{ 0 };
 		float w{ 0 }, h{ 0 };

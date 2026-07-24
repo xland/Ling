@@ -26,10 +26,9 @@ namespace Ling {
 		DWRITE_TEXT_METRICS metrics;
 		self->textLayout->GetMetrics(&metrics);
 		// 向上取整到整像素，返回给 yoga 用于布局（下游会得到整数 x/y）。
-		return {
-			std::ceil(metrics.width),
-			std::ceil(metrics.height)
-		};
+		self->metricH = std::ceil(metrics.height);
+		self->metricW = std::ceil(metrics.width);
+		return { self->metricW, self->metricH };
 	}
 
 	void Label::setText(const std::wstring& text)
@@ -75,7 +74,10 @@ namespace Ling {
 			paint();
 		}
 	}
-
+	void Label::setBg(const Color& color)
+	{
+		bgColor = color;
+	}
 	void Label::paint()
 	{
 		// surface 的尺寸随 layout 出的 w/h 走：yoga 会先调 measureFunc 得到尺寸、
@@ -98,6 +100,17 @@ namespace Ling {
 			}
 		}
 
+		D2D1_POINT_2F pos{};
+
+		if (YGNodeStyleGetFlexDirection(node) == YGFlexDirection::YGFlexDirectionColumn) {
+			if (YGNodeStyleGetJustifyContent(node) == YGJustify::YGJustifyCenter) {
+				pos.y = (pxH - metricH) / 2;
+			}
+			if (YGNodeStyleGetAlignItems(node) == YGAlign::YGAlignCenter) {
+				pos.x = (pxW - metricW) / 2;
+			}
+		}
+
 		auto s = surface.as<ABI::Windows::UI::Composition::ICompositionDrawingSurfaceInterop>();
 		ComPtr<ID2D1DeviceContext> ctx;
 		POINT offset{};   // 物理像素
@@ -105,10 +118,10 @@ namespace Ling {
 		// 全程使用物理像素，不调 SetDpi
 		auto trans = D2D1::Matrix3x2F::Translation(static_cast<float>(offset.x), static_cast<float>(offset.y));
 		ctx->SetTransform(trans);
-		ctx->Clear(0);
+		ctx->Clear(bgColor.getD2DColor());
 		ComPtr<ID2D1SolidColorBrush> brush;
 		ctx->CreateSolidColorBrush(color.getD2DColor(), brush.GetAddressOf());
-		ctx->DrawTextLayout({ 0.f, 0.f }, textLayout.Get(), brush.Get());
+		ctx->DrawTextLayout(pos, textLayout.Get(), brush.Get());
 		s->EndDraw();
 	}
 

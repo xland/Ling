@@ -69,7 +69,7 @@ namespace Ling {
 		auto trans = D2D1::Matrix3x2F::Translation(static_cast<float>(offset.x), static_cast<float>(offset.y));
 		ctx->SetTransform(trans);
 		ctx->Clear(0);
-		s->EndDraw();
+		s->EndDraw(); 
 	}
 
 	void Image::layout()

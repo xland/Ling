@@ -123,6 +123,41 @@ namespace Ling {
 		body->layout();
 	}
 
+	std::wstring WinBase::openFileDialog(std::span<const COMDLG_FILTERSPEC> filter)
+	{
+		IFileOpenDialog* fileOpen;
+		auto hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_ALL, IID_IFileOpenDialog, reinterpret_cast<void**>(&fileOpen));
+		if (FAILED(hr)) return L"";
+		hr = fileOpen->SetFileTypes(static_cast<UINT>(filter.size()), filter.data());
+		if (FAILED(hr)) {
+			fileOpen->Release();
+			return L"";
+		}
+		hr = fileOpen->Show(NULL);
+		if (FAILED(hr)) {
+			fileOpen->Release();
+			return L"";
+		}
+		IShellItem* pItem;
+		hr = fileOpen->GetResult(&pItem);
+		if (FAILED(hr)) {
+			fileOpen->Release();
+			return L"";
+		}
+		PWSTR pszFilePath;
+		hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+		if (FAILED(hr)) {
+			pItem->Release();
+			fileOpen->Release();
+			return L"";
+		}
+		std::wstring result{ pszFilePath };
+		CoTaskMemFree(pszFilePath);
+		pItem->Release();
+		fileOpen->Release();
+		return result;
+	}
+
 	void WinBase::createNativeWindow(int iconId, DWORD exStyle, DWORD style)
 	{
 		auto hIns = GetModuleHandle(nullptr);
