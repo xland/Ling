@@ -8,6 +8,8 @@ namespace Ling {
 		public:
 			~App();
 			static App* get();
+			void quit(int code = 0);
+			void exit(int code = 0);
 		private:
 			static void init();
 			App();

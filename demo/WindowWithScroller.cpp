@@ -1,8 +1,7 @@
-﻿#include <winrt/Windows.UI.Composition.h>
-#include <winrt/Windows.Foundation.Collections.h>
+﻿//#include <winrt/Windows.UI.Composition.h>
+//#include <winrt/Windows.Foundation.Collections.h>
 
 #include "WindowWithScroller.h"
-#include "include/Ling.h"
 
 WindowWithScroller::WindowWithScroller():Ling::WinBase()
 {
@@ -10,8 +9,11 @@ WindowWithScroller::WindowWithScroller():Ling::WinBase()
     setSize(800, 600);
     setCenter();
 
-    onMoveId = on(Ling::Event::MouseMove, [this](void* e) { this->onMove(e); });
-    onDownId = on(Ling::Event::MouseDown, [this](void* e) { this->onDown(e); });
+    on(Ling::Event::MouseMove, [this](void* e) { this->onMove(e); });
+    on(Ling::Event::MouseDown, [this](void* e) { this->onDown(e); });
+    on(Ling::Event::Maximize, [this](void* e) { this->btns[1]->setText(L"\ue6e9"); });
+    on(Ling::Event::Restore, [this](void* e) { this->btns[1]->setText(L"\ue6e5"); });
+    on(Ling::Event::Destroy, [this](void* e) { Ling::App::get()->quit(); });
 }
 
 WindowWithScroller::~WindowWithScroller()
@@ -23,45 +25,7 @@ void WindowWithScroller::onCreated()
     enableShadow();
     body->setBg(0xFFFFFFFF);
     body->setFlexDirection(Ling::FlexDirection::Column); // 默认主轴就是 Column（垂直方向），这里显式设置更清晰
-
-    auto titleBar = body->makeChild<Ling::Node>();
-    titleBar->setWidthPercent(100.f);
-    titleBar->setHeight(30.f);
-    titleBar->setBg(0xF8F8F8FF);
-    titleBar->setFlexDirection(Ling::FlexDirection::Row);
-
-    titleBox = titleBar->makeChild<Ling::Node>();
-    titleBox->setJustifyContent(Ling::Justify::Center);
-    titleBox->setAlignItems(Ling::Align::FlexStart);
-    //titleBox->setPaddingLeft(12.f);
-    titleBox->setFlexGrow(1.f);
-
-    auto titleText = titleBox->makeChild<Ling::NodeText>();
-    titleText->setText(L"窗口标题");
-    titleText->setColor(0X000000FF);
-    titleText->setFontSize(12.f);
-
-    
-
-    auto btn = titleBar->makeChild<Ling::Button>();
-    btn->setWidth(32.f);
-    btn->setHeight(30.f);
-    btn->setText(L"\ue6e8");
-    btn->setFontFamily(L"icon");
-    btn->setHoverColor(0X000000FF);
-    btn->setFontSize(12.f);
-
-    //std::vector<std::wstring> iconCodes = { L"\ue6e8",L"\ue6e8",L"\ue6e8" };
-    //for (size_t i = 0; i < iconCodes.size(); i++)
-    //{
-    //    auto btn = titleBar->makeChild<Ling::Node>();
-    //    btn->setJustifyContent(Ling::Justify::Center);
-    //    btn->setAlignItems(Ling::Align::Center);
-    //    btn->setWidth(32.f);
-    //    auto icon = btn->makeChild<Ling::NodeText>();
-    //    icon->setText(iconCodes[i], 13.f, L"icon");
-    //    btns.push_back(btn);
-    //} 
+    initTitleBar();
     initScrollerBox();
     show();
 }
@@ -71,7 +35,7 @@ LRESULT WindowWithScroller::onHitTest(const POINT& pos)
     POINT pt = pos;
     ScreenToClient(hwnd, &pt); 
     const int border = static_cast<int>(4 * dpi);
-    if (!wasMaximized) {
+    if (!isMaximized) {
         const bool onLeft = pt.x >= 0 && pt.x < border;
         const bool onRight = pt.x <= w && pt.x >= w - border;
         const bool onTop = pt.y >= 0 && pt.y < border;
@@ -93,20 +57,60 @@ LRESULT WindowWithScroller::onHitTest(const POINT& pos)
     return HTCLIENT;
 }
 
+void WindowWithScroller::initTitleBar()
+{
+    auto titleBar = body->makeChild<Ling::Node>();
+    titleBar->setWidthPercent(100.f);
+    titleBar->setHeight(30.f);
+    titleBar->setBg(0xF8F8F8FF);
+    titleBar->setFlexDirection(Ling::FlexDirection::Row);
+
+    titleBox = titleBar->makeChild<Ling::Node>();
+    titleBox->setJustifyContent(Ling::Justify::Center);
+    titleBox->setAlignItems(Ling::Align::FlexStart);
+    titleBox->setPaddingLeft(12.f);
+    titleBox->setFlexGrow(1.f);
+
+    auto titleText = titleBox->makeChild<Ling::NodeText>();
+    titleText->setText(title);
+
+    std::vector<std::wstring> iconCodes = { L"\ue6e8",L"\ue6e5",L"\ue6e7" };
+    for (size_t i = 0; i < iconCodes.size(); i++)
+    {
+        auto btn = titleBar->makeChild<Ling::Button>();
+        btn->setId(std::format("btn{}", i));
+        btn->setWidth(32.f);
+        btn->setText(iconCodes[i]);
+        btn->setFontFamily(L"icon");
+        btn->setColor(0X888888FF);
+        if (i == 2) {
+            btn->setHoverColor(0xFFFFFFff);
+            btn->setHoverBg(0xE81123FF);
+        }
+        else {
+            btn->setHoverColor(0X333333FF);
+            btn->setHoverBg(0xE6E6E6FF);
+        }
+        btn->setFontSize(12.f);
+        btn->on(Ling::Event::MouseDown, [this](auto arg) {this->onDown(arg);});
+        btns.push_back(btn);
+    }
+}
+
 void WindowWithScroller::initScrollerBox()
 {
     scrollerBox = body->makeChild<Ling::NodeScroller>();
     scrollerBox->setWidthPercent(100.f);
     scrollerBox->setFlexGrow(1.f);
-    scrollerBox->setContentHeight(2 * h / dpi);
-    auto linearBrush = compositor.CreateLinearGradientBrush();
-    linearBrush.StartPoint({ 0.5f, 0.0f });
-    linearBrush.EndPoint({ 0.5f, 1.0f });
-    auto stop1 = compositor.CreateColorGradientStop(0.0f, Ling::Color(0x00FFFFFF).getUIColor());
-    auto stop2 = compositor.CreateColorGradientStop(1.0f, Ling::Color(0xFFFF00FF).getUIColor());
-    linearBrush.ColorStops().Append(stop1);
-    linearBrush.ColorStops().Append(stop2);
-    scrollerBox->content->visual.Brush(linearBrush);
+    scrollerBox->setContentHeight(3 * h / dpi);
+    //auto linearBrush = compositor.CreateLinearGradientBrush();
+    //linearBrush.StartPoint({ 0.5f, 0.0f });
+    //linearBrush.EndPoint({ 0.5f, 1.0f });
+    //auto stop1 = compositor.CreateColorGradientStop(0.0f, Ling::Color(0x00FFFFFF).getUIColor());
+    //auto stop2 = compositor.CreateColorGradientStop(1.0f, Ling::Color(0xFFFF00FF).getUIColor());
+    //linearBrush.ColorStops().Append(stop1);
+    //linearBrush.ColorStops().Append(stop2);
+    //scrollerBox->content->visual.Brush(linearBrush);
 }
 
 void WindowWithScroller::onMove(void* e)
@@ -135,5 +139,19 @@ void WindowWithScroller::onMove(void* e)
 
 void WindowWithScroller::onDown(void* e)
 {
-
+    auto btn = (Ling::Button*)e;
+    if (btn == btns[0]) {
+        minimize();
+    }
+    else if (btn == btns[1]) {
+        if (isMaximized) {
+            restore();
+        }
+        else {
+            maximize();
+        }
+    }
+    else if (btn == btns[2]) {
+        close();
+    }
 }

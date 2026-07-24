@@ -17,6 +17,7 @@ namespace Ling {
 		void setFontSize(float val);
 		void setFontFamily(const std::wstring& val);
 		void setColor(Color color);
+		void paint();
 	public:
 		winrt::Windows::UI::Composition::CompositionDrawingSurface surface{ nullptr };
 		Microsoft::WRL::ComPtr<IDWriteTextLayout> textLayout;
@@ -53,13 +54,11 @@ namespace Ling {
 		using Node::setFlexDirection;
 
 		void layout() override;
-		void onDpiChanged() override;
-		void paint();
-		void rebuildTextLayout();
+		void beforeLayout() override;
 		Color color{ 0x333333FF };
 		std::wstring text;
 		std::wstring fontFamily;
-		float fontSize{ 13.f };
+		float fontSize{ 12.f };
 	private:
 	};
 }

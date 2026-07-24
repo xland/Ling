@@ -17,8 +17,13 @@ namespace Ling {
 	void NodeText::setText(const std::wstring& text)
 	{
 		this->text = text;
-		if (textLayout.Get()) {
-			rebuildTextLayout();
+		auto d2d = D2D::get();
+		textLayout = d2d->createTextLayout(text, FLT_MAX, FLT_MAX);
+		textLayout->SetFontSize(fontSize * win->dpi, { 0, INT_MAX });
+		if (!fontFamily.empty()) {
+			textLayout->SetFontFamilyName(fontFamily.data(), { 0, INT_MAX });
+		}
+		if (surface) {
 			paint();
 		}
 	}
@@ -27,7 +32,9 @@ namespace Ling {
 	{
 		this->fontSize = val;
 		if (textLayout.Get()) {
-			rebuildTextLayout();
+			textLayout->SetFontSize(fontSize * win->dpi, { 0, INT_MAX });
+		}
+		if (surface) {
 			paint();
 		}
 	}
@@ -35,47 +42,21 @@ namespace Ling {
 	void NodeText::setFontFamily(const std::wstring& val)
 	{
 		this->fontFamily = val;
-		if (textLayout.Get()) {
-			rebuildTextLayout();
+		if (textLayout.Get() && !fontFamily.empty()) {
+			textLayout->SetFontFamilyName(fontFamily.data(), { 0, INT_MAX });
+		}
+		if (surface) {
 			paint();
 		}
 	}
 
-	void NodeText::rebuildTextLayout()
-	{
-		if (text.empty()) return;
-		auto d2d = D2D::get();
-		if (!surface) {
-			surface = d2d->createDrawingSurface(win->compositor);
-			Composition::CompositionSurfaceBrush brush = win->compositor.CreateSurfaceBrush(surface);
-			visual.Brush(brush);
-		}
-		textLayout = d2d->createTextLayout(text, FLT_MAX, FLT_MAX);
-		textLayout->SetFontSize(fontSize * win->dpi, { 0, INT_MAX });
-		if (!fontFamily.empty()) {
-			textLayout->SetFontFamilyName(fontFamily.data(), { 0, INT_MAX });
-		}
-		DWRITE_TEXT_METRICS metrics;
-		textLayout->GetMetrics(&metrics);
-		// textLayout 里已经是物理像素了，直接设给 yoga，不再走 setSize（那会把它当逻辑值再乘一遍 dpi）
-		YGNodeStyleSetWidth(node, metrics.width);
-		YGNodeStyleSetHeight(node, metrics.height);
-		surface.Resize({ (int)metrics.width, (int)metrics.height });
-	}
-
 	void NodeText::setColor(Color color)
 	{
-		if (!this->color.equals(color)) {
-			this->color = color;
-			if (textLayout.Get()) {
-				paint();
-			}
+		if (this->color == color)  return;
+		this->color = color;
+		if (surface) {
+			paint();
 		}
-	}
-
-	void NodeText::onDpiChanged()
-	{
-		//rebuildTextLayout();
 	}
 
 	void NodeText::paint()
@@ -96,9 +77,26 @@ namespace Ling {
 
 	void NodeText::layout()
 	{
-		rebuildTextLayout();
 		Node::layout(); 
 		paint();
+	}
+
+	void NodeText::beforeLayout()
+	{
+		DWRITE_TEXT_METRICS metrics;
+		textLayout->GetMetrics(&metrics);
+		// textLayout 里已经是物理像素了，直接设给 yoga，不再走 setSize（那会把它当逻辑值再乘一遍 dpi）
+		YGNodeStyleSetWidth(node, metrics.width);
+		YGNodeStyleSetHeight(node, metrics.height);
+		if (!surface) {
+			auto d2d = D2D::get();
+			surface = d2d->createDrawingSurface(win->compositor, (int)metrics.width, (int)metrics.height);
+			Composition::CompositionSurfaceBrush brush = win->compositor.CreateSurfaceBrush(surface);
+			visual.Brush(brush);
+		}
+		else {
+			surface.Resize({ (int)metrics.width, (int)metrics.height });
+		}
 	}
 
 }

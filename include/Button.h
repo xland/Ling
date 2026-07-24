@@ -12,6 +12,7 @@ namespace Ling {
 		void setFontSize(float val);
 		void setFontFamily(const std::wstring& val);
 		void setColor(Color color);
+		void setBg(const Color& color);
 		void setHoverColor(Color color);
 		void setHoverBg(Color color);
 	private:
@@ -20,7 +21,7 @@ namespace Ling {
 	private:
 		NodeText* label;
 		size_t onMoveId, onDownId;
-		Color hoverColor, hoverBg;
+		Color hoverColor{ 0x333333FF }, hoverBg{ 0 },color{ 0x333333FF };
 		bool isHover;
 	};
 }

@@ -16,6 +16,7 @@ namespace Ling {
 		public:
 			Node(WinBase* parent);
 			virtual ~Node();
+			void setId(const std::string& id);
 			template<typename T> requires std::derived_from<T, Node>
 			T* makeChild();
 			std::unique_ptr<Node> detachChild(Node* child);
@@ -23,7 +24,7 @@ namespace Ling {
 			bool isPosIn(POINT pos);
 			void hide();
 			void show();
-			void setBg(const Color& color);
+			virtual void setBg(const Color& color);
 
 			// 下列所有 setter 一律接收“逻辑像素”，内部乘 dpi 塞给 yoga。
 			void setFlexGrow(float val);
@@ -85,11 +86,15 @@ namespace Ling {
 			YGNodeRef node{ nullptr };
 			Node* parent{ nullptr };
 			std::vector<std::unique_ptr<Node>> children;
+			std::string id;
 		protected:
+			virtual void beforeLayout() {};
 			virtual void layout();
 			virtual void onDpiChanged() {}
 		protected:
 			Color bgColor{0};
+		private:
+			void _beforeLayout();
 		private:
 			std::optional<float> width, height;
 			std::optional<float> margin[4];   // left, top, right, bottom
@@ -102,7 +107,6 @@ namespace Ling {
 		node->parent = this;
 		visual.Children().InsertAtTop(node->visual);
 		YGNodeInsertChild(this->node, node->node, YGNodeGetChildCount(this->node));
-
 		auto savePtr = std::unique_ptr<T>(node);
 		children.push_back(std::move(savePtr));
 		return node;

@@ -17,6 +17,16 @@ namespace Ling {
         return app.get();
     }
 
+    void App::quit(int code)
+    {
+        PostQuitMessage(code);
+    }
+
+    void App::exit(int code)
+    {
+        ExitProcess(code);
+    }
+
     void App::init()
     {
         App::initDispatcherQueueCtrl();

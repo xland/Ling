@@ -30,12 +30,25 @@ namespace Ling {
 		if (!hwnd) return;
 		SetWindowLongPtr(hwnd, GWLP_USERDATA, NULL);
 		DestroyWindow(hwnd);
+		emit(Event::Destroy, nullptr);
 	}
 
 	void WinBase::minimize()
 	{
 		if (!hwnd) return;
 		ShowWindow(hwnd, SW_MINIMIZE);
+	}
+
+	void WinBase::maximize()
+	{
+		if (!hwnd) return;
+		ShowWindow(hwnd, SW_MAXIMIZE);
+	}
+
+	void WinBase::restore()
+	{
+		if (!hwnd) return;
+		ShowWindow(hwnd, SW_RESTORE);
 	}
 
 	void WinBase::enableShadow()
@@ -103,8 +116,8 @@ namespace Ling {
 
 	void WinBase::layout()
 	{
-		// body 是根节点，尺寸完全由窗口物理尺寸决定 —— 直接设给 yoga，不走 Node::setSize
-		// （那会把 w/h 当成逻辑值再乘一遍 dpi，导致翻倍）
+		body->_beforeLayout();
+		// body 是根节点，尺寸完全由窗口物理尺寸决定 —— 直接设给 yoga，不走 Node::setSize （那会把 w/h 当成逻辑值再乘一遍 dpi，导致翻倍）
 		YGNodeStyleSetWidth(body->node, w);
 		YGNodeStyleSetHeight(body->node, h);
 		YGNodeCalculateLayout(body->node, w, h, YGDirectionLTR);
@@ -210,9 +223,6 @@ namespace Ling {
 		else if (msg == WM_GETMINMAXINFO) {
 			self->onMinMaxInfo((PMINMAXINFO)lParam);
 		}
-		else if (msg == WM_NCDESTROY) {
-			self->emit(Event::Destroy, nullptr);
-		}
 		return DefWindowProc(hwnd, msg, wParam, lParam);
 	}
 
@@ -300,12 +310,12 @@ namespace Ling {
 			return;
 		}
 		if (wParam == SIZE_MAXIMIZED) {
-			wasMaximized = true;
+			isMaximized = true;
 			emit(Event::Maximize, nullptr);
 		}
 		else if (wParam == SIZE_RESTORED) {
-			if (wasMaximized) {
-				wasMaximized = false;
+			if (isMaximized) {
+				isMaximized = false;
 				emit(Event::Restore, nullptr);
 			}
 		}

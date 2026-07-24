@@ -32,7 +32,11 @@ namespace Ling {
 	}
 	void Button::setColor(Color color)
 	{
-		label->setColor(color);
+		this->color = color;
+	}
+	void Button::setBg(const Color& color)
+	{
+		bgColor = color;
 	}
 	void Button::setHoverColor(Color color)
 	{
@@ -50,16 +54,21 @@ namespace Ling {
 		if (isHover != hoverFlag) {
 			isHover = hoverFlag;
 			if (isHover) {
-				setBg(hoverBg);
+				visual.Brush(win->compositor.CreateColorBrush(hoverBg.getUIColor()));
 				label->setColor(hoverColor);
 			}
 			else {
-				setBg(hoverBg);
-				label->setColor(label->color);
+				visual.Brush(win->compositor.CreateColorBrush(bgColor.getUIColor()));
+				label->setColor(color);
 			}
 		}
 	}
 	void Button::onDown(void* e)
 	{
+		auto tuplePtr = static_cast<std::tuple<POINT,bool>*>(e);
+		auto [pos,isRight] = *tuplePtr;
+		if (!isRight && isPosIn(pos)) {
+			emit(Event::MouseDown,this);
+		}
 	}
 }

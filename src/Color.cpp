@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include "../include/Color.h"
 
-namespace Ling{
+namespace Ling {
 
 	Color::Color()
 	{
@@ -39,10 +39,12 @@ namespace Ling{
 	{
 		return a == 0;
 	}
-	bool Color::equals(const Color& other) const
+
+	bool Color::operator==(const Color& other) const
 	{
 		return (r == other.r && g == other.g && b == other.b && a == other.a);
 	}
+
 	void Color::setRGBA(const int& r, const int& g, const int& b, const int& a)
 	{
 		this->r = r;

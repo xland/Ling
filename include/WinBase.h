@@ -20,6 +20,8 @@ namespace Ling {
 		void hide();
 		void close();
 		void minimize();
+		void maximize();
+		void restore();
 		void createNativeWindow(int iconId = 0,DWORD exStyle = NULL, DWORD style = WS_POPUP | WS_MAXIMIZEBOX | WS_MINIMIZEBOX);
 		void setTimer(UINT elapse, UINT id);
 		void killTimer(UINT id);
@@ -34,7 +36,7 @@ namespace Ling {
 		float dpi{ 1.0 };
 		HWND hwnd{ nullptr };
 		std::wstring title;
-		bool isMouseIn{ false }, wasMaximized{ false };
+		bool isMouseIn{ false }, isMaximized{ false };
 		std::unique_ptr<Node> body;
 		winrt::Windows::UI::Composition::Compositor compositor{ nullptr };
 	protected:

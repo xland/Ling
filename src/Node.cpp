@@ -13,6 +13,11 @@ namespace Ling {
 		YGNodeFree(node);
 	}
 
+	void Node::setId(const std::string& id)
+	{
+		this->id = id;
+	}
+
 	std::unique_ptr<Node> Node::detachChild(Node* child) {
 		auto it = std::find_if(children.begin(), children.end(), [child](const std::unique_ptr<Node>& p) { return p.get() == child; });
 		if (it == children.end()) return nullptr;
@@ -65,6 +70,14 @@ namespace Ling {
 		}
 		for (auto& child : children) {
 			child->layout();
+		}
+	}
+
+	void Node::_beforeLayout()
+	{
+		for (auto& child : children) {
+			child->beforeLayout();
+			child->_beforeLayout();
 		}
 	}
 
