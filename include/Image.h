@@ -5,11 +5,11 @@
 
 namespace Ling {
 	class WinBase;
-	class Label :public Node
+	class Image :public Node
 	{
 	public:
-		Label(WinBase* win);
-		~Label();
+		Image(WinBase* win);
+		~Image();
 		void setText(const std::wstring& text);
 		void setFontSize(float val);
 		void setFontFamily(const std::wstring& val);
@@ -17,7 +17,6 @@ namespace Ling {
 		void paint();
 	public:
 		winrt::Windows::UI::Composition::CompositionDrawingSurface surface{ nullptr };
-		Microsoft::WRL::ComPtr<IDWriteTextLayout> textLayout;
 	private:
 		using Node::makeChild;
 		using Node::setAlignItems;
@@ -26,9 +25,6 @@ namespace Ling {
 		static YGSize nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode);
 		void layout() override;
 	private:
-		Color color{ 0x333333FF };
-		std::wstring text;
-		std::wstring fontFamily;
-		float fontSize{ 12.f };
 	};
 }
+

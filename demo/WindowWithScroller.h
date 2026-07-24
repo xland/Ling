@@ -8,6 +8,7 @@ public:
 private:
 	void onCreated() override;
 	LRESULT onHitTest(const POINT& pos) override;
+	void onMinMaxInfo(MINMAXINFO* mmi) override;
 	void initTitleBar();
 	void initScrollerBox();
 	void onMove(void* e);

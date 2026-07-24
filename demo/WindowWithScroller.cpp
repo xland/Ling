@@ -150,3 +150,15 @@ void WindowWithScroller::onDown(void* e)
         close();
     }
 }
+
+void WindowWithScroller::onMinMaxInfo(MINMAXINFO* mmi)
+{
+    RECT workAreaRect;
+    BOOL getWorkAreaSuccess = SystemParametersInfo(SPI_GETWORKAREA, 0, &workAreaRect, 0);
+    mmi->ptMaxPosition.x = workAreaRect.left;
+    mmi->ptMaxPosition.y = workAreaRect.top;
+    mmi->ptMaxSize.x = workAreaRect.right - workAreaRect.left;
+    mmi->ptMaxSize.y = workAreaRect.bottom - workAreaRect.top;
+    mmi->ptMinTrackSize.x = 500;
+    mmi->ptMinTrackSize.y = 360;
+}

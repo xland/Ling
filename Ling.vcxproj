@@ -170,6 +170,7 @@
     <ClInclude Include="include\EventBase.h" />
     <ClInclude Include="include\Event.h" />
     <ClInclude Include="include\FlexDirection.h" />
+    <ClInclude Include="include\Image.h" />
     <ClInclude Include="include\Justify.h" />
     <ClInclude Include="include\Ling.h" />
     <ClInclude Include="include\Node.h" />
@@ -184,6 +185,7 @@
     <ClCompile Include="src\Button.cpp" />
     <ClCompile Include="src\Color.cpp" />
     <ClCompile Include="src\D2D.cpp" />
+    <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\Node.cpp" />
     <ClCompile Include="src\App.cpp" />
     <ClCompile Include="src\EventBase.cpp" />
