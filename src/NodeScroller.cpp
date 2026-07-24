@@ -21,7 +21,12 @@ namespace Ling {
 		colorTransparent = win->compositor.CreateColorBrush(Color(0x00000000).getUIColor());
 		visual.Clip(win->compositor.CreateInsetClip());
 
-		content = makeChild<Node>();
+		content = new Node(win);
+		content->parent = this;
+		visual.Children().InsertAtTop(content->visual);
+		YGNodeInsertChild(this->node, content->node, YGNodeGetChildCount(this->node));
+		auto safePtr = std::unique_ptr<Node>(content);
+		children.push_back(std::move(safePtr));
 
 		visualScroller = win->compositor.CreateSpriteVisual();
 		visual.Children().InsertAtTop(visualScroller);
@@ -138,6 +143,13 @@ namespace Ling {
 		// 滑块所有尺寸都是 dpi 派生量。这里不用做任何事：
 		// applyDpiChange 结束后 WinBase 会 relayout，layout() 里会调 setScroll
 		// 重算 visualThumb 的 offset/size；visualScroller 的 offset/size 也在 layout 里更新。
+	}
+
+	void NodeScroller::setChild(Node* child)
+	{
+		child->parent = content;
+		content->visual.Children().InsertAtTop(child->visual);
+		YGNodeInsertChild(content->node, child->node, YGNodeGetChildCount(content->node));
 	}
 
 	void NodeScroller::layout()

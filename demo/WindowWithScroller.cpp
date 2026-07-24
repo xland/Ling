@@ -103,6 +103,15 @@ void WindowWithScroller::initScrollerBox()
     scrollerBox->setWidthPercent(100.f);
     scrollerBox->setFlexGrow(1.f);
     scrollerBox->setContentHeight(3 * h / dpi);
+
+    for (size_t i = 0; i < 100; i++)
+    {
+        auto text = scrollerBox->makeChild<Ling::NodeText>();
+        text->setText(std::format(L"这是一行文本，看看能渲染多少条{}", i));        
+    }
+    
+
+
     //auto linearBrush = compositor.CreateLinearGradientBrush();
     //linearBrush.StartPoint({ 0.5f, 0.0f });
     //linearBrush.EndPoint({ 0.5f, 1.0f });

@@ -32,6 +32,7 @@ namespace Ling {
 	}
 	void Button::setColor(Color color)
 	{
+		label->setColor(color);
 		this->color = color;
 	}
 	void Button::setBg(const Color& color)

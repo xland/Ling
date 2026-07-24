@@ -85,17 +85,21 @@ namespace Ling {
 	{
 		DWRITE_TEXT_METRICS metrics;
 		textLayout->GetMetrics(&metrics);
-		// textLayout 里已经是物理像素了，直接设给 yoga，不再走 setSize（那会把它当逻辑值再乘一遍 dpi）
-		YGNodeStyleSetWidth(node, metrics.width);
-		YGNodeStyleSetHeight(node, metrics.height);
+		// DirectWrite 输出的 width/height 是分数。直接塞给 yoga 会让布局出的 x/y
+		// 也带分数，Composition 亚像素偏移会让 ClearType 文本看起来发糊。向上
+		// 取整到整像素，surface 也用同一份整数尺寸，避免 SurfaceBrush 拉伸重采样。
+		const int pxW = static_cast<int>(std::ceil(metrics.width));
+		const int pxH = static_cast<int>(std::ceil(metrics.height));
+		YGNodeStyleSetWidth(node, static_cast<float>(pxW));
+		YGNodeStyleSetHeight(node, static_cast<float>(pxH));
 		if (!surface) {
 			auto d2d = D2D::get();
-			surface = d2d->createDrawingSurface(win->compositor, (int)metrics.width, (int)metrics.height);
+			surface = d2d->createDrawingSurface(win->compositor, pxW, pxH);
 			Composition::CompositionSurfaceBrush brush = win->compositor.CreateSurfaceBrush(surface);
 			visual.Brush(brush);
 		}
 		else {
-			surface.Resize({ (int)metrics.width, (int)metrics.height });
+			surface.Resize({ pxW, pxH });
 		}
 	}
 

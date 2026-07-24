@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include <winrt/Windows.UI.Composition.h>
 #include <winrt/Windows.UI.Composition.Desktop.h>
+#include <yoga/Yoga.h>
 #include "EventBase.h"
 
 namespace Ling {
@@ -31,7 +32,7 @@ namespace Ling {
 		void setCenter();
 		void layout();
 	public:
-		int x{ 0 }, y{ 0 };  
+		int x{ 0 }, y{ 0 };
 		float w{ 0 }, h{ 0 };
 		float dpi{ 1.0 };
 		HWND hwnd{ nullptr };
@@ -39,6 +40,8 @@ namespace Ling {
 		bool isMouseIn{ false }, isMaximized{ false };
 		std::unique_ptr<Node> body;
 		winrt::Windows::UI::Composition::Compositor compositor{ nullptr };
+		// yoga 全局配置：所有 node 走这一份，主要用于按 dpi 做像素对齐（point scale factor）
+		YGConfigRef yogaConfig{ nullptr };
 	protected:
 		virtual void onCreated() {};
 		virtual LRESULT onHitTest(const POINT& pos) { return HTCLIENT; };

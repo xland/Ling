@@ -91,6 +91,7 @@ namespace Ling {
 			virtual void beforeLayout() {};
 			virtual void layout();
 			virtual void onDpiChanged() {}
+			virtual void setChild(Node* child);
 		protected:
 			Color bgColor{0};
 		private:
@@ -104,9 +105,7 @@ namespace Ling {
 	template<typename T> requires std::derived_from<T, Node>
 	T* Node::makeChild() {
 		auto node = new T(win);
-		node->parent = this;
-		visual.Children().InsertAtTop(node->visual);
-		YGNodeInsertChild(this->node, node->node, YGNodeGetChildCount(this->node));
+		setChild(node);
 		auto savePtr = std::unique_ptr<T>(node);
 		children.push_back(std::move(savePtr));
 		return node;

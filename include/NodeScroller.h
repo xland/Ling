@@ -22,6 +22,7 @@ namespace Ling {
 		void setScroll(float y);
 		void layout() override;
 		void onDpiChanged() override;
+		void setChild(Node* child) override;
 	private:
 		float contentHeightLogical{ 0.f };  // 保留逻辑值备查（真正的重推走 content->applyDpiChange）
 		size_t onWheelId, onMoveId, onUpId, onDownId;

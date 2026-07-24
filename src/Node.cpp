@@ -4,7 +4,7 @@
 
 namespace Ling {
 
-	Node::Node(WinBase* win) :win{ win }, node(YGNodeNew()), visual{ win->compositor.CreateSpriteVisual() }
+	Node::Node(WinBase* win) :win{ win }, node(YGNodeNewWithConfig(win->yogaConfig)), visual{ win->compositor.CreateSpriteVisual() }
 	{
 	}
 
@@ -32,7 +32,12 @@ namespace Ling {
 	void Node::removeChild(Node* child) {
 		detachChild(child);
 	}
-
+	void Node::setChild(Node* child) 
+	{
+		child->parent = this;
+		visual.Children().InsertAtTop(child->visual);
+		YGNodeInsertChild(this->node, child->node, YGNodeGetChildCount(this->node));
+	}
 	bool Node::isPosIn(POINT pos)
 	{
 		if (pos.x > x && pos.x<x + w && pos.y>y && pos.y < y + h) {

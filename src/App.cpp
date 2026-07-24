@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include "../include/App.h"
+#include "../yoga/YGConfig.h"
 
 namespace Ling {
     static std::unique_ptr<App> app;
