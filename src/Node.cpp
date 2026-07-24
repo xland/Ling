@@ -4,7 +4,7 @@
 
 namespace Ling {
 
-	Node::Node(WinBase* win) :win{ win }, node(YGNodeNewWithConfig(win->yogaConfig)), visual{ win->compositor.CreateSpriteVisual() }
+	Node::Node(WinBase* win) :win{ win }, node(YGNodeNew()), visual{ win->compositor.CreateSpriteVisual() }
 	{
 	}
 

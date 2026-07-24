@@ -30,15 +30,6 @@ namespace Ling {
 		using Node::setWidthPercent;
 		using Node::setHeightPercent;
 		using Node::setSizePercent;
-		using Node::setMargin;
-		using Node::setMarginLeft;
-		using Node::setMarginTop;
-		using Node::setMarginRight;
-		using Node::setMarginBottom;
-		using Node::getMarginLeft;
-		using Node::getMarginTop;
-		using Node::getMarginRight;
-		using Node::getMarginBottom;
 		using Node::setPadding;
 		using Node::setPaddingLeft;
 		using Node::setPaddingTop;

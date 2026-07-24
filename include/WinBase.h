@@ -40,8 +40,6 @@ namespace Ling {
 		bool isMouseIn{ false }, isMaximized{ false };
 		std::unique_ptr<Node> body;
 		winrt::Windows::UI::Composition::Compositor compositor{ nullptr };
-		// yoga 全局配置：所有 node 走这一份，主要用于按 dpi 做像素对齐（point scale factor）
-		YGConfigRef yogaConfig{ nullptr };
 	protected:
 		virtual void onCreated() {};
 		virtual LRESULT onHitTest(const POINT& pos) { return HTCLIENT; };

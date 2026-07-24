@@ -7,16 +7,10 @@ namespace Ling {
 	WinBase::WinBase() :EventBase(), compositor{ Composition::Compositor() }
 	{
 		dpi = static_cast<float>(GetDpiForSystem()) / 96.f;
-		yogaConfig = YGConfigNew();
-		YGConfigSetPointScaleFactor(yogaConfig, dpi);
 	}
 
 	WinBase::~WinBase()
 	{
-		if (yogaConfig) {
-			YGConfigFree(yogaConfig);
-			yogaConfig = nullptr;
-		}
 	}
 
 	void WinBase::show()
@@ -300,7 +294,6 @@ namespace Ling {
 	{
 		const UINT newDPI = HIWORD(wParam);
 		dpi = newDPI / 96.f;
-		YGConfigSetPointScaleFactor(yogaConfig, dpi);
 		body->applyDpiChange();
 		emit(Event::DpiChanged, nullptr);
 		RECT* prcNewWindow = reinterpret_cast<RECT*>(lParam);

@@ -10,13 +10,11 @@ namespace Ling {
 	public:
 		NodeScroller(WinBase* win);
 		~NodeScroller();
-		void setContentHeight(float h);
 		void onWheel(void* e);
 		void onMove(void* e);
 		void onDown(void* e);
 		void onUp(void* e);
 	public:
-		//winrt::Windows::UI::Composition::SpriteVisual visualContent{ nullptr };
 		Node* content;
 	private:
 		void setScroll(float y);
@@ -24,7 +22,6 @@ namespace Ling {
 		void onDpiChanged() override;
 		void setChild(Node* child) override;
 	private:
-		float contentHeightLogical{ 0.f };  // 保留逻辑值备查（真正的重推走 content->applyDpiChange）
 		size_t onWheelId, onMoveId, onUpId, onDownId;
 		winrt::Windows::UI::Composition::SpriteVisual visualScroller{ nullptr };
 		winrt::Windows::UI::Composition::SpriteVisual visualThumb{ nullptr };

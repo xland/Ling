@@ -49,15 +49,6 @@ namespace Ling {
 		win->off(Event::MouseDown, onDownId);
 	}
 
-	void NodeScroller::setContentHeight(float h)
-	{
-		// 参数 h 是逻辑像素；透传给 Node::setHeight 后由它乘 dpi。
-		contentHeightLogical = h;
-		content->setWidthPercent(100.f);
-		content->setHeight(h);
-		scrollY = 0;
-	}
-
 	void NodeScroller::onWheel(void* e)
 	{
 		if (!visualScroller.IsVisible()) return;
@@ -127,14 +118,18 @@ namespace Ling {
 	{
 		float maxScroll = std::max(0.f, content->h - h);
 		y = std::clamp(y, 0.f, maxScroll);
-		scrollY = y;
+		// 关键：偏移 snap 到整像素。scrollY 带小数会让 content 及其所有子节点
+		// 落到分数像素位置，ClearType 文本在滚动过程中会周期性发糊。
+		// 命中测试用的仍是这个整数 scrollY —— 保持"视觉/逻辑"一致。
+		scrollY = std::round(y);
 		content->visual.Offset({ 0.f, -scrollY, 0.f }); //todo 重要，命中测试时，要考虑此偏移
 		if (content->h > h) {
 			float minH = sliderMinH * win->dpi;
 			float thumbH = std::max(minH, h * h / content->h);
 			float top = maxScroll > 0 ? scrollY * (h - thumbH) / maxScroll : 0.f;
-			visualThumb.Offset({ 0.f, top, 0.f });
-			visualThumb.Size({ sliderW * win->dpi, thumbH });
+			// thumb 也 snap 一下，避免拖动时滑块自身发糊
+			visualThumb.Offset({ 0.f, std::round(top), 0.f });
+			visualThumb.Size({ sliderW * win->dpi, std::round(thumbH) });
 		}
 	}
 

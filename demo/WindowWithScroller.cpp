@@ -1,6 +1,4 @@
-﻿//#include <winrt/Windows.UI.Composition.h>
-//#include <winrt/Windows.Foundation.Collections.h>
-
+﻿#include "pch.h"
 #include "WindowWithScroller.h"
 
 WindowWithScroller::WindowWithScroller():Ling::WinBase()
@@ -102,12 +100,11 @@ void WindowWithScroller::initScrollerBox()
     scrollerBox = body->makeChild<Ling::NodeScroller>();
     scrollerBox->setWidthPercent(100.f);
     scrollerBox->setFlexGrow(1.f);
-    scrollerBox->setContentHeight(3 * h / dpi);
-
     for (size_t i = 0; i < 100; i++)
     {
         auto text = scrollerBox->makeChild<Ling::NodeText>();
         text->setText(std::format(L"这是一行文本，看看能渲染多少条{}", i));        
+        text->setMargin(12.f, 8.f, 12.f, 8.f);
     }
     
 
