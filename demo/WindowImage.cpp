@@ -34,18 +34,8 @@ LRESULT WindowImage::onHitTest(const POINT pos)
     ScreenToClient(hwnd, &pt); 
     const int border = static_cast<int>(4 * dpi);
     if (!isMaximized) {
-        const bool onLeft = pt.x >= 0 && pt.x < border;
-        const bool onRight = pt.x <= w && pt.x >= w - border;
-        const bool onTop = pt.y >= 0 && pt.y < border;
-        const bool onBottom = pt.y <= h && pt.y >= h - border; 
-        if (onTop && onLeft)  return HTTOPLEFT;
-        if (onTop && onRight) return HTTOPRIGHT;
-        if (onBottom && onLeft)  return HTBOTTOMLEFT;
-        if (onBottom && onRight) return HTBOTTOMRIGHT; 
-        if (onLeft)   return HTLEFT;
-        if (onRight)  return HTRIGHT;
-        if (onTop)    return HTTOP;
-        if (onBottom) return HTBOTTOM;
+        auto result = borderHitTest(pt);
+        if (result != HTCLIENT) return result;
     }
     if (titleBox) {
         if (pt.y >= 0 && pt.y < titleBox->h && pt.x < titleBox->w) {

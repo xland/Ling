@@ -164,11 +164,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TitleBar.cpp" />
     <ClCompile Include="WindowImage.cpp" />
     <ClCompile Include="WindowWithScroller.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="TitleBar.h" />
     <ClInclude Include="WindowImage.h" />
     <ClInclude Include="WindowWithScroller.h" />
   </ItemGroup>

@@ -27,6 +27,9 @@
     <ClCompile Include="WindowImage.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="TitleBar.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowWithScroller.h">
@@ -36,6 +39,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="WindowImage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleBar.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
