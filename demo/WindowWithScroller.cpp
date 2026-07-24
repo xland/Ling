@@ -4,7 +4,7 @@
 
 WindowWithScroller::WindowWithScroller():Ling::WinBase()
 {
-    setTitle(L"图像文字识别工具");
+    setTitle(L"滚动容器演示");
     setSize(800, 600);
     setCenter();
     on(Ling::Event::Destroy, [this](void* e) { Ling::App::get()->quit(); });

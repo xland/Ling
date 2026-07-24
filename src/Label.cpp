@@ -36,7 +36,7 @@ namespace Ling {
 	{
 		this->text = text;
 		auto d2d = D2D::get();
-		textLayout = d2d->createTextLayout(text, FLT_MAX, FLT_MAX);
+		d2d->dwriteFactory->CreateTextLayout(text.data(), (UINT32)(text.length()), d2d->baseTextFormat.Get(), FLT_MAX, FLT_MAX, textLayout.GetAddressOf());
 		textLayout->SetFontSize(fontSize * win->dpi, { 0, INT_MAX });
 		if (!fontFamily.empty()) {
 			textLayout->SetFontFamilyName(fontFamily.data(), { 0, INT_MAX });

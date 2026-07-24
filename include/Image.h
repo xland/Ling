@@ -10,11 +10,8 @@ namespace Ling {
 	public:
 		Image(WinBase* win);
 		~Image();
-		void setText(const std::wstring& text);
-		void setFontSize(float val);
-		void setFontFamily(const std::wstring& val);
-		void setColor(Color color);
 		void paint();
+		void loadImg(const std::wstring& imgPath);
 	public:
 		winrt::Windows::UI::Composition::CompositionDrawingSurface surface{ nullptr };
 	private:
@@ -25,6 +22,7 @@ namespace Ling {
 		static YGSize nodeMeasureCB(YGNodeConstRef node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode);
 		void layout() override;
 	private:
+		ComPtr<ID2D1Bitmap> bitmap;
 	};
 }
 
