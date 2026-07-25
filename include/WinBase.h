@@ -56,6 +56,7 @@ namespace Ling {
 		bool isMouseIn{ false }, isMaximized{ false };
 		std::unique_ptr<Node> body;
 		winrt::Windows::UI::Composition::Compositor compositor{ nullptr };
+		winrt::event<winrt::delegate<POINT, bool>> onMouseDown;
 	protected:
 		virtual void onCreated() {};
 		virtual LRESULT onHitTest(const POINT pos) { return HTCLIENT; };

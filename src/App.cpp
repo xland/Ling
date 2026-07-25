@@ -1,4 +1,5 @@
 ﻿#include "pch.h"
+#include <Windows.h>
 #include "../include/App.h"
 #include "../yoga/YGConfig.h"
 
@@ -28,11 +29,44 @@ namespace Ling {
         ExitProcess(code);
     }
 
+    void App::refuseSecondInstance(const std::wstring& checkId)
+    {
+        auto wndName = std::format(L"Ling_{}", checkId);
+        auto hwnd = FindWindow(L"STATIC", wndName.data());
+        if (hwnd) {
+            PostMessage(hwnd, WM_APP + 660, 0, 0);
+            App::exit(0);
+            return;
+        }
+        initMsgWin(wndName);
+    }
+
     void App::init()
     {
         App::initDispatcherQueueCtrl();
         auto ptr = new App();
         app.reset(ptr);
+    }
+
+    void App::initMsgWin(const std::wstring& wndName)
+    {
+        if (msgHwnd) return;
+        msgHwnd = CreateWindow(L"STATIC", wndName.data(), 0, 0, 0, 0, 0, HWND_MESSAGE, NULL, GetInstanceModule(NULL), NULL);
+        SetWindowLongPtr(msgHwnd, GWLP_WNDPROC, (LONG_PTR)App::winProc);
+        SetWindowLongPtr(msgHwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
+    }
+
+    LRESULT App::winProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+    {
+        auto self = reinterpret_cast<App*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
+        if (!self) {
+            return DefWindowProc(hwnd, msg, wParam, lParam);
+        }
+        else if (msg == WM_APP + 660)
+        {
+
+        }
+        return DefWindowProc(hwnd, msg, wParam, lParam);
     }
 
     void App::initDispatcherQueueCtrl()

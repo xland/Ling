@@ -256,13 +256,16 @@ namespace Ling {
 			if (LOWORD(lParam) == HTCLIENT) return self->setCursor();
 		}
 		else if (msg == WM_RBUTTONDOWN) {
-			self->mouseDown({ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) }, true);
+			//self->mouseDown({ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) }, true);
+			self->onMouseDown(POINT{ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) }, true);
+			return 0;
 		}
 		else if (msg == WM_RBUTTONUP) {
 			self->mouseUp({ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) }, true);
 		}
 		else if (msg == WM_LBUTTONDOWN) {
-			self->mouseDown({ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) }, false);
+			self->onMouseDown(POINT{ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) }, false);
+			//self->mouseDown({ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) }, true);
 		}
 		else if (msg == WM_LBUTTONUP) {
 			self->mouseUp({ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) }, false);
@@ -310,8 +313,10 @@ namespace Ling {
 
 	void WinBase::mouseDown(POINT pos, bool isRight)
 	{
-		auto arg = std::make_tuple(pos, isRight);
-		emit(Event::MouseDown, &arg);
+		//auto arg = std::make_tuple(pos, isRight);
+		//emit(Event::MouseDown, &arg);
+		if(onMouseDown)
+		onMouseDown(pos, false);
 	}
 
 	void WinBase::mouseUp(POINT pos, bool isRight)

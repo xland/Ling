@@ -9,7 +9,7 @@ public:
 private:
 	void onCreated() override;
 	LRESULT onHitTest(const POINT pos) override;
-	void onDown(void* e);
+	void onDown(POINT pos, bool isRight);
 private:
 	std::unique_ptr<TitleBar> titleBar;
 	Ling::Label* label;

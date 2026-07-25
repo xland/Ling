@@ -8,8 +8,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 {
     Ling::init();
     //WindowWithScroller win;
-    //WindowImage win;
-    WindowCanvas win;
+    WindowImage win;
+    //WindowCanvas win;
     MSG msg;
     while (GetMessage(&msg, NULL, 0, 0))
     {

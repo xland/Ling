@@ -8,7 +8,7 @@ WindowImage::WindowImage():Ling::WinBase()
     setSize(800, 600);
     setCenter();
     on(Ling::Event::Destroy, [this](void* e) { Ling::App::get()->quit(); });
-    on(Ling::Event::MouseDown, [this](auto arg) {this->onDown(arg);});
+    onMouseDown.add([this](POINT pos, bool flag ) { this->onDown(pos,flag); });
     createNativeWindow();
 }
 
@@ -43,10 +43,8 @@ LRESULT WindowImage::onHitTest(const POINT pos)
     return titleBar->hitCaption(pt);
 }
 
-void WindowImage::onDown(void* e)
+void WindowImage::onDown(POINT pos,bool isRight)
 {
-    auto tuplePtr = static_cast<std::tuple<POINT, bool>*>(e);
-    auto [pos, isRight] = *tuplePtr;
     if (pos.y < titleBar->height*dpi) return;
     COMDLG_FILTERSPEC types[] = {
         { L"png", L"*.png" },
