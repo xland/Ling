@@ -167,8 +167,6 @@
     <ClInclude Include="include\Color.h" />
     <ClInclude Include="include\D2D.h" />
     <ClInclude Include="include\Edge.h" />
-    <ClInclude Include="include\EventBase.h" />
-    <ClInclude Include="include\Event.h" />
     <ClInclude Include="include\FlexDirection.h" />
     <ClInclude Include="include\Image.h" />
     <ClInclude Include="include\ImageBox.h" />
@@ -193,7 +191,6 @@
     <ClCompile Include="src\Canvas.cpp" />
     <ClCompile Include="src\Node.cpp" />
     <ClCompile Include="src\App.cpp" />
-    <ClCompile Include="src\EventBase.cpp" />
     <ClCompile Include="src\Ling.cpp" />
     <ClCompile Include="src\ScrollerBox.cpp" />
     <ClCompile Include="src\Label.cpp" />

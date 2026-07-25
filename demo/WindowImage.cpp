@@ -7,7 +7,7 @@ WindowImage::WindowImage():Ling::WinBase()
     setTitle(L"图像控件演示");
     setSize(800, 600);
     setCenter();
-    on(Ling::Event::Destroy, [this](void* e) { Ling::App::get()->quit(); });
+    onDestroy.add([this] { Ling::App::get()->quit(); });
     onMouseDown.add([this](POINT pos, bool flag ) { this->onDown(pos,flag); });
     createNativeWindow();
 }

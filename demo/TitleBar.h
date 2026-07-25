@@ -12,7 +12,7 @@ public:
 	float height{ 30.f };
 protected:
 private:
-	void onDown(void* e);
+	void onBtnClick(Ling::Button* btn);
 private:
 	Ling::WinBase* win;
 	Ling::Node* titleBox;

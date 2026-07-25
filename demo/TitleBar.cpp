@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "TitleBar.h"
 
 TitleBar::TitleBar(Ling::WinBase* win):win{win}
@@ -18,7 +18,7 @@ TitleBar::TitleBar(Ling::WinBase* win):win{win}
     auto titleText = titleBox->makeChild<Ling::Label>();
     titleText->setText(win->title);
 
-    std::vector<std::wstring> iconCodes = { L"\ue6e8",L"\ue6e5",L"\ue6e7" };
+    std::vector<std::wstring> iconCodes = { L"", L"", L"" };
     for (size_t i = 0; i < iconCodes.size(); i++)
     {
         auto btn = titleBar->makeChild<Ling::Button>();
@@ -36,12 +36,12 @@ TitleBar::TitleBar(Ling::WinBase* win):win{win}
             btn->setHoverBg(0xE6E6E6FF);
         }
         btn->setFontSize(12.f);
-        btn->on(Ling::Event::MouseDown, [this](auto arg) {this->onDown(arg);});
+        btn->onClick.add([this](Ling::Button* b) { this->onBtnClick(b); });
         btns.push_back(btn);
     }
 
-    win->on(Ling::Event::Maximize, [this](void* e) { this->btns[1]->setText(L"\ue6e9"); });
-    win->on(Ling::Event::Restore, [this](void* e) { this->btns[1]->setText(L"\ue6e5"); });
+    win->onMaximize.add([this] { this->btns[1]->setText(L""); });
+    win->onRestore .add([this] { this->btns[1]->setText(L""); });
 }
 
 TitleBar::~TitleBar()
@@ -57,9 +57,8 @@ LRESULT TitleBar::hitCaption(const POINT pt)
     return HTCLIENT;
 }
 
-void TitleBar::onDown(void* e)
+void TitleBar::onBtnClick(Ling::Button* btn)
 {
-    auto btn = (Ling::Button*)e;
     if (btn == btns[0]) {
         win->minimize();
     }

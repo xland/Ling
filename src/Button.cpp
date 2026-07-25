@@ -5,19 +5,19 @@
 
 namespace Ling {
 
-	Button::Button(WinBase* win) :Node(win), EventBase()
+	Button::Button(WinBase* win) :Node(win)
 	{
 		setJustifyContent(Ling::Justify::Center);
 		setAlignItems(Ling::Align::Center);
 		text = makeChild<Text>();
-		onMoveId = win->on(Ling::Event::MouseMove, [this](void* e) { this->onMove(e); });
-		onDownId = win->on(Ling::Event::MouseDown, [this](void* e) { this->onDown(e); });
+		moveTok = win->onMouseMove.add([this](POINT pos) { this->onMove(pos); });
+		downTok = win->onMouseDown.add([this](POINT pos, bool isRight) { this->onDown(pos, isRight); });
 	}
 
 	Button::~Button()
 	{
-		win->off(Ling::Event::MouseMove, onMoveId);
-		win->off(Ling::Event::MouseDown, onDownId);
+		win->onMouseMove.remove(moveTok);
+		win->onMouseDown.remove(downTok);
 	}
 	void Button::setText(const std::wstring& s)
 	{
@@ -52,9 +52,8 @@ namespace Ling {
 		hoverBrush = win->compositor.CreateColorBrush(color.getUIColor());
 		if (isHover) visual.Brush(hoverBrush);
 	}
-	void Button::onMove(void* e)
+	void Button::onMove(POINT pos)
 	{
-		auto pos = *(static_cast<POINT*>(e));
 		auto hoverFlag = isPosIn(pos);
 		if (isHover == hoverFlag) return;
 		isHover = hoverFlag;
@@ -68,12 +67,10 @@ namespace Ling {
 			text->setColor(color);
 		}
 	}
-	void Button::onDown(void* e)
+	void Button::onDown(POINT pos, bool isRight)
 	{
-		auto tuplePtr = static_cast<std::tuple<POINT,bool>*>(e);
-		auto [pos,isRight] = *tuplePtr;
 		if (!isRight && isPosIn(pos)) {
-			emit(Event::MouseDown,this);
+			onClick(this);
 		}
 	}
 }

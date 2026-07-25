@@ -1,5 +1,4 @@
 ﻿#include "pch.h"
-#include "../include/Event.h"
 #include "../include/ScrollerBox.h"
 #include "../include/WinBase.h"
 
@@ -35,34 +34,30 @@ namespace Ling {
 		visualThumb = win->compositor.CreateSpriteVisual();
 		visualScroller.Children().InsertAtTop(visualThumb);
 
-		onWheelId = win->on(Event::MouseWheel, [this](void* e) { this->onWheel(e); });
-		onMoveId  = win->on(Event::MouseMove,  [this](void* e) { this->onMove(e); });
-		onUpId    = win->on(Event::MouseUp,    [this](void* e) { this->onUp(e); });
-		onDownId  = win->on(Event::MouseDown,  [this](void* e) { this->onDown(e); });
+		wheelTok = win->onMouseWheel.add([this](POINT pos, float space) { this->onWheel(pos, space); });
+		moveTok  = win->onMouseMove .add([this](POINT pos)               { this->onMove(pos); });
+		upTok    = win->onMouseUp   .add([this](POINT pos, bool isRight) { this->onUp(pos, isRight); });
+		downTok  = win->onMouseDown .add([this](POINT pos, bool isRight) { this->onDown(pos, isRight); });
 	}
 
 	ScrollerBox::~ScrollerBox()
 	{
-		win->off(Event::MouseWheel, onWheelId);
-		win->off(Event::MouseMove, onMoveId);
-		win->off(Event::MouseUp, onUpId);
-		win->off(Event::MouseDown, onDownId);
+		win->onMouseWheel.remove(wheelTok);
+		win->onMouseMove .remove(moveTok);
+		win->onMouseUp   .remove(upTok);
+		win->onMouseDown .remove(downTok);
 	}
 
-	void ScrollerBox::onWheel(void* e)
+	void ScrollerBox::onWheel(POINT pos, float space)
 	{
 		if (!visualScroller.IsVisible()) return;
-		auto tuplePtr = static_cast<std::tuple<POINT, float>*>(e);
-		auto [pos, space] = *tuplePtr;
 		if (!isPosIn(pos)) return;
 		setScroll(scrollY - space);
 	}
 
-	void ScrollerBox::onDown(void* e)
+	void ScrollerBox::onDown(POINT pos, bool isRight)
 	{
 		if (!visual.IsVisible()) return;
-		auto tuplePtr = static_cast<std::tuple<POINT, bool>*>(e);
-		auto [pos, isRight] = *tuplePtr;
 		if (isRight) return;
 		auto sbW{ sliderW * win->dpi };
 		// 只在点击滚动条条形区域内才启动拖动
@@ -74,7 +69,7 @@ namespace Ling {
 		}
 	}
 
-	void ScrollerBox::onUp(void* e)
+	void ScrollerBox::onUp(POINT pos, bool isRight)
 	{
 		if (scrollerDragging) {
 			ReleaseCapture();
@@ -82,10 +77,9 @@ namespace Ling {
 		}
 	}
 
-	void ScrollerBox::onMove(void* e)
+	void ScrollerBox::onMove(POINT pos)
 	{
 		if (!visual.IsVisible()) return;
-		auto pos = *(static_cast<POINT*>(e));
 		if (!scrollerDragging && !isPosIn(pos)) {
 			visualScroller.Brush(colorTransparent);
 			visualThumb.Brush(colorTransparent);

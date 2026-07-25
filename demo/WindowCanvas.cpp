@@ -6,8 +6,8 @@ WindowCanvas::WindowCanvas() : Ling::WinBase()
     setTitle(L"Canvas 自绘演示");
     setSize(800, 600);
     setCenter();
-    on(Ling::Event::Destroy, [this](void*) { Ling::App::get()->quit(); });
-    on(Ling::Event::SizeChanged, [this](void*) { redraw(); });
+    onDestroy.add([this] { Ling::App::get()->quit(); });
+    onSizeChanged.add([this] { redraw(); });
     createNativeWindow();
     redraw();
 }

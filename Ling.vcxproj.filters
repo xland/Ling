@@ -27,12 +27,6 @@
     <ClInclude Include="include\WinBase.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\EventBase.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Event.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="include\Node.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -90,9 +84,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\App.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\EventBase.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\WinBase.cpp">

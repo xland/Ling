@@ -10,8 +10,6 @@
 #include "Color.h"
 #include "D2D.h"
 #include "Node.h"
-#include "EventBase.h"
-#include "Event.h"
 #include "Label.h"
 #include "Image.h"
 #include "ImageBox.h"

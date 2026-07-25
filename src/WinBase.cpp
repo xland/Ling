@@ -4,7 +4,7 @@
 #include "../include/ScrollerBox.h"
 
 namespace Ling {
-	WinBase::WinBase() :EventBase(), compositor{ Composition::Compositor() }
+	WinBase::WinBase() :compositor{ Composition::Compositor() }
 	{
 		dpi = static_cast<float>(GetDpiForSystem()) / 96.f;
 	}
@@ -27,7 +27,7 @@ namespace Ling {
 	{
 		SetWindowLongPtr(hwnd, GWLP_USERDATA, NULL);
 		DestroyWindow(hwnd);
-		emit(Event::Destroy, nullptr);
+		onDestroy();
 	}
 
 	void WinBase::minimize()
@@ -256,19 +256,20 @@ namespace Ling {
 			if (LOWORD(lParam) == HTCLIENT) return self->setCursor();
 		}
 		else if (msg == WM_RBUTTONDOWN) {
-			//self->mouseDown({ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) }, true);
 			self->onMouseDown(POINT{ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) }, true);
 			return 0;
 		}
 		else if (msg == WM_RBUTTONUP) {
-			self->mouseUp({ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) }, true);
+			self->onMouseUp(POINT{ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) }, true);
+			return 0;
 		}
 		else if (msg == WM_LBUTTONDOWN) {
 			self->onMouseDown(POINT{ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) }, false);
-			//self->mouseDown({ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) }, true);
+			return 0;
 		}
 		else if (msg == WM_LBUTTONUP) {
-			self->mouseUp({ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) }, false);
+			self->onMouseUp(POINT{ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) }, false);
+			return 0;
 		}
 		else if (msg == WM_MOUSEMOVE) {
 			self->mouseMove({ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) });
@@ -280,10 +281,10 @@ namespace Ling {
 			self->mouseWheel(wParam, lParam);
 		}
 		else if (msg == WM_KEYDOWN) {
-			self->keyDown(wParam);
+			self->onKeyDown(wParam);
 		}
 		else if (msg == WM_TIMER) {
-			self->timer(wParam - WM_APP);
+			self->onTimer(wParam - WM_APP);
 		}
 		else if (msg == WM_DPICHANGED) {
 			self->dpiChange(wParam, lParam);
@@ -304,25 +305,11 @@ namespace Ling {
 	BOOL WinBase::setCursor()
 	{
 		HCURSOR cursor{ nullptr };
-		emit(Event::Cursor, &cursor);
+		onCursor(&cursor);
 		if (!cursor) {
 			SetCursor(LoadCursor(nullptr, IDC_ARROW));
 		}
 		return TRUE;
-	}
-
-	void WinBase::mouseDown(POINT pos, bool isRight)
-	{
-		//auto arg = std::make_tuple(pos, isRight);
-		//emit(Event::MouseDown, &arg);
-		if(onMouseDown)
-		onMouseDown(pos, false);
-	}
-
-	void WinBase::mouseUp(POINT pos, bool isRight)
-	{
-		auto arg = std::make_tuple(pos, isRight);
-		emit(Event::MouseUp, &arg);
 	}
 
 	void WinBase::mouseMove(POINT pos)
@@ -334,14 +321,14 @@ namespace Ling {
 			tme.hwndTrack = hwnd;
 			TrackMouseEvent(&tme);
 		}
-		emit(Event::MouseMove, &pos);
+		onMouseMove(pos);
 	}
 
 	void WinBase::mouseLeave()
 	{
 		isMouseIn = false;
-		auto arg = POINT{ INT_MAX, INT_MAX };
-		emit(Event::MouseMove, &arg);
+		// 用哨兵坐标通知订阅方"鼠标离开客户区"——保留旧行为语义
+		onMouseMove(POINT{ INT_MAX, INT_MAX });
 	}
 
 	void WinBase::mouseWheel(WPARAM wParam, LPARAM lParam)
@@ -350,20 +337,7 @@ namespace Ling {
 		ScreenToClient(hwnd, &pt);
 		auto delta{ (short)HIWORD(wParam) };
 		auto space = (delta / (float)WHEEL_DELTA) * 60.f * dpi;
-		auto arg = std::make_tuple(pt, space);
-		emit(Event::MouseWheel, &arg);
-	}
-
-	void WinBase::keyDown(UINT key)
-	{
-		UINT keyVal = key;
-		emit(Event::KeyDown, &keyVal);
-	}
-
-	void WinBase::timer(UINT id) 
-	{
-		UINT idVal = id;
-		emit(Event::Timer, &idVal);
+		onMouseWheel(pt, space);
 	}
 
 	void WinBase::dpiChange(WPARAM wParam, LPARAM lParam)
@@ -371,7 +345,7 @@ namespace Ling {
 		const UINT newDPI = HIWORD(wParam);
 		dpi = newDPI / 96.f;
 		body->applyDpiChange();
-		emit(Event::DpiChanged, nullptr);
+		onDpiChanged();
 		RECT* prcNewWindow = reinterpret_cast<RECT*>(lParam);
 		const int newW = prcNewWindow->right - prcNewWindow->left;
 		const int newH = prcNewWindow->bottom - prcNewWindow->top;
@@ -382,31 +356,31 @@ namespace Ling {
 	{
 		if (wParam == SIZE_MINIMIZED) {
 			mouseMove(POINT{INT_MAX,INT_MAX});
-			emit(Event::Minimize, nullptr);
+			onMinimize();
 			return;
 		}
 		if (wParam == SIZE_MAXIMIZED) {
 			isMaximized = true;
-			emit(Event::Maximize, nullptr);
+			onMaximize();
 		}
 		else if (wParam == SIZE_RESTORED) {
 			if (isMaximized) {
 				isMaximized = false;
-				emit(Event::Restore, nullptr);
+				onRestore();
 			}
 		}
 		w = static_cast<float>(GET_X_LPARAM(lParam));
 		h = static_cast<float>(GET_Y_LPARAM(lParam));
 		if (w <= 0 || h <= 0) return;
 		layout();
-		emit(Event::SizeChanged, nullptr);
+		onSizeChanged();
 	}
 
 	void WinBase::posChange(POINT pos)
 	{
 		this->x = pos.x;
 		this->y = pos.y;
-		emit(Event::PosChanged, &pos);
+		onPosChanged(pos);
 	}
 	int WinBase::paint()
 	{
