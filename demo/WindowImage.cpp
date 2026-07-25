@@ -60,5 +60,4 @@ void WindowImage::onDown(void* e)
     }
     label->hide();
     img->loadImg(imgPath);
-    layout();
 }

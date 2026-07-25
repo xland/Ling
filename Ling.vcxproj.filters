@@ -75,6 +75,9 @@
     <ClInclude Include="include\ImageBox.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\Canvas.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="include\Text.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -120,6 +123,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\ImageBox.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Canvas.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Text.cpp">

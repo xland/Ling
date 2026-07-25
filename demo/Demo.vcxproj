@@ -167,12 +167,14 @@
     <ClCompile Include="TitleBar.cpp" />
     <ClCompile Include="WindowImage.cpp" />
     <ClCompile Include="WindowWithScroller.cpp" />
+    <ClCompile Include="WindowCanvas.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="TitleBar.h" />
     <ClInclude Include="WindowImage.h" />
     <ClInclude Include="WindowWithScroller.h" />
+    <ClInclude Include="WindowCanvas.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />

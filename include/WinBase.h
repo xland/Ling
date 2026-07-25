@@ -75,7 +75,9 @@ namespace Ling {
 		void dpiChange(WPARAM wParam, LPARAM lParam);
 		void sizeChange(WPARAM wParam, LPARAM lParam);
 		void posChange(POINT pos);
-	private:	
+		int paint();
+	private:
 		winrt::Windows::UI::Composition::Desktop::DesktopWindowTarget winTarget{ nullptr };
+		bool isDirty{ false };
 	};
 }

@@ -47,6 +47,7 @@ namespace Ling {
 
 	void WinBase::refresh()
 	{
+		isDirty = true;
 		InvalidateRect(hwnd, nullptr, FALSE);
 	}
 
@@ -169,6 +170,7 @@ namespace Ling {
 		body = std::unique_ptr<Node>(new Node(this));
 		winTarget.Root(body->visual);
 		onCreated();
+		layout();
 	}
 
 	LRESULT WinBase::borderHitTest(const POINT pt)
@@ -240,7 +242,12 @@ namespace Ling {
 			return 1;
 		}
 		else if (msg == WM_PAINT) {
-			self->layout(); return 0;
+			return self->paint();
+		}
+		else if (msg == WM_SHOWWINDOW) {
+			if (wParam == TRUE) {
+				return 1;
+			}
 		}
 		else if (msg == WM_NCHITTEST) {
 			return self->onHitTest({ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) });
@@ -386,8 +393,8 @@ namespace Ling {
 		w = static_cast<float>(GET_X_LPARAM(lParam));
 		h = static_cast<float>(GET_Y_LPARAM(lParam));
 		if (w <= 0 || h <= 0) return;
-		emit(Event::SizeChanged, nullptr);
 		layout();
+		emit(Event::SizeChanged, nullptr);
 	}
 
 	void WinBase::posChange(POINT pos)
@@ -395,5 +402,15 @@ namespace Ling {
 		this->x = pos.x;
 		this->y = pos.y;
 		emit(Event::PosChanged, &pos);
+	}
+	int WinBase::paint()
+	{
+		PAINTSTRUCT ps;
+		BeginPaint(hwnd, &ps);
+		EndPaint(hwnd, &ps);
+		if (!isDirty) return 0;
+		layout();
+		isDirty = false;
+		return 0;
 	}
 }

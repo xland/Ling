@@ -172,6 +172,7 @@
     <ClInclude Include="include\FlexDirection.h" />
     <ClInclude Include="include\Image.h" />
     <ClInclude Include="include\ImageBox.h" />
+    <ClInclude Include="include\Canvas.h" />
     <ClInclude Include="include\Justify.h" />
     <ClInclude Include="include\Ling.h" />
     <ClInclude Include="include\Node.h" />
@@ -189,6 +190,7 @@
     <ClCompile Include="src\D2D.cpp" />
     <ClCompile Include="src\Image.cpp" />
     <ClCompile Include="src\ImageBox.cpp" />
+    <ClCompile Include="src\Canvas.cpp" />
     <ClCompile Include="src\Node.cpp" />
     <ClCompile Include="src\App.cpp" />
     <ClCompile Include="src\EventBase.cpp" />
