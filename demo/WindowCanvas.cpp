@@ -56,11 +56,11 @@ void WindowCanvas::redraw()
     D2D1_ELLIPSE ellipse{ { cx, cy }, rx, ry };
 
     Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> fill;
-    ctx->CreateSolidColorBrush(Ling::Color(0x4B8BF5FF).getD2DColor(), fill.GetAddressOf());
+    ctx->CreateSolidColorBrush(Ling::Color(0x6699FFFF).getD2DColor(), fill.GetAddressOf());
     ctx->FillEllipse(ellipse, fill.Get());
 
     Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> stroke;
-    ctx->CreateSolidColorBrush(Ling::Color(0x1E5CC7FF).getD2DColor(), stroke.GetAddressOf());
+    ctx->CreateSolidColorBrush(Ling::Color(0xFF9922FF).getD2DColor(), stroke.GetAddressOf());
     ctx->DrawEllipse(ellipse, stroke.Get(), 2.f * dpi);
 
     canvas->finishPaint();

@@ -9,6 +9,7 @@ WindowImage::WindowImage():Ling::WinBase()
     setCenter();
     on(Ling::Event::Destroy, [this](void* e) { Ling::App::get()->quit(); });
     on(Ling::Event::MouseDown, [this](auto arg) {this->onDown(arg);});
+    createNativeWindow();
 }
 
 WindowImage::~WindowImage()

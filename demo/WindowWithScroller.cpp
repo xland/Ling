@@ -8,6 +8,7 @@ WindowWithScroller::WindowWithScroller():Ling::WinBase()
     setSize(800, 600);
     setCenter();
     on(Ling::Event::Destroy, [this](void* e) { Ling::App::get()->quit(); });
+    createNativeWindow();
 }
 
 WindowWithScroller::~WindowWithScroller()

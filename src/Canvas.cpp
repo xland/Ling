@@ -24,7 +24,6 @@ namespace Ling {
             auto d2d = D2D::get();
             surface = d2d->createDrawingSurface(win->compositor, (float)pxW, (float)pxH);
             auto brush = win->compositor.CreateSurfaceBrush(surface);
-            // surface 尺寸恒等于 visual 尺寸，None 只是防止外部再包一层 visual 时被拉伸。
             brush.Stretch(winrt::Windows::UI::Composition::CompositionStretch::None);
             visual.Brush(brush);
         }
