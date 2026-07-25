@@ -14,6 +14,7 @@
 #include "Event.h"
 #include "Label.h"
 #include "Image.h"
+#include "ImageBox.h"
 #include "ScrollerBox.h"
 #include "Button.h"
 #include "Util.h"

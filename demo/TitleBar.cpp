@@ -5,7 +5,7 @@ TitleBar::TitleBar(Ling::WinBase* win):win{win}
 {
     auto titleBar = win->body->makeChild<Ling::Node>();
     titleBar->setWidthPercent(100.f);
-    titleBar->setHeight(30.f);
+    titleBar->setHeight(height);
     titleBar->setBg(0xF8F8F8FF);
     titleBar->setFlexDirection(Ling::FlexDirection::Row);
 

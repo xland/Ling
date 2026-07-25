@@ -85,8 +85,7 @@ namespace Ling {
 	void ScrollerBox::onMove(void* e)
 	{
 		if (!visual.IsVisible()) return;
-		auto tuplePtr = static_cast<std::tuple<POINT>*>(e);
-		auto [pos] = *tuplePtr;
+		auto pos = *(static_cast<POINT*>(e));
 		if (!scrollerDragging && !isPosIn(pos)) {
 			visualScroller.Brush(colorTransparent);
 			visualThumb.Brush(colorTransparent);

@@ -54,8 +54,7 @@ namespace Ling {
 	}
 	void Button::onMove(void* e)
 	{
-		auto tuplePtr = static_cast<std::tuple<POINT>*>(e);
-		auto [pos] = *tuplePtr;
+		auto pos = *(static_cast<POINT*>(e));
 		auto hoverFlag = isPosIn(pos);
 		if (isHover == hoverFlag) return;
 		isHover = hoverFlag;

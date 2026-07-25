@@ -8,6 +8,8 @@ public:
 	TitleBar(Ling::WinBase* win);
 	~TitleBar();
 	LRESULT hitCaption(const POINT pt);
+public:
+	float height{ 30.f };
 protected:
 private:
 	void onDown(void* e);

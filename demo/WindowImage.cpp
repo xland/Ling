@@ -8,6 +8,7 @@ WindowImage::WindowImage():Ling::WinBase()
     setSize(800, 600);
     setCenter();
     on(Ling::Event::Destroy, [this](void* e) { Ling::App::get()->quit(); });
+    on(Ling::Event::MouseDown, [this](auto arg) {this->onDown(arg);});
 }
 
 WindowImage::~WindowImage()
@@ -20,15 +21,13 @@ void WindowImage::onCreated()
     body->setBg(0xFFFFFFFF);
     body->setFlexDirection(Ling::FlexDirection::Column);
     titleBar = std::make_unique<TitleBar>(this);
-    btn = body->makeChild<Ling::Button>();
-    btn->setText(L"点击加载图像");
-    btn->setFontSize(36.f);
-    btn->setColor(0x888888FF);
-    btn->setHoverColor(0x888888FF);
-    btn->setFlexGrow(1.f);
-    btn->setJustifyContent(Ling::Justify::Center);
-    btn->setAlignItems(Ling::Align::Center);
-    btn->on(Ling::Event::MouseDown, [this](auto arg) {this->onDown(arg);});
+    label = body->makeChild<Ling::Label>();
+    label->setText(L"点击加载图像");
+    label->setFontSize(36.f);
+    label->setColor(0x888888FF);
+    label->setFlexGrow(1.f);
+    label->setJustifyContent(Ling::Justify::Center);
+    label->setAlignItems(Ling::Align::Center);
     show();
 }
 
@@ -45,16 +44,21 @@ LRESULT WindowImage::onHitTest(const POINT pos)
 
 void WindowImage::onDown(void* e)
 {
+    auto tuplePtr = static_cast<std::tuple<POINT, bool>*>(e);
+    auto [pos, isRight] = *tuplePtr;
+    if (pos.y < titleBar->height*dpi) return;
     COMDLG_FILTERSPEC types[] = {
         { L"png", L"*.png" },
         { L"jpeg", L"*.jpg;*.jpeg" },
         { L"all files", L"*.*" }
     };
     auto imgPath = openFileDialog(types);
+    if (imgPath.empty()) return;
     if (!img) {
-        img = body->makeChild<Ling::Image>();
+        img = body->makeChild<Ling::ImageBox>();
+        img->setFlexGrow(1.f);      // 让 ImageBox 吃掉按钮以外的剩余空间
     }
-    btn->hide();
+    label->hide();
     img->loadImg(imgPath);
     layout();
 }

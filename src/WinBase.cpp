@@ -322,14 +322,13 @@ namespace Ling {
 			tme.hwndTrack = hwnd;
 			TrackMouseEvent(&tme);
 		}
-		auto arg = std::make_tuple(pos);
-		emit(Event::MouseMove, &arg);
+		emit(Event::MouseMove, &pos);
 	}
 
 	void WinBase::mouseLeave()
 	{
 		isMouseIn = false;
-		auto arg = std::make_tuple(FLT_MAX, FLT_MAX);
+		auto arg = POINT{ INT_MAX, INT_MAX };
 		emit(Event::MouseMove, &arg);
 	}
 
@@ -395,7 +394,6 @@ namespace Ling {
 	{
 		this->x = pos.x;
 		this->y = pos.y;
-		auto arg = std::make_tuple(pos);
-		emit(Event::PosChanged, nullptr);
+		emit(Event::PosChanged, &pos);
 	}
 }
