@@ -32,11 +32,16 @@ namespace Ling {
 	void Node::removeChild(Node* child) {
 		detachChild(child);
 	}
-	void Node::setChild(Node* child) 
+	void Node::setChild(Node* child)
 	{
 		child->parent = this;
 		visual.Children().InsertAtTop(child->visual);
 		YGNodeInsertChild(this->node, child->node, YGNodeGetChildCount(this->node));
+		// 保证边框始终盖在所有子节点之上（如果启用了边框）
+		if (borderVisual) {
+			visual.Children().Remove(borderVisual);
+			visual.Children().InsertAtTop(borderVisual);
+		}
 	}
 	bool Node::isPosIn(POINT pos)
 	{
@@ -77,6 +82,7 @@ namespace Ling {
 			x = parent->x + x;
 			y = parent->y + y;
 		}
+		syncChrome();
 		for (auto& child : children) {
 			child->layout();
 		}
@@ -262,5 +268,96 @@ namespace Ling {
 	void Node::setFlexDirection(const FlexDirection& flexDirection)
 	{
 		YGNodeStyleSetFlexDirection(node, (YGFlexDirection)flexDirection);
+	}
+
+	// ---- 圆角 & 边框 ----------------------------------------------------------
+	// 设计：
+	//  - 圆角用 GeometricClip(RoundedRectangleGeometry) 挂到 visual 上 —— 背景
+	//    Brush（setBg 设的 ColorBrush）和子节点会一起被裁剪。
+	//  - 边框用 ShapeVisual + SpriteShape 描一圈 stroke。Composition 的 stroke
+	//    以几何路径为中线两侧扩散 —— 要让 stroke 外沿贴 (0,0)-(w,h)，几何本身
+	//    需要向内 inset borderW/2；对应地，几何的圆角半径也要减去 borderW/2。
+	//  - 真正把物理像素写进 Composition 的动作集中在 syncChrome()，每次 layout
+	//    以及 setter 触发时调用；DPI 变化后 WinBase 会 relayout，无需额外挂钩。
+	void Node::setCornerRadius(float r)
+	{
+		cornerRadius = r;
+		if (r > 0.f && !clipGeo) {
+			clipGeo = win->compositor.CreateRoundedRectangleGeometry();
+			visual.Clip(win->compositor.CreateGeometricClip(clipGeo));
+		}
+		else if (r <= 0.f && clipGeo) {
+			// 关掉圆角：把 clip 清掉，几何对象也丢，syncChrome 才不会再更新它
+			visual.Clip(winrt::Windows::UI::Composition::CompositionClip{ nullptr });
+			clipGeo = nullptr;
+		}
+		syncChrome();
+		win->refresh();
+	}
+
+	void Node::setBorder(float width, const Color& color)
+	{
+		borderColor = color;
+		setBorderWidth(width);   // 内部会走 syncChrome
+	}
+
+	void Node::setBorderWidth(float width)
+	{
+		borderWidth = width;
+		if (width > 0.f && !borderVisual) {
+			borderVisual = win->compositor.CreateShapeVisual();
+			borderGeo = win->compositor.CreateRoundedRectangleGeometry();
+			borderShape = win->compositor.CreateSpriteShape(borderGeo);
+			borderShape.StrokeBrush(win->compositor.CreateColorBrush(borderColor.getUIColor()));
+			borderVisual.Shapes().Append(borderShape);
+			// 顶层：保证边框盖在所有子节点之上
+			visual.Children().InsertAtTop(borderVisual);
+		}
+		else if (width <= 0.f && borderVisual) {
+			visual.Children().Remove(borderVisual);
+			borderVisual = nullptr;
+			borderGeo = nullptr;
+			borderShape = nullptr;
+		}
+		syncChrome();
+		win->refresh();
+	}
+
+	void Node::setBorderColor(const Color& color)
+	{
+		borderColor = color;
+		if (borderShape) {
+			borderShape.StrokeBrush(win->compositor.CreateColorBrush(color.getUIColor()));
+			win->refresh();
+		}
+	}
+
+	void Node::syncChrome()
+	{
+		if (w <= 0.f || h <= 0.f) return;
+		const float d = win->dpi;
+
+		if (clipGeo) {
+			// 圆角剪切：clip 相对 visual 自身坐标系 (0,0)-(w,h)
+			const float r = std::min({ cornerRadius * d, w * 0.5f, h * 0.5f });
+			clipGeo.Size({ w, h });
+			clipGeo.CornerRadius({ r, r });
+		}
+
+		if (borderVisual) {
+			const float bw = borderWidth * d;
+			const float inset = bw * 0.5f;
+			// stroke 以路径为中线双向扩散，路径内缩 bw/2 才能让外沿贴 (0,0)-(w,h)
+			borderVisual.Size({ w, h });
+			borderVisual.Offset({ 0.f, 0.f, 0.f });
+			// Geometry 无 Offset 属性，把位移写在 Shape 上（CompositionShape.Offset）
+			borderShape.Offset({ inset, inset });
+			borderGeo.Size({ std::max(0.f, w - bw), std::max(0.f, h - bw) });
+			// 圆角边框：外圆角 = cornerRadius，描边中线半径 = outerR - bw/2
+			const float outerR = std::min({ cornerRadius * d, w * 0.5f, h * 0.5f });
+			const float midR = std::max(0.f, outerR - inset);
+			borderGeo.CornerRadius({ midR, midR });
+			borderShape.StrokeThickness(bw);
+		}
 	}
 }

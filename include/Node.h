@@ -61,6 +61,15 @@ namespace Ling {
 			float getPaddingBottom();
 			std::tuple<float, float, float, float> getPadding();
 
+			// 圆角 & 边框。逻辑像素，内部乘 dpi。
+			// - setCornerRadius(0) / setBorderWidth(0) 表示无对应效果。
+			// - 无 setBg 时背景走透明 —— clip 依然生效，圆角剪切对子节点仍有效。
+			// - 边框沿 (0,0)-(w,h) 外沿绘制，几何自动内 inset borderW/2 保证 stroke 外沿贴边。
+			void setCornerRadius(float r);
+			void setBorder(float width, const Color& color);
+			void setBorderWidth(float width);
+			void setBorderColor(const Color& color);
+
 			void setFlexWrap(const Wrap& val);
 			/// <summary>
 			/// 用来设置 子元素在交叉轴 上的对齐方式。
@@ -92,6 +101,8 @@ namespace Ling {
 			virtual void layout();
 			virtual void onDpiChanged() {}
 			virtual void setChild(Node* child);
+			// 根据当前 w/h/dpi 同步圆角 clip 与边框几何；layout() 末尾调用。
+			void syncChrome();
 		protected:
 			Color bgColor{0};
 		private:
@@ -99,6 +110,16 @@ namespace Ling {
 			std::optional<float> width, height;
 			std::optional<float> margin[4];   // left, top, right, bottom
 			std::optional<float> padding[4];
+
+			// 圆角 & 边框 —— 逻辑像素缓存，DPI 变化时物理像素在 syncChrome() 里重算。
+			float cornerRadius{ 0.f };
+			float borderWidth{ 0.f };
+			Color borderColor{ 0 };
+			// 懒创建：只有 cornerRadius>0 时才有 clipGeo；只有 borderWidth>0 时才有 borderVisual。
+			winrt::Windows::UI::Composition::CompositionRoundedRectangleGeometry clipGeo{ nullptr };
+			winrt::Windows::UI::Composition::ShapeVisual borderVisual{ nullptr };
+			winrt::Windows::UI::Composition::CompositionRoundedRectangleGeometry borderGeo{ nullptr };
+			winrt::Windows::UI::Composition::CompositionSpriteShape borderShape{ nullptr };
 	};
 
 	template<typename T> requires std::derived_from<T, Node>
