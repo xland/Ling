@@ -8,8 +8,6 @@ namespace Ling {
     Label::Label(WinBase* win) : Node(win)
     {
         // 默认让 Text 在容器内居中；使用者可通过 Node::setJustify/setAlign 覆盖。
-        setJustifyContent(Justify::Center);
-        setAlignItems(Align::Center);
         text = makeChild<Text>();
     }
 

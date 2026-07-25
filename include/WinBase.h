@@ -27,6 +27,7 @@ namespace Ling {
 		void minimize();
 		void maximize();
 		void restore();
+		void refresh();
 		void createNativeWindow(int iconId = 0,DWORD exStyle = NULL, DWORD style = WS_POPUP | WS_MAXIMIZEBOX | WS_MINIMIZEBOX);
 		void setTimer(UINT elapse, UINT id);
 		void killTimer(UINT id);

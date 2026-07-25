@@ -15,19 +15,16 @@ namespace Ling {
 
 	void WinBase::show()
 	{
-		if (!hwnd) return;
 		ShowWindow(hwnd, SW_SHOW);
 	}
 
 	void WinBase::hide()
 	{
-		if (!hwnd) return;
 		ShowWindow(hwnd, SW_HIDE);
 	}
 
 	void WinBase::close()
 	{
-		if (!hwnd) return;
 		SetWindowLongPtr(hwnd, GWLP_USERDATA, NULL);
 		DestroyWindow(hwnd);
 		emit(Event::Destroy, nullptr);
@@ -35,20 +32,22 @@ namespace Ling {
 
 	void WinBase::minimize()
 	{
-		if (!hwnd) return;
 		ShowWindow(hwnd, SW_MINIMIZE);
 	}
 
 	void WinBase::maximize()
 	{
-		if (!hwnd) return;
 		ShowWindow(hwnd, SW_MAXIMIZE);
 	}
 
 	void WinBase::restore()
 	{
-		if (!hwnd) return;
 		ShowWindow(hwnd, SW_RESTORE);
+	}
+
+	void WinBase::refresh()
+	{
+		InvalidateRect(hwnd, nullptr, FALSE);
 	}
 
 	void WinBase::enableShadow()
@@ -170,7 +169,6 @@ namespace Ling {
 		body = std::unique_ptr<Node>(new Node(this));
 		winTarget.Root(body->visual);
 		onCreated();
-		layout();
 	}
 
 	LRESULT WinBase::borderHitTest(const POINT pt)
@@ -240,6 +238,9 @@ namespace Ling {
 		}
 		else if (msg == WM_ERASEBKGND) {
 			return 1;
+		}
+		else if (msg == WM_PAINT) {
+			self->layout(); return 0;
 		}
 		else if (msg == WM_NCHITTEST) {
 			return self->onHitTest({ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) });

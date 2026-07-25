@@ -13,6 +13,7 @@
 #include "EventBase.h"
 #include "Event.h"
 #include "Label.h"
+#include "Image.h"
 #include "ScrollerBox.h"
 #include "Button.h"
 #include "Util.h"

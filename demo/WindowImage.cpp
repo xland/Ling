@@ -45,11 +45,16 @@ LRESULT WindowImage::onHitTest(const POINT pos)
 
 void WindowImage::onDown(void* e)
 {
-    
     COMDLG_FILTERSPEC types[] = {
-    { L"png", L"*.png" },
-    { L"jpeg", L"*.jpg;*.jpeg" },
-    { L"all files", L"*.*" }
+        { L"png", L"*.png" },
+        { L"jpeg", L"*.jpg;*.jpeg" },
+        { L"all files", L"*.*" }
     };
-    auto path = openFileDialog(types);
+    auto imgPath = openFileDialog(types);
+    if (!img) {
+        img = body->makeChild<Ling::Image>();
+    }
+    btn->hide();
+    img->loadImg(imgPath);
+    layout();
 }

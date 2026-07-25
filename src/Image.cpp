@@ -48,6 +48,7 @@ namespace Ling {
 		if (FAILED(hr)) {
 			return;
 		}
+		YGNodeMarkDirty(node);
 	}
 
 
@@ -56,20 +57,44 @@ namespace Ling {
 		//如果你在 YGNodeStyleSetWidth(node, 100) / YGNodeStyleSetHeight(node, 50) 里已经指定了固定大小，Yoga 就直接用这个值，不会去调用 measureFunc。
 		//如果父容器已经约束住了大小，比如 flex : 1 填充满了，Yoga 也不会再问 measureFunc。
 		auto self = static_cast<Image*>(YGNodeGetContext(node));
-		
-		return { 0, 0 };
+		if (!self->bitmap) return { 0.f, 0.f };
+		auto size = self->bitmap->GetSize();
+		return { std::ceil(size.width), std::ceil(size.height) };
 	}
 
 	void Image::paint()
 	{
+		// 用 bitmap 的原生像素尺寸,不再看 yoga 的 w/h
+		auto px = bitmap->GetPixelSize();
+		const int pxW = static_cast<int>(px.width);
+		const int pxH = static_cast<int>(px.height);
+		if (pxW <= 0 || pxH <= 0) return;
+
+		if (!surface) {
+			auto d2d = D2D::get();
+			surface = d2d->createDrawingSurface(win->compositor, (float)pxW, (float)pxH);
+			auto brush = win->compositor.CreateSurfaceBrush(surface);
+			brush.Stretch(winrt::Windows::UI::Composition::CompositionStretch::None);  // 关键:不让 Composition 再缩
+			// 想要"图像画在 visual 中央"就取消下面这句注释:
+			 //brush.HorizontalAlignmentRatio(0.5f); brush.VerticalAlignmentRatio(0.5f);
+			visual.Brush(brush);
+		}
+		else {
+			auto sz = surface.SizeInt32();
+			if (sz.Width != pxW || sz.Height != pxH) {
+				surface.Resize({ pxW, pxH });
+			}
+		}
+
 		auto s = surface.as<ABI::Windows::UI::Composition::ICompositionDrawingSurfaceInterop>();
 		ComPtr<ID2D1DeviceContext> ctx;
 		POINT offset{};
-		HRESULT hr = s->BeginDraw(nullptr, __uuidof(ID2D1DeviceContext), reinterpret_cast<void**>(ctx.GetAddressOf()), &offset);
-		auto trans = D2D1::Matrix3x2F::Translation(static_cast<float>(offset.x), static_cast<float>(offset.y));
-		ctx->SetTransform(trans);
+		s->BeginDraw(nullptr, __uuidof(ID2D1DeviceContext), reinterpret_cast<void**>(ctx.GetAddressOf()), &offset);
+		ctx->SetTransform(D2D1::Matrix3x2F::Translation((float)offset.x, (float)offset.y));
 		ctx->Clear(0);
-		s->EndDraw(); 
+		D2D1_RECT_F dstRect{ 0.f, 0.f, (float)pxW, (float)pxH };
+		ctx->DrawBitmap(bitmap.Get(), dstRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR);
+		s->EndDraw();
 	}
 
 	void Image::layout()

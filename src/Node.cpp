@@ -48,11 +48,15 @@ namespace Ling {
 	void Node::hide()
 	{
 		visual.IsVisible(false);
+		YGNodeStyleSetDisplay(node, YGDisplayNone);
+		win->refresh();
 	}
 
 	void Node::show()
 	{
 		visual.IsVisible(true);
+		YGNodeStyleSetDisplay(node, YGDisplayFlex);
+		win->refresh();
 	}
 
 	void Node::setBg(const Color& color)

@@ -41,7 +41,7 @@ namespace Ling {
         }
         // 内容变了 -> metric 变了 -> 通知 yoga 重新 measure。
         // 只有已经进入 yoga 布局树的节点才能 mark dirty（否则 API 会断言）。
-        if (YGNodeGetOwner(node)) YGNodeMarkDirty(node);
+        YGNodeMarkDirty(node);
         if (surface) paint();
     }
 
@@ -51,7 +51,7 @@ namespace Ling {
         if (textLayout.Get()) {
             textLayout->SetFontSize(fontSize * win->dpi, { 0, INT_MAX });
         }
-        if (YGNodeGetOwner(node)) YGNodeMarkDirty(node);
+        YGNodeMarkDirty(node);
         if (surface) paint();
     }
 
@@ -61,7 +61,7 @@ namespace Ling {
         if (textLayout.Get() && !fontFamily.empty()) {
             textLayout->SetFontFamilyName(fontFamily.data(), { 0, INT_MAX });
         }
-        if (YGNodeGetOwner(node)) YGNodeMarkDirty(node);
+        YGNodeMarkDirty(node);
         if (surface) paint();
     }
 
@@ -76,7 +76,7 @@ namespace Ling {
     {
         if (textLayout.Get()) {
             textLayout->SetFontSize(fontSize * win->dpi, { 0, INT_MAX });
-            if (YGNodeGetOwner(node)) YGNodeMarkDirty(node);
+            YGNodeMarkDirty(node);
         }
     }
 
@@ -108,8 +108,7 @@ namespace Ling {
         auto s = surface.as<ABI::Windows::UI::Composition::ICompositionDrawingSurfaceInterop>();
         ComPtr<ID2D1DeviceContext> ctx;
         POINT offset{};   // 物理像素
-        s->BeginDraw(nullptr, __uuidof(ID2D1DeviceContext),
-            reinterpret_cast<void**>(ctx.GetAddressOf()), &offset);
+        s->BeginDraw(nullptr, __uuidof(ID2D1DeviceContext), reinterpret_cast<void**>(ctx.GetAddressOf()), &offset);
         auto trans = D2D1::Matrix3x2F::Translation((float)offset.x, (float)offset.y);
         ctx->SetTransform(trans);
         ctx->Clear(0);    // surface 只画字，背景由外层容器负责

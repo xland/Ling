@@ -13,5 +13,6 @@ private:
 private:
 	std::unique_ptr<TitleBar> titleBar;
 	Ling::Button* btn;
+	Ling::Image* img;
 };
 

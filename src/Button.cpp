@@ -61,11 +61,11 @@ namespace Ling {
 		isHover = hoverFlag;
 		// 背景色如果配置一致则不需要换 brush；text->setColor 内部已判等，可放心调。
 		if (isHover) {
-			if (hoverBg != bgColor && hoverBrush) visual.Brush(hoverBrush);
+			visual.Brush(hoverBrush);
 			text->setColor(hoverColor);
 		}
 		else {
-			if (hoverBg != bgColor && normalBrush) visual.Brush(normalBrush);
+			visual.Brush(normalBrush);
 			text->setColor(color);
 		}
 	}
