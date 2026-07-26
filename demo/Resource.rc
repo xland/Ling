@@ -1,9 +1,8 @@
 ﻿#define APSTUDIO_READONLY_SYMBOLS
 #include "winres.h"
 #undef APSTUDIO_READONLY_SYMBOLS
-// 100 ICON "Res/logo.ico"
-// 嵌入资源文件
-iconfont.ttf RCDATA "iconfont.ttf"
+100 ICON "logo.ico"
+icon.ttf RCDATA "icon.ttf"
 
 
 // 配置可执行文件产品信息

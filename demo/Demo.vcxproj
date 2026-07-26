@@ -166,15 +166,17 @@
     </ClCompile>
     <ClCompile Include="TitleBar.cpp" />
     <ClCompile Include="WindowImage.cpp" />
-    <ClCompile Include="WindowWithScroller.cpp" />
     <ClCompile Include="WindowCanvas.cpp" />
+    <ClCompile Include="WindowBorderRadius.cpp" />
+    <ClCompile Include="WindowScroller.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="TitleBar.h" />
     <ClInclude Include="WindowImage.h" />
-    <ClInclude Include="WindowWithScroller.h" />
     <ClInclude Include="WindowCanvas.h" />
+    <ClInclude Include="WindowBorderRadius.h" />
+    <ClInclude Include="WindowScroller.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />

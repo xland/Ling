@@ -18,9 +18,6 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="WindowWithScroller.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -33,11 +30,14 @@
     <ClCompile Include="TitleBar.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="WindowBorderRadius.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowScroller.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="WindowWithScroller.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -48,6 +48,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="TitleBar.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowBorderRadius.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowScroller.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

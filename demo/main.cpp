@@ -3,16 +3,18 @@
 #include "WindowScroller.h"
 #include "WindowImage.h"
 #include "WindowCanvas.h"
+#include "WindowBorderRadius.h"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPTSTR lpCmdLine, _In_ int nCmdShow)
 {
     Ling::init();
     Ling::App::get()->refuseSecondInstance(L"Ling.Demo");
-    Ling::D2D::get()->addFonts({ L"iconfont.ttf" });
+    Ling::D2D::get()->addFonts({ L"icon.ttf" });
 
     //WindowScroller win;
-    WindowImage win;
+    //WindowImage win;
     //WindowCanvas win;
+    WindowBorderRadius win;
     MSG msg;
     while (GetMessage(&msg, NULL, 0, 0))
     {
