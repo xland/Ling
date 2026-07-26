@@ -35,17 +35,7 @@ namespace Ling {
 		void setSize(float w, float h);
 		void setPosition(int x, int y);
 		void setCenter();
-		void layout();
-		/// <summary>
-		/// COMDLG_FILTERSPEC types[] = {
-		/// 	{ L"png", L"*.png" },
-		/// 	{ L"jpeg", L"*.jpg;*.jpeg" },
-		/// 	{ L"all files", L"*.*" }
-		/// };
-		/// auto path = loader.getFilePath(types);
-		/// </summary>
-		/// <param name="filter"></param>
-		/// <returns></returns>
+		void layout(); 
 		std::wstring openFileDialog(std::span<const COMDLG_FILTERSPEC> filter);
 	public:
 		int x{ 0 }, y{ 0 };
@@ -55,24 +45,20 @@ namespace Ling {
 		std::wstring title;
 		bool isMouseIn{ false }, isMaximized{ false };
 		winrt::Windows::UI::Composition::Compositor compositor{ nullptr };
-
-		// —— 事件字段：外部通过 .add(lambda) 订阅，.remove(token) 退订 ——
-		// 声明必须在 body 之前：C++ 按声明的反序析构。子节点 (Button/ScrollerBox) 在
-		// 自己的 ~ 里会调用 win->onXxx.remove(token)，如果事件字段先于 body 析构就 UB。
-		winrt::event<winrt::delegate<POINT>>        onMouseMove;
-		winrt::event<winrt::delegate<POINT, bool>>  onMouseDown;   // (pos, isRight)
-		winrt::event<winrt::delegate<POINT, bool>>  onMouseUp;
-		winrt::event<winrt::delegate<POINT, float>> onMouseWheel;  // (pos, deltaLogical)
-		winrt::event<winrt::delegate<HCURSOR*>>     onCursor;      // handler 写 *cursor
-		winrt::event<winrt::delegate<POINT>>        onPosChanged;
-		winrt::event<winrt::delegate<UINT>>         onKeyDown;
-		winrt::event<winrt::delegate<UINT>>         onTimer;
-		winrt::event<winrt::delegate<>>             onSizeChanged;
-		winrt::event<winrt::delegate<>>             onDpiChanged;
-		winrt::event<winrt::delegate<>>             onDestroy;
-		winrt::event<winrt::delegate<>>             onMaximize;
-		winrt::event<winrt::delegate<>>             onMinimize;
-		winrt::event<winrt::delegate<>>             onRestore;
+		 
+		winrt::event<winrt::delegate<POINT>> onMouseMove;
+		winrt::event<winrt::delegate<POINT, bool>> onMouseDown; 
+		winrt::event<winrt::delegate<POINT, bool>> onMouseUp;
+		winrt::event<winrt::delegate<POINT, float>> onMouseWheel; 
+		winrt::event<winrt::delegate<HCURSOR*>> onCursor; 
+		winrt::event<winrt::delegate<UINT>> onKeyDown;
+		winrt::event<winrt::delegate<UINT>> onTimer;
+		winrt::event<winrt::delegate<>> onSizeChanged;
+		winrt::event<winrt::delegate<>> onDpiChanged;
+		winrt::event<winrt::delegate<>> onDestroy;
+		winrt::event<winrt::delegate<>> onMaximize;
+		winrt::event<winrt::delegate<>> onMinimize;
+		winrt::event<winrt::delegate<>> onRestore;
 
 		std::unique_ptr<Node> body;   // 必须在事件字段之后声明，先于事件字段析构
 	protected:

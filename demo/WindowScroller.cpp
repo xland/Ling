@@ -1,8 +1,8 @@
 ﻿#include "pch.h"
-#include "WindowWithScroller.h"
+#include "WindowScroller.h"
 #include "TitleBar.h"
 
-WindowWithScroller::WindowWithScroller():Ling::WinBase()
+WindowScroller::WindowScroller():Ling::WinBase()
 {
     setTitle(L"滚动容器演示");
     setSize(800, 600);
@@ -11,11 +11,11 @@ WindowWithScroller::WindowWithScroller():Ling::WinBase()
     createNativeWindow();
 }
 
-WindowWithScroller::~WindowWithScroller()
+WindowScroller::~WindowScroller()
 {
 }
 
-void WindowWithScroller::onCreated()
+void WindowScroller::onCreated()
 {
     enableShadow();
     body->setBg(0xFFFFFFFF);
@@ -25,7 +25,7 @@ void WindowWithScroller::onCreated()
     show();
 }
 
-LRESULT WindowWithScroller::onHitTest(const POINT pos)
+LRESULT WindowScroller::onHitTest(const POINT pos)
 {
     POINT pt = pos;
     ScreenToClient(hwnd, &pt); 
@@ -36,7 +36,7 @@ LRESULT WindowWithScroller::onHitTest(const POINT pos)
     return titleBar->hitCaption(pt);
 }
 
-void WindowWithScroller::initScrollerBox()
+void WindowScroller::initScrollerBox()
 {
     scrollerBox = body->makeChild<Ling::ScrollerBox>();
     scrollerBox->setWidthPercent(100.f);

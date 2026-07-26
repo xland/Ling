@@ -133,7 +133,7 @@ namespace Ling {
 			fileOpen->Release();
 			return L"";
 		}
-		hr = fileOpen->Show(NULL);
+		hr = fileOpen->Show(hwnd);
 		if (FAILED(hr)) {
 			fileOpen->Release();
 			return L"";
@@ -281,10 +281,10 @@ namespace Ling {
 			self->mouseWheel(wParam, lParam);
 		}
 		else if (msg == WM_KEYDOWN) {
-			self->onKeyDown(wParam);
+			self->onKeyDown((UINT)wParam);
 		}
 		else if (msg == WM_TIMER) {
-			self->onTimer(wParam - WM_APP);
+			self->onTimer((UINT)(wParam - WM_APP));
 		}
 		else if (msg == WM_DPICHANGED) {
 			self->dpiChange(wParam, lParam);
@@ -380,7 +380,6 @@ namespace Ling {
 	{
 		this->x = pos.x;
 		this->y = pos.y;
-		onPosChanged(pos);
 	}
 	int WinBase::paint()
 	{

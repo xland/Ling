@@ -1,11 +1,11 @@
 ﻿#pragma once
 #include "include/Ling.h"
 #include "TitleBar.h"
-class WindowWithScroller : public Ling::WinBase
+class WindowScroller : public Ling::WinBase
 {
 public:
-	WindowWithScroller();
-	~WindowWithScroller();
+	WindowScroller();
+	~WindowScroller();
 private:
 	void onCreated() override;
 	LRESULT onHitTest(const POINT pos) override;

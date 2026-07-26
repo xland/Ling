@@ -65,7 +65,7 @@ namespace Ling {
 			// - setCornerRadius(0) / setBorderWidth(0) 表示无对应效果。
 			// - 无 setBg 时背景走透明 —— clip 依然生效，圆角剪切对子节点仍有效。
 			// - 边框沿 (0,0)-(w,h) 外沿绘制，几何自动内 inset borderW/2 保证 stroke 外沿贴边。
-			void setCornerRadius(float r);
+			void setBorderRadius(float r);
 			void setBorder(float width, const Color& color);
 			void setBorderWidth(float width);
 			void setBorderColor(const Color& color);

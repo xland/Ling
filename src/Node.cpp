@@ -279,7 +279,7 @@ namespace Ling {
 	//    需要向内 inset borderW/2；对应地，几何的圆角半径也要减去 borderW/2。
 	//  - 真正把物理像素写进 Composition 的动作集中在 syncChrome()，每次 layout
 	//    以及 setter 触发时调用；DPI 变化后 WinBase 会 relayout，无需额外挂钩。
-	void Node::setCornerRadius(float r)
+	void Node::setBorderRadius(float r)
 	{
 		cornerRadius = r;
 		if (r > 0.f && !clipGeo) {

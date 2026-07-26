@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include <Windows.h>
+#include "../include/D2D.h"
 #include "../include/App.h"
 #include "../yoga/YGConfig.h"
 
@@ -31,27 +32,29 @@ namespace Ling {
 
     void App::refuseSecondInstance(const std::wstring& checkId)
     {
-        auto wndName = std::format(L"Ling_{}", checkId);
-        auto hwnd = FindWindow(L"STATIC", wndName.data());
+        _ASSERT_EXPR(msgHwnd == nullptr, L"too late to refuse second instance");
+        auto msgWndName = std::format(L"Ling_{}", checkId);
+        auto hwnd = FindWindow(L"STATIC", msgWndName.data());
         if (hwnd) {
             PostMessage(hwnd, WM_APP + 660, 0, 0);
             App::exit(0);
             return;
         }
-        initMsgWin(wndName);
+        initMsgWin(msgWndName);
     }
 
     void App::init()
     {
         App::initDispatcherQueueCtrl();
+        D2D::init();
         auto ptr = new App();
         app.reset(ptr);
     }
 
-    void App::initMsgWin(const std::wstring& wndName)
+    void App::initMsgWin(const std::wstring& msgWndName)
     {
         if (msgHwnd) return;
-        msgHwnd = CreateWindow(L"STATIC", wndName.data(), 0, 0, 0, 0, 0, HWND_MESSAGE, NULL, GetInstanceModule(NULL), NULL);
+        msgHwnd = CreateWindow(L"STATIC", msgWndName.data(), 0, 0, 0, 0, 0, HWND_MESSAGE, NULL, GetInstanceModule(NULL), NULL);
         SetWindowLongPtr(msgHwnd, GWLP_WNDPROC, (LONG_PTR)App::winProc);
         SetWindowLongPtr(msgHwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
     }
@@ -64,7 +67,7 @@ namespace Ling {
         }
         else if (msg == WM_APP + 660)
         {
-
+            self->onSecondInstance();
         }
         return DefWindowProc(hwnd, msg, wParam, lParam);
     }
