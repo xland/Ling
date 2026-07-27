@@ -26,6 +26,7 @@ namespace Ling {
 
     void App::quit(int code)
     {
+        onBeforeQuit();
         PostQuitMessage(code);
     }
 
@@ -34,15 +35,16 @@ namespace Ling {
         ExitProcess(code);
     }
 
-    void App::refuseSecondInstance()
+    bool App::refuseSecondInstance()
     {
         auto hwnd = FindWindow(L"STATIC", appID.data());
         if (hwnd) {
             PostMessage(hwnd, WM_APP + 1, 0, 0);
             App::exit(0);
-            return;
+            return true;
         }
         initMsgWin();
+        return false;
     }
 
     void App::regHotKey(const std::wstring& keyStr, const UINT msgId)
@@ -76,12 +78,17 @@ namespace Ling {
         }
         initMsgWin();
         BOOL result = RegisterHotKey(msgHwnd, WM_APP + msgId, modifiers, keyCode);
-        if (!result) {
-        	DWORD error = GetLastError();
-        	if (error == ERROR_HOTKEY_ALREADY_REGISTERED) {
-                _ASSERT_EXPR(FALSE, L"hot key confilict，error");
-        	}
-        }
+        //if (!result) {
+        //	DWORD error = GetLastError();
+        //	if (error == ERROR_HOTKEY_ALREADY_REGISTERED) {
+        //        _ASSERT_EXPR(FALSE, L"hot key confilict，error");
+        //	}
+        //}
+    }
+
+    void App::unRegHotKey(const UINT msgId)
+    {
+        UnregisterHotKey(msgHwnd, WM_APP + msgId);
     }
 
     void App::initTray(const UINT msgId, const std::wstring& tip)
@@ -108,6 +115,39 @@ namespace Ling {
             Shell_NotifyIcon(NIM_DELETE, tray.get());
             tray.reset();
         }
+    }
+
+    void App::initArgs()
+    {
+        LPWSTR* argv;
+        int argc;
+        LPWSTR cmdLine = GetCommandLine();
+        argv = CommandLineToArgvW(cmdLine, &argc);
+        for (int i = 1; i < argc; ++i) {
+            std::wstring arg{ argv[i] };
+            auto index = arg.find(L"=");
+            if (index != std::wstring::npos) {
+                args[arg.substr(0, index)] = arg.substr(index + 1);
+            }
+            else {
+                args.insert({ arg,L"true" });
+            }
+        }
+        LocalFree(argv);
+    }
+
+    UINT App::popupMenu(HMENU menu)
+    {
+        POINT pt;
+        GetCursorPos(&pt);
+        // 参考 MS KB 135788：托盘弹菜单前必须把 owner 拉到前台, 菜单才能收到"外部点击"
+        // 和"失焦"事件从而自动关闭；否则会一直挂着。菜单结束后再补一个 WM_NULL, 兜住
+        // 部分 shell 版本的兼容问题。
+        SetForegroundWindow(msgHwnd);
+        UINT selectedCmd = TrackPopupMenuEx(menu,TPM_RIGHTBUTTON | TPM_NONOTIFY | TPM_RETURNCMD,pt.x,pt.y,msgHwnd,nullptr);
+        PostMessage(msgHwnd, WM_NULL, 0, 0);
+        DestroyMenu(menu);
+        return selectedCmd;
     }
 
     void App::init()
@@ -144,23 +184,19 @@ namespace Ling {
         else if (msg == self->trayMsgId)
         {
             if (lParam == WM_LBUTTONDOWN) {
-                self->onTrayMouseEvent(false,true,false);
+                self->onTrayMouseEvent(true,false);
             }
             else if (lParam == WM_RBUTTONDOWN)
             {
-                self->onTrayMouseEvent(false, true, true);
+                self->onTrayMouseEvent(true, true);
             }
             else if (lParam == WM_LBUTTONUP)
             {
-                self->onTrayMouseEvent(false, false, true);
+                self->onTrayMouseEvent(false, true);
             }
             else if (lParam == WM_RBUTTONUP)
             {
-                self->onTrayMouseEvent(false, false, true);
-            }
-            else if (lParam == WM_MOUSEMOVE)
-            {
-                self->onTrayMouseEvent(true, false, false);
+                self->onTrayMouseEvent(false, true);
             }
         }
         return DefWindowProc(hwnd, msg, wParam, lParam);

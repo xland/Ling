@@ -36,10 +36,11 @@ namespace Ling {
 		void setPosition(int x, int y);
 		void setCenter();
 		void layout(); 
+		void setMinSize(float w, float h);
 		std::wstring openFileDialog(std::span<const COMDLG_FILTERSPEC> filter);
 	public:
 		int x{ 0 }, y{ 0 };
-		float w{ 0 }, h{ 0 };
+		float w{ 0 }, h{ 0 }, minW{ 800 }, minH{600};
 		float dpi{ 1.0 };
 		HWND hwnd{ nullptr };
 		std::wstring title;

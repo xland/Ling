@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include <vector>
 
+namespace Ling {
 #define COMPILE_TIME_RAND_STR(LEN) \
     []<size_t... I>(std::index_sequence<I...>) -> std::wstring { \
         constexpr std::wstring_view chars = L"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; \
@@ -16,7 +17,20 @@
         return L"Ling_" + std::wstring{gen(I, I)...}; \
     }(std::make_index_sequence<LEN>{})
 
-namespace Ling {
+    template<typename... Args>
+    void log(std::wstring_view fmt, Args&&... args)
+    {
+        auto now = std::chrono::system_clock::now();
+        auto time = std::chrono::system_clock::to_time_t(now);
+        std::tm tm{};
+        localtime_s(&tm, &time);
+        std::wstringstream ss;
+        ss << std::put_time(&tm, L"%Y-%m-%d %H:%M:%S");
+        auto timeStr = ss.str();
+        auto msg = std::vformat(fmt, std::make_wformat_args(args...));
+        std::wstring final = L"[" + timeStr + L"] " + msg + L"\n";
+        OutputDebugString(final.c_str());
+    }
 	class Util
 	{
 	public:
@@ -26,5 +40,17 @@ namespace Ling {
 		static std::tuple<void*, DWORD> getRes(const std::wstring& name);
 		static std::vector<std::wstring> splitStr(const std::wstring& str, wchar_t delimiter);
 		static UINT strToKey(const std::wstring& vkCode);
+        static std::wstring getSysLang();
+        static std::wstring readFile(const std::wstring& path);
+        static void saveFile(const std::wstring& path, const std::wstring& content);
+
+        template <std::ranges::input_range Range, typename T>
+        static int getIndex(const Range& range, const T& target) {
+            auto it = std::ranges::find(range, target);
+            if (it != std::ranges::end(range)) {
+                return std::ranges::distance(range.begin(), it);
+            }
+            return -1;
+        }
 	};
 }

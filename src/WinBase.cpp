@@ -123,6 +123,12 @@ namespace Ling {
 		body->layout();
 	}
 
+	void WinBase::setMinSize(float w, float h)
+	{
+		minW = w * dpi;
+		minH = h * dpi;
+	}
+
 	std::wstring WinBase::openFileDialog(std::span<const COMDLG_FILTERSPEC> filter)
 	{
 		IFileOpenDialog* fileOpen;
@@ -199,8 +205,8 @@ namespace Ling {
 		mmi->ptMaxPosition.y = workAreaRect.top;
 		mmi->ptMaxSize.x = workAreaRect.right - workAreaRect.left;
 		mmi->ptMaxSize.y = workAreaRect.bottom - workAreaRect.top;
-		mmi->ptMinTrackSize.x = 500;
-		mmi->ptMinTrackSize.y = 360;
+		mmi->ptMinTrackSize.x = minW;
+		mmi->ptMinTrackSize.y = minH;
 	}
 
 	std::wstring& WinBase::getWinClsName(HINSTANCE hIns)

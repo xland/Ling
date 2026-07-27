@@ -166,5 +166,62 @@ namespace Ling {
         }
         return 0;
     }
+    std::wstring Util::getSysLang()
+    {
+        LANGID langID = GetUserDefaultLangID(); //默认语言标识符
+        WCHAR langName[LOCALE_NAME_MAX_LENGTH];
+        auto areaId = MAKELCID(langID, SORT_DEFAULT); //区域设置ID
+        if (LCIDToLocaleName(areaId, langName, LOCALE_NAME_MAX_LENGTH, 0)) {
+            return std::wstring{ langName };
+        }
+        return L"zh-CN";
+    }
+    std::wstring Util::readFile(const std::wstring& path)
+    {
+        HANDLE hFile = CreateFile(path.data(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+        if (hFile == INVALID_HANDLE_VALUE) return L"";
+        LARGE_INTEGER fileSize;
+        if (!GetFileSizeEx(hFile, &fileSize)) {
+            CloseHandle(hFile);
+            return L"";
+        }
+        if (fileSize.QuadPart == 0) {
+            CloseHandle(hFile);
+            return L"";
+        }
+        std::wstring outContent;
+        outContent.resize(static_cast<size_t>(fileSize.QuadPart));
+        DWORD bytesRead = 0;
+        BOOL success = ReadFile(hFile, outContent.data(), static_cast<DWORD>(fileSize.QuadPart), &bytesRead, NULL);
+        if (!success) {
+            CloseHandle(hFile);
+            return L"";
+        }
+        outContent.resize(bytesRead);
+        CloseHandle(hFile);
+        if (outContent.size() >= 1 && outContent[0] == 0xFEFF) {
+            outContent.erase(0, 1); // 删除第一个字符
+        }
+        return outContent;
+    }
+    void Util::saveFile(const std::wstring& path, const std::wstring& content)
+    {
+        HANDLE hFile = CreateFile(path.data(), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+        if (hFile == INVALID_HANDLE_VALUE) return;
+        DWORD bytesWritten = 0;
+        WORD bom = 0xFEFF;
+        BOOL success = WriteFile(hFile, &bom, sizeof(WORD), &bytesWritten, NULL);
+        if (!success) {
+            CloseHandle(hFile); // 出错也要关闭句柄
+            return;
+        }
+        DWORD contentLength = static_cast<DWORD>(content.length() * sizeof(wchar_t));
+        success = WriteFile(hFile, content.data(), contentLength, &bytesWritten, NULL);
+        if (!success) {
+            CloseHandle(hFile);
+            return;
+        }
+        CloseHandle(hFile);
+    }
 }
 
