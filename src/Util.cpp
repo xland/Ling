@@ -1,4 +1,5 @@
 ﻿#include "pch.h"
+#include <cwctype>
 #include "../include/Util.h"
 
 namespace Ling {
@@ -69,6 +70,101 @@ namespace Ling {
         DWORD size = SizeofResource(NULL, hRes);
         return std::make_tuple(pData, size);
     }
+    std::vector<std::wstring> Util::splitStr(const std::wstring& str, wchar_t delimiter) {
+        std::vector<std::wstring> result;
+        std::wistringstream wiss(str);
+        std::wstring token;
+        while (std::getline(wiss, token, delimiter)) {
+            result.push_back(token);
+        }
+        return result;
+    }
+    UINT Util::strToKey(const std::wstring& vkCode)
+    {
+        if (vkCode.empty()) return 0;
+        // 1. 处理单字符 (A-Z, 0-9)
+        if (vkCode.length() == 1) {
+            wchar_t c = vkCode[0];
+            if (c >= 'A' && c <= 'Z') return static_cast<UINT>(c);
+            if (c >= 'a' && c <= 'z') return static_cast<UINT>(std::towupper(c));
+            if (c >= '0' && c <= '9') return static_cast<UINT>(c);
+        }
+        // 2. 处理小键盘数字 "Num0" 等
+        if (vkCode.rfind(L"num", 0) == 0) {
+            std::wstring numPart = vkCode.substr(vkCode.find_first_not_of(L" \t", 3));
+            if (!numPart.empty() && numPart.length() == 1) {
+                wchar_t c = numPart[0];
+                if (c >= '0' && c <= '9') {
+                    return VK_NUMPAD0 + (c - '0');
+                }
+            }
+        }
+        // 3. 功能键 (F1 - F12)
+        if (vkCode == L"f1") return VK_F1;
+        if (vkCode == L"f2") return VK_F2;
+        if (vkCode == L"f3") return VK_F3;
+        if (vkCode == L"f4") return VK_F4;
+        if (vkCode == L"f5") return VK_F5;
+        if (vkCode == L"f6") return VK_F6;
+        if (vkCode == L"f7") return VK_F7;
+        if (vkCode == L"f8") return VK_F8;
+        if (vkCode == L"f9") return VK_F9;
+        if (vkCode == L"f10") return VK_F10;
+        if (vkCode == L"f11") return VK_F11;
+        if (vkCode == L"f12") return VK_F12;
+        // 4. 方向键
+        if (vkCode == L"up") return VK_UP;
+        if (vkCode == L"down") return VK_DOWN;
+        if (vkCode == L"left") return VK_LEFT;
+        if (vkCode == L"right") return VK_RIGHT;
+        // 5. 控制与编辑键
+        if (vkCode == L"enter") return VK_RETURN;
+        if (vkCode == L"esc") return VK_ESCAPE;
+        if (vkCode == L"space") return VK_SPACE;
+        if (vkCode == L"tab") return VK_TAB;
+        if (vkCode == L"backspace") return VK_BACK;
+        if (vkCode == L"delete") return VK_DELETE;
+        if (vkCode == L"insert") return VK_INSERT;
+        if (vkCode == L"home") return VK_HOME;
+        if (vkCode == L"end") return VK_END;
+        if (vkCode == L"pageup") return VK_PRIOR;
+        if (vkCode == L"pagedown") return VK_NEXT;
+        if (vkCode == L"printscreen") return VK_SNAPSHOT;
+        if (vkCode == L"scrolllock") return VK_SCROLL;
+        if (vkCode == L"pause") return VK_PAUSE;
+        // 6. 小键盘符号
+        if (vkCode == L"numlock") return VK_NUMLOCK;
+        if (vkCode == L"*") return VK_MULTIPLY;
+        if (vkCode == L"+") return VK_ADD;
+        if (vkCode == L"-") return VK_SUBTRACT;
+        if (vkCode == L"/") return VK_DIVIDE;
+        if (vkCode == L".") return VK_DECIMAL;
+        // 7. 主键盘符号键 (OEM Keys)
+        // 注意：这些 VK_OEM 键在不同键盘布局下对应的物理按键可能不同
+        // 这里以标准美式键盘 (US QWERTY) 为基准进行映射
+        if (vkCode == L"`" || vkCode == L"~") return VK_OEM_3;      // ` ~
+        if (vkCode == L"-") return VK_OEM_MINUS;                       // - _ (注意：这里会覆盖小键盘的 VK_SUBTRACT，如果需要区分，建议小键盘用 "num-" 或 "numpad-")
+        if (vkCode == L"=" || vkCode == L"+") return VK_OEM_PLUS;   // = +
+        if (vkCode == L"[") return VK_OEM_4;                           // [ {
+        if (vkCode == L"]") return VK_OEM_6;                           // ] }
+        if (vkCode == L"\\") return VK_OEM_5;                          // \ |
+        if (vkCode == L";") return VK_OEM_1;                           // ; :
+        if (vkCode == L"'") return VK_OEM_7;                           // ' "
+        if (vkCode == L",") return VK_OEM_COMMA;                       // , <
+        if (vkCode == L".") return VK_OEM_PERIOD;                      // . >
+        if (vkCode == L"/") return VK_OEM_2;                           // / ?
 
+        // 8. 动态单字符回退 (处理未知的单字符符号)
+        // 如果上面都没匹配到，且长度仅为 1，尝试让 Windows 根据当前键盘布局反向解析
+        if (vkCode.length() == 1) {
+            SHORT vkResult = VkKeyScanW(vkCode[0]);
+            if (vkResult != -1) {
+                // VkKeyScanW 返回值的低 8 位是虚拟键码，高 8 位是 Shift/Ctrl/Alt 状态
+                // 因为我们只需要基础键码，所以取低 8 位即可
+                return static_cast<UINT>(vkResult & 0xFF);
+            }
+        }
+        return 0;
+    }
 }
 

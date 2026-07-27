@@ -8,7 +8,7 @@
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPTSTR lpCmdLine, _In_ int nCmdShow)
 {
     Ling::init();
-    Ling::App::get()->refuseSecondInstance(L"Ling.Demo");
+    Ling::App::get()->refuseSecondInstance();
     Ling::D2D::get()->addFonts({ L"icon.ttf" });
 
     //WindowScroller win;

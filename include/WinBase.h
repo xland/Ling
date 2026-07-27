@@ -28,7 +28,7 @@ namespace Ling {
 		void maximize();
 		void restore();
 		void refresh();
-		void createNativeWindow(int iconId = 0,DWORD exStyle = NULL, DWORD style = WS_POPUP | WS_MAXIMIZEBOX | WS_MINIMIZEBOX);
+		void createNativeWindow(DWORD exStyle = NULL, DWORD style = WS_POPUP | WS_MAXIMIZEBOX | WS_MINIMIZEBOX);
 		void setTimer(UINT elapse, UINT id);
 		void killTimer(UINT id);
 		void setTitle(const std::wstring& title);
@@ -67,7 +67,7 @@ namespace Ling {
 		LRESULT borderHitTest(const POINT pt);
 		virtual void onMinMaxInfo(MINMAXINFO* mmi);
 	private:
-		std::wstring& getWinClsName(HINSTANCE hIns, const int& iconId);
+		std::wstring& getWinClsName(HINSTANCE hIns);
 		static LRESULT CALLBACK winProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		BOOL setCursor();
 		void mouseMove(POINT pos);

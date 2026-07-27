@@ -158,10 +158,10 @@ namespace Ling {
 		return result;
 	}
 
-	void WinBase::createNativeWindow(int iconId, DWORD exStyle, DWORD style)
+	void WinBase::createNativeWindow(DWORD exStyle, DWORD style)
 	{
 		auto hIns = GetModuleHandle(nullptr);
-		auto cls = getWinClsName(hIns,iconId);
+		auto cls = getWinClsName(hIns);
 		hwnd = CreateWindowEx(WS_EX_NOREDIRECTIONBITMAP | exStyle, cls.data(), title.data(), style, x, y, (float)w, (float)h, NULL, NULL, hIns, NULL); //WS_POPUP
 		SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 		auto interop = compositor.as<ABI::Windows::UI::Composition::Desktop::ICompositorDesktopInterop>();
@@ -203,9 +203,9 @@ namespace Ling {
 		mmi->ptMinTrackSize.y = 360;
 	}
 
-	std::wstring& WinBase::getWinClsName(HINSTANCE hIns, const int& iconId)
+	std::wstring& WinBase::getWinClsName(HINSTANCE hIns)
 	{
-		static std::wstring clsName = [&hIns,&iconId] {
+		static std::wstring clsName = [&hIns] {
 			WNDCLASSEXW wcex{};
 			wcex.cbSize = sizeof(WNDCLASSEX);
 			wcex.style = CS_HREDRAW | CS_VREDRAW;
@@ -215,14 +215,10 @@ namespace Ling {
 			wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 			wcex.lpszMenuName = nullptr;
 			wcex.lpszClassName = L"Ling";
-			if (iconId > 0) {
-				wcex.hIcon   = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(iconId));
-				wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(iconId));
-			}
-			else {
-				wcex.hIcon   = LoadIcon(nullptr, IDI_APPLICATION);
-				wcex.hIconSm = LoadIcon(nullptr, IDI_APPLICATION);
-			}
+			wcex.hIcon = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(1));
+			wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(1));
+			//wcex.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
+			//wcex.hIconSm = LoadIcon(nullptr, IDI_APPLICATION);
 			ATOM atom = RegisterClassEx(&wcex);
 			if (atom == 0) {
 				assert("RegisterClassEx failed");

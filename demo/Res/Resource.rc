@@ -1,7 +1,7 @@
 ﻿#define APSTUDIO_READONLY_SYMBOLS
 #include "winres.h"
 #undef APSTUDIO_READONLY_SYMBOLS
-100 ICON "logo.ico"
+1 ICON "logo.ico"
 icon.ttf RCDATA "icon.ttf"
 
 

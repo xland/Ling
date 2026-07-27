@@ -179,10 +179,13 @@
     <ClInclude Include="WindowScroller.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Resource.rc" />
+    <ResourceCompile Include="Res\Resource.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Font Include="iconfont.ttf" />
+    <Image Include="Res\logo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Res\icon.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
