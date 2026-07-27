@@ -1,8 +1,4 @@
 # Ling
 
-A GUI Framework for modern C++
-
-# 目标
-
-- 此项目正在大面积重构；
+一个使用现代C++开发的GUI框架，仅为Windows桌面应用服务。
 
