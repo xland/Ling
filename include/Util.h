@@ -17,20 +17,7 @@ namespace Ling {
         return L"Ling_" + std::wstring{gen(I, I)...}; \
     }(std::make_index_sequence<LEN>{})
 
-    template<typename... Args>
-    void log(std::wstring_view fmt, Args&&... args)
-    {
-        auto now = std::chrono::system_clock::now();
-        auto time = std::chrono::system_clock::to_time_t(now);
-        std::tm tm{};
-        localtime_s(&tm, &time);
-        std::wstringstream ss;
-        ss << std::put_time(&tm, L"%Y-%m-%d %H:%M:%S");
-        auto timeStr = ss.str();
-        auto msg = std::vformat(fmt, std::make_wformat_args(args...));
-        std::wstring final = L"[" + timeStr + L"] " + msg + L"\n";
-        OutputDebugString(final.c_str());
-    }
+
 	class Util
 	{
 	public:

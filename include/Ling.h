@@ -4,6 +4,7 @@
 #include "Align.h"
 #include "Wrap.h"
 #include "Edge.h"
+#include "Position.h"
 #include "Justify.h"
 #include "FlexDirection.h"
 #include "App.h"

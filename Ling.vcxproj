@@ -174,6 +174,7 @@
     <ClInclude Include="include\Justify.h" />
     <ClInclude Include="include\Ling.h" />
     <ClInclude Include="include\Node.h" />
+    <ClInclude Include="include\Position.h" />
     <ClInclude Include="include\ScrollerBox.h" />
     <ClInclude Include="include\Label.h" />
     <ClInclude Include="include\Util.h" />

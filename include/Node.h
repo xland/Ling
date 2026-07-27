@@ -7,6 +7,8 @@
 #include "Align.h"
 #include "Justify.h"
 #include "FlexDirection.h"
+#include "Position.h"
+#include "Edge.h"
 #include "Color.h"
 namespace Ling {
 	class WinBase;
@@ -70,19 +72,23 @@ namespace Ling {
 			void setBorderWidth(float width);
 			void setBorderColor(const Color& color);
 
-			void setFlexWrap(const Wrap& val);
+			void setPositionType(const Position val);
+
+			void setPosition(Edge edge, float val);
+
+			void setFlexWrap(const Wrap val);
 			/// <summary>
 			/// 用来设置 子元素在交叉轴 上的对齐方式。
 			/// </summary>
-			void setAlignItems(const Align& val);
+			void setAlignItems(const Align val);
 			/// <summary>
 			/// 控制子元素在 主轴的分布方式
 			/// </summary>
-			void setJustifyContent(const Justify& val);
+			void setJustifyContent(const Justify val);
 			/// <summary>
 			/// 设置主轴的方向
 			/// </summary>
-			void setFlexDirection(const FlexDirection& flexDirection);
+			void setFlexDirection(const FlexDirection flexDirection);
 
 			// dpi 变化时由 WinBase 递归调用：
 			//   1) 用缓存的逻辑值 × 新 dpi 重推 yoga 样式；
@@ -110,6 +116,7 @@ namespace Ling {
 			std::optional<float> width, height;
 			std::optional<float> margin[4];   // left, top, right, bottom
 			std::optional<float> padding[4];
+			std::optional<float> edges[4];
 
 			// 圆角 & 边框 —— 逻辑像素缓存，DPI 变化时物理像素在 syncChrome() 里重算。
 			float cornerRadius{ 0.f };

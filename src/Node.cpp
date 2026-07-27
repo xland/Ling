@@ -101,6 +101,10 @@ namespace Ling {
 		if (padding[1]) YGNodeStyleSetPadding(node, YGEdgeTop,    *padding[1] * d);
 		if (padding[2]) YGNodeStyleSetPadding(node, YGEdgeRight,  *padding[2] * d);
 		if (padding[3]) YGNodeStyleSetPadding(node, YGEdgeBottom, *padding[3] * d);
+		if (edges[0]) YGNodeStyleSetPosition(node, YGEdgeLeft, *edges[0] * win->dpi);
+		if (edges[1]) YGNodeStyleSetPosition(node, YGEdgeTop, *edges[1] * win->dpi);
+		if (edges[2]) YGNodeStyleSetPosition(node, YGEdgeRight, *edges[2] * win->dpi);
+		if (edges[3]) YGNodeStyleSetPosition(node, YGEdgeBottom, *edges[3] * win->dpi);
 		onDpiChanged();
 		for (auto& child : children) {
 			child->applyDpiChange();
@@ -251,21 +255,42 @@ namespace Ling {
 			padding[3].value_or(0.f)
 		);
 	}
+	void Node::setPositionType(const Position val)
+	{
+		YGNodeStyleSetPositionType(node, (YGPositionType)val);
+	}
 
-	void Node::setAlignItems(const Align& val)
+	void Node::setPosition(Edge edge, float val)
+	{
+		if (edge == Edge::Left) {
+			edges[0] = val;
+		}
+		else if (edge == Edge::Top) {
+			edges[1] = val;
+		}
+		else if (edge == Edge::Right) {
+			edges[2] = val;
+		}
+		else if (edge == Edge::Bottom) {
+			edges[3] = val;
+		}
+		YGNodeStyleSetPosition(node, (YGEdge)edge, val*win->dpi);
+	}
+
+	void Node::setAlignItems(const Align val)
 	{
 		YGNodeStyleSetAlignItems(node, (YGAlign)val);
 	}
 
-	void Node::setFlexWrap(const Wrap& val)
+	void Node::setFlexWrap(const Wrap val)
 	{
 		YGNodeStyleSetFlexWrap(node, (YGWrap)val);
 	}
-	void Node::setJustifyContent(const Justify& val)
+	void Node::setJustifyContent(const Justify val)
 	{
 		YGNodeStyleSetJustifyContent(node, (YGJustify)val);
 	}
-	void Node::setFlexDirection(const FlexDirection& flexDirection)
+	void Node::setFlexDirection(const FlexDirection flexDirection)
 	{
 		YGNodeStyleSetFlexDirection(node, (YGFlexDirection)flexDirection);
 	}
@@ -332,11 +357,12 @@ namespace Ling {
 		}
 	}
 
+
+
 	void Node::syncChrome()
 	{
 		if (w <= 0.f || h <= 0.f) return;
 		const float d = win->dpi;
-
 		if (clipGeo) {
 			// 圆角剪切：clip 相对 visual 自身坐标系 (0,0)-(w,h)
 			const float r = std::min({ cornerRadius * d, w * 0.5f, h * 0.5f });
