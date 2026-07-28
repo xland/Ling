@@ -33,8 +33,7 @@ namespace Ling {
     {
         this->text = text;
         auto d2d = D2D::get();
-        d2d->dwriteFactory->CreateTextLayout(text.data(), (UINT32)text.length(),
-            d2d->baseTextFormat.Get(), FLT_MAX, FLT_MAX, textLayout.ReleaseAndGetAddressOf());
+        d2d->dwriteFactory->CreateTextLayout(text.data(), (UINT32)text.length(), d2d->baseTextFormat.Get(), FLT_MAX, FLT_MAX, textLayout.ReleaseAndGetAddressOf());
         textLayout->SetFontSize(fontSize * win->dpi, { 0, INT_MAX });
         if (!fontFamily.empty()) {
             textLayout->SetFontFamilyName(fontFamily.data(), { 0, INT_MAX });
@@ -43,6 +42,11 @@ namespace Ling {
         // 只有已经进入 yoga 布局树的节点才能 mark dirty（否则 API 会断言）。
         YGNodeMarkDirty(node);
         if (surface) paint();
+    }
+
+    std::wstring Text::getText()
+    {
+        return text;
     }
 
     void Text::setFontSize(float val)

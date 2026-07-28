@@ -18,6 +18,7 @@ namespace Ling {
         Text(WinBase* win);
         ~Text();
         void setText(const std::wstring& text);
+        std::wstring getText();
         void setFontSize(float val);
         void setFontFamily(const std::wstring& val);
         void setColor(Color color);

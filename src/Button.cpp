@@ -23,6 +23,10 @@ namespace Ling {
 	{
 		text->setText(s);
 	}
+	std::wstring Button::getText()
+	{
+		return text->getText();
+	}
 	void Button::setFontSize(float val)
 	{
 		text->setFontSize(val);

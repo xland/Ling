@@ -15,6 +15,7 @@ namespace Ling {
     public:
         Label(WinBase* win);
         ~Label();
+        std::wstring getText();
         void setText(const std::wstring& text);
         void setFontSize(float val);
         void setFontFamily(const std::wstring& val);

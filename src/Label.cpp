@@ -15,6 +15,11 @@ namespace Ling {
     {
     }
 
+    std::wstring Label::getText()
+    {
+        return text->getText();
+    }
+
     void Label::setText(const std::wstring& s)       { text->setText(s); }
     void Label::setFontSize(float v)                 { text->setFontSize(v); }
     void Label::setFontFamily(const std::wstring& f) { text->setFontFamily(f); }
