@@ -38,10 +38,8 @@ namespace Ling {
         if (!fontFamily.empty()) {
             textLayout->SetFontFamilyName(fontFamily.data(), { 0, INT_MAX });
         }
-        // 内容变了 -> metric 变了 -> 通知 yoga 重新 measure。
-        // 只有已经进入 yoga 布局树的节点才能 mark dirty（否则 API 会断言）。
         YGNodeMarkDirty(node);
-        if (surface) paint();
+        win->refresh();
     }
 
     std::wstring Text::getText()
