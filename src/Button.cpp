@@ -42,6 +42,12 @@ namespace Ling {
 		normalBrush = win->compositor.CreateColorBrush(color.getUIColor());
 		if (!isHover) visual.Brush(normalBrush);
 	}
+	void Button::setBorderColor(const Color& color)
+	{
+		borderColorNormal = color;
+		// 正常态直接落到底层；hover 态则保留 hoverBorderColor 不动。
+		if (!isHover) Node::setBorderColor(color);
+	}
 	void Button::setHoverColor(Color color)
 	{
 		hoverColor = color;
@@ -52,6 +58,12 @@ namespace Ling {
 		hoverBrush = win->compositor.CreateColorBrush(color.getUIColor());
 		if (isHover) visual.Brush(hoverBrush);
 	}
+	void Button::setHoverBorderColor(Color color)
+	{
+		hoverBorderColor = color;
+		hasHoverBorderColor = true;
+		if (isHover) Node::setBorderColor(color);
+	}
 	void Button::onMove(POINT pos)
 	{
 		auto hoverFlag = isPosIn(pos);
@@ -61,10 +73,12 @@ namespace Ling {
 		if (isHover) {
 			visual.Brush(hoverBrush);
 			text->setColor(hoverColor);
+			if (hasHoverBorderColor) Node::setBorderColor(hoverBorderColor);
 		}
 		else {
 			visual.Brush(normalBrush);
 			text->setColor(color);
+			if (hasHoverBorderColor) Node::setBorderColor(borderColorNormal);
 		}
 	}
 	void Button::onDown(POINT pos, bool isRight)

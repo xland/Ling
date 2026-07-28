@@ -322,7 +322,10 @@ namespace Ling {
 
 	void Node::setBorder(float width, const Color& color)
 	{
-		borderColor = color;
+		// 走 virtual：子类（如 Button）可以在此缓存"正常态"颜色。
+		// 顺序：先 setBorderColor（此时 borderShape 可能还没创建，Node 版本只更新成员），
+		//      再 setBorderWidth（创建 shape 时会读 borderColor 做首刷）。
+		setBorderColor(color);
 		setBorderWidth(width);   // 内部会走 syncChrome
 	}
 

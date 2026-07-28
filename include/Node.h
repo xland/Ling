@@ -27,12 +27,16 @@ namespace Ling {
 			void hide();
 			void show();
 			virtual void setBg(const Color& color);
-
-			// 下列所有 setter 一律接收“逻辑像素”，内部乘 dpi 塞给 yoga。
+			/// <summary>
+			/// 父容器在主轴方向上空间有剩余，子元素瓜分并放大尺寸
+			/// </summary>
+			/// <param name="val"></param>
 			void setFlexGrow(float val);
 			/// <summary>
-			/// 此元素如何在父元素主轴方向上“收缩”
+			/// 当父容器的可用空间小于所有子节点尺寸总和时，该属性才会生效。
+			/// 按照设定的 val 值比例，承担空间不足的压缩量。默认值为 1，表示当空间不足时会按比例缩小；若设为 0，则节点拒绝收缩，保持原始尺寸。
 			/// </summary>
+			/// <param name="val"></param>
 			void setFlexShrink(float val);
 			void setWidth(float w);
 			void setHeight(float h);
@@ -70,7 +74,7 @@ namespace Ling {
 			void setBorderRadius(float r);
 			void setBorder(float width, const Color& color);
 			void setBorderWidth(float width);
-			void setBorderColor(const Color& color);
+			virtual void setBorderColor(const Color& color);
 
 			void setPositionType(const Position val);
 

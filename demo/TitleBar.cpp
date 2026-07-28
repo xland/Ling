@@ -18,7 +18,7 @@ TitleBar::TitleBar(Ling::WinBase* win):win{win}
     auto titleText = titleBox->makeChild<Ling::Label>();
     titleText->setText(win->title);
 
-    std::vector<std::wstring> iconCodes = { L"", L"", L"" };
+    std::vector<std::wstring> iconCodes = { L"\ue6e8",L"\ue6e5",L"\ue6e7" };
     for (size_t i = 0; i < iconCodes.size(); i++)
     {
         auto btn = titleBar->makeChild<Ling::Button>();
@@ -40,8 +40,8 @@ TitleBar::TitleBar(Ling::WinBase* win):win{win}
         btns.push_back(btn);
     }
 
-    win->onMaximize.add([this] { this->btns[1]->setText(L""); });
-    win->onRestore .add([this] { this->btns[1]->setText(L""); });
+    win->onMaximize.add([this] { this->btns[1]->setText(L"\ue6e9"); });
+    win->onRestore .add([this] { this->btns[1]->setText(L"\ue6e5"); });
 }
 
 TitleBar::~TitleBar()

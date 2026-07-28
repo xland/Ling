@@ -14,8 +14,10 @@ namespace Ling {
 		void setFontFamily(const std::wstring& val);
 		void setColor(Color color);
 		void setBg(const Color& color) override;
+		void setBorderColor(const Color& color) override;
 		void setHoverColor(Color color);
 		void setHoverBg(Color color);
+		void setHoverBorderColor(Color color);
 	public:
 		// 按钮自己的"被点击"事件。参数是按钮指针，方便一个 handler 处理一组按钮
 		winrt::event<winrt::delegate<Button*>> onClick;
@@ -25,10 +27,11 @@ namespace Ling {
 	private:
 		Text* text{ nullptr };
 		winrt::event_token moveTok{}, downTok{};
-		Color hoverColor{ 0x333333FF }, hoverBg{ 0 }, color{ 0x333333FF };
+		Color hoverColor{ 0x333333FF }, hoverBg{ 0 }, hoverBorderColor{ 0 }, color{ 0x333333FF }, borderColorNormal{ 0 };
 		// 两个背景刷缓存下来，hover 切换时只做引用替换，不再每次 new。
 		winrt::Windows::UI::Composition::CompositionColorBrush normalBrush{ nullptr };
 		winrt::Windows::UI::Composition::CompositionColorBrush hoverBrush{ nullptr };
+		bool hasHoverBorderColor{ false };
 		bool isHover{ false };
 	};
 }

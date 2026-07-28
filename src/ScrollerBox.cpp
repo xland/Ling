@@ -34,10 +34,11 @@ namespace Ling {
 		visualThumb = win->compositor.CreateSpriteVisual();
 		visualScroller.Children().InsertAtTop(visualThumb);
 
-		wheelTok = win->onMouseWheel.add([this](POINT pos, float space) { this->onWheel(pos, space); });
-		moveTok  = win->onMouseMove .add([this](POINT pos)               { this->onMove(pos); });
-		upTok    = win->onMouseUp   .add([this](POINT pos, bool isRight) { this->onUp(pos, isRight); });
-		downTok  = win->onMouseDown .add([this](POINT pos, bool isRight) { this->onDown(pos, isRight); });
+		auto weak = std::weak_ptr<bool>(alive);
+		wheelTok = win->onMouseWheel.add([this, weak](POINT pos, float space) {if (!weak.lock()) return; this->onWheel(pos, space); });
+		moveTok  = win->onMouseMove .add([this, weak](POINT pos)               {if (!weak.lock()) return; this->onMove(pos); });
+		upTok    = win->onMouseUp   .add([this, weak](POINT pos, bool isRight) {if (!weak.lock()) return; this->onUp(pos, isRight); });
+		downTok  = win->onMouseDown .add([this, weak](POINT pos, bool isRight) {if (!weak.lock()) return; this->onDown(pos, isRight); });
 	}
 
 	ScrollerBox::~ScrollerBox()

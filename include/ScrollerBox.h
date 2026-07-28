@@ -32,5 +32,6 @@ namespace Ling {
 			colorTransparent{nullptr};
 		float scrollY, dragStartMouseY, dragStartScrollY;
 		bool scrollerDragging;
+		std::shared_ptr<bool> alive{ std::make_shared<bool>(true) };
 	};
 }
