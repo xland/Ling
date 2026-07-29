@@ -18,7 +18,7 @@ namespace Ling {
 		public:
 			Node(WinBase* parent);
 			virtual ~Node();
-			void setId(const std::string& id);
+			void setId(const std::wstring& id);
 			template<typename T> requires std::derived_from<T, Node>
 			T* makeChild();
 			std::unique_ptr<Node> detachChild(Node* child);
@@ -106,7 +106,7 @@ namespace Ling {
 			YGNodeRef node{ nullptr };
 			Node* parent{ nullptr };
 			std::vector<std::unique_ptr<Node>> children;
-			std::string id;
+			std::wstring id;
 		protected:
 			virtual void layout();
 			virtual void onDpiChanged() {}

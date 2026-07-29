@@ -282,8 +282,11 @@ namespace Ling {
 		else if (msg == WM_MOUSEWHEEL) {
 			self->mouseWheel(wParam, lParam);
 		}
-		else if (msg == WM_KEYDOWN) {
+		else if (msg == WM_KEYDOWN || msg == WM_SYSKEYDOWN) {
 			self->onKeyDown((UINT)wParam);
+		}
+		else if (msg == WM_KEYUP || msg == WM_SYSKEYUP) {
+			self->onKeyUp((UINT)wParam);
 		}
 		else if (msg == WM_TIMER) {
 			self->onTimer((UINT)(wParam - WM_APP));

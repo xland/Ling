@@ -13,7 +13,7 @@ namespace Ling {
 		YGNodeFree(node);
 	}
 
-	void Node::setId(const std::string& id)
+	void Node::setId(const std::wstring& id)
 	{
 		this->id = id;
 	}

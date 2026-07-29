@@ -22,7 +22,7 @@ TitleBar::TitleBar(Ling::WinBase* win):win{win}
     for (size_t i = 0; i < iconCodes.size(); i++)
     {
         auto btn = titleBar->makeChild<Ling::Button>();
-        btn->setId(std::format("btn{}", i));
+        btn->setId(std::format(L"btn{}", i));
         btn->setWidth(32.f);
         btn->setText(iconCodes[i]);
         btn->setFontFamily(L"icon");
