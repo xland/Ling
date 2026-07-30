@@ -34,11 +34,12 @@ namespace Ling {
 		visualThumb = win->compositor.CreateSpriteVisual();
 		visualScroller.Children().InsertAtTop(visualThumb);
 
-		auto weak = std::weak_ptr<bool>(alive);
-		wheelTok = win->onMouseWheel.add([this, weak](POINT pos, float space) {if (!weak.lock()) return; this->onWheel(pos, space); });
-		moveTok  = win->onMouseMove .add([this, weak](POINT pos)               {if (!weak.lock()) return; this->onMove(pos); });
-		upTok    = win->onMouseUp   .add([this, weak](POINT pos, bool isRight) {if (!weak.lock()) return; this->onUp(pos, isRight); });
-		downTok  = win->onMouseDown .add([this, weak](POINT pos, bool isRight) {if (!weak.lock()) return; this->onDown(pos, isRight); });
+
+		auto weakThis = getWeakThis<ScrollerBox>();
+		wheelTok = win->onMouseWheel.add([this, weakThis](POINT pos, float space) { if (auto self = weakThis.lock()) self->onWheel(pos, space); });
+		moveTok  = win->onMouseMove .add([this, weakThis](POINT pos)               {if (auto self = weakThis.lock()) self->onMove(pos); });
+		upTok    = win->onMouseUp   .add([this, weakThis](POINT pos, bool isRight) {if (auto self = weakThis.lock()) self->onUp(pos, isRight); });
+		downTok  = win->onMouseDown .add([this, weakThis](POINT pos, bool isRight) {if (auto self = weakThis.lock()) self->onDown(pos, isRight); });
 	}
 
 	ScrollerBox::~ScrollerBox()

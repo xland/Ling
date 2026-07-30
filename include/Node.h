@@ -12,7 +12,7 @@
 #include "Color.h"
 namespace Ling {
 	class WinBase;
-	class Node
+	class Node: public std::enable_shared_from_this<Node>
 	{
 		friend class WinBase;
 		public:
@@ -113,6 +113,10 @@ namespace Ling {
 			virtual void setChild(Node* child);
 			// 根据当前 w/h/dpi 同步圆角 clip 与边框几何；layout() 末尾调用。
 			void syncChrome();
+			template <typename T>
+			std::weak_ptr<T> getWeakThis() {
+				return std::dynamic_pointer_cast<T>(shared_from_this());
+			}
 		protected:
 			Color bgColor{0};
 		private:
