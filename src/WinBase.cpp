@@ -332,7 +332,6 @@ namespace Ling {
 	void WinBase::mouseLeave()
 	{
 		isMouseIn = false;
-		// 用哨兵坐标通知订阅方"鼠标离开客户区"——保留旧行为语义
 		onMouseMove(POINT{ INT_MAX, INT_MAX });
 	}
 
@@ -372,6 +371,7 @@ namespace Ling {
 			if (isMaximized) {
 				isMaximized = false;
 				onRestore();
+				onMouseMove(POINT{ INT_MAX, INT_MAX });
 			}
 		}
 		w = static_cast<float>(GET_X_LPARAM(lParam));

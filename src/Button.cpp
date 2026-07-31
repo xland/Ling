@@ -10,16 +10,14 @@ namespace Ling {
 		setJustifyContent(Ling::Justify::Center);
 		setAlignItems(Ling::Align::Center);
 		text = makeChild<Text>();
-		auto weakThis = getWeakThis<Button>();
-		moveTok = win->onMouseMove.add([weakThis](POINT pos) { 
-			if (auto self = weakThis.lock()) {
-				self->onMove(pos);
-			}			
+		auto weakThis = getWeakThis();
+		moveTok = win->onMouseMove.add([this, weakThis](POINT pos) {
+			if (!weakThis.lock()) return;
+			onMove(pos);
 		});
-		downTok = win->onMouseDown.add([weakThis](POINT pos, bool isRight) { 
-			if (auto self = weakThis.lock()) {
-				self->onDown(pos,isRight);
-			}
+		downTok = win->onMouseDown.add([this, weakThis](POINT pos, bool isRight) {
+			if (!weakThis.lock()) return;
+			onDown(pos, isRight);
 		});
 	}
 

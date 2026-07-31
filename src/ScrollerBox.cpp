@@ -35,11 +35,11 @@ namespace Ling {
 		visualScroller.Children().InsertAtTop(visualThumb);
 
 
-		auto weakThis = getWeakThis<ScrollerBox>();
-		wheelTok = win->onMouseWheel.add([this, weakThis](POINT pos, float space) { if (auto self = weakThis.lock()) self->onWheel(pos, space); });
-		moveTok  = win->onMouseMove .add([this, weakThis](POINT pos)               {if (auto self = weakThis.lock()) self->onMove(pos); });
-		upTok    = win->onMouseUp   .add([this, weakThis](POINT pos, bool isRight) {if (auto self = weakThis.lock()) self->onUp(pos, isRight); });
-		downTok  = win->onMouseDown .add([this, weakThis](POINT pos, bool isRight) {if (auto self = weakThis.lock()) self->onDown(pos, isRight); });
+		auto weakThis = getWeakThis();
+		wheelTok = win->onMouseWheel.add([this, weakThis](POINT pos, float space) { if (!weakThis.lock()) return; onWheel(pos, space); });
+		moveTok  = win->onMouseMove .add([this, weakThis](POINT pos)               { if (!weakThis.lock()) return; onMove(pos); });
+		upTok    = win->onMouseUp   .add([this, weakThis](POINT pos, bool isRight) { if (!weakThis.lock()) return; onUp(pos, isRight); });
+		downTok  = win->onMouseDown .add([this, weakThis](POINT pos, bool isRight) { if (!weakThis.lock()) return; onDown(pos, isRight); });
 	}
 
 	ScrollerBox::~ScrollerBox()

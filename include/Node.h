@@ -113,9 +113,12 @@ namespace Ling {
 			virtual void setChild(Node* child);
 			// 根据当前 w/h/dpi 同步圆角 clip 与边框几何；layout() 末尾调用。
 			void syncChrome();
-			template <typename T>
-			std::weak_ptr<T> getWeakThis() {
-				return std::dynamic_pointer_cast<T>(shared_from_this());
+			// 生命周期哨兵：与 this 同生死。事件回调捕获返回值后用 lock()
+			// 判定 this 是否还活着；不再触发 std::bad_weak_ptr。
+			// 用 weak_ptr<bool> 而不是 weak_ptr<T>，因为 Node 当前用 unique_ptr 管理，
+			// 没有真正的 shared_ptr<T> 可借；我们只用控制块的强引用计数来判生死。
+			std::weak_ptr<bool> getWeakThis() {
+				return std::weak_ptr<bool>(alive);
 			}
 		protected:
 			Color bgColor{0};
@@ -135,6 +138,9 @@ namespace Ling {
 			winrt::Windows::UI::Composition::ShapeVisual borderVisual{ nullptr };
 			winrt::Windows::UI::Composition::CompositionRoundedRectangleGeometry borderGeo{ nullptr };
 			winrt::Windows::UI::Composition::CompositionSpriteShape borderShape{ nullptr };
+			// 生命周期哨兵：与 this 同生死（Node 析构时 alive 自动析构，强引用归零）。
+			// getWeakThis() 借它生成 weak_ptr<bool>；事件回调 lock() 非空即代表 this 还活。
+			std::shared_ptr<bool> alive{ std::make_shared<bool>(true) };
 	};
 
 	template<typename T> requires std::derived_from<T, Node>
