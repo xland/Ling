@@ -51,7 +51,7 @@ namespace Ling {
 		winrt::event<winrt::delegate<POINT, bool>> onMouseDown; 
 		winrt::event<winrt::delegate<POINT, bool>> onMouseUp;
 		winrt::event<winrt::delegate<POINT, float>> onMouseWheel; 
-		winrt::event<winrt::delegate<HCURSOR*>> onCursor; 
+		winrt::event<winrt::delegate<bool*>> onCursor; 
 		winrt::event<winrt::delegate<UINT>> onKeyDown;
 		winrt::event<winrt::delegate<UINT>> onKeyUp;
 		winrt::event<winrt::delegate<UINT>> onTimer;

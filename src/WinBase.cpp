@@ -309,11 +309,10 @@ namespace Ling {
 
 	BOOL WinBase::setCursor()
 	{
-		HCURSOR cursor{ nullptr };
-		onCursor(&cursor);
-		if (!cursor) {
-			SetCursor(LoadCursor(nullptr, IDC_ARROW));
-		}
+		bool flag{ false };
+		onCursor(&flag);
+		if (flag) return TRUE;
+		SetCursor(LoadCursor(nullptr, IDC_ARROW));
 		return TRUE;
 	}
 
