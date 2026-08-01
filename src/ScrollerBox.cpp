@@ -117,7 +117,8 @@ namespace Ling {
 		// 落到分数像素位置，ClearType 文本在滚动过程中会周期性发糊。
 		// 命中测试用的仍是这个整数 scrollY —— 保持"视觉/逻辑"一致。
 		scrollY = std::round(y);
-		content->visual.Offset({ 0.f, -scrollY, 0.f }); //todo 重要，命中测试时，要考虑此偏移
+		content->visual.Offset({ 0.f, -scrollY, 0.f });
+		// 命中测试请用 getScrollY()：窗口坐标 -> 内容坐标要 +scrollY。
 		if (content->h > h) {
 			float minH = sliderMinH * win->dpi;
 			float thumbH = std::max(minH, h * h / content->h);
@@ -126,6 +127,44 @@ namespace Ling {
 			visualThumb.Offset({ 0.f, std::round(top), 0.f });
 			visualThumb.Size({ sliderW * win->dpi, std::round(thumbH) });
 		}
+	}
+
+	float ScrollerBox::getMaxScrollY() const
+	{
+		return std::max(0.f, content->h - h);
+	}
+
+	void ScrollerBox::scrollTo(float y)
+	{
+		if (scrollY == std::round(std::clamp(y, 0.f, getMaxScrollY()))) return;
+		setScroll(y);
+	}
+
+	void ScrollerBox::scrollBy(float delta)
+	{
+		scrollTo(scrollY + delta);
+	}
+
+	void ScrollerBox::scrollIntoView(float top, float bottom)
+	{
+		// top/bottom 是内容坐标（未减 scrollY）。可视窗口是 [scrollY, scrollY + h]。
+		if (bottom <= top) return;
+		if (top < scrollY) scrollTo(top);
+		else if (bottom > scrollY + h) {
+			// 区间比视口还高时优先对齐顶部，否则底部贴边
+			scrollTo(bottom - top > h ? top : bottom - h);
+		}
+	}
+
+	float ScrollerBox::getScrollBarWidth() const
+	{
+		return visualScroller && visualScroller.IsVisible() ? sliderW * win->dpi : 0.f;
+	}
+
+	bool ScrollerBox::isPosInContent(POINT pos) const
+	{
+		return pos.x >= x && pos.x < x + w - getScrollBarWidth()
+			&& pos.y >= y && pos.y < y + h;
 	}
 
 	void ScrollerBox::onDpiChanged()
@@ -153,6 +192,10 @@ namespace Ling {
 			setScroll(scrollY);
 		}
 		else {
+			// 内容缩到不需要滚动了（窗口变大 / 内容变少）。Node::layout 刚把
+			// content 的 visual offset 重置成 0，这里必须把 scrollY 也跟着归零，
+			// 否则它会残留旧值，让依赖 getScrollY() 的命中测试整体偏移。
+			scrollY = 0.f;
 			visualScroller.IsVisible(false);
 		}
 	}

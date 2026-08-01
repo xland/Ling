@@ -391,8 +391,11 @@ namespace Ling {
 		BeginPaint(hwnd, &ps);
 		EndPaint(hwnd, &ps);
 		if (!isDirty) return 0;
-		layout();
+		// 先清标志再 layout：layout 过程中子节点可能因内容重排而再次 refresh()
+		// （例如宽度变化导致文本重新换行、高度变了要求二次布局）。若在 layout 之后
+		// 才清，那次 refresh 置的 isDirty 会被这里抹掉，重排就丢了一帧。
 		isDirty = false;
+		layout();
 		return 0;
 	}
 }
