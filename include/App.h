@@ -30,6 +30,7 @@ namespace Ling {
 			winrt::event<winrt::delegate<bool,bool>> onTrayMouseEvent;
 			std::wstring appID;
 			std::unordered_map<std::wstring, std::wstring> args;
+			winrt::Windows::System::DispatcherQueue dq;
 		private:
 			static void init();
 			App();
@@ -38,7 +39,6 @@ namespace Ling {
 			void initMsgWin();
 			static LRESULT CALLBACK winProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 			static void initDispatcherQueueCtrl();
-			winrt::Windows::System::DispatcherQueue dq;
 			HWND msgHwnd;
 			std::unique_ptr<NOTIFYICONDATA> tray;
 			UINT trayMsgId;

@@ -113,13 +113,11 @@ namespace Ling {
 			virtual void setChild(Node* child);
 			// 根据当前 w/h/dpi 同步圆角 clip 与边框几何；layout() 末尾调用。
 			void syncChrome();
-			// 生命周期哨兵：与 this 同生死。事件回调捕获返回值后用 lock()
-			// 判定 this 是否还活着；不再触发 std::bad_weak_ptr。
-			// 用 weak_ptr<bool> 而不是 weak_ptr<T>，因为 Node 当前用 unique_ptr 管理，
-			// 没有真正的 shared_ptr<T> 可借；我们只用控制块的强引用计数来判生死。
-			std::weak_ptr<bool> getWeakThis() {
-				return std::weak_ptr<bool>(alive);
-			}
+			/// <summary>
+			/// 事件回调 lock() 非空即代表 this 还活。
+			/// </summary>
+			/// <returns></returns>
+			std::weak_ptr<bool> getWeakThis();
 		protected:
 			Color bgColor{0};
 		private:

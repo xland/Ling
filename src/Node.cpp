@@ -10,6 +10,7 @@ namespace Ling {
 
 	Node::~Node()
 	{
+		children.clear();
 		YGNodeFree(node);
 	}
 
@@ -388,5 +389,9 @@ namespace Ling {
 			borderGeo.CornerRadius({ midR, midR });
 			borderShape.StrokeThickness(bw);
 		}
+	}
+	std::weak_ptr<bool> Node::getWeakThis()
+	{
+		return std::weak_ptr<bool>(alive);
 	}
 }
