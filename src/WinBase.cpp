@@ -168,7 +168,7 @@ namespace Ling {
 	{
 		auto hIns = GetModuleHandle(nullptr);
 		auto cls = getWinClsName(hIns);
-		hwnd = CreateWindowEx(WS_EX_NOREDIRECTIONBITMAP | exStyle, cls.data(), title.data(), style, x, y, (float)w, (float)h, NULL, NULL, hIns, NULL); //WS_POPUP
+		hwnd = CreateWindowEx(WS_EX_NOREDIRECTIONBITMAP | exStyle, cls.data(), title.data(), style, x, y, (float)w, (float)h, NULL, NULL, hIns, NULL);
 		SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 		auto interop = compositor.as<ABI::Windows::UI::Composition::Desktop::ICompositorDesktopInterop>();
 		auto r = reinterpret_cast<ABI::Windows::UI::Composition::Desktop::IDesktopWindowTarget**>(winrt::put_abi(winTarget));

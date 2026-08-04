@@ -35,7 +35,7 @@ namespace Ling {
 		void setSize(float w, float h);
 		void setPosition(int x, int y);
 		void setCenter();
-		void layout(); 
+		virtual void layout();
 		void setMinSize(float w, float h);
 		std::wstring openFileDialog(std::span<const COMDLG_FILTERSPEC> filter);
 	public:
@@ -68,10 +68,10 @@ namespace Ling {
 		virtual LRESULT onHitTest(const POINT pos) { return HTCLIENT; };
 		LRESULT borderHitTest(const POINT pt);
 		virtual void onMinMaxInfo(MINMAXINFO* mmi);
+		virtual BOOL setCursor();
 	private:
 		std::wstring& getWinClsName(HINSTANCE hIns);
 		static LRESULT CALLBACK winProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
-		BOOL setCursor();
 		void mouseMove(POINT pos);
 		void mouseLeave();
 		void mouseWheel(WPARAM wParam, LPARAM lParam);
