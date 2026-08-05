@@ -384,6 +384,7 @@ namespace Ling {
 	{
 		this->x = pos.x;
 		this->y = pos.y;
+		onMoved();
 	}
 	int WinBase::paint()
 	{

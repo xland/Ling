@@ -61,6 +61,7 @@ namespace Ling {
 		winrt::event<winrt::delegate<>> onMaximize;
 		winrt::event<winrt::delegate<>> onMinimize;
 		winrt::event<winrt::delegate<>> onRestore;
+		winrt::event<winrt::delegate<>> onMoved;
 
 		std::unique_ptr<Node> body;   // 必须在事件字段之后声明，先于事件字段析构
 	protected:
