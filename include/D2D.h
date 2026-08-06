@@ -18,11 +18,11 @@ namespace Ling {
 		void addFonts(const std::vector<std::wstring>& fontResourceNames);
 		winrt::Windows::UI::Composition::CompositionDrawingSurface createDrawingSurface(const winrt::Windows::UI::Composition::Compositor& comp, float w = 0, float h = 0);
 	public:
-		Microsoft::WRL::ComPtr<IDWriteFactory5> dwriteFactory;
-		Microsoft::WRL::ComPtr<IDWriteTextFormat> baseTextFormat;
 		Microsoft::WRL::ComPtr<ID2D1Device> d2dDevice;
 		Microsoft::WRL::ComPtr<ID2D1DeviceContext> deviceContext;
 		Microsoft::WRL::ComPtr<ID2D1Factory1> d2dFactory;
+		Microsoft::WRL::ComPtr<IDWriteFactory5> dwriteFactory;
+		Microsoft::WRL::ComPtr<IDWriteTextFormat> baseTextFormat;
 		Microsoft::WRL::ComPtr<IDWriteFontCollection1> fontCollection;
 	private:
 		D2D();

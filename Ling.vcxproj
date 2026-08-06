@@ -182,10 +182,12 @@
     <ClInclude Include="include\Util.h" />
     <ClInclude Include="include\WinBase.h" />
     <ClInclude Include="include\Wrap.h" />
+    <ClInclude Include="include\Slider.h" />
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="include\Text.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Slider.cpp" />
     <ClCompile Include="src\Button.cpp" />
     <ClCompile Include="src\Color.cpp" />
     <ClCompile Include="src\D2D.cpp" />

@@ -78,6 +78,9 @@
     <ClInclude Include="include\Position.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\Slider.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Ling.cpp">
@@ -123,6 +126,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Text.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Slider.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

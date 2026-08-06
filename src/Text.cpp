@@ -109,7 +109,7 @@ namespace Ling {
 
         auto s = surface.as<ABI::Windows::UI::Composition::ICompositionDrawingSurfaceInterop>();
         ComPtr<ID2D1DeviceContext> ctx;
-        POINT offset{};   // 物理像素
+        POINT offset{};
         s->BeginDraw(nullptr, __uuidof(ID2D1DeviceContext), reinterpret_cast<void**>(ctx.GetAddressOf()), &offset);
         auto trans = D2D1::Matrix3x2F::Translation((float)offset.x, (float)offset.y);
         ctx->SetTransform(trans);
