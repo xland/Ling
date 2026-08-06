@@ -23,6 +23,7 @@ namespace Ling {
 			T* makeChild();
 			std::unique_ptr<Node> detachChild(Node* child);
 			void removeChild(Node* child);
+			void removeAllChildren();
 			bool isPosIn(POINT pos);
 			void hide();
 			void show();

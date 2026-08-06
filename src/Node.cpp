@@ -33,6 +33,13 @@ namespace Ling {
 	void Node::removeChild(Node* child) {
 		detachChild(child);
 	}
+	void Node::removeAllChildren()
+	{
+		for (auto& child:children)
+		{
+			detachChild(child.get());
+		}
+	}
 	void Node::setChild(Node* child)
 	{
 		child->parent = this;
