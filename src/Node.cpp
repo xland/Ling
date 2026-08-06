@@ -31,14 +31,24 @@ namespace Ling {
 	}
 
 	void Node::removeChild(Node* child) {
-		detachChild(child);
+		// 返回值丢弃 == 立即销毁该子节点（unique_ptr 临时对象析构）。
+		if (detachChild(child)) win->refresh();
 	}
 	void Node::removeAllChildren()
 	{
-		for (auto& child:children)
-		{
-			detachChild(child.get());
+		// 不能写成 for (auto& c : children) detachChild(c.get()); ——
+		// detachChild 内部会 children.erase()，vector 的 erase 使被删位置及其之后
+		// 的迭代器全部失效，range-for 的 ++ 于是跳过下一个元素（每两个只删掉一个），
+		// 且最后一次 erase 后可能越过 end()，是 UB。
+		// 改成：先把 yoga / visual 的挂接逐个摘掉，最后一次性清空容器。
+		for (auto& child : children) {
+			YGNodeRemoveChild(node, child->node);
+			visual.Children().Remove(child->visual);
+			child->parent = nullptr;
 		}
+		// unique_ptr 析构即销毁子节点；clear 不触碰迭代器，安全。
+		children.clear();
+		win->refresh();
 	}
 	void Node::setChild(Node* child)
 	{
