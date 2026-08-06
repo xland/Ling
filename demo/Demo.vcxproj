@@ -169,6 +169,7 @@
     <ClCompile Include="WindowCanvas.cpp" />
     <ClCompile Include="WindowBorderRadius.cpp" />
     <ClCompile Include="WindowScroller.cpp" />
+    <ClCompile Include="WindowSlider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -177,6 +178,7 @@
     <ClInclude Include="WindowCanvas.h" />
     <ClInclude Include="WindowBorderRadius.h" />
     <ClInclude Include="WindowScroller.h" />
+    <ClInclude Include="WindowSlider.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Res\Resource.rc" />

@@ -80,16 +80,17 @@ namespace Ling {
 		auto hoverFlag = isPosIn(pos);
 		if (isHover == hoverFlag) return;
 		isHover = hoverFlag;
-		// 背景色如果配置一致则不需要换 brush；text->setColor 内部已判等，可放心调。
 		if (isHover) {
 			visual.Brush(hoverBrush);
 			text->setColor(hoverColor);
 			if (hasHoverBorderColor) Node::setBorderColor(hoverBorderColor);
+			onEnter(this);
 		}
 		else {
 			visual.Brush(normalBrush);
 			text->setColor(color);
 			if (hasHoverBorderColor) Node::setBorderColor(borderColorNormal);
+			onLeave(this);
 		}
 	}
 	void Button::onDown(POINT pos, bool isRight)

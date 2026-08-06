@@ -20,8 +20,9 @@ namespace Ling {
 		void setHoverBg(Color color);
 		void setHoverBorderColor(Color color);
 	public:
-		// 按钮自己的"被点击"事件。参数是按钮指针，方便一个 handler 处理一组按钮
 		winrt::event<winrt::delegate<Button*>> onClick;
+		winrt::event<winrt::delegate<Button*>> onEnter;
+		winrt::event<winrt::delegate<Button*>> onLeave;
 	private:
 		void onMove(POINT pos);
 		void onDown(POINT pos, bool isRight);

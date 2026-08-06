@@ -16,6 +16,7 @@
 #include "ImageBox.h"
 #include "ScrollerBox.h"
 #include "Button.h"
+#include "Slider.h"
 #include "Canvas.h"
 #include "Util.h"
 #include "WinBase.h"
