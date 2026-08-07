@@ -21,6 +21,8 @@ namespace Ling {
 		~WinBase();
 		void enableShadow();
 		void enableBorderResize();
+		void disableWinAnimation();
+		void disableBorderRadius();
 		void show();
 		void hide();
 		void close();

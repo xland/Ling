@@ -13,6 +13,18 @@ namespace Ling {
 	{
 	}
 
+	void WinBase::disableWinAnimation()
+	{
+		BOOL attrib = TRUE;
+		DwmSetWindowAttribute(hwnd, DWMWA_TRANSITIONS_FORCEDISABLED, &attrib, sizeof(attrib));
+	}
+
+	void WinBase::disableBorderRadius()
+	{
+		DWM_WINDOW_CORNER_PREFERENCE preference = DWMWCP_DONOTROUND;
+		DwmSetWindowAttribute( hwnd, DWMWA_WINDOW_CORNER_PREFERENCE, &preference, sizeof(preference));
+	}
+
 	void WinBase::show()
 	{
 		ShowWindow(hwnd, SW_SHOW);
