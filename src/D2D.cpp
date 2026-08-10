@@ -25,10 +25,9 @@ namespace Ling {
 
 	void D2D::initDevice()
 	{
-		ComPtr<ID3D11Device> d3dDevice;
 		D3D_FEATURE_LEVEL levels[]{ D3D_FEATURE_LEVEL_11_1, D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_10_0, D3D_FEATURE_LEVEL_10_1 };
 		auto count = std::size(levels);
-		auto hr = D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, D3D11_CREATE_DEVICE_BGRA_SUPPORT, levels, count, D3D11_SDK_VERSION, &d3dDevice, nullptr, nullptr);
+		auto hr = D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, D3D11_CREATE_DEVICE_BGRA_SUPPORT, levels, count, D3D11_SDK_VERSION, d3dDevice.ReleaseAndGetAddressOf(), nullptr, nullptr);
 		if (FAILED(hr)) {
 			_ASSERT_EXPR(FALSE, L"D3D11CreateDevice，error");
 			return;
@@ -41,6 +40,11 @@ namespace Ling {
 		}
 		ComPtr<IDXGIDevice> dxgiDevice;
 		d3dDevice->QueryInterface(dxgiDevice.ReleaseAndGetAddressOf());
+		// 顺着 device -> adapter -> factory 拿到 IDXGIFactory2，createSwapChain 要用它
+		ComPtr<IDXGIAdapter> adapter;
+		if (SUCCEEDED(dxgiDevice->GetAdapter(adapter.GetAddressOf()))) {
+			adapter->GetParent(__uuidof(IDXGIFactory2), reinterpret_cast<void**>(dxgiFactory.ReleaseAndGetAddressOf()));
+		}
 		hr = d2dFactory->CreateDevice(dxgiDevice.Get(), d2dDevice.ReleaseAndGetAddressOf());
 		if (FAILED(hr)) {
 			_ASSERT_EXPR(FALSE, L"D2D1CreateFactory CreateDevice，error");
@@ -133,6 +137,40 @@ namespace Ling {
 			winrt::Windows::Graphics::DirectX::DirectXPixelFormat::B8G8R8A8UIntNormalized,
 			winrt::Windows::Graphics::DirectX::DirectXAlphaMode::Premultiplied
 		);
+	}
+
+	ComPtr<IDXGISwapChain1> D2D::createSwapChain(UINT w, UINT h)
+	{
+		ComPtr<IDXGISwapChain1> swap;
+		if (!dxgiFactory || w == 0 || h == 0) return swap;
+		DXGI_SWAP_CHAIN_DESC1 scd{
+			.Width{ w },
+			.Height{ h },
+			.Format{ DXGI_FORMAT_B8G8R8A8_UNORM },
+			.SampleDesc{ .Count{ 1 } },
+			.BufferUsage{ DXGI_USAGE_RENDER_TARGET_OUTPUT },
+			// 双缓冲：一张给合成器读，一张给我们画。Present 只是换指针，没有拷贝
+			.BufferCount{ 2 },
+			.Scaling{ DXGI_SCALING_STRETCH },
+			.SwapEffect{ DXGI_SWAP_EFFECT_FLIP_DISCARD },
+			// 窗口是 WS_EX_NOREDIRECTIONBITMAP 的分层窗口，得让 swap chain 也带 alpha
+			.AlphaMode{ DXGI_ALPHA_MODE_PREMULTIPLIED }
+		};
+		auto hr = dxgiFactory->CreateSwapChainForComposition(d3dDevice.Get(), &scd, nullptr, swap.ReleaseAndGetAddressOf());
+		if (FAILED(hr)) {
+			_ASSERT_EXPR(FALSE, L"CreateSwapChainForComposition，error");
+			swap.Reset();
+		}
+		return swap;
+	}
+
+	Composition::ICompositionSurface D2D::createSurfaceForSwapChain(const Composition::Compositor& comp, IDXGISwapChain1* swap)
+	{
+		Composition::ICompositionSurface surface{ nullptr };
+		if (!swap) return surface;
+		auto interop = comp.as<ABI::Windows::UI::Composition::ICompositorInterop>();
+		interop->CreateCompositionSurfaceForSwapChain(swap, reinterpret_cast<ABI::Windows::UI::Composition::ICompositionSurface**>(winrt::put_abi(surface)));
+		return surface;
 	}
 
 }
