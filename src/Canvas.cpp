@@ -26,8 +26,9 @@ namespace Ling {
     {
         auto d2d = D2D::get();
         if (!ctx) {
-            // 自己一份 context：它要长期把后台缓冲设为 target，而 d2d->deviceContext 的 target
-            // 会被别处（Image / Text / 使用者代码）换掉，共用就会互相打断 BeginDraw。
+            // 自己一份 context：swap chain 路径要跨帧长期把后台缓冲设为 target，
+            // 而 d2d->deviceContext 是全局共享的资源工厂（大家拿它 CreateBrush / CreateBitmap），
+            // 让它长期挂着某个窗口的后台缓冲不合适，多个 Canvas 也会互相抢 target。
             // 同一个 device 上开多个 context 是允许的，画刷也能跨 context 复用。
             if (FAILED(d2d->d2dDevice->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, ctx.ReleaseAndGetAddressOf()))) return false;
         }
