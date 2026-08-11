@@ -17,6 +17,8 @@ namespace Ling {
     constexpr int tabSpaces{ 4 };
     // 定时器 id 分配起点。WinBase::setTimer 内部会加 WM_APP，这里只需保证同窗口内不重复。
     constexpr UINT timerIdBase{ 0x4200 };
+    // 判定"内容装不下"的容差（物理像素）。见 maxScrollY。
+    constexpr float scrollEps{ 0.5f };
 
     TextBox::TextBox(WinBase* win) : Node(win)
     {
@@ -108,6 +110,34 @@ namespace Ling {
         win->refresh();
     }
 
+    void TextBox::setBold(bool val)
+    {
+        if (isBold == val) return;
+        isBold = val;
+        buildLayout();
+        resetCaretPos(caretIndex);
+        win->refresh();
+    }
+
+    void TextBox::setItalic(bool val)
+    {
+        if (isItalic == val) return;
+        isItalic = val;
+        buildLayout();
+        resetCaretPos(caretIndex);
+        win->refresh();
+    }
+
+    void TextBox::setAutoSize(bool val)
+    {
+        if (autoSize == val) return;
+        autoSize = val;
+        // 折行宽度变了（FLT_MAX <-> contentW），layout 得重建；开启时还会顺手把尺寸写回 yoga。
+        buildLayout();
+        resetCaretPos(caretIndex);
+        win->refresh();
+    }
+
     void TextBox::setColor(Color val)
     {
         color = val;
@@ -192,6 +222,8 @@ namespace Ling {
         if (textLayout) {
             textLayout->SetFontSize(px, { 0, INT_MAX });
             if (!fontFamily.empty()) textLayout->SetFontFamilyName(fontFamily.data(), { 0, INT_MAX });
+            textLayout->SetFontWeight(isBold ? DWRITE_FONT_WEIGHT_BOLD : DWRITE_FONT_WEIGHT_NORMAL, { 0, INT_MAX });
+            textLayout->SetFontStyle(isItalic ? DWRITE_FONT_STYLE_ITALIC : DWRITE_FONT_STYLE_NORMAL, { 0, INT_MAX });
         }
 
         if (!placeholder.empty()) {
@@ -200,6 +232,8 @@ namespace Ling {
             if (placeholderLayout) {
                 placeholderLayout->SetFontSize(px, { 0, INT_MAX });
                 if (!fontFamily.empty()) placeholderLayout->SetFontFamilyName(fontFamily.data(), { 0, INT_MAX });
+                placeholderLayout->SetFontWeight(isBold ? DWRITE_FONT_WEIGHT_BOLD : DWRITE_FONT_WEIGHT_NORMAL, { 0, INT_MAX });
+                placeholderLayout->SetFontStyle(isItalic ? DWRITE_FONT_STYLE_ITALIC : DWRITE_FONT_STYLE_NORMAL, { 0, INT_MAX });
             }
         }
         else {
@@ -207,27 +241,62 @@ namespace Ling {
         }
     }
 
+    float TextBox::wrapWidth() const
+    {
+        if (autoSize) return FLT_MAX;
+        const float cw = contentW();
+        return cw > 0.f ? cw : FLT_MAX;
+    }
+
+    void TextBox::applyAutoSize()
+    {
+        if (!textLayout) return;
+        const float d = win->dpi;
+        auto [pl, pt, pr, pb] = getPadding();
+        DWRITE_TEXT_METRICS m{};
+        textLayout->GetMetrics(&m);
+        // 用 widthIncludingTrailingWhitespace：尾随空格也是用户打出来的，得占位置，
+        // 不然在行尾按空格框不变宽，光标却已经跑到框外了。
+        float tw = m.widthIncludingTrailingWhitespace;
+        float th = m.height;
+        // 空文本时 GetMetrics 给的宽高都是 0，拿行高兜底，否则框会塌成一条缝、光标无处可画。
+        FLOAT cx{ 0.f }, cy{ 0.f };
+        DWRITE_HIT_TEST_METRICS hm{};
+        textLayout->HitTestTextPosition(0, FALSE, &cx, &cy, &hm);
+        if (th <= 0.f) th = hm.height;
+        // 至少留下光标那一竖线的宽度。
+        tw = std::max(tw, caretW * d);
+        // 连内边距一起往上取整到整像素再写回去：yoga 会把算出来的宽高吸附到整像素，
+        // 这里给 42.7 这种小数，吸附成 42 就比文本本身还矮，凭空多出一根滚动条。
+        // getPadding 是逻辑像素，setWidth/setHeight 也收逻辑像素（内部再乘 dpi）。
+        setWidth(std::ceil(tw + (pl + pr) * d) / d);
+        setHeight(std::ceil(th + (pt + pb) * d) / d);
+    }
+
     void TextBox::buildLayout()
     {
-        // 宽度已知时按内容区宽度折行；布局还没跑过（w 为 0）时先用 FLT_MAX，
-        // 等 layout() 拿到真实宽度再重建。
-        const float cw = contentW();
-        createLayouts(cw > 0.f ? cw : FLT_MAX);
+        createLayouts(wrapWidth());
+        if (autoSize) {
+            // 不折行，内容永远装得下，不必考虑滚动条占宽。
+            applyAutoSize();
+        }
         // 第二趟：滚动条贴在右边框上，先占掉右内边距 —— 只有它比右内边距还宽时，
         // 才需要再挤占文本宽度，否则右侧文字会被压住。
         // 收窄只会让文本更高，所以不会和 needScrollBar 来回抖动。
-        if (cw > 0.f && needScrollBar()) {
+        else if (contentW() > 0.f && needScrollBar()) {
             const float overlap = scrollBarW * win->dpi - getPaddingRight() * win->dpi;
-            if (overlap > 0.f) createLayouts(std::max(1.f, cw - overlap));
+            if (overlap > 0.f) createLayouts(std::max(1.f, contentW() - overlap));
         }
-        lastLayoutW = cw;
+        lastLayoutW = wrapWidth();
     }
 
     void TextBox::layout()
     {
         Node::layout();
+        // 隐藏时（display:none）w/h 会变成 0，再往下走只会白重建一次 layout 又画一帧看不见的东西。
+        if (!visual.IsVisible()) return;
         // 控件宽度变了（窗口 resize / flex 重排）要按新宽度重新折行。
-        if (contentW() != lastLayoutW) {
+        if (wrapWidth() != lastLayoutW) {
             buildLayout();
             resetCaretPos(caretIndex);
         }
@@ -324,12 +393,15 @@ namespace Ling {
 
     float TextBox::maxScrollY() const
     {
-        return std::max(0.f, textH() - contentH());
+        const float over = textH() - contentH();
+        // 不到半像素的溢出不算溢出：文本度量是小数、控件宽高被吸附到整像素，
+        // 两边差个零点几是常态，那点差别根本看不见，却足以让滚动条冒出来。
+        return over > scrollEps ? over : 0.f;
     }
 
     bool TextBox::needScrollBar() const
     {
-        return contentH() > 0.f && textH() > contentH();
+        return contentH() > 0.f && maxScrollY() > 0.f;
     }
 
     bool TextBox::isPosInScrollBar(POINT pos) const
@@ -393,6 +465,7 @@ namespace Ling {
         SetFocus(win->hwnd);
         win->setTimer(caretBlinkMs, timerId);
         win->refresh();
+        onFocusChanged(this, true);
     }
 
     void TextBox::blur()
@@ -404,6 +477,7 @@ namespace Ling {
         selAnchor = caretIndex;
         win->killTimer(timerId);
         win->refresh();
+        onFocusChanged(this, false);
     }
 
     // ---- 绘制 -----------------------------------------------------------------

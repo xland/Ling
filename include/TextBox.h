@@ -31,6 +31,11 @@ namespace Ling {
         std::wstring getText();
         void setFontSize(float val);
         void setFontFamily(const std::wstring& val);
+        void setBold(bool val);
+        void setItalic(bool val);
+        // 自适应尺寸：文本不折行，控件宽高跟着文本内容长。
+        // 开启后 setWidth/setHeight 设的尺寸会被覆盖，也不会再出现滚动条（内容永远装得下）。
+        void setAutoSize(bool val);
         // 文字颜色。未单独设置光标色时，光标也用这个颜色。
         void setColor(Color color);
         void setCaretColor(Color color);
@@ -41,9 +46,15 @@ namespace Ling {
 
         void selectAll();
         bool isFocused() const;
+        // 主动聚焦 / 结束编辑。控件自己也会在点击、ESC、宿主窗口失焦时调它们。
+        void focus();
+        void blur();
     public:
         // 文本被编辑后触发（setText 也会触发）。
         winrt::event<winrt::delegate<TextBox*, const std::wstring&>> onTextChanged;
+        // 焦点态变化后触发。宿主可以据此接管"编辑开始 / 结束"这件事，
+        // 不必自己去判断点击落在哪、按的是不是 ESC。
+        winrt::event<winrt::delegate<TextBox*, bool>> onFocusChanged;
     private:
         // 内容与滚动都由自身绘制，屏蔽掉子节点与内部布局相关的 API（同 Text / Slider 的做法）。
         // setWidth/setHeight/setPadding/setBg/setBorder* 保持可用。
@@ -61,6 +72,12 @@ namespace Ling {
         void buildLayout();
         // 按指定折行宽度创建 textLayout / placeholderLayout。只由 buildLayout 调用。
         void createLayouts(float maxW);
+        // 折行宽度：autoSize 时不折行，否则按内容区宽度。布局还没跑过（宽度为 0）时也不折行，
+        // 等 layout() 拿到真实宽度再重建。判断"要不要重建 layout"用它而不是 contentW ——
+        // autoSize 下 w 是由文本反推出来的，拿 contentW 比会每帧都判定成"宽度变了"。
+        float wrapWidth() const;
+        // autoSize 下按文本度量反推控件宽高并写回 yoga。只由 buildLayout 调用。
+        void applyAutoSize();
         // 内容区（padding 以内）的宽高，物理像素。也就是 canvas 的宽高。
         float contentW() const;
         float contentH() const;
@@ -95,10 +112,6 @@ namespace Ling {
         float thumbH() const;
         float thumbY() const;
 
-        // ---- 焦点 ----
-        void focus();
-        void blur();
-
         // ---- 绘制 ----
         void paint();
         void paintSelectionBg(ID2D1DeviceContext* ctx, ID2D1SolidColorBrush* brush);
@@ -123,6 +136,9 @@ namespace Ling {
         std::wstring placeholder;
         std::wstring fontFamily;
         float fontSize{ 14.f };
+        bool isBold{ false }, isItalic{ false };
+        // 尺寸跟着文本走（不折行）。见 setAutoSize。
+        bool autoSize{ false };
         Color color{ 0x333333FF };
         Color caretColor{ 0x333333FF };
         Color selectionBgColor{ 0x99C9EF99 };
