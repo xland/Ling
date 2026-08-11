@@ -6,10 +6,10 @@ namespace Ling {
 	Color::Color()
 	{
 	}
-	Color::Color(const std::uint8_t& r, const std::uint8_t& g, const std::uint8_t& b, const std::uint8_t& a) : r{ r }, g{ g }, b{ b }, a{ a }
+	Color::Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a) : r{ r }, g{ g }, b{ b }, a{ a }
 	{
 	}
-	Color::Color(const uint32_t& rgba)
+	Color::Color(uint32_t rgba)
 	{
 		r = (rgba >> 24) & 0xFF;
 		g = (rgba >> 16) & 0xFF;
@@ -45,7 +45,7 @@ namespace Ling {
 		return (r == other.r && g == other.g && b == other.b && a == other.a);
 	}
 
-	void Color::setRGBA(const int& r, const int& g, const int& b, const int& a)
+	void Color::setRGBA(int r, int g, int b, int a)
 	{
 		this->r = r;
 		this->b = b;

@@ -192,7 +192,7 @@ namespace Ling {
             }
             else if (lParam == WM_LBUTTONUP)
             {
-                self->onTrayMouseEvent(false, true);
+                self->onTrayMouseEvent(false, false);
             }
             else if (lParam == WM_RBUTTONUP)
             {
