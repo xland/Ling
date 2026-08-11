@@ -8,5 +8,5 @@
 - 使用 [Yoga](https://github.com/react/yoga) 作为布局引擎
 - Release编译产物 < 1M
 - 可以编译为单文件 exe
-- 目前应用于 [ScreenCapture](https://github.com/xland/ScreenCapture) 项目
+- 目前此框架应用于 [ScreenCapture](https://github.com/xland/ScreenCapture) 项目
 
