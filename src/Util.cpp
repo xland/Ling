@@ -56,6 +56,21 @@ namespace Ling {
         CloseClipboard();
     }
 
+    std::wstring Util::getTextFromClipboard()
+    {
+        if (!OpenClipboard(nullptr)) return L"";
+        HANDLE hData = GetClipboardData(CF_UNICODETEXT);
+        if (!hData) {
+            CloseClipboard();
+            return L"";
+        }
+        auto pszText = static_cast<wchar_t*>(GlobalLock(hData));
+        std::wstring text = pszText ? pszText : L"";
+        GlobalUnlock(hData);
+        CloseClipboard();
+        return text;
+    }
+
     std::tuple<void*, DWORD> Util::getRes(const std::wstring& name)
     {
         HRSRC hRes = FindResource(NULL, name.data(), RT_RCDATA);

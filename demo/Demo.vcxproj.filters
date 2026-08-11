@@ -39,6 +39,9 @@
     <ClCompile Include="WindowSlider.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="WindowTextBox.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -60,6 +63,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="WindowSlider.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowTextBox.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

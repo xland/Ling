@@ -18,6 +18,7 @@
 #include "Button.h"
 #include "Slider.h"
 #include "Canvas.h"
+#include "TextBox.h"
 #include "Util.h"
 #include "WinBase.h"
 

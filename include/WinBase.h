@@ -56,6 +56,15 @@ namespace Ling {
 		winrt::event<winrt::delegate<bool*>> onCursor; 
 		winrt::event<winrt::delegate<UINT>> onKeyDown;
 		winrt::event<winrt::delegate<UINT>> onKeyUp;
+		// WM_CHAR：参数是字符码（已经过键盘布局与 IME 转换），文本输入取字符要用它而不是 onKeyDown。
+		// 码点 > 0xFFFF 时需要使用者自己拼代理对。
+		winrt::event<winrt::delegate<UINT>> onChar;
+		// WM_IME_STARTCOMPOSITION：输入法开始组字。订阅者应在此把候选框摆到光标附近。
+		winrt::event<winrt::delegate<>> onIME;
+		// WM_SETFOCUS / WM_KILLFOCUS：窗口级焦点。控件自身的焦点态由控件维护，
+		// 窗口失焦时通常要让控件一并失焦（否则光标会在没焦点的窗口里继续闪）。
+		winrt::event<winrt::delegate<>> onFocus;
+		winrt::event<winrt::delegate<>> onBlur;
 		winrt::event<winrt::delegate<UINT>> onTimer;
 		winrt::event<winrt::delegate<>> onSizeChanged;
 		winrt::event<winrt::delegate<>> onDpiChanged;

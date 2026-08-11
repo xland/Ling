@@ -24,6 +24,7 @@ namespace Ling {
 		static bool isWin11();
 		static std::wstring convertToWStr(const char* str);
 		static void setTextToClipboard(const std::wstring& text);
+		static std::wstring getTextFromClipboard();
 		static std::tuple<void*, DWORD> getRes(const std::wstring& name);
 		static std::vector<std::wstring> splitStr(const std::wstring& str, wchar_t delimiter);
 		static UINT strToKey(const std::wstring& vkCode);

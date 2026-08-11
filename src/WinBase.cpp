@@ -285,6 +285,21 @@ namespace Ling {
 		else if (msg == WM_KEYUP || msg == WM_SYSKEYUP) {
 			self->onKeyUp((UINT)wParam);
 		}
+		// 以下四条都不吞消息，继续交给 DefWindowProc：
+		// WM_CHAR 由 WM_KEYDOWN 经 TranslateMessage 派生，IME 的组字结果也走这里；
+		// 拦下 WM_IME_STARTCOMPOSITION 会让输入法失去默认的组字窗口行为。
+		else if (msg == WM_CHAR) {
+			self->onChar((UINT)wParam);
+		}
+		else if (msg == WM_IME_STARTCOMPOSITION) {
+			self->onIME();
+		}
+		else if (msg == WM_SETFOCUS) {
+			self->onFocus();
+		}
+		else if (msg == WM_KILLFOCUS) {
+			self->onBlur();
+		}
 		else if (msg == WM_TIMER) {
 			self->onTimer((UINT)(wParam - WM_APP));
 		}

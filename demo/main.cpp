@@ -5,6 +5,7 @@
 #include "WindowCanvas.h"
 #include "WindowBorderRadius.h"
 #include "WindowSlider.h"
+#include "WindowTextBox.h"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPTSTR lpCmdLine, _In_ int nCmdShow)
 {
@@ -16,7 +17,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     //WindowImage win;
     //WindowCanvas win;
     //WindowBorderRadius win;
-    WindowSlider win;
+    //WindowSlider win;
+    WindowTextBox win;
     MSG msg;
     while (GetMessage(&msg, NULL, 0, 0))
     {
