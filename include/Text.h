@@ -48,6 +48,9 @@ namespace Ling {
         void layout() override;
         void onDpiChanged() override;
         void paint();
+        // 建 textLayout。字体族名决定用哪个 TextFormat（图标字体和系统字体不在同一个
+        // 字体集合里），所以换族名不能只 SetFontFamilyName，得整个重建
+        void makeLayout();
 
     private:
         winrt::Windows::UI::Composition::CompositionDrawingSurface surface{ nullptr };

@@ -29,15 +29,25 @@ namespace Ling {
         return { std::ceil(m.width), std::ceil(m.height) };
     }
 
+    void Text::makeLayout()
+    {
+        auto d2d = D2D::get();
+        if (!d2d || !d2d->dwriteFactory) return;
+        auto format = d2d->getTextFormat(fontFamily);
+        d2d->dwriteFactory->CreateTextLayout(text.data(), (UINT32)text.length(), format, FLT_MAX, FLT_MAX, textLayout.ReleaseAndGetAddressOf());
+        if (!textLayout) return;
+        textLayout->SetFontSize(fontSize * win->dpi, { 0, INT_MAX });
+        if (!fontFamily.empty()) {
+            // format 已经是对应集合的了，这句是为了在同一集合内指定具体族名
+            // （比如系统集合里从默认的雅黑换成别的）
+            textLayout->SetFontFamilyName(fontFamily.data(), { 0, INT_MAX });
+        }
+    }
+
     void Text::setText(const std::wstring& text)
     {
         this->text = text;
-        auto d2d = D2D::get();
-        d2d->dwriteFactory->CreateTextLayout(text.data(), (UINT32)text.length(), d2d->baseTextFormat.Get(), FLT_MAX, FLT_MAX, textLayout.ReleaseAndGetAddressOf());
-        textLayout->SetFontSize(fontSize * win->dpi, { 0, INT_MAX });
-        if (!fontFamily.empty()) {
-            textLayout->SetFontFamilyName(fontFamily.data(), { 0, INT_MAX });
-        }
+        makeLayout();
         YGNodeMarkDirty(node);
         win->refresh();
     }
@@ -60,9 +70,9 @@ namespace Ling {
     void Text::setFontFamily(const std::wstring& val)
     {
         this->fontFamily = val;
-        if (textLayout.Get() && !fontFamily.empty()) {
-            textLayout->SetFontFamilyName(fontFamily.data(), { 0, INT_MAX });
-        }
+        // 换族名可能意味着换字体集合（图标字体自成一个集合），只改 layout 上的族名不够，
+        // 那样在系统集合里找不到图标字体，会退回默认字体显示成方块
+        if (textLayout.Get()) makeLayout();
         YGNodeMarkDirty(node);
         if (surface) paint();
     }

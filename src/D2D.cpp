@@ -65,7 +65,11 @@ namespace Ling {
 		}
 		hr = d2dDevice->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, deviceContext.ReleaseAndGetAddressOf());
 	}
-    // 1. 初始化：仅加载系统字体（默认行为）
+    // 1. 初始化：只建工厂和默认 TextFormat。
+    // CreateTextFormat 的字体集合传 nullptr = 直接用 DWrite 的系统字体集合。
+    // 早先的做法是把系统字体集经 FontSetBuilder 在进程内重建一份再绑上去，那份副本
+    // （每个 face 的族名/样式/文件引用等元数据）随机器上装的字体数量增长，能占好几 MB，
+    // 而且 addFonts 一来还要以它为基底再重建一遍。自定义字体现在单独成集合，见 addFonts
     void D2D::initFont()
     {
         auto hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_ISOLATED,__uuidof(IDWriteFactory5),reinterpret_cast<::IUnknown**>(dwriteFactory.ReleaseAndGetAddressOf()));
@@ -73,47 +77,31 @@ namespace Ling {
             _ASSERT_EXPR(FALSE, L"DWriteCreateFactory, error");
             return;
         }
-        // 获取系统字体集
-        ComPtr<IDWriteFontCollection> sysCollection;
-        dwriteFactory->GetSystemFontCollection(&sysCollection);
-        ComPtr<IDWriteFontCollection1> sysCollection1;
-        sysCollection.As(&sysCollection1);
-        ComPtr<IDWriteFontSet> sysFontSet;
-        sysCollection1->GetFontSet(&sysFontSet);
-
-        // 创建 FontSetBuilder 并仅加入系统字体
-        ComPtr<IDWriteFontSetBuilder1> builder;
-        dwriteFactory->CreateFontSetBuilder(&builder);
-        builder->AddFontSet(sysFontSet.Get());
-
-        // 生成字体集合
-        ComPtr<IDWriteFontSet> combinedFontSet;
-        builder->CreateFontSet(&combinedFontSet);
-        dwriteFactory->CreateFontCollectionFromFontSet(combinedFontSet.Get(), &fontCollection);
-
-        // 创建默认 TextFormat
-        hr = dwriteFactory->CreateTextFormat(L"Microsoft YaHei", fontCollection.Get(),
+        hr = dwriteFactory->CreateTextFormat(L"Microsoft YaHei", nullptr,
             DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL,
             12.f, L"zh-CN", baseTextFormat.GetAddressOf());
     }
 
-    // 2. 附加：在已有字体集基础上追加自定义字体
+    // 2. 附加：自定义字体单独成一个集合，不与系统字体合并（合并的代价见 initFont 的注释）
     void D2D::addFonts(const std::vector<std::wstring>& fontResourceNames)
     {
-        if (fontResourceNames.empty()) return;
-        // 获取当前字体集作为基础
-        ComPtr<IDWriteFontCollection1> currentCollection1;
-        fontCollection.As(&currentCollection1);
-        ComPtr<IDWriteFontSet> currentFontSet;
-        currentCollection1->GetFontSet(&currentFontSet);
-        // 创建新的 Builder，以当前字体集为基底
+        if (fontResourceNames.empty() || !dwriteFactory) return;
         ComPtr<IDWriteFontSetBuilder1> builder;
-        dwriteFactory->CreateFontSetBuilder(&builder);
-        builder->AddFontSet(currentFontSet.Get());
-        // 创建内存字体加载器
-        ComPtr<IDWriteInMemoryFontFileLoader> loader;
-        dwriteFactory->CreateInMemoryFontFileLoader(loader.GetAddressOf());
-        dwriteFactory->RegisterFontFileLoader(loader.Get());
+        if (FAILED(dwriteFactory->CreateFontSetBuilder(&builder))) {
+            _ASSERT_EXPR(FALSE, L"CreateFontSetBuilder, error");
+            return;
+        }
+        // 之前加过的自定义字体也放进新集合，否则这次调用会把上次加的顶掉
+        if (customFontCollection) {
+            ComPtr<IDWriteFontSet> oldSet;
+            if (SUCCEEDED(customFontCollection->GetFontSet(&oldSet))) {
+                builder->AddFontSet(oldSet.Get());
+            }
+        }
+        if (!fontLoader) {
+            dwriteFactory->CreateInMemoryFontFileLoader(fontLoader.GetAddressOf());
+            dwriteFactory->RegisterFontFileLoader(fontLoader.Get());
+        }
         // 逐个加载并追加自定义字体
         for (const auto& resName : fontResourceNames) {
             auto [pData, size] = Util::getRes(resName.c_str());
@@ -122,22 +110,64 @@ namespace Ling {
                 return;
             }
             ComPtr<IDWriteFontFile> fontFile;
-            auto hr = loader->CreateInMemoryFontFileReference(dwriteFactory.Get(), pData, size, nullptr, fontFile.GetAddressOf());
+            auto hr = fontLoader->CreateInMemoryFontFileReference(dwriteFactory.Get(), pData, size, nullptr, fontFile.GetAddressOf());
             if (FAILED(hr)) {
                 _ASSERT_EXPR(FALSE, L"font res decode, error");
                 continue;
             }
             builder->AddFontFile(fontFile.Get());
         }
-        // 重新生成合并后的字体集合
-        ComPtr<IDWriteFontSet> combinedFontSet;
-        builder->CreateFontSet(&combinedFontSet);
-        dwriteFactory->CreateFontCollectionFromFontSet(combinedFontSet.Get(), &fontCollection);
+        ComPtr<IDWriteFontSet> customFontSet;
+        if (FAILED(builder->CreateFontSet(&customFontSet))) {
+            _ASSERT_EXPR(FALSE, L"CreateFontSet, error");
+            return;
+        }
+        if (FAILED(dwriteFactory->CreateFontCollectionFromFontSet(customFontSet.Get(), customFontCollection.ReleaseAndGetAddressOf()))) {
+            _ASSERT_EXPR(FALSE, L"CreateFontCollectionFromFontSet, error");
+            return;
+        }
+        makeCustomFormats();
+    }
 
-        // 重新创建 TextFormat（字体集已变更，需要重建）
-        dwriteFactory->CreateTextFormat(L"Microsoft YaHei", fontCollection.Get(),
-            DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL,
-            12.f, L"zh-CN", baseTextFormat.ReleaseAndGetAddressOf());
+    void D2D::makeCustomFormats()
+    {
+        customFormats.clear();
+        if (!customFontCollection) return;
+        auto familyCount = customFontCollection->GetFontFamilyCount();
+        for (UINT32 i = 0; i < familyCount; i++) {
+            ComPtr<IDWriteFontFamily> family;
+            if (FAILED(customFontCollection->GetFontFamily(i, family.GetAddressOf()))) continue;
+            ComPtr<IDWriteLocalizedStrings> names;
+            if (FAILED(family->GetFamilyNames(names.GetAddressOf()))) continue;
+            auto nameCount = names->GetCount();
+            if (nameCount == 0) continue;
+            // 先取第 0 个名字建 format
+            UINT32 len{ 0 };
+            if (FAILED(names->GetStringLength(0, &len))) continue;
+            std::wstring first(len, L'\0');
+            if (FAILED(names->GetString(0, first.data(), len + 1))) continue;
+            ComPtr<IDWriteTextFormat> format;
+            if (FAILED(dwriteFactory->CreateTextFormat(first.data(), customFontCollection.Get(),
+                DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL,
+                12.f, L"zh-CN", format.GetAddressOf()))) continue;
+            // 各本地化名字都登记一份（同一个 format），调用方写哪个名字都能命中
+            for (UINT32 j = 0; j < nameCount; j++) {
+                if (FAILED(names->GetStringLength(j, &len))) continue;
+                std::wstring name(len, L'\0');
+                if (FAILED(names->GetString(j, name.data(), len + 1))) continue;
+                std::transform(name.begin(), name.end(), name.begin(), ::towlower);
+                customFormats[name] = format;
+            }
+        }
+    }
+
+    IDWriteTextFormat* D2D::getTextFormat(const std::wstring& fontFamily)
+    {
+        if (fontFamily.empty() || customFormats.empty()) return baseTextFormat.Get();
+        std::wstring key{ fontFamily };
+        std::transform(key.begin(), key.end(), key.begin(), ::towlower);
+        auto it = customFormats.find(key);
+        return it == customFormats.end() ? baseTextFormat.Get() : it->second.Get();
     }
 
 	Composition::CompositionDrawingSurface D2D::createDrawingSurface(const Composition::Compositor& comp, float w, float h)

@@ -217,8 +217,10 @@ namespace Ling {
         if (!d2d) return;
         const float px = fontSize * win->dpi;
 
+        // 图标字体与系统字体不在同一个字体集合里，format 得按族名挑
+        auto format = d2d->getTextFormat(fontFamily);
         d2d->dwriteFactory->CreateTextLayout(text.data(), (UINT32)text.length(),
-            d2d->baseTextFormat.Get(), maxW, FLT_MAX, textLayout.ReleaseAndGetAddressOf());
+            format, maxW, FLT_MAX, textLayout.ReleaseAndGetAddressOf());
         if (textLayout) {
             textLayout->SetFontSize(px, { 0, INT_MAX });
             if (!fontFamily.empty()) textLayout->SetFontFamilyName(fontFamily.data(), { 0, INT_MAX });
@@ -228,7 +230,7 @@ namespace Ling {
 
         if (!placeholder.empty()) {
             d2d->dwriteFactory->CreateTextLayout(placeholder.data(), (UINT32)placeholder.length(),
-                d2d->baseTextFormat.Get(), maxW, FLT_MAX, placeholderLayout.ReleaseAndGetAddressOf());
+                format, maxW, FLT_MAX, placeholderLayout.ReleaseAndGetAddressOf());
             if (placeholderLayout) {
                 placeholderLayout->SetFontSize(px, { 0, INT_MAX });
                 if (!fontFamily.empty()) placeholderLayout->SetFontFamilyName(fontFamily.data(), { 0, INT_MAX });
