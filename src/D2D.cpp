@@ -4,6 +4,7 @@
 #include "../include/D2D.h"
 #include "../include/Util.h"
 #include <wincodec.h>
+#include <dxgi1_3.h>   // IDXGIDevice3::Trim
 namespace Ling {
 	static std::unique_ptr<D2D> d2d;
 	D2D::D2D()
@@ -22,6 +23,18 @@ namespace Ling {
     {
         return d2d.get();
     }
+
+	void D2D::trim()
+	{
+		// 传 0 = 把所有当前没人引用的缓存资源都丢掉（默认参数是"最近 N 毫秒没用过的"）
+		if (d2dDevice) d2dDevice->ClearResources(0);
+		// IDXGIDevice3::Trim 本是给挂起的 UWP 应用准备的，作用正好：让驱动释放它在进程里
+		// 留的那堆临时缓冲。Win8.1 起就有，拿不到接口就算了，不影响正常绘制
+		ComPtr<IDXGIDevice3> dxgiDevice;
+		if (d3dDevice && SUCCEEDED(d3dDevice.As(&dxgiDevice))) {
+			dxgiDevice->Trim();
+		}
+	}
 
 	void D2D::initDevice()
 	{

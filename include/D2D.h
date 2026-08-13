@@ -27,6 +27,11 @@ namespace Ling {
 		Microsoft::WRL::ComPtr<IDXGISwapChain1> createSwapChain(UINT w, UINT h);
 		// 把 swap chain 包成能塞给 CreateSurfaceBrush 的合成表面，视觉树用法与 DrawingSurface 完全一致。
 		winrt::Windows::UI::Composition::ICompositionSurface createSurfaceForSwapChain(const winrt::Windows::UI::Composition::Compositor& comp, IDXGISwapChain1* swap);
+		// 空闲时归还内存：丢掉 D2D 内部那些没人引用的缓存，再让显卡驱动把它在本进程里的
+		// 临时分配还给系统。设备本身不销毁，所以下次绘制不用重建设备（没有唤醒延迟），
+		// 调用方持有的位图 / 画刷 / 字体也都不受影响，代价只是重建缓存的那一帧多几毫秒。
+		// 适合托盘常驻这种"长时间不画任何东西"的场景，什么时候算空闲由调用方决定。
+		void trim();
 	public:
 		Microsoft::WRL::ComPtr<ID3D11Device> d3dDevice;
 		Microsoft::WRL::ComPtr<IDXGIFactory2> dxgiFactory;

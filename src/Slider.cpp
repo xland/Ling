@@ -101,6 +101,13 @@ namespace Ling {
 		setValue(value);   // 当前值可能不落在新的 step 格点上
 	}
 
+	float Slider::getValueAt(float px) const
+	{
+		// 与 onDown 走的是同一条路（posToValue 再 setValue 里 snap），
+		// 所以这里返回的值和"真按下去"的结果一致。
+		return snap(posToValue(px));
+	}
+
 	// ---- 颜色 -----------------------------------------------------------------
 
 	void Slider::setTrackColor(const Color& color)

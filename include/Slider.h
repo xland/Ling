@@ -18,6 +18,10 @@ namespace Ling {
 		float getMax() const;
 		// 步进。0 = 连续（默认）；>0 则值吸附到 min + n*step。
 		void setStep(float val);
+		// 窗口 x 坐标处对应的值：在这里按下去会得到什么值，就返回什么值（已夹紧 + step 吸附）。
+		// px 与 isPosIn 同坐标系（窗口绝对坐标，物理像素）。
+		// 给外部做悬停提示用 —— 鼠标只是路过滑轨时 value 并没有变，拿 getValue 是不对的。
+		float getValueAt(float px) const;
 
 		void setTrackColor(const Color& color);
 		void setFillColor(const Color& color);
@@ -43,7 +47,8 @@ namespace Ling {
 		void layout() override;
 		// 把当前 value/w/h/dpi 写进 Composition 的几何属性。
 		void syncVisual();
-		// 窗口 x 坐标 -> 值。x 是 Node::layout 累加后的窗口绝对坐标，与 isPosIn 同坐标系。
+		// 窗口 x 坐标 -> 值（不吸附，供内部拖动与 getValueAt 复用）。
+		// x 是 Node::layout 累加后的窗口绝对坐标，与 isPosIn 同坐标系。
 		float posToValue(float px) const;
 		// clamp 到值域 + step 吸附。
 		float snap(float v) const;
