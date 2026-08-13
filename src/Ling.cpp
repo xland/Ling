@@ -10,6 +10,7 @@ namespace Ling{
 		return true;
 	}
 	void dispose() {
+		App::dispose(); //顺序要紧：先放掉持有 WinRT/COM 对象的单例，再拆套间
 		CoUninitialize();
 	}
 }

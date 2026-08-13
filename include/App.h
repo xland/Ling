@@ -4,6 +4,7 @@
 #include <winrt/Windows.System.h>
 namespace Ling {
 	bool init();
+	void dispose();
 	class App
 	{
 		public:
@@ -33,8 +34,12 @@ namespace Ling {
 			winrt::Windows::System::DispatcherQueue dq;
 		private:
 			static void init();
+			// 由 Ling::dispose 调用：托盘图标、DispatcherQueue 都得在 CoUninitialize 之前放掉，
+			// 留给进程退出后的静态析构就是往已经拆掉的 COM 套间上打 Release
+			static void dispose();
 			App();
 			friend bool Ling::init();
+			friend void Ling::dispose();
 		private:
 			void initMsgWin();
 			static LRESULT CALLBACK winProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);

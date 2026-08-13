@@ -24,6 +24,11 @@ namespace Ling {
         return app.get();
     }
 
+    void App::dispose()
+    {
+        app.reset();
+    }
+
     void App::quit(int code)
     {
         onBeforeQuit();
