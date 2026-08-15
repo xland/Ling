@@ -18,7 +18,11 @@ namespace Ling {
 			/// 并触发前一个应用实例的onSecondInstance事件
 			/// </summary>
 			bool refuseSecondInstance();
-			void regHotKey(const std::wstring& keyStr, const UINT msgId);
+			/// <summary>
+			/// 注册全局热键，返回是否注册成功。键名认不出来、或者这个组合已经被别的程序占了
+			/// 都会失败 —— 失败要不要告诉用户由调用方决定
+			/// </summary>
+			bool regHotKey(const std::wstring& keyStr, const UINT msgId);
 			void unRegHotKey(const UINT msgId);
 			void initTray(const UINT msgId,const std::wstring& tip);
 			void disposeTray();

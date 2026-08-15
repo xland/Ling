@@ -52,7 +52,7 @@ namespace Ling {
         return false;
     }
 
-    void App::regHotKey(const std::wstring& keyStr, const UINT msgId)
+    bool App::regHotKey(const std::wstring& keyStr, const UINT msgId)
     {
         std::wstring lowerName = keyStr;
         std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(), ::towlower);
@@ -77,18 +77,11 @@ namespace Ling {
                 keyCode = Util::strToKey(key);
             }
         }
-        if (keyCode == 0) {
-            _ASSERT_EXPR(FALSE, L"can not recognize key code，error");
-            return;
-        }
+        //键名认不出来（配置文件被手工改坏了之类）：注册不了，交给调用方处理
+        if (keyCode == 0) return false;
         initMsgWin();
-        BOOL result = RegisterHotKey(msgHwnd, WM_APP + msgId, modifiers, keyCode);
-        //if (!result) {
-        //	DWORD error = GetLastError();
-        //	if (error == ERROR_HOTKEY_ALREADY_REGISTERED) {
-        //        _ASSERT_EXPR(FALSE, L"hot key confilict，error");
-        //	}
-        //}
+        // 失败的常见原因是 ERROR_HOTKEY_ALREADY_REGISTERED：这个组合已经被别的程序占了
+        return RegisterHotKey(msgHwnd, WM_APP + msgId, modifiers, keyCode) != FALSE;
     }
 
     void App::unRegHotKey(const UINT msgId)
