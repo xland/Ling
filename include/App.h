@@ -1,10 +1,12 @@
 ﻿#pragma once
 #include <dispatcherqueue.h>
 #include <shellapi.h>
+#include <vector>
 #include <winrt/Windows.System.h>
 namespace Ling {
 	bool init();
 	void dispose();
+	class WinBase;
 	class App
 	{
 		public:
@@ -36,6 +38,9 @@ namespace Ling {
 			std::wstring appID;
 			std::unordered_map<std::wstring, std::wstring> args;
 			winrt::Windows::System::DispatcherQueue dq;
+			// 当前打开的窗口，按创建顺序。WinBase 构造时登记、析构时注销。
+			// 最后一个窗口注销时会顺手销毁 D2D 设备 —— 一个窗口都没有时它没有任何用处
+			std::vector<WinBase*> windows;
 		private:
 			static void init();
 			// 由 Ling::dispose 调用：托盘图标、DispatcherQueue 都得在 CoUninitialize 之前放掉，

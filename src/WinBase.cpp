@@ -2,15 +2,29 @@
 #include "../include/WinBase.h"
 #include "../include/Node.h"
 #include "../include/ScrollerBox.h"
+#include "../include/App.h"
+#include "../include/D2D.h"
 
 namespace Ling {
 	WinBase::WinBase() :compositor{ Composition::Compositor() }
 	{
+		App::get()->windows.push_back(this);
 		dpi = static_cast<float>(GetDpiForSystem()) / 96.f;
 	}
 
+	// 进程里一个窗口都不剩时，图形设备没有任何用处 —— 连同显卡驱动在本进程里的那份分配一起
+	// 还给系统。下次建窗口时 D2D::get() 会自动重建，代价是第一帧多几十毫秒
 	WinBase::~WinBase()
 	{
+		// body 和 winTarget 是本类的成员，按语言规则要等这个函数体跑完才析构，而它们持有由
+		// D2D 设备造出来的合成表面 —— 得先显式放掉，下面销毁设备才真的能把内存还回去。
+		// 派生类的成员（位图、画刷等）已经在进入本函数之前析构完了，不用管
+		winTarget = nullptr;
+		body.reset();
+		auto app = App::get();
+		if (!app) return; //进程退出后的静态析构：单例和 COM 套间都没了，别再往上打电话
+		std::erase(app->windows, this);
+		if (app->windows.empty()) D2D::dispose();
 	}
 
 	void WinBase::disableWinAnimation()

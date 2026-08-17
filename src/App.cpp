@@ -151,7 +151,6 @@ namespace Ling {
     void App::init()
     {
         App::initDispatcherQueueCtrl();
-        D2D::init();
         auto ptr = new App();
         app.reset(ptr);
     }

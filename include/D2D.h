@@ -13,14 +13,21 @@
 namespace Ling {
 	class D2D
 	{
-		friend class App;
 	public:
 		~D2D();
+		// 取图形设备。设备是惰性建的：第一次调用时才建，所以启动到托盘、一个窗口都没有的
+		// 状态下进程里根本没有 D3D / D2D / DXGI / DWrite 这一套东西。
+		// 最后一个窗口关掉时设备会被销毁（见 WinBase 的析构），下次调用这里自动重建
 		static D2D* get();
+		// 销毁整套设备，把显卡驱动在本进程里的分配一并还给系统。调用方持有的位图 / 画刷 /
+		// 字体会随之失效，所以只能在确认没人再用它们的时候调 —— 也就是没有任何窗口的时候
+		static void dispose();
 		// 追加自定义字体（图标字体这类），资源名即 vcxproj 里的资源标识。
+		// 只登记资源名、不触碰设备，因此启动时调它不会把整套 D3D 拉起来；设备每次重建
+		// 都会按登记的名字重新加载一遍。
 		// 它们单独成一个集合，不与系统字体合并 —— 合并要把系统字体集在进程内重建一份，
 		// 元数据能占好几 MB。代价是取 TextFormat 时必须按族名分流，见 getTextFormat
-		void addFonts(const std::vector<std::wstring>& fontResourceNames);
+		static void addFonts(const std::vector<std::wstring>& fontResourceNames);
 		// 按字体族名挑 TextFormat：族名属于 addFonts 加进来的自定义字体，就给绑了自定义
 		// 集合的那个；其余（空族名、系统字体名）一律给 baseTextFormat。
 		// 之所以要分流：TextFormat 创建时就把字体集合定死了，而 IDWriteTextLayout::
@@ -38,11 +45,6 @@ namespace Ling {
 		Microsoft::WRL::ComPtr<IDXGISwapChain1> createSwapChain(UINT w, UINT h);
 		// 把 swap chain 包成能塞给 CreateSurfaceBrush 的合成表面，视觉树用法与 DrawingSurface 完全一致。
 		winrt::Windows::UI::Composition::ICompositionSurface createSurfaceForSwapChain(const winrt::Windows::UI::Composition::Compositor& comp, IDXGISwapChain1* swap);
-		// 空闲时归还内存：丢掉 D2D 内部那些没人引用的缓存，再让显卡驱动把它在本进程里的
-		// 临时分配还给系统。设备本身不销毁，所以下次绘制不用重建设备（没有唤醒延迟），
-		// 调用方持有的位图 / 画刷 / 字体也都不受影响，代价只是重建缓存的那一帧多几毫秒。
-		// 适合托盘常驻这种"长时间不画任何东西"的场景，什么时候算空闲由调用方决定。
-		void trim();
 	public:
 		Microsoft::WRL::ComPtr<ID3D11Device> d3dDevice;
 		Microsoft::WRL::ComPtr<IDXGIFactory2> dxgiFactory;
@@ -61,11 +63,15 @@ namespace Ling {
 		Microsoft::WRL::ComPtr<IDWriteFontCollection1> customFontCollection;
 	private:
 		D2D();
-		static void init();
 		void initFont();
 		void initDevice();
+		// 按 fontNames 里登记的资源名重建自定义字体集合。设备每次重建都要跑一遍，
+		// 所以是全量重建而不是增量追加
+		void loadFonts();
 		// 按 customFontCollection 里实际有的字体族名，逐族建一个 TextFormat 登记进 customFormats
 		void makeCustomFormats();
+		// addFonts 登记的字体资源名。存成静态的，这样设备销毁重建之后自定义字体不会丢
+		static std::vector<std::wstring> fontNames;
 
 	};
 }
