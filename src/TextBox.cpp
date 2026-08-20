@@ -138,6 +138,13 @@ namespace Ling {
         win->refresh();
     }
 
+    void TextBox::setVerticalCenter(bool val)
+    {
+        if (verticalCenter == val) return;
+        verticalCenter = val;
+        win->refresh();
+    }
+
     void TextBox::setColor(Color val)
     {
         color = val;
@@ -250,6 +257,13 @@ namespace Ling {
         return cw > 0.f ? cw : FLT_MAX;
     }
 
+    float TextBox::vCenterOffset() const
+    {
+        if (!verticalCenter) return 0.f;
+        const float over = textH() - contentH();
+        return over < 0.f ? -over * 0.5f : 0.f;
+    }
+
     void TextBox::applyAutoSize()
     {
         if (!textLayout) return;
@@ -337,7 +351,7 @@ namespace Ling {
         auto [pl, pt, pr, pb] = const_cast<TextBox*>(this)->getPadding();
         // 窗口坐标 -> 内容坐标：减掉控件原点与内边距，再加回滚动量。
         const float lx = pos.x - (x + pl * d);
-        const float ly = pos.y - (y + pt * d) + scrollY;
+        const float ly = pos.y - (y + pt * d) + scrollY - vCenterOffset();
         BOOL isTrailingHit{ FALSE }, isInside{ FALSE };
         DWRITE_HIT_TEST_METRICS hm{};
         textLayout->HitTestPoint(lx, ly, &isTrailingHit, &isInside, &hm);
@@ -501,6 +515,7 @@ namespace Ling {
         const float oy = pt * d;
         const float cw = contentW();
         const float ch = contentH();
+        const float vcOff = vCenterOffset();
 
         ComPtr<ID2D1SolidColorBrush> brush;
         ctx->CreateSolidColorBrush(color.getD2DColor(), brush.GetAddressOf());
@@ -511,7 +526,7 @@ namespace Ling {
         if (text.empty() && placeholderLayout && !focused) {
             ComPtr<ID2D1SolidColorBrush> phBrush;
             ctx->CreateSolidColorBrush(placeholderColor.getD2DColor(), phBrush.GetAddressOf());
-            ctx->DrawTextLayout({ ox, oy }, placeholderLayout.Get(), phBrush.Get(), D2D1_DRAW_TEXT_OPTIONS_NONE);
+            ctx->DrawTextLayout({ ox, oy + vcOff }, placeholderLayout.Get(), phBrush.Get(), D2D1_DRAW_TEXT_OPTIONS_NONE);
         }
         else if (textLayout) {
             if (focused && hasSelection()) {
@@ -519,11 +534,11 @@ namespace Ling {
                 ctx->CreateSolidColorBrush(selectionBgColor.getD2DColor(), selBrush.GetAddressOf());
                 // 选区底色画在文字底下，所以先画。坐标系整体平移到文本原点，
                 // 这样 HitTestTextRange 返回的布局坐标可以直接用。
-                ctx->SetTransform(D2D1::Matrix3x2F::Translation(ox, oy - scrollY));
+                ctx->SetTransform(D2D1::Matrix3x2F::Translation(ox, oy + vcOff - scrollY));
                 paintSelectionBg(ctx, selBrush.Get());
                 ctx->SetTransform(D2D1::Matrix3x2F::Identity());
             }
-            ctx->DrawTextLayout({ ox, oy - scrollY }, textLayout.Get(), brush.Get(), D2D1_DRAW_TEXT_OPTIONS_NONE);
+            ctx->DrawTextLayout({ ox, oy + vcOff - scrollY }, textLayout.Get(), brush.Get(), D2D1_DRAW_TEXT_OPTIONS_NONE);
             if (focused && caretVisible) {
                 ComPtr<ID2D1SolidColorBrush> caretBrush;
                 ctx->CreateSolidColorBrush(caretColor.getD2DColor(), caretBrush.GetAddressOf());
@@ -531,7 +546,7 @@ namespace Ling {
                 // 所以最少让它往右挪半个线宽。
                 const float lw = caretW * d;
                 const float cx = ox + std::max(caretPos.x, lw * 0.5f);
-                const float cy = oy + caretPos.y - scrollY;
+                const float cy = oy + vcOff + caretPos.y - scrollY;
                 ctx->DrawLine({ cx, cy }, { cx, cy + caretHeight }, caretBrush.Get(), lw);
             }
         }
@@ -799,7 +814,7 @@ namespace Ling {
         // 组字窗口 / 候选框的位置是相对宿主窗口客户区的，所以要把光标的内容坐标
         // 换算回窗口坐标：内容原点 = 控件原点 + padding，再减掉滚动量。
         const float cx = std::min(x + pl * d + caretPos.x, win->w - 1.f);
-        const float cyTop = y + pt * d + caretPos.y - scrollY;
+        const float cyTop = y + pt * d + caretPos.y - scrollY + vCenterOffset();
         const float cyBottom = std::min(cyTop + caretHeight, win->h - 1.f);
 
         // 组字窗口贴着光标顶端 —— 组字中的文字应该出现在正在编辑的那一行上。

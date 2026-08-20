@@ -51,9 +51,7 @@ namespace Ling {
 
 	void WinBase::close()
 	{
-		SetWindowLongPtr(hwnd, GWLP_USERDATA, NULL);
 		DestroyWindow(hwnd);
-		onDestroy();
 	}
 
 	void WinBase::minimize()
@@ -329,6 +327,9 @@ namespace Ling {
 		}
 		else if (msg == WM_GETMINMAXINFO) {
 			self->onMinMaxInfo((PMINMAXINFO)lParam);
+		}
+		else if (msg == WM_DESTROY) {
+			self->onDestroy();
 		}
 		return DefWindowProc(hwnd, msg, wParam, lParam);
 	}

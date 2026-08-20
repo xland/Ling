@@ -36,6 +36,9 @@ namespace Ling {
         // 自适应尺寸：文本不折行，控件宽高跟着文本内容长。
         // 开启后 setWidth/setHeight 设的尺寸会被覆盖，也不会再出现滚动条（内容永远装得下）。
         void setAutoSize(bool val);
+        // 垂直居中：文本总高度小于内容区时，绘制位置下移使其视觉上居中。
+        // 文本溢出时此设置无效（正常滚动）。
+        void setVerticalCenter(bool val);
         // 文字颜色。未单独设置光标色时，光标也用这个颜色。
         void setColor(Color color);
         void setCaretColor(Color color);
@@ -76,6 +79,8 @@ namespace Ling {
         // 等 layout() 拿到真实宽度再重建。判断"要不要重建 layout"用它而不是 contentW ——
         // autoSize 下 w 是由文本反推出来的，拿 contentW 比会每帧都判定成"宽度变了"。
         float wrapWidth() const;
+        // 垂直居中偏移量（物理像素）。verticalCenter 开启且文本未溢出时返回居中偏移，否则 0。
+        float vCenterOffset() const;
         // autoSize 下按文本度量反推控件宽高并写回 yoga。只由 buildLayout 调用。
         void applyAutoSize();
         // 内容区（padding 以内）的宽高，物理像素。也就是 canvas 的宽高。
@@ -139,6 +144,7 @@ namespace Ling {
         bool isBold{ false }, isItalic{ false };
         // 尺寸跟着文本走（不折行）。见 setAutoSize。
         bool autoSize{ false };
+        bool verticalCenter{ false };
         Color color{ 0x333333FF };
         Color caretColor{ 0x333333FF };
         Color selectionBgColor{ 0x99C9EF99 };
