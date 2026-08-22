@@ -45,6 +45,9 @@ namespace Ling {
 		Microsoft::WRL::ComPtr<IDXGISwapChain1> createSwapChain(UINT w, UINT h);
 		// 把 swap chain 包成能塞给 CreateSurfaceBrush 的合成表面，视觉树用法与 DrawingSurface 完全一致。
 		winrt::Windows::UI::Composition::ICompositionSurface createSurfaceForSwapChain(const winrt::Windows::UI::Composition::Compositor& comp, IDXGISwapChain1* swap);
+		// 直接建一个 IDWriteTextLayout。Ling 的 Label/Text 走的是 Composition 节点树，
+		// 而 CutMask / WinLong 是在自己的 D2D context 上手绘文字，需要裸的 layout。
+		static Microsoft::WRL::ComPtr<IDWriteTextLayout> makeTextLayout(const std::wstring& text, float fontSize, float w= FLT_MAX, float h= FLT_MAX);
 	public:
 		Microsoft::WRL::ComPtr<ID3D11Device> d3dDevice;
 		Microsoft::WRL::ComPtr<IDXGIFactory2> dxgiFactory;

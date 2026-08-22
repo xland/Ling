@@ -209,4 +209,13 @@ namespace Ling {
 		return surface;
 	}
 
+    ComPtr<IDWriteTextLayout> D2D::makeTextLayout(const std::wstring& text, float fontSize, float w, float h)
+    {
+        ComPtr<IDWriteTextLayout> layout;
+        d2d->dwriteFactory->CreateTextLayout(text.data(), (UINT32)text.length(), d2d->baseTextFormat.Get(), w, h, layout.GetAddressOf());
+        if (!layout) return layout;
+        layout->SetFontSize(fontSize, { 0,INT_MAX });
+        return layout;
+    }
+
 }

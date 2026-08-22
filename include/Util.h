@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <string>
 #include <Windows.h>
+#include <fstream>
 #include <vector>
 
 namespace Ling {
@@ -23,6 +24,7 @@ namespace Ling {
 	public:
 		static bool isWin11();
 		static std::wstring convertToWStr(const char* str);
+        static std::string convertToStr(const std::wstring& wstr);
 		static void setTextToClipboard(const std::wstring& text);
 		static std::wstring getTextFromClipboard();
 		static std::tuple<void*, DWORD> getRes(const std::wstring& name);
@@ -31,6 +33,9 @@ namespace Ling {
         static std::wstring getSysLang();
         static std::wstring readFile(const std::wstring& path);
         static void saveFile(const std::wstring& path, const std::wstring& content);
+        static std::array<int, 3> getVerNum(const std::wstring& exePath = L"");
+        static std::wstring readTextFromBytes(const void* data, size_t size);
+        static std::wstring readFileText(const std::filesystem::path& path);
 
         template <std::ranges::input_range Range, typename T>
         static int getIndex(const Range& range, const T& target) {
